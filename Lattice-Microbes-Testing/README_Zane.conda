@@ -1,0 +1,36 @@
+# Portable conda build
+
+Install Anaconda 3 if not already installed on your computer
+https://www.anaconda.com/
+
+If you want GPU acceleration, install cuda and export your cuda path in your .bashrc profile:
+https://developer.nvidia.com/cuda-downloads
+
+Line to add to .bashrc:
+export PATH="/usr/local/cuda/bin/:$PATH"
+
+Make your Anaconda environment with your choice of name "envname" using Python 3:
+    conda create -n envname python=3.7.3
+    conda activate envname
+    conda install -y protobuf==3.12.4 hdf5 numpy cython cmake==3.14.0 xlrd swig jupyter matplotlib ipywidgets h5py tqdm pillow jinja2 scipy pybind11 pandas pytables biopython
+    conda install -y git gcc_linux-64 gxx_linux-64 binutils_linux-64
+
+then go to a directory where you want to build Lattice Microbes and do the build running the following commands:
+(You do not need to run simulations where the build is located, lm will be installed in your environemnt to be used like any other command) 
+    mkdir build
+    cd build
+    cmake path/Lattice-Microbes-mod/src/ -D MPD_GLOBAL_T_MATRIX=True -D MPD_GLOBAL_R_MATRIX=True
+    make
+    make install
+
+To run the sample simulation file, run the following line:
+
+lm -g 0 -r 1 -sl lm::rdme::IntMpdRdmeSolver -f MinCell_5s_testing.lm
+
+-g the index of the GPU to use
+-r the index of the replicate to run
+-sl the Reaction-Diffusion Master equation Solver to use
+-f the simulation filename
+
+LM_tutorial.lm can be simulated using only MpdRdmeSolver
+MinCell_5s_testing.lm will only run correctly using IntMpdRdmeSolver
