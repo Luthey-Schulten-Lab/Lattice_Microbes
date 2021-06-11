@@ -1,0 +1,139 @@
+\chapter{Capabilities}
+
+%%%%%%%%%%%%%%%
+% Section: SS %
+%%%%%%%%%%%%%%%
+\section{Stochastic Simulations}
+Lattice Microbes can be used to simulate chemical master equations (CME):
+\begin{equation*}
+\frac{dP(\mathbf{x},t)}{dt}=\sum_{r}^{R} [-a_r({{\mathbf{x}}}) P({{\mathbf{x}}},t) + a_r({{\mathbf{x}}}_\nu-\mathbf{S_r}) P({{\mathbf{x}}}-\mathbf{S_r},t)]
+\end{equation*}
+
+\noindent and reaction-diffusion master equations (RDME):
+\begin{align*}
+\frac{dP(\mathbf{x},t)}{dt}=\sum_{\nu}^{V}\sum_{r}^{R} &[-a_r({{\mathbf{x}}}_\nu) P({{\mathbf{x}}}_\nu,t) + a_r({{\mathbf{x}}}_\nu-\mathbf{S_r}) P({{\mathbf{x}}}_\nu-\mathbf{S_r},t)]\\
++\sum_{\nu}^{V}\sum_{\xi}^{\pm\hat{i},\hat{j},\hat{k}}\sum_{\alpha}^{N} &[-d^{\alpha} x_{\nu}^{\alpha} P({{\mathbf{x}}},t) + d^{\alpha} (x_{\nu+\xi}^{\alpha}+1) P({{\mathbf{x}}}+1_{\nu+\xi}^{\alpha}-1_{\nu}^{\alpha},t)]
+\end{align*}
+
+\noindent using a variety of methods.  Both CME and RDME support a number of different reaction types including zeroth, first, second, and second order self reaction.  These reactions are of the form in Table \ref{tbl:rxnTypes}.  All rate constants input to Lattice Microbes should be the stochastic rate constant that has been scaled by the volume and Avogadro's number so that it is in units of \textbf{sec\textsuperscript{-1}}.  Use the table for the correct conversion factor.
+
+\begin{sidewaystable}[htp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Order} & \textbf{Form} & \textbf{Parameters} & \textbf{Macroscopic Units} & \textbf{Stochastic Rate Constant ($s^{-1}$)}\\
+\hline\hline
+0th  & $\emptyset \rightarrow \text{A}$   & $k$ & $Ms^{-1}$ & $k\cdot V \cdot N_A$\\
+\hline
+1st & $\text{A} \rightarrow \text{B}$ & $k$ & $s^{-1}$ & $k$ \\
+\hline
+2nd & $\text{A}+\text{B}\rightarrow \text{C}$ & $k$ & $M^{-1}s^{-1}$ & $\frac{k}{V\cdot N_A}$ \\
+\hline
+2nd (Self)\textsuperscript{*} & $2\text{A}\rightarrow\text{B}$ & $k$ & $M^{-1}s^{-1}$ & $\frac{k}{V\cdot N_A}$ \\
+\hline
+Michaelis-Menten\textsuperscript{$\dagger$} & $\text{E}+\text{S}\rightarrow\text{E}+\text{P}$ & $k_{cat}$, $K_{M}$ & $s^{-1}$, $M$ & $\frac{k_{cat}}{V\cdot N_A}$, $K_{M}V\cdot N_A$ \\ 
+\hline
+Competitive Michaelis-Menten\textsuperscript{$\dagger$} & $\text{E}+\text{I}+\text{S}\rightarrow\text{E}+\text{I}+\text{P}$ & $k_{cat}$, $K_{M}$, $K_{I}$ & $s^{-1}$, $M$, $M$ & $\frac{k_{cat}}{V\cdot N_A}$, $K_{M}V\cdot N_A$ , $K_{I}V\cdot N_A$\\ 
+\hline
+Uncompetitive Michaelis-Menten\textsuperscript{$\dagger$} & $\text{E}+\text{I}+\text{S}\rightarrow\text{E}+\text{I}+\text{P}$ & $k_{cat}$, $K_{M}$, $K_{I}$ & $s^{-1}$, $M$, $M$ & $\frac{k_{cat}}{V\cdot N_A}$, $K_{M}V\cdot N_A$ , $K_{I}V\cdot N_A$\\ 
+\hline
+Noncompetitive Michaelis-Menten\textsuperscript{$\dagger$} & $\text{E}+\text{I}+\text{S}\rightarrow\text{E}+\text{I}+\text{P}$ & $k_{cat}$, $K_{M}$, $K_{I}$ & $s^{-1}$, $M$, $M$ & $\frac{k_{cat}}{VN_A}$, $K_{M}V\cdot N_A$ , $K_{I}V\cdot N_A$\\ 
+\hline
+\end{tabular}
+\end{center}
+\caption{Reactions available to both CME and RDME.  Here, the stochastic rate constant should be computed from the macroscopic rate constant (perhaps from experiment) using the volume of the experiment, $V$, and Avogadro's number, $N_A$. \textsuperscript{*}Note that for a 2nd order self reaction, the rate of A disappearing is $2k$. \textsuperscript{$\dagger$}Michaelis-Menten type reactions are currently only supported in CME simulations, and only compute the propensity of forming the product using the steady-state assumption.} \label{tbl:rxnTypes}
+\end{sidewaystable}%
+
+
+In addition, the pyLM problem solving environment provides tools to setup, run and post-process stochastic simulations as well as integrate the stochastic techniques with other simulation methodologies (for example, see: \cite{Cole2014sso}).  The capabilities are outlined here.
+
+\subsection{Well-Stirred Simulations}
+CME simulations require species, reactions along with their rate constants, and initial specie counts to be specified.\\
+
+A number of algorithms for sampling the CME are available with CPU and GPU implementations.  The Gillespie stochastic simulation algorithm (SSA) \cite{Gillespie1977ess} is the slowest but most straightforward.  The next-reaction (NR) and fluctuating next-reaction (FNR) \cite{Gibson2000ees} algorithms are also available and (may, depending on the count of particles) considerably speed up the simulation using variable time-stepping.  These techniques along with their capabilities can be found in Table \ref{tbl:cmeAlgorithms}. 
+
+
+\begin{table}[htp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Method} & \textbf{CPU} & \textbf{GPU} & \textbf{Solver Keyword} \\
+\hline\hline
+SSA & Y & Y & lm::cme::GillespieDSolver \\
+\hline
+NR & Y & Y & lm::cme::NextReactionSolver \\
+\hline
+FNR & Y & Y & lm::cme::FluctuatingNRSolver \\
+\hline
+\end{tabular}
+\end{center}
+\caption{CME sampling algorithms available in Lattice Microbes.  CPU and GPU columns indicate whether the algorithm is available (Y) or unavailable (N) for the particular compute device.  The Solver Keyword column indicates the string to pass to the ``lm" executable to perform that simulation.} \label{tbl:cmeAlgorithms}
+\end{table}%
+
+
+
+
+
+\subsection{Spatially-Resolved Simulations}
+In addition to species, reactions along with their rate constants, and initial specie counts, RDME also requires the lattice spacing, spatial organization of objects (membrane, cytoplasm, etc.) and diffusion rates in and between these spatial objects to be specified.  \\
+
+Two methods for solving the RDME are available in Lattice Microbes.  The first is the next subvolume (NS) method \cite{Elf2004ssb}, which is analogous to the next reaction method, of the CME.  The other is a constant timestep method called Multiparticle diffusion (MPD) developed to take advantage of the fine-grained parallelism afforded by the GPU \cite{Roberts2013lmh}.  In the latter case, the timestep is specified by the diffusion time:
+\begin{equation*}
+\tau=\frac{\lambda^2}{2\cdot n\cdot D}
+\end{equation*}
+\noindent where $\lambda$ is the lattice spacing, $n$ is the dimensionality (conventionally 2 or 3) and $D$ is the macroscopic diffusion constant. Both are GPU accelerated, while only one is available on the CPU as indicated in Table \ref{tbl:cmeAlgorithms}.
+
+Additionally, a version of the MPD algorithm is available for computers with multiple-GPUs (called the MGPU-MPD solver) that can effectively and efficiently split the computation over the GPUs~\cite{Hallock2014sor}. 
+
+
+
+\begin{table}[htp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Method} & \textbf{CPU} & \textbf{GPU} & \textbf{Solver Keyword} \\
+\hline\hline
+NS & Y & Y & lm::rdme::NextSubvolumeSolver \\
+\hline
+MPD &N & Y & lm::rdme::MpdRdmeSolver \\
+\hline
+MGPU-MPD & N & Y & lm::rdme::MGPUMpdRdmeSolver \\
+\hline
+\end{tabular}
+\end{center}
+\caption{RDME sampling algorithms available in Lattice Microbes.  CPU and GPU columns indicate whether the algorithm is available (Y) or unavailable (N) for the particular compute device.  The Solver Keyword column indicates the string to pass to the ``lm" executable to perform that simulation.} \label{tbl:cmeAlgorithms}
+\end{table}%
+
+
+%%%%%%%%%%%%%%%%
+% Section: PSE %
+%%%%%%%%%%%%%%%%
+\section{Problem Solving Environment}
+
+pyLM and the included library of standard systems pySTDLM provide a problem solving environment for setting up, running and analyzing stochastic biological simulations \cite{Peterson2013aps}.  It contains functionality for specifying simulation setup including:
+
+\begin{itemize}
+\item Named species
+\item Initial counts and distributions 
+\item Reactions and rates
+\item Spatial localization and definition
+\item Diffusion properties
+\item Obstacles
+\item Define custom simulation flow
+\end{itemize}
+
+In addition, there are a number of pre- and post-processing functionalities including (but not limited to):
+
+\begin{itemize}
+\item Integration with Jupyter Notebook
+\item Handles to data in the popular Numpy array representation
+\item Plotting species averages/variances and individual time traces
+\item Plotting Kymographs of spatial species distributions
+\item Reaction network generation
+\item Dynamic reaction network representations
+\end{itemize}
+
+The standard library (pySTDLM) also includes a number of cell shapes, colony layout routines, and previously published reaction systems.  Finally, pyLM provides functionality for accessing the underlying representation of the simulation data with time-based interrupts to allow users to modify or analyze the state of the simulation on-the-fly.  This last functionality allows there merger of different methodologies together.  For examples of how to use pyLM please refer to the ``Instruction Guide" and for full enumeration of functionality please see the ``Reference Manual" both of which are available online at \url{http://www.scs.illinois.edu/schulten/lm}. 
+
+
+

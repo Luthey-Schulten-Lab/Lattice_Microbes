@@ -1,0 +1,2814 @@
+#### Multiresolution_RDME ####
+
+    #### bimolecular_timing ####
+
+    # Setup the simulations.
+    rm -f bimolecular*.lm
+    lm_sbml_import bimolecular.lm bimolecular.sbml
+    lm_setdm bimolecular.lm numberReactions=2 numberSpecies=3 numberSiteTypes=1 "latticeSize=[32,32,32]" latticeSpacing=31.25e-9 particlesPerSite=8 "DiffusionMatrix=[8.15e-14]" "ReactionLocationMatrix=[1]";
+
+    % Build a initial lattice.
+    filename=sprintf('bimolecular.lm');
+    disp(sprintf('Setting lattice for %s',filename));
+    L=permute(h5read(filename,'/Model/Diffusion/Lattice'),[4:-1:1]);
+    L=L.*0;
+    for i=[1:2000]
+        placed=0;
+        while placed==0
+            x=round(1+rand()*(size(L,1)-1));
+            y=round(1+rand()*(size(L,2)-1));
+            z=round(1+rand()*(size(L,3)-1));
+            for p=[1:size(L,4)]
+                if L(x,y,z,p) == 0
+                    L(x,y,z,p)=mod(i,2)+1;
+                    placed=1;
+                    break;
+                end
+            end
+        end
+    end
+    h5write(filename,'/Model/Diffusion/Lattice',permute(L,[4:-1:1]));
+
+    # Profile using lm.
+    cp bimolecular.lm data/bimolecular_direct.lm
+    lm_setp data/bimolecular_direct.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/bimolecular_direct.lm -r 1-10 -sl lm::cme::GillespieDSolver -cr 11 -gr 1/3 logs/bimolecular_direct.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    cp bimolecular.lm data/bimolecular_direct_nogpu.lm
+    lm_setp data/bimolecular_direct_nogpu.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/bimolecular_direct_nogpu.lm -r 1-10 -sl lm::cme::GillespieDSolver -cr 11 -gr 0 logs/bimolecular_direct_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    cp bimolecular.lm data/bimolecular_nextr.lm
+    lm_setp data/bimolecular_nextr.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/bimolecular_nextr.lm -r 1-10 -sl lm::cme::NextReactionSolver -cr 11 -gr 1/3 logs/bimolecular_nextr.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    cp bimolecular.lm data/bimolecular_nextr_nogpu.lm
+    lm_setp data/bimolecular_nextr_nogpu.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/bimolecular_nextr_nogpu.lm -r 1-10 -sl lm::cme::NextReactionSolver -cr 11 -gr 0 logs/bimolecular_nextr_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+
+    cp bimolecular.lm data/bimolecular_mpd.lm
+    lm_setp data/bimolecular_mpd.lm timestep=3.0e-3 writeInterval=1e7 latticeWriteInterval=1e7 maxTime=5.277e1
+    lm-submit data/bimolecular_mpd.lm -r 1-10 -sl lm::rdme::MpdRdmeSolver -cr 11 -gr 1/3 logs/bimolecular_mpd.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    cp bimolecular.lm data/bimolecular_nsm.lm
+    lm_setp data/bimolecular_nsm.lm writeInterval=1e7 latticeWriteInterval=1e7 maxSteps=10000 maxTime=Inf
+    lm-submit data/bimolecular_nsm.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 1/3 logs/bimolecular_nsm.log eir@compute-6-1.local 1 12 4 erobert3
+
+    cp bimolecular.lm data/bimolecular_nsm_nogpu.lm
+    lm_setp data/bimolecular_nsm_nogpu.lm writeInterval=1e7 latticeWriteInterval=1e7 maxSteps=10000 maxTime=Inf
+    lm-submit data/bimolecular_nsm_nogpu.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 0 logs/bimolecular_nsm_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    
+    # Profile using stochkit.
+    rm -rf data/bimolecular_stochkit
+    ssa -m bimolecular_stochkit.xml -t 1e6 -r 10 --out-dir data/bimolecular_stochkit --keep-trajectories -p 1
+
+    # Profile using copasi.
+    mkdir -p data/bimolecular_copasi;
+    is="01 02 03 04 05 06 07 08 09 10";
+    for i in $is; do
+        /usr/bin/time -f "%e" -o data/bimolecular_copasi/time_$i.txt ~/share/lib/copasi/bin/CopasiSE bimolecular.cps; 
+    done;
+    
+    # Profile using mesord.
+    rm data/bimolecular_mesord/*
+    cd data/bimolecular_mesord
+    cp ../../bimolecular_mesord.xml .
+    mesord -q 0.03125 um -i 458 -I 5 -c 60 -p bimolecular_mesord.xml
+    cd ../..
+
+    
+    #### cell_builder ####
+    
+    rm -f ecoli.lm
+    lm_sbml_import ecoli.lm bimolecular.sbml
+    lm_setdm ecoli.lm numberReactions=2 numberSpecies=3 numberSiteTypes=4 "latticeSize=[64,64,128]" latticeSpacing=16e-9 particlesPerSite=8  "ReactionLocationMatrix(0:1,2)=[1,0]" "DiffusionMatrix(0:2,0:2,0)=[8.15e-14,0,8.15e-14;0,0,0;8.15e-15,0,8.15e-15]" "DiffusionMatrix(0:2,0:2,1)=[0,0,0;0,8.15e-14,8.15e-14;0,8.15e-15,8.15e-15]" "DiffusionMatrix(0:2,0:2,2)=[0,0,0;0,0,0;0,0,8.15e-16]";
+    lm_python -s build_ecoli.py -sa ecoli.lm
+    
+    # Run the a simulation of the cell.
+    cp ecoli.lm data/ecoli_mpd.lm
+    lm_setp data/ecoli_mpd.lm timestep=7.5e-4 latticeWriteInterval=7.5e-2 writeInterval=7.5e-3 maxTime=7.5e0
+    lm-submit data/ecoli_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/diffusion_mpd.log local 2 1 1 erobert3
+    
+    # Visualize in VMD.
+    set env(LM_CREATE_SITE_ATOMS) 1
+    graphics top material Ghost
+    
+    % Count the number of particles in the lattice.
+    replicate=1;
+    L=permute(h5read('data/ecoli_mpd.lm',sprintf('/Model/Diffusion/Lattice')),[4:-1:1]);
+    psum=sum(sum(sum(L>0)));
+    disp(sprintf('initial=%d (%d %d %d %d %d %d %d %d) %d--%d',sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    for ts=[0:10]
+        L=permute(h5read('data/ecoli_mpd.lm',sprintf('/Simulations/%07d/Lattice/%010d',replicate,ts)),[4:-1:1]);
+        psum=sum(sum(sum(L>0)));
+        disp(sprintf('ts %4d=%d (%d %d %d %d %d %d %d %d) %d--%d',ts,sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    end
+    
+    # Build an E. coli lac system.
+    rm -f lac*.lm
+    lm_sbml_import lac_invivo.lm lac.sbml
+    lm_setdm lac_invivo.lm PlaceParticles=False numberReactions=23 numberSpecies=12 numberSiteTypes=4 "latticeSize=[64,64,128]" latticeSpacing=16e-9 particlesPerSite=8 "ReactionLocationMatrix(0:17,1)=[1]" "ReactionLocationMatrix(18:22,2)=[1]" "DiffusionMatrix(1,1,4:6)=[1.0e-12]" "DiffusionMatrix(1:2,1:2,7)=[0.1e-12,0.1e-12,0,0]" "DiffusionMatrix(2,2,8:9)=[0.1e-12]" "DiffusionMatrix(0:2,0:2,10)=[0,0,0;0,1.28e-12,1.28e-12;0,1.28e-12,1.28e-12]" "DiffusionMatrix(0:2,0:2,11)=[1.28e-12,0,1.28e-12;0,0,0;1.28e-12,0,1.28e-12]";
+    lm_python -s build_lac.py -sa lac_invivo.lm 0.2
+
+    # Visualize in VMD.
+    set env(LM_CREATE_SITE_ATOMS) 1
+    set env(LM_CREATE_OBSTACLE_ATOMS) 1
+    graphics top material Ghost
+    
+    # Run the local simulations on rig.
+    cp lac_invivo.lm data/lac_invivo_mpd.lm
+    lm_setp data/lac_invivo_mpd.lm timestep=5e-5 writeInterval=1e-3 latticeWriteInterval=1e-3 maxTime=1e0
+    lm-submit data/lac_invivo_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/lac_invivo_mpd.log local 1 2 1 erobert3
+
+    # Test building an E. coli lac system at several different resolutions.
+    lm_setdm mr_lac_invivo.lm PlaceParticles=False numberReactions=23 numberSpecies=12 numberSiteTypes=4 "latticeSize=[16,16,16]" latticeSpacing=1e-9 particlesPerSite=8 "ReactionLocationMatrix(0:17,1)=[1]" "ReactionLocationMatrix(18:22,2)=[1]" "DiffusionMatrix(1,1,4:6)=[1.0e-12]" "DiffusionMatrix(1:2,1:2,7)=[0.1e-12,0.1e-12,0,0]" "DiffusionMatrix(2,2,8:9)=[0.1e-12]" "DiffusionMatrix(0:2,0:2,10)=[0,0,0;0,1.28e-12,1.28e-12;0,1.28e-12,1.28e-12]" "DiffusionMatrix(0:2,0:2,11)=[1.28e-12,0,1.28e-12;0,0,0;1.28e-12,0,1.28e-12]";
+    is="0 1 2 3"; resolutions=(1.6e-08 8.0e-09 4.0e-09 2.0e-09);
+    packing=0.20;
+    for i in $is; do
+        resolution=${resolutions[i]};
+        cp mr_lac_invivo.lm mr_lac_invivo_${packing}_${resolution}.lm;
+    done;
+    lm_python -s build_lac_multiple_resolutions.py -sa mr_lac_invivo ${packing} 1.6e-08 8.0e-09 4.0e-09 2.0e-09
+    
+    [64,64,128]" latticeSpacing=16e-9
+
+
+    
+    
+    #### cuda_rng_profiling ####
+    
+    # Run a test using the cpu for rng.
+    m="burst"; a=106.6667; b=22.5; h=2.00; n50=1000; kap0=`echo "scale=2;${a}/100" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; h0=${h}; n050=${n50}; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; h1=${h}; n150=${n50}; d1=1; gamma=50; initialProtein=0;
+    filename="nocuda.lm5"; writeInterval=1e6; maxTime=1e14;
+    rm -f ${filename} && lm_setp ${filename} 4 proteinModel=${m} a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    replicates="1-10" && lm-submit ${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 ${filename}.log eir@compute-6-2.local 1 2 0 erobert3;
+    
+    # Run a test using the gpu for rng.
+    m="burst"; a=106.6667; b=22.5; h=2.00; n50=1000; kap0=`echo "scale=2;${a}/100" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; h0=${h}; n050=${n50}; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; h1=${h}; n150=${n50}; d1=1; gamma=50; initialProtein=0;
+    filename="cuda.lm5"; writeInterval=1e6; maxTime=1e14;
+    rm -f ${filename} && lm_setp ${filename} 4 proteinModel=${m} a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    replicates="1-66" && lm-submit ${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1/2 -gr 1/6 ${filename}.log eir@compute-6-1.local 1 12 4 erobert3;
+    
+    
+    #### diffusion_validation ####
+    
+    %%%% Diffusion model %%%%
+    
+    # Setup the diffusion simulations.
+    rm diffusion*.lm
+    lm_setrm diffusion.lm numberSpecies=250 numberReactions=0 "InitialSpeciesCounts=[1]"
+    lm_setdm diffusion.lm numberSpecies=250 numberSiteTypes=1 "latticeSize=[128,128,64]" latticeSpacing=8e-9 particlesPerSite=8 "DiffusionMatrix=[1.28e-12]"
+    lm_setp diffusion.lm latticeWriteInterval=6.25e-4 writeInterval=6.25e-4 maxTime=1e1
+    
+    % Build a initial lattice.
+    L=permute(h5read('diffusion.lm','/Model/Diffusion/Lattice'),[4:-1:1]);
+    L=L.*0;
+    for i=[1:250]
+        placed=0;
+        while placed==0
+            x=round(1+rand()*(size(L,1)-1));
+            y=round(1+rand()*(size(L,2)-1));
+            z=round(1+rand()*(size(L,3)-1));
+            for p=[1:size(L,4)]
+                if L(x,y,z,p) == 0
+                    L(x,y,z,p)=i;
+                    placed=1;
+                    break;
+                end
+            end
+        end
+    end
+    h5write('diffusion.lm','/Model/Diffusion/Lattice',permute(L,[4:-1:1]));
+    
+    # Test the nsm simulations.
+    cp diffusion.lm data/test_diffusion_nsm.lm
+    lm_setp data/test_diffusion_nsm.lm latticeWriteInterval=1e-5 writeInterval=1e-5 maxTime=1e-3
+    lm-submit data/test_diffusion_nsm.lm -r 1-1 -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1 logs/test_diffusion_nsm.log local 2 1 1 erobert3
+    
+    # Run the mpd simulations.
+    cp diffusion.lm data/diffusion_mpd.lm
+    lm_setp data/diffusion_mpd.lm timestep=12.5e-6
+    #lm-submit data/diffusion_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/diffusion_mpd.log local 2 1 1 erobert3
+    lm-submit data/diffusion_mpd.lm -r 2-10 -sl lm::rdme::MpdRdmeSolver -cr 11 -gr 1/3 logs/diffusion_mpd.log eir 1 12 4 erobert3
+    
+    # Run the nsm simulations.
+    cp diffusion.lm data/diffusion_nsm.lm
+    lm-submit data/diffusion_nsm.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 1/3 logs/diffusion_nsm.log eir 1 12 4 erobert3
+    #lm-submit data/diffusion_nsm.lm -r 1-1 -sl lm::rdme::NextSubvolumeSolver -cr 7 logs/diffusion_nsm.log odin 1 8 0 erobert3
+    
+    % Count the number of particles in the lattice.
+    replicate=1;
+    L=permute(h5read('data/diffusion_nsm.lm',sprintf('/Model/Diffusion/Lattice')),[4:-1:1]);
+    psum=sum(sum(sum(L>0)));
+    disp(sprintf('initial=%d (%d %d %d %d %d %d %d %d) %d--%d',sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    for ts=[0:1]
+        L=permute(h5read('data/diffusion_nsm.lm',sprintf('/Simulations/%07d/Lattice/%010d',replicate,ts)),[4:-1:1]);
+        psum=sum(sum(sum(L>0)));
+        disp(sprintf('ts %4d=%d (%d %d %d %d %d %d %d %d) %d--%d',ts,sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    end
+    
+    # Calculate the diffusion statistics.
+    replicates="2 3 4 5 6 7 8 9 10"; windowsPerOrder=10; minParticle=1; maxParticle=250; method="nsm";
+    for replicate in $replicates; do
+        lm_python-submit ../scripts/calculate_sp_diffusion_stats.py data/diffusion_${method} data/diffusion_${method}.lm ${replicate} ${windowsPerOrder} ${minParticle} ${maxParticle} logs/calc_diffusion_${method}_${replicate}.log eir 1 erobert3;
+    done;
+    
+    % Plot the single particle diffusion runs.
+    method='nsm';
+    plot_diffusion_sp_msd('Single Particle MSD (D=%0.01e m^2/s)', [1e-3 1e1 1e-15 1e-10], sprintf('data/diffusion_%s_01_r.dat',method), [0.0], [1:20]);    
+    
+    % Plot the single particle diffusion statistics.
+    method='nsm';
+    plot_diffusion_sp_stats(sprintf('data/diffusion_%s_%%02d_%%s.dat',method), [], 1.28e-12, [1:10]);    
+
+
+
+    
+    % Track the particles over the trajectory.
+    ps=[1:250]; ts=[0:9];
+    tracks=zeros(size(ps,2),size(ts,2)+1,3);
+    
+    % Get the initial position.
+    L=permute(h5read('data/diffusion_mpd.lm',sprintf('/Model/Diffusion/Lattice')),[4:-1:1]);
+    for pi=[1:size(ps,2)]
+        p=ps(pi);
+        [x,y,z,i]=ind2sub(size(L),find(L==p));
+        tracks(pi,1,:)=[x y z];
+    end
+    
+    % Get the position at each timestep.
+    for ts=[0:9]
+        L=permute(h5read('data/diffusion_mpd.lm',sprintf('/Simulations/0000001/Lattice/%010d',ts)),[4:-1:1]);
+        psum=sum(sum(sum(L>0)));
+        disp(sprintf('ts %4d=%d (%d %d %d %d %d %d %d %d) %d--%d',ts,sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    end
+    
+    
+    #### lac_timing ####
+
+    %%%% [Iex] = 5 uM %%%%
+    
+    # Setup the simulations.
+    rm -f lac*.lm
+    lm_sbml_import lac.lm lac.sbml
+    lm_setdm lac.lm numberReactions=23 numberSpecies=12 numberSiteTypes=3 "latticeSize=[64,64,128]" latticeSpacing=16e-9 particlesPerSite=8 "ReactionLocationMatrix(0:17,1)=[1]" "ReactionLocationMatrix(18:22,2)=[1]" "DiffusionMatrix(1,1,4:6)=[1.0e-12]" "DiffusionMatrix(1:2,1:2,7)=[0.1e-12,0.1e-12,0,0]" "DiffusionMatrix(2,2,8:9)=[0.1e-12]" "DiffusionMatrix(0:2,0:2,10)=[0,0,0;0,1.28e-12,1.28e-12;0,1.28e-12,1.28e-12]" "DiffusionMatrix(0:2,0:2,11)=[1.28e-12,0,1.28e-12;0,0,0;1.28e-12,0,1.28e-12]";
+    lm_python -s build_lac.py -sa lac.lm False
+    lm_sbml_import lac_invivo.lm lac.sbml
+    lm_setdm lac_invivo.lm numberReactions=23 numberSpecies=12 numberSiteTypes=4 "latticeSize=[64,64,128]" latticeSpacing=16e-9 particlesPerSite=8 "ReactionLocationMatrix(0:17,1)=[1]" "ReactionLocationMatrix(18:22,2)=[1]" "DiffusionMatrix(1,1,4:6)=[1.0e-12]" "DiffusionMatrix(1:2,1:2,7)=[0.1e-12,0.1e-12,0,0]" "DiffusionMatrix(2,2,8:9)=[0.1e-12]" "DiffusionMatrix(0:2,0:2,10)=[0,0,0;0,1.28e-12,1.28e-12;0,1.28e-12,1.28e-12]" "DiffusionMatrix(0:2,0:2,11)=[1.28e-12,0,1.28e-12;0,0,0;1.28e-12,0,1.28e-12]";
+    lm_python -s build_lac.py -sa lac_invivo.lm 1
+
+    # Visualize in VMD.
+    set env(LM_CREATE_SITE_ATOMS) 1
+    set env(LM_CREATE_OBSTACLE_ATOMS) 1
+    graphics top material Ghost
+    
+    # Test the local simulations on rig.
+    cp lac_invivo.lm data/test_lac_invivo_mpd.lm
+    lm_setp data/test_lac_invivo_mpd.lm timestep=5e-5 writeInterval=1e-3 latticeWriteInterval=1e-1 maxTime=1e0
+    lm-submit data/test_lac_invivo_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 10 logs/test_lac_invivo_mpd.log local 1 2 1 erobert3
+    
+    
+    cp lac_invivo.lm data/test_lac_invivo_nsm.lm
+    lm_setp data/test_lac_invivo_nsm.lm writeInterval=1e-3 latticeWriteInterval=1e-3 maxTime=1e-2
+    lm-submit data/test_lac_invivo_nsm.lm -r 1-1 -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1 logs/test_lac_invivo_nsm.log local 1 2 1 erobert3
+    
+    # Profile using lm.
+    cp lac.lm data/lac_direct.lm
+    lm_setp data/lac_direct.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_direct.lm -r 1-10 -sl lm::cme::GillespieDSolver -cr 11 -gr 1/3 logs/lac_direct.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac.lm data/lac_direct_nogpu.lm
+    lm_setp data/lac_direct_nogpu.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_direct_nogpu.lm -r 1-10 -sl lm::cme::GillespieDSolver -cr 11 -gr 0 logs/lac_direct_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac.lm data/lac_nextr.lm
+    lm_setp data/lac_nextr.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_nextr.lm -r 1-10 -sl lm::cme::NextReactionSolver -cr 11 -gr 1/3 logs/lac_nextr.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac.lm data/lac_nextr_nogpu.lm
+    lm_setp data/lac_nextr_nogpu.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_nextr_nogpu.lm -r 1-10 -sl lm::cme::NextReactionSolver -cr 11 -gr 0 logs/lac_nextr_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac.lm data/lac_mpd.lm
+    lm_setp data/lac_mpd.lm timestep=5e-5 writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e0
+    lm-submit data/lac_mpd.lm -r 1-10 -sl lm::rdme::MpdRdmeSolver -cr 11 -gr 1 logs/lac_mpd.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac.lm data/lac_nsm.lm
+    lm_setp data/lac_nsm.lm writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e0
+    lm-submit data/lac_nsm.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 1/3 logs/lac_nsm.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac.lm data/lac_nsm_nogpu.lm
+    lm_setp data/lac_nsm_nogpu.lm writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e0
+    lm-submit data/lac_nsm_nogpu.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 0 logs/lac_nsm_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    cp lac_invivo.lm data/lac_invivo_mpd.lm
+    lm_setp data/lac_invivo_mpd.lm timestep=5e-5 writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e0
+    lm-submit data/lac_invivo_mpd.lm -r 1-10 -sl lm::rdme::MpdRdmeSolver -cr 11 -gr 1 logs/lac_invivo_mpd.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac_invivo.lm data/lac_invivo_nsm.lm
+    lm_setp data/lac_invivo_nsm.lm writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e0
+    lm-submit data/lac_invivo_nsm.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 1/3 logs/lac_invivo_nsm.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    
+    # Profile using stochkit.
+    rm -rf data/lac_stochkit
+    ssa -m lac_stochkit.xml -t 3e6 -r 10 --out-dir data/lac_stochkit --keep-trajectories -p 1
+
+    # Profile using copasi.
+    mkdir -p data/lac_copasi;
+    is="01 02 03 04 05 06 07 08 09 10";
+    for i in $is; do
+        /usr/bin/time -f "%e" -o data/lac_copasi/time_$i.txt ~/share/lib/copasi/bin/CopasiSE lac_copasi.cps; 
+    done;
+
+    # Profile using mesord.
+    rm data/lac_mesord/*
+    cd data/lac_mesord
+    cp ../../lac_mesord.xml .
+    #mesord -q 0.016 um -i 142 -I 4 -c 0.001 -p lac_mesord.xml
+    mesord -q 0.016 um -t 1.0 -c 0.01 -p lac_mesord.xml
+    cd ../..
+
+    %%%% [Iex] = 40 uM %%%%
+    
+    # Setup the simulations.
+    rm -f lac_high*.lm
+    lm_sbml_import lac_high.lm lac_high.sbml
+    lm_setdm lac_high.lm PlaceParticles=False numberReactions=23 numberSpecies=12 numberSiteTypes=3 "latticeSize=[128,128,256]" latticeSpacing=8e-9 particlesPerSite=8 "ReactionLocationMatrix(0:17,1)=[1]" "ReactionLocationMatrix(18:22,2)=[1]" "DiffusionMatrix(1,1,4:6)=[1.0e-12]" "DiffusionMatrix(1:2,1:2,7)=[0.1e-12,0.1e-12,0,0]" "DiffusionMatrix(2,2,8:9)=[0.1e-12]" "DiffusionMatrix(0:2,0:2,10)=[0,0,0;0,1.28e-12,1.28e-12;0,1.28e-12,1.28e-12]" "DiffusionMatrix(0:2,0:2,11)=[1.28e-12,0,1.28e-12;0,0,0;1.28e-12,0,1.28e-12]";
+    lm_python -s build_lac_high.py -sa lac_high.lm 0
+    lm_sbml_import lac_high_invivo.lm lac_high.sbml
+    lm_setdm lac_high_invivo.lm PlaceParticles=False numberReactions=23 numberSpecies=12 numberSiteTypes=4 "latticeSize=[128,128,256]" latticeSpacing=8e-9 particlesPerSite=8 "ReactionLocationMatrix(0:17,1)=[1]" "ReactionLocationMatrix(18:22,2)=[1]" "DiffusionMatrix(1,1,4:6)=[1.0e-12]" "DiffusionMatrix(1:2,1:2,7)=[0.1e-12,0.1e-12,0,0]" "DiffusionMatrix(2,2,8:9)=[0.1e-12]" "DiffusionMatrix(0:2,0:2,10)=[0,0,0;0,1.28e-12,1.28e-12;0,1.28e-12,1.28e-12]" "DiffusionMatrix(0:2,0:2,11)=[1.28e-12,0,1.28e-12;0,0,0;1.28e-12,0,1.28e-12]";
+    lm_python -s build_lac_high.py -sa lac_high_invivo.lm 1
+
+    # Visualize in VMD.
+    graphics top material Ghost
+    
+    % Count the number of particles in the lattice.
+    L=permute(h5read('lac_high.lm',sprintf('/Model/Diffusion/Lattice')),[4:-1:1]);
+    psum=sum(sum(sum(L>0)));
+    disp(sprintf('initial=%d (%d %d %d %d %d %d %d %d) %d--%d',sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    
+    # Test the local simulations on rig.
+    cp lac_high.lm data/test_lac_high_mpd.lm
+    lm_setp data/test_lac_high_mpd.lm timestep=1.25e-5 writeInterval=1.25e-5 latticeWriteInterval=1.25e-5 maxTime=1.25e-4
+    lm-submit data/test_lac_high_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/test_lac_high_mpd.log local 1 2 1 erobert3
+    cp lac_high.lm data/test_lac_high_nsm.lm
+    lm_setp data/test_lac_high_nsm.lm writeInterval=1.25e-5 latticeWriteInterval=1.25e-5 maxTime=1.25e-4
+    lm-submit data/test_lac_high_nsm.lm -r 1-1 -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1 logs/test_lac_high_nsm.log local 1 2 1 erobert3    
+    cp lac_high_invivo.lm data/test_lac_high_invivo_mpd.lm
+    lm_setp data/test_lac_high_invivo_mpd.lm timestep=1.25e-5 writeInterval=5e-4 latticeWriteInterval=5e-4 maxTime=5e-1
+    lm-submit data/test_lac_high_invivo_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/test_lac_high_invivo_mpd.log local 1 2 1 erobert3
+    
+    # Profile using lm.
+    cp lac_high.lm data/lac_high_direct.lm
+    lm_setp data/lac_high_direct.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_high_direct.lm -r 1-10 -sl lm::cme::GillespieDSolver -cr 11 -gr 1/3 logs/lac_high_direct.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac_high.lm data/lac_high_direct_nogpu.lm
+    lm_setp data/lac_high_direct_nogpu.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_high_direct_nogpu.lm -r 1-10 -sl lm::cme::GillespieDSolver -cr 11 -gr 0 logs/lac_high_direct_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac_high.lm data/lac_high_nextr.lm
+    lm_setp data/lac_high_nextr.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_high_nextr.lm -r 1-10 -sl lm::cme::NextReactionSolver -cr 11 -gr 1/3 logs/lac_high_nextr.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac_high.lm data/lac_high_nextr_nogpu.lm
+    lm_setp data/lac_high_nextr_nogpu.lm writeInterval=1e7 maxSteps=100000000 maxTime=Inf
+    lm-submit data/lac_high_nextr_nogpu.lm -r 1-10 -sl lm::cme::NextReactionSolver -cr 11 -gr 0 logs/lac_high_nextr_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac_high.lm data/lac_high_mpd.lm
+    lm_setp data/lac_high_mpd.lm timestep=1.25e-5 writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e-2
+    lm-submit data/lac_high_mpd.lm -r 1-10 -sl lm::rdme::MpdRdmeSolver -cr 11 -gr 1 logs/lac_high_mpd.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac_high.lm data/lac_high_nsm.lm
+    lm_setp data/lac_high_nsm.lm writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e-4
+    lm-submit data/lac_high_nsm.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 1/3 logs/lac_high_nsm.log eir@compute-6-1.local 1 12 4 erobert3
+    cp lac_high.lm data/lac_high_nsm_nogpu.lm
+    lm_setp data/lac_high_nsm_nogpu.lm writeInterval=1e7 latticeWriteInterval=1e7 maxTime=1e-4
+    lm-submit data/lac_high_nsm_nogpu.lm -r 1-10 -sl lm::rdme::NextSubvolumeSolver -cr 11 -gr 0 logs/lac_high_nsm_nogpu.log eir@compute-6-1.local 1 12 4 erobert3
+    
+    # Profile using stochkit.
+    rm -rf data/lac_high_stochkit
+    ssa -m lac_high_stochkit.xml -t 2.0e4 -r 10 --out-dir data/lac_high_stochkit --keep-trajectories -p 1
+    
+    # Profile using copasi.
+    mkdir -p data/lac_high_copasi;
+    is="01 02 03 04 05 06 07 08 09 10";
+    for i in $is; do
+        /usr/bin/time -f "%e" -o data/lac_high_copasi/time_$i.txt ~/share/lib/copasi/bin/CopasiSE lac_high_copasi.cps; 
+    done;
+
+    # Profile using mesord.
+    rm data/lac_high_mesord/*
+    cd data/lac_high_mesord
+    cp ../../lac_high_mesord.xml .
+    #mesord -q 0.016 um -i 134 -I 4 -C 100000 -p lac_high_mesord.xml
+    mesord -q 0.016 um -t 1e-4 -c 1.0 -p lac_high_mesord.xml
+    cd ../..
+
+    
+    #### lattice_1d_single_gpu_profiling ####
+    
+    # Profile by lattice size, word size, apron size, calculation load, and kernel launch parameters for x diffusion.
+    export ds=`seq -f "%g" 0 2`;
+    export is=`seq -f "%g" 0 4`;
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 0 1`;
+    export js=`seq -f "%g" 0 9`;
+    export ks=`seq -f "%g" 0 15`;
+    export ls=`seq -f "%g" 0 15`;
+    export fs=`seq -f "%g" 0 4`;
+    ../scripts/run_profile_tests.sh eir ./lattice_1d_profiler.sh
+
+    # Profile for all three dimensions.    
+    export ds=3;
+    export is=`seq -f "%g" 0 4`;
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 0 1`;
+    export fs=`seq -f "%g" 0 4`;    
+    export x_y_zkps=`seq -f "%g" 0 8`
+    ../scripts/run_profile_tests.sh gna ./lattice_1d_profiler.sh
+        
+    # Parse the profile files.
+    export hs=`seq -f "%g" 0 2`;
+    export ds=`seq -f "%g" 3 3`;
+    ../scripts/run_profile_parser.sh
+    
+    % Plot the profiles.
+    plot_profile(3,4,5,[1:3],[4],[1:4],[1:5],[1:5]);    
+    
+    % Plot some details.
+    plot_profile(3,2,3,[2:3],[4],[4],[3:5],[1:5]);
+
+    
+    #### lattice_1d_single_gpu_profiling/disassembly ####
+    
+    # 0 flops
+    rm -rf 0flops && mkdir -p 0flops;
+    /usr/local/cuda/bin/nvcc -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -ptx ../lattice_1D_profiler.cu -o 0flops/lattice_1D_profiler.ptx
+    /usr/local/cuda/bin/nvcc -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -dir 0flops -ext all ../lattice_1D_profiler.cu -o test
+    cuobjdump -elf -sass 0flops/*/sm_11 > 0flops/sm11.asm;
+    cuobjdump -elf -sass 0flops/*/sm_13 > 0flops/sm13.asm;
+
+    # 1 flops    
+    rm -rf 1flops && mkdir -p 1flops;
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=1 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -ptx ../lattice_1D_profiler.cu -o 1flops/lattice_1D_profiler.ptx
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=1 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -dir 1flops -ext all ../lattice_1D_profiler.cu -o test
+    cuobjdump -elf -sass 1flops/*/sm_11 > 1flops/sm11.asm;
+    cuobjdump -elf -sass 1flops/*/sm_13 > 1flops/sm13.asm;
+    
+    # 2 flops    
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=2 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -ptx ../lattice_1D_profiler.cu -o 2flops/lattice_1D_profiler.ptx
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=2 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -dir 2flops -ext all ../lattice_1D_profiler.cu -o test
+    cuobjdump -elf -sass 2flops/*/sm_11 > 2flops/lattice_1D_profiler.asm    
+    
+    # 10 flops    
+    rm -rf 10flops && mkdir -p 10flops;
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=10 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -ptx ../lattice_1D_profiler.cu -o 10flops/lattice_1D_profiler.ptx;
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=10 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -dir 10flops -ext all ../lattice_1D_profiler.cu -o test;
+    cuobjdump -elf -sass 10flops/*/sm_11 > 10flops/sm11.asm;
+    cuobjdump -elf -sass 10flops/*/sm_13 > 10flops/sm13.asm;
+
+    # 11 flops
+    rm -rf 11flops && mkdir -p 11flops;
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=11 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -ptx ../lattice_1D_profiler.cu -o 11flops/lattice_1D_profiler.ptx;
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=11 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -dir 11flops -ext all ../lattice_1D_profiler.cu -o test;
+    cuobjdump -elf -sass 11flops/*/sm_11 > 11flops/sm11.asm;
+    cuobjdump -elf -sass 11flops/*/sm_13 > 11flops/sm13.asm;
+    
+    # 100 flops
+    rm -rf 100flops && mkdir -p 100flops;
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=100 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -ptx ../lattice_1D_profiler.cu -o 100flops/lattice_1D_profiler.ptx;
+    /usr/local/cuda/bin/nvcc -DSIMULATED_WORKLOAD=100 -DDO_X_DIFFUSION -m32 -O3 -DMACOSX --gpu-architecture compute_11 --gpu-code sm_11,sm_13 --ptxas-options=-v -DOPT_CUDA -DOPT_PROF -DPROF_ENABLE -DPROF_MAX_THREADS=1 -DPROF_MAX_EVENTS=100000 -DPROF_MAX_CUDA_EVENT_BUFFER=2010 -DPROF_OUT_FILE=output.prof -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/c -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/src/cuda -I/Network/Servers/sol.scs.uiuc.edu/Volumes/HomeRAID2/Homes/erobert3/Work/Lab/Code/LatticeMicrobe/profile -DX_SIZE=64 -DY_SIZE=64 -DZ_SIZE=64 -DLS_WORDS_PER_SITE=1 -DLS_WINDOW_APRON_SIZE=0 -DLS_X_BLOCK_MAX_X_SIZE=16 -DLS_Y_BLOCK_X_SIZE=0 -DLS_Y_BLOCK_Y_SIZE=0 -DLS_Z_BLOCK_X_SIZE=0 -DLS_Z_BLOCK_Z_SIZE=0 -dir 100flops -ext all ../lattice_1D_profiler.cu -o test;
+    cuobjdump -elf -sass 100flops/*/sm_11 > 100flops/sm11.asm;
+    cuobjdump -elf -sass 100flops/*/sm_13 > 100flops/sm13.asm;
+    
+    opendiff 10flops/lattice_1D_profiler.ptx 11flops/lattice_1D_profiler.ptx
+    opendiff 10flops/sm11.asm 10flops/sm13.asm
+    opendiff 10flops/sm11.asm 11flops/sm11.asm
+    opendiff 0flops/sm13.asm 1flops/sm13.asm
+    
+    
+    #### lattice_2d_single_gpu_profiling ####
+    
+    sleep 5h;
+    
+    # Profile for the xy dimension.    
+    export ds=4;
+    export is=`seq -f "%g" 0 4`;
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 0 1`;
+    export fs=`seq -f "%g" 0 4`;    
+    export xykps=`seq -f "%g" 0 15`;
+    ../scripts/run_profile_tests.sh eir ./lattice_2d_profiler.sh;
+    
+    # Profile for xy and z dimensions.
+    export ds=5;
+    export is=`seq -f "%g" 0 4`;
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 0 1`;
+    export fs=`seq -f "%g" 0 4`;    
+    export xy_zkps=`seq -f "%g" 0 8`;
+    ../scripts/run_profile_tests.sh eir ./lattice_2d_profiler.sh;
+        
+    # Parse the profile files.
+    export hs=`seq -f "%g" 0 2`;
+    export ds=`seq -f "%g" 4 5`;
+    ../scripts/run_profile_parser.sh
+    
+    % Plot the profiles.
+    plot_profile(3,4,5,[1:3],[5:6],[1:4],[1:5],[1:5]);
+    
+    % Plot some details.
+    plot_profile(3,2,3,[2:3],[6],[4],[3:5],[1:5]);
+        
+    
+    #### lattice_3d_single_gpu_profiling ####
+    
+    # Profile by lattice size, word size, apron size, calculation load, and kernel launch parameters for x diffusion.
+    export ds=6;
+    export is="0 2";
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 1 1`;
+    export fs=`seq -f "%g" 0 0`;    
+    export xyzkps=`seq -f "%g" 0 22`;
+    ../scripts/run_profile_tests.sh eir ./lattice_3d_profiler.sh
+                
+    # Parse the profile files.
+    export hs=`seq -f "%g" 2 2`;
+    export ds=6;
+    ../scripts/run_profile_parser.sh
+    
+    % Plot the profiles.
+    plot_profile(1,3,4,[1:3],[6],[1 2 3 4],[1:1],[1 3]);
+    
+
+    #### lattice_3dw_single_gpu_profiling ####
+    
+    # Profile with no apron.
+    export ds=6;
+    export is=`seq -f "%g" 0 4`;
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 0 0`;
+    export fs=`seq -f "%g" 0 4`;    
+    export xyzkps=`seq -f "%g" 0 22`;
+    ../scripts/run_profile_tests.sh eir ./lattice_3dw_profiler.sh;
+
+    # Profile with an apron of 1 x=16.
+    export ds=6;
+    export is=`seq -f "%g" 7 11`;
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 1 1`;
+    export fs=`seq -f "%g" 0 4`;    
+    export xyzkps=`seq -f "%g" 0 12`;
+    ../scripts/run_profile_tests.sh eir ./lattice_3dw_profiler.sh;
+    
+    # Profile with an apron of 1 x=32.
+    export ds=6;
+    export is=`seq -f "%g" 12 16`;
+    export ws=`seq -f "%g" 0 1`;
+    export as=`seq -f "%g" 1 1`;
+    export fs=`seq -f "%g" 0 4`;    
+    export xyzkps=`seq -f "%g" 13 22`;
+    ../scripts/run_profile_tests.sh eir ./lattice_3dw_profiler.sh;
+    
+    # Parse the profile files.
+    export hs=`seq -f "%g" 2 2`;
+    export ds=6;
+    ../scripts/run_profile_parser.sh
+    
+    % Plot the profiles.
+    plot_profile(3,4,5,[1:3],[7],[1:4],[1:5],[1:5 8:12 13:17]);
+    
+    % Plot some details.
+    plot_profile(3,2,3,[2:3],[7],[4],[3:5],[1:5 8:12 13:17]);
+    
+    #### lkcell_profiling ####
+
+    %%%% gna timings %%%%
+    
+    # 0% packing 0 uM external inducer.
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/gna_invivo_lac_switch  0e-6 0.0 5e-3 5e-4 5e-4 logs/cell.log local 1 erobert3
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/gna_invivo_lac_switch 20e-6 0.0 5e-3 5e-4 5e-4 logs/cell.log local 1 erobert3
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/gna_invivo_lac_switch  0e-6 0.4 5e-3 5e-4 5e-4 logs/cell.log local 1 erobert3
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/gna_invivo_lac_switch 20e-6 0.4 5e-3 5e-4 5e-4 logs/cell.log local 1 erobert3
+    
+    %%%% sif timings %%%%
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/sif_invivo_lac_switch  0e-6 0.0 5e-3 5e-4 5e-4 logs/cell1.log sif 1 erobert3
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/sif_invivo_lac_switch 20e-6 0.0 5e-3 5e-4 5e-4 logs/cell2.log sif 1 erobert3
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/sif_invivo_lac_switch  0e-6 0.4 5e-3 5e-4 5e-4 logs/cell3.log sif 1 erobert3
+    lkcell-submit -s invivo_lac_switch.py -sa simulation_data/sif_invivo_lac_switch 20e-6 0.4 5e-3 5e-4 5e-4 logs/cell4.log sif 1 erobert3    
+    
+    %%%% vl10 timings %%%%
+    lkcell -s invivo_lac_switch.py -sa simulation_data/vl10_invivo_lac_switch   0e-6 0.0 5e-3 5e-4 5e-4
+    lkcell -s invivo_lac_switch.py -sa simulation_data/vl10_invivo_lac_switch  20e-6 0.0 5e-3 5e-4 5e-4
+
+    #### ou_noise_validation ####
+    
+    %%%% Decay reaction %%%%
+    
+    # Setup the decay simulations.
+    rm -f decay.lm
+    lm_sbml_import decay.lm decay.xml
+    lm_setp decay.lm writeInterval=1e-2 maxTime=5e0 noiseRecalcFraction=1e-3 parameterWriteInterval=1e-3
+    lm_setrm decay.lm ReactionRateNoise=[1.2321,0.208152306474458]
+    cp decay.lm data/decay_nrfluc.lm
+    
+    # Run the simulations.
+    lm-submit data/decay_nrfluc.lm -r 1-1 -sl lm::cme::FluctuatingNRSolver -cr 1 logs/decay_nrfluc.log local 1 2 0 erobert3
+
+    % Calculate P(x,t)
+    Ris="6 7 8 9"; Rs=(100000 50000 25000 10000 5000 2500 1000 500 250 100);
+    for Ri in $Ris; do
+        R=${Rs[Ri]};
+        matlab-submit calc_pt "'data/decay_nrfluc_${R}.mat'" "'data/decay_nrfluc.lm'" ${R} 0 1000 1 logs/pt_decay_${R}.log sif 1 erobert3;
+    done;
+    
+    % Plot the parameter noise.
+    Rs=[1:1000]; P=0; k=3.33; var0=(k/2)^2; tau0=log(2)/k;
+    method='nrfluc';
+    noise=[];
+    for R=Rs
+        filename=sprintf('data/decay_%s.lm',method);
+        tmp=cast(h5read(filename,sprintf('/Simulations/%07d/ParameterValues/%07d',R,P)),'double')';
+        noise(end+1:end+size(tmp,1)-1,:)=tmp(2:end,:);
+    end
+    subplot(2,1,1);
+    plot(noise(2:end,1),noise(2:end,2),'.');
+    axis([noise(1,1) noise(end,1) -2*k 2*k]);
+    subplot(2,1,2);
+    x=noise(2:end,2); dt=noise(2,1)-noise(1,1);
+    [cr,ct]=xcorr(x,'coeff');
+    cr=cr(find(ct==0):end);
+    ct=(ct(find(ct==0):end)).*dt;
+    semilogx(ct,cr);
+    s = fitoptions('Method','NonlinearLeastSquares', 'Lower',[1e-3], 'Upper',[1e3], 'Startpoint',[tau0]);
+    f = fittype('exp(-x/tau)','options',s,'coeff',{'tau'});
+    [fo,gof]=fit(ct',cr,f);
+    fitvalues=coeffvalues(fo);
+    tau=fitvalues(1);
+    hold('on');
+    semilogx(ct, exp(-ct./tau), 'r--');
+    semilogx(ct, exp(-ct./tau0), 'k:');
+    hold('off');
+    ax=axis; axis([noise(1,1) noise(end,1) -0.2 1.1e0]);
+    disp(sprintf('mean=%1.4e (0.0), var=%0.4e (%0.4e), tau=%0.4e (%0.4e)',mean(x),var(x),var0,tau,tau0));
+    
+    
+    
+    % Calculate the PDF, E, and Var from the CME.
+    x=[0:1000]; ts=[0:1e-2:5e0]; k=3.33;
+    E0=x(end).*exp(-k.*ts);
+    V0=x(end).*exp(-k.*ts).*(1-exp(-k.*ts));
+    Pt0=zeros(size(x,2),size(ts,2));
+    for ti=[1:size(ts,2)]
+        for xi=[1:size(x,2)]
+            Pt0(xi,ti)=nchoosek(x(end),x(xi))*exp(-k*ts(ti)*x(xi))*((1-exp(-k*ts(ti)))^(x(end)-x(xi)));
+        end
+    end    
+        
+    % Plot the mean and variance as a function of time.
+    R=500;
+    method='nrfluc';
+    load(sprintf('data/decay_%s_%d.mat',method,R),'Pt');
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+    end
+    subplot(2,2,1);
+    semilogy(ts(2:15:end), E(2:15:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 5 1e-9 1e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 5 1e-6 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:15:end), V(2:15:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 5 1e-9 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 5 1e-6 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+
+    % Plot a comparison of the PDFs.
+    rows=2; cols=5; plotIndex=1;
+    x=[0:1000];
+    Rs=[100 250 500 1000 2500 5000 10000 25000 50000 100000];
+    ti=50;
+    method='nrfluc';
+    for ri=[1:4]
+        R=Rs(ri);
+        load(sprintf('data/decay_%s_%d.mat',method,R),'Pt');
+        subplot(rows,cols,plotIndex);
+        semilogy(x, Pt(:,ti), 'rx');
+        hold('on');
+        semilogy(x, Pt0(:,ti), 'b');
+        hold('off');
+        KL=0;
+        for xi=[1:size(x,2)]
+            if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                KL=KL+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+            end
+        end
+        ax=axis; axis([0 1000 1e-6 1e0]); xlabel('Count (A)'); ylabel('Probability'); title(sprintf('N=%d, KL=%0.2e',R,KL));
+        plotIndex=plotIndex+1;
+    end
+
+    
+    #### protobuf_profiling ####
+    
+    # Run a simulation to get some data set timings.
+    a=600.000; b=5.316; d1=1; gamma=53; epsilon=0.0117; kapOnMin=6; kapOnMax=64.44; n50On=1057.67; hOn=2.0; kapOffMin=6; kapOffMax=64.44; n50Off=1057.67; hOff=2.0; kapLoopMin=30; kapLoopMax=30; n50Loop=151.187; hLoop=2.0; kapUnloopMin=0.82665; kapUnloopMax=46.466; n50Unloop=151.187; hUnloop=2.0; fptProteinMax=5000; initialProtein=0;
+    filename="test.lm5"; writeInterval=1e-2; maxTime=1e0;  replicates="1-100";
+    rm -f ${filename} && lm_setp ${filename} 5 a=${a} b=${b} d1=${d1} gamma=${gamma} epsilon=${epsilon} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} fptProteinMax=${fptProteinMax} kapOnMin=${kapOnMin} kapOnMax=${kapOnMax} n50On=${n50On} hOn=${hOn} kapOffMin=${kapOffMin} kapOffMax=${kapOffMax} n50Off=${n50Off} hOff=${hOff} kapLoopMin=${kapLoopMin} kapLoopMax=${kapLoopMax} n50Loop=${n50Loop} hLoop=${hLoop} kapUnloopMin=${kapUnloopMin} kapUnloopMax=${kapUnloopMax} n50Unloop=${n50Unloop} hUnloop=${hUnloop};
+    lm-submit ${filename} -m lm::cme::TwoStateHillLoopSwitch -r ${replicates} ${filename}.log sif 2 1 0 erobert3;
+    
+    
+    #### rdme_validation ####
+    
+    %%%% Decay reaction %%%%
+    
+    # Setup the decay simulations.
+    rm -f decay*.lm
+    lm_sbml_import decay.lm decay.xml
+    lm_setdm decay.lm numberSpecies=2 numberReactions=1 numberSiteTypes=1 "latticeSize=[32,32,32]" latticeSpacing=124e-9 particlesPerSite=8 "DiffusionMatrix=[1.28e-12]" "ReactionLocationMatrix=[1]"
+    lm_setp decay.lm latticeWriteInterval=1.0e0 writeInterval=1.5e-1 maxTime=5.0e0
+    
+    % Build a initial lattice.
+    L=permute(h5read('decay.lm','/Model/Diffusion/Lattice'),[4:-1:1]);
+    L=L.*0;
+    for i=[1:1000]
+        placed=0;
+        while placed==0
+            x=round(1+rand()*(size(L,1)-1));
+            y=round(1+rand()*(size(L,2)-1));
+            z=round(1+rand()*(size(L,3)-1));
+            for p=[1:size(L,4)]
+                if L(x,y,z,p) == 0
+                    L(x,y,z,p)=1;
+                    placed=1;
+                    break;
+                end
+            end
+        end
+    end
+    h5write('decay.lm','/Model/Diffusion/Lattice',permute(L,[4:-1:1]));
+    
+    # Test the mpd simulations.
+    cp decay.lm data/test_decay_mpd.lm
+    lm_setp data/test_decay_mpd.lm timestep=3.0e-3 latticeWriteInterval=1.0e0 writeInterval=1.5e-1 maxTime=1.0e0
+    lm-submit data/test_decay_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/test_decay_mpd.log local 2 1 1 erobert3
+
+    # Test the nsm simulations.
+    cp decay.lm data/test_decay_nsm.lm
+    lm_setp data/test_decay_nsm.lm fptTrackingList=0,1 latticeWriteInterval=1.0e-3 writeInterval=1.0e-5 maxTime=1e-2
+    lm-submit data/test_decay_nsm.lm -r 1-1 -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1 logs/test_decay_nsm.log local 2 1 1 erobert3
+    
+    % Count the number of particles in the lattice.
+    replicate=1;
+    L=permute(h5read('data/test_decay_nsm.lm',sprintf('/Model/Diffusion/Lattice')),[4:-1:1]);
+    psum=sum(sum(sum(L>0)));
+    disp(sprintf('initial=%d (%d %d %d %d %d %d %d %d) %d--%d',sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    for ts=[0:10]
+        L=permute(h5read('data/test_decay_nsm.lm',sprintf('/Simulations/%07d/Lattice/%010d',replicate,ts)),[4:-1:1]);
+        psum=sum(sum(sum(L>0)));
+        disp(sprintf('ts %4d=%d (%d %d %d %d %d %d %d %d) %d--%d',ts,sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    end
+    
+    # Run the mpd simulations.
+    cp decay.lm data/decay_mpd.lm
+    lm_setp data/decay_mpd.lm timestep=3.0e-3
+    is=`seq -f "%g" 0 39`; replicatesPerSim=2500;
+    for i in $is; do
+        lm-submit data/decay_mpd.lm -r $(((i*replicatesPerSim)+1))-$(((i+1)*replicatesPerSim)) -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/decay_mpd_${i}.log eir 4 12 4 erobert3;
+    done;
+
+    # Run the nsm simulations.
+    cp decay.lm data/decay_nsm.lm
+    is=`seq -f "%g" 0 39`; replicatesPerSim=2500;
+    for i in $is; do
+        lm-submit data/decay_nsm.lm -r $(((i*replicatesPerSim)+1))-$(((i+1)*replicatesPerSim)) -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1 logs/decay_nsm_${i}.log eir 3 12 4 erobert3;
+    done;
+
+    % Calculate P(x,t)
+    method="nsm";
+    Ris="0 1 2 3 4 5 6 7 8 9"; Rs=(100000 50000 25000 10000 5000 2500 1000 500 250 100);
+    for Ri in $Ris; do
+        R=${Rs[Ri]};
+        matlab-submit calc_pt "'data/decay_${method}_${R}.mat'" "'data/decay_${method}.lm'" ${R} 0 1000 1 logs/pt_decay_${method}_${R}.log sif 1 erobert3;
+    done;
+    
+    % Calculate the PDF, E, and Var from the CME.
+    x=[0:1000]; ts=[0:1.5e-1:5e0]; k=3.33;
+    E0=x(end).*exp(-k.*ts);
+    V0=x(end).*exp(-k.*ts).*(1-exp(-k.*ts));
+    Pt0=zeros(size(x,2),size(ts,2));
+    for ti=[1:size(ts,2)]
+        for xi=[1:size(x,2)]
+            Pt0(xi,ti)=nchoosek(x(end),x(xi))*exp(-k*ts(ti)*x(xi))*((1-exp(-k*ts(ti)))^(x(end)-x(xi)));
+        end
+    end    
+        
+    % Plot the mean and variance as a function of time.
+    R=100000;
+    method='nsm';
+    load(sprintf('data/decay_%s_%d.mat',method,R),'Pt');
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+    end
+    subplot(2,2,1);
+    semilogy(ts(2:end), E(2:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 5 1e-5 1e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 5 1e-6 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:end), V(2:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 5 1e-5 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 5 1e-6 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+    
+    % Plot a comparison of the PDFs.
+    rows=2; cols=5; plotIndex=1;
+    x=[0:1000];
+    Rs=[100 250 500 1000 2500 5000 10000 25000 50000 100000];
+    ti=4;
+    method='nsm';
+    for ri=[1:length(Rs)]
+        R=Rs(ri);
+        load(sprintf('data/decay_%s_%d.mat',method,R),'Pt');
+        subplot(rows,cols,plotIndex);
+        semilogy(x, Pt(:,ti), 'rx');
+        hold('on');
+        semilogy(x, Pt0(:,ti), 'b');
+        hold('off');
+        KL=0;
+        for xi=[1:size(x,2)]
+            if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                KL=KL+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+            end
+        end
+        ax=axis; axis([100 300 1e-6 1e0]); xlabel('Count (A)'); ylabel('Probability'); title(sprintf('N=%d, KL=%0.2e',R,KL));
+        plotIndex=plotIndex+1;
+    end
+    
+    % Plot the maximum KL divergence as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'mpd','nsm'};
+    maxKL=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/decay_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            KL=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL(ti)=KL(ti)+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+            end
+            if ri == 10 && mi == 1, plot(ts,KL);, end;
+            maxKL(ri,mi)=max(KL);
+        end
+    end
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog((Rs),(maxKL(:,mi)), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog((Rs),(mean(maxKL,2)));
+    hold('off');
+    axis([5e1 2e5 1e-4 1e0]); xlabel('Number Replicates'); ylabel('Max KL Divergence'); legend(legendStrings,'Location','NorthEast');
+
+    
+    %%%% Reversible unimolecular reaction %%%%
+    
+    # Setup the reversible_unimolecular simulations.
+    rm -f reversible_unimolecular*.lm
+    lm_sbml_import reversible_unimolecular.lm reversible_unimolecular.xml
+    lm_setdm reversible_unimolecular.lm numberReactions=2 numberSpecies=2 numberSiteTypes=1 "latticeSize=[32,32,32]" latticeSpacing=124e-9 particlesPerSite=8 "DiffusionMatrix=[1.28e-12]" "ReactionLocationMatrix=[1]"
+    lm_setp reversible_unimolecular.lm latticeWriteInterval=5.0e0 writeInterval=1.5e-1 maxTime=1.0e1
+    
+    % Build a initial lattice.
+    L=permute(h5read('reversible_unimolecular.lm','/Model/Diffusion/Lattice'),[4:-1:1]);
+    L=L.*0;
+    for i=[1:1000]
+        placed=0;
+        while placed==0
+            x=round(1+rand()*(size(L,1)-1));
+            y=round(1+rand()*(size(L,2)-1));
+            z=round(1+rand()*(size(L,3)-1));
+            for p=[1:size(L,4)]
+                if L(x,y,z,p) == 0
+                    L(x,y,z,p)=1;
+                    placed=1;
+                    break;
+                end
+            end
+        end
+    end
+    h5write('reversible_unimolecular.lm','/Model/Diffusion/Lattice',permute(L,[4:-1:1]));
+    
+    # Test the mpd simulations.
+    cp reversible_unimolecular.lm data/test_reversible_unimolecular_mpd.lm
+    lm_setp data/test_reversible_unimolecular_mpd.lm timestep=3.0e-3 latticeWriteInterval=1.0e0 writeInterval=1.5e-1 maxTime=1.0e0
+    lm-submit data/test_reversible_unimolecular_mpd.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/test_reversible_unimolecular_mpd.log local 2 1 1 erobert3
+
+    # Test the nsm simulations.
+    cp reversible_unimolecular.lm data/test_reversible_unimolecular_nsm.lm
+    lm_setp data/test_reversible_unimolecular_nsm.lm latticeWriteInterval=1.0e-3 writeInterval=1.0e-5 maxTime=1e0
+    lm-submit data/test_reversible_unimolecular_nsm.lm -r 1-1 -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1 logs/test_reversible_unimolecular_nsm.log local 2 1 1 erobert3
+    
+    # Run the mpd simulations.
+    cp reversible_unimolecular.lm data/reversible_unimolecular_mpd.lm
+    lm_setp data/reversible_unimolecular_mpd.lm timestep=3.0e-3
+    is=`seq -f "%g" 0 39`; replicatesPerSim=2500;
+    for i in $is; do
+        lm-submit data/reversible_unimolecular_mpd.lm -r $(((i*replicatesPerSim)+1))-$(((i+1)*replicatesPerSim)) -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/reversible_unimolecular_mpd_${i}.log eir 4 12 4 erobert3;
+    done;
+
+    # Run the nsm simulations.
+    cp reversible_unimolecular.lm data/reversible_unimolecular_nsm.lm
+    is=`seq -f "%g" 0 1`; replicatesPerSim=50000;
+    for i in $is; do
+        lm-submit data/reversible_unimolecular_nsm.lm -r $(((i*replicatesPerSim)+1))-$(((i+1)*replicatesPerSim)) -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1/3 logs/reversible_unimolecular_nsm_${i}.log eir 3 12 4 erobert3;
+    done;
+
+    % Calculate P(x,t)
+    method="nsm";
+    Ris="0 1 2 3 4 5 6 7 8 9"; Rs=(100000 50000 25000 10000 5000 2500 1000 500 250 100);
+    for Ri in $Ris; do
+        R=${Rs[Ri]};
+        matlab-submit calc_pt "'data/reversible_unimolecular_${method}_${R}.mat'" "'data/reversible_unimolecular_${method}.lm'" ${R} 0 1000 1 logs/pt_reversible_unimolecular_${method}_${R}.log sif 1 erobert3;
+    done;
+    
+    % Calculate the PDF, E, and Var from the CME.
+    x=[0:1000]; ts=[0:1.5e-1:1e1]; k1=0.178; k2=0.351;
+    E0=(x(end)/(k1+k2)).*(k1.*exp(-(k1+k2).*ts)+k2);
+    lambda=k1/k2;
+    k=k1+k2;
+    omega=lambda.*exp(-k.*ts)+1;
+    V0=(x(end).*omega./(1+lambda)).*(1-(omega./(1+lambda)));
+    
+    % Integrate the CME to obtain the PDF.
+    A=zeros(length(x),length(x));
+    Pt0init=zeros(size(x));
+    Pt0init(end)=1.0;
+    for i=[1:length(x)]
+        if i > 1
+            A(i,i-1) = k2*(x(end)-x(i)+1);
+        end
+        A(i,i)   = -(k1*x(i)+k2*(x(end)-x(i)));
+        if i < length(x)
+            A(i,i+1) = k1*(x(i)+1);
+        end
+    end
+    options = odeset('RelTol',1e-15,'AbsTol',1e-15,'NonNegative',ones(length(Pt0init),1));
+    [ts,Pt0] = ode45(@(tsanon,Ptanon) cme_derivatives(tsanon,Ptanon,A),ts,Pt0init,options); Pt0=Pt0'; ts=ts';
+    
+    % Plot the mean and variance as a function of time.
+    R=100000;
+    method='nsm';
+    load(sprintf('data/reversible_unimolecular_%s_%d.mat',method,R),'Pt');
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+    end
+    subplot(2,2,1);
+    semilogy(ts(2:2:end), E(2:2:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 10 1e2 2e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:2:end), V(2:2:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 10 1e0 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    
+    % Plot the expectation and variance errors as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'mpd','nsm'};
+    errE=zeros(size(Rs,2),size(methods,2));
+    errV=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_unimolecular_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            E=zeros(1,size(ts,2));
+            V=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                E(ti)=sum(x'.*Pt(:,ti));
+                V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+            end
+            errE(ri,mi)=mean(abs(E(2:end)-E0(2:end))./E0(2:end));
+            errV(ri,mi)=mean(abs(V(2:end)-V0(2:end))./V0(2:end));
+        end
+    end
+    colors=getplotcolors();
+    subplot(2,1,1);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog((Rs),(errE(:,mi)), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errE,2));
+    hold('off');
+    axis([5e1 2e5 1e-5 1e-2]); xlabel('Number Replicates'); ylabel('Mean Relative Error in E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,1,2);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog((Rs),(errV(:,mi)), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errV,2));
+    hold('off');
+    axis([5e1 2e5 1e-3 1e0]); xlabel('Number Replicates'); ylabel('Mean Relative Error in Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+
+    % Plot the maximum KL divergence as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'mpd','nsm'};
+    maxKL=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_unimolecular_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            KL=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL(ti)=KL(ti)+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+            end
+            if ri == 10 && mi == 1, plot(ts,KL);, end;
+            maxKL(ri,mi)=max(KL);
+        end
+    end
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,maxKL(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(maxKL,2));
+    hold('off');
+    axis([5e1 2e5 1e-4 1e0]); xlabel('Number Replicates'); ylabel('Max KL Divergence'); legend(legendStrings,'Location','NorthEast');
+    
+    %%%% Reversible bimolecular reaction %%%%
+    
+    # Setup the reversible_bimolecular simulations.
+    rm -f reversible_bimolecular*.lm
+    Ds=(  1.00e-15 3.16e-15 1.00e-14 3.16e-14 8.15e-14 1.00e-13 3.16e-13 1.00e-12 3.16e-12 1.00e-11);
+    taus=(3.0e-3   3.0e-3   3.0e-3   3.0e-3   3.0e-3   3.0e-3   9.5e-4   3.0e-4   9.5e-5   3.0e-5);
+    is="4"
+    for i in $is; do
+        D=${Ds[i]};
+        tau=${taus[i]};
+        echo "$D, $tau"
+        lm_sbml_import reversible_bimolecular_${D}.lm reversible_bimolecular.xml;
+        lm_setdm reversible_bimolecular_${D}.lm numberReactions=2 numberSpecies=3 numberSiteTypes=1 "latticeSize=[32,32,32]" latticeSpacing=31.25e-9 particlesPerSite=8 "DiffusionMatrix=[${D}]" "ReactionLocationMatrix=[1]";
+        lm_setp reversible_bimolecular_${D}.lm timestep=${tau} latticeWriteInterval=5.0e0 writeInterval=1.5e-1 maxTime=1.0e1;
+    done;
+    
+    # Test the mpd simulations.
+    cp reversible_bimolecular_1.00e-15.lm data/test_reversible_bimolecular_mpd_1.00e-15.lm
+    lm_setp data/test_reversible_bimolecular_mpd_1.00e-15.lm timestep=3.0e-3 latticeWriteInterval=1.0e-2 writeInterval=1.0e-2 maxTime=1.0e1
+    lm-submit data/test_reversible_bimolecular_mpd_1.00e-15.lm -r 1-1 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/test_reversible_bimolecular_mpd_1.00e-15.log local 2 1 1 erobert3
+    
+    # Test the nsm simulations.
+    cp reversible_bimolecular_8.15e-14.lm data/test_reversible_bimolecular_nsm_8.15e-14.lm
+    lm_setp data/test_reversible_bimolecular_nsm_8.15e-14.lm latticeWriteInterval=3.0e-3 writeInterval=3.0e-5 maxTime=1.0e-1
+    lm-submit data/test_reversible_bimolecular_nsm_8.15e-14.lm -r 1-1 -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1 logs/test_reversible_bimolecular_nsm_8.15e-14.log local 2 1 1 erobert3
+    
+    % Count the number of particles in the lattice.
+    replicate=1;
+    L=permute(h5read('data/test_reversible_bimolecular_mpd.lm',sprintf('/Model/Diffusion/Lattice')),[4:-1:1]);
+    psum=sum(sum(sum(L>0)));
+    disp(sprintf('initial=%d (%d %d %d %d %d %d %d %d) %d--%d',sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    for ts=[0:66]
+        L=permute(h5read('data/test_reversible_bimolecular_mpd.lm',sprintf('/Simulations/%07d/Lattice/%010d',replicate,ts)),[4:-1:1]);
+        psum=sum(sum(sum(L>0)));
+        disp(sprintf('ts %4d=%d (%d %d %d %d %d %d %d %d) %d--%d',ts,sum(sum(sum(sum(L>0)))),psum,min(min(min(min(L)))),max(max(max(max(L))))));
+    end
+    
+    # Run the mpd simulations.
+    is="8"; Ds=(1.00e-15 3.16e-15 1.00e-14 3.16e-14 8.15e-14 1.00e-13 3.16e-13 1.00e-12 3.16e-12 1.00e-11);
+    js=`seq -f "%g" 0 3`; replicatesPerSim=2500;
+    for i in $is; do
+        D=${Ds[i]};
+        cp reversible_bimolecular_${D}.lm data/reversible_bimolecular_mpd_${D}.lm
+        for j in $js; do
+            lm-submit data/reversible_bimolecular_mpd_${D}.lm -r $(((j*replicatesPerSim)+1))-$(((j+1)*replicatesPerSim)) -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/reversible_bimolecular_mpd_${D}_${j}.log eir 4 12 4 erobert3;
+        done;
+    done;
+
+    # Run the nsm simulations.
+    is="4"; Ds=(1.00e-15 3.16e-15 1.00e-14 3.16e-14 8.15e-14 1.00e-13 3.16e-13 1.00e-12 3.16e-12 1.00e-11);
+    js=`seq -f "%g" 0 1`; replicatesPerSim=50000;
+    for i in $is; do
+        D=${Ds[i]};
+        cp reversible_bimolecular_${D}.lm data/reversible_bimolecular_nsm_${D}.lm
+        for j in $js; do
+            lm-submit data/reversible_bimolecular_nsm_${D}.lm -r $(((j*replicatesPerSim)+1))-$(((j+1)*replicatesPerSim)) -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 1/3 logs/reversible_bimolecular_nsm_${D}_${j}.log eir 4 12 4 erobert3;
+            #lm-submit data/reversible_bimolecular_nsm_${D}.lm -r $(((j*replicatesPerSim)+1))-$(((j+1)*replicatesPerSim)) -sl lm::rdme::NextSubvolumeSolver -cr 1 logs/reversible_bimolecular_nsm_${D}_${j}.log ge1 60 2 0 erobert3;
+        done;
+    done;
+    
+    # Calculate P(x,t)
+    method="nsm";
+    is="8 9"; Ds=(1.00e-15 3.16e-15 1.00e-14 3.16e-14 8.15e-14 1.00e-13 3.16e-13 1.00e-12 3.16e-12 1.00e-11);
+    Ris="6"; Rs=(100 250 500 1000 2500 5000 10000 25000 50000 100000);
+    for i in $is; do
+        for Ri in $Ris; do
+            D=${Ds[i]};
+            R=${Rs[Ri]};
+            matlab-submit calc_pt "'data/reversible_bimolecular_${method}_${D}_${R}.mat'" "'data/reversible_bimolecular_${method}_${D}.lm'" ${R} 0 1000 1 logs/pt_reversible_bimolecular_${method}_${D}_${R}.log sif 1 erobert3;
+        done;
+    done;
+    
+    # Run a fine timestep simulation.
+    cp reversible_bimolecular_8.15e-14.lm data/reversible_bimolecular_mpd_8.15e-14_1.5e-03.lm
+    lm_setp data/reversible_bimolecular_mpd_8.15e-14_1.5e-03.lm timestep=1.5e-3
+    lm-submit data/reversible_bimolecular_mpd_8.15e-14_1.5e-03.lm -r 1-100000 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 30:00 logs/reversible_bimolecular_mpd_8.15e-14_1.5e-03.log eir 4 12 4 erobert3
+    #lm-submit data/reversible_bimolecular_mpd_8.15e-14_1.5e-03.lm -r 1-100000 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 30:00 logs/reversible_bimolecular_mpd_8.15e-14_1.5e-03.log normal 3 16 6 erobert3 nqp-jobs 20:00:00
+
+    cp reversible_bimolecular_8.15e-14.lm data/reversible_bimolecular_mpd_8.15e-14_6.0e-04.lm
+    lm_setp data/reversible_bimolecular_mpd_8.15e-14_6.0e-04.lm timestep=6.0e-4
+    lm-submit data/reversible_bimolecular_mpd_8.15e-14_6.0e-04.lm -r 1-3 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 30:00 logs/reversible_bimolecular_mpd_8.15e-14_6.0e-04.log eir@compute-6-1.local 1 12 4 erobert3
+    #lm-submit data/reversible_bimolecular_mpd_8.15e-14_6.0e-04.lm -r 1-100000 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 30:00 logs/reversible_bimolecular_mpd_8.15e-14_6.0e-04.log normal 3 16 6 erobert3 nqp-jobs 20:00:00
+
+    cp reversible_bimolecular_8.15e-14.lm data/reversible_bimolecular_mpd_8.15e-14_3.0e-04.lm
+    lm_setp data/reversible_bimolecular_mpd_8.15e-14_3.0e-04.lm timestep=3.0e-4
+    #lm-submit data/reversible_bimolecular_mpd_8.15e-14_3.0e-04.lm -r 1-100000 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 30:00 logs/reversible_bimolecular_mpd_8.15e-14_3.0e-04.log eir 4 12 4 erobert3
+    lm-submit data/reversible_bimolecular_mpd_8.15e-14_3.0e-04.lm -r 1-100000 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 30:00 logs/reversible_bimolecular_mpd_8.15e-14_3.0e-04.log normal 6 16 6 erobert3 nqp-jobs 20:00:00
+    
+    cp reversible_bimolecular_8.15e-14.lm data/reversible_bimolecular_mpd_8.15e-14_3.0e-05.lm
+    lm_setp data/reversible_bimolecular_mpd_8.15e-14_3.0e-05.lm timestep=3.0e-5
+    #lm-submit data/reversible_bimolecular_mpd_8.15e-14_3.0e-05.lm -r 1-100000 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 logs/reversible_bimolecular_mpd_8.15e-14_3.0e-05.log eir 4 12 4 erobert3
+    lm-submit data/reversible_bimolecular_mpd_8.15e-14_3.0e-05.lm -r 1-50000 -sl lm::rdme::MpdRdmeSolver -cr 1 -gr 1 -ck 30:00 logs/reversible_bimolecular_mpd_8.15e-14_3.0e-05.log normal 10 16 6 erobert3 nqp-jobs 48:00:00
+    
+    % Check the simulation replicates.
+    for R=[1:100]
+        try
+            data=h5read('data/reversible_bimolecular_mpd_8.15e-14_6.0e-04.lm',sprintf('/Simulations/%07d/SpeciesCountTimes',R));
+            disp(sprintf('%06d = %d',R,length(data)));
+        catch err
+            disp(sprintf('%06d = ERROR',R));
+        end
+    end
+    
+    # Calculate P(x,t) for the fine timestep simulations.
+    method="mpd";
+    is="1"; Ds=(8.15e-14 8.15e-14 8.15e-14); taus=(1.5e-03 6.0e-04 3.0e-04);
+    Ris=`seq -f "%g" 0 9`; Rs=(100 250 500 1000 2500 5000 10000 25000 50000 100000);
+    tau=;
+    for i in $is; do
+        for Ri in $Ris; do
+            D=${Ds[i]};
+            tau=${taus[i]};
+            R=${Rs[Ri]};
+            matlab-submit calc_pt "'data/reversible_bimolecular_${method}_${D}_${tau}_${R}.mat'" "'data/reversible_bimolecular_${method}_${D}_${tau}.lm'" ${R} 0 1000 1 logs/pt_reversible_bimolecular_${method}_${D}_${tau}_${R}.log sif 1 erobert3;
+        done;
+    done;
+
+    % Setup some Matlab parameters.
+    Ds=[1.00e-15 3.16e-15 1.00e-14 3.16e-14 8.15e-14 1.00e-13 3.16e-13 1.00e-12 3.16e-12 1.00e-11];
+    x=[0:1000]; ts=[0:1.5e-1:1e1];
+    
+    % Integrate the CME for the reaction to compare with theory.
+    k1=1.7774e-4; k2=0.351;
+    A=zeros(length(x),length(x));
+    Pt0init=zeros(size(x));
+    Pt0init(end)=1.0;
+    for i=[1:length(x)]
+        if i > 1
+            A(i,i-1) = k2*(x(end)-x(i)+1);
+        end
+        A(i,i)   = -(k1*(x(i)^2)+k2*(x(end)-x(i)));
+        if i < length(x)
+            A(i,i+1) = k1*((x(i)+1)^2);
+        end
+    end
+    options = odeset('RelTol',1e-15,'AbsTol',1e-15,'NonNegative',ones(length(Pt0init),1));
+    [ts,Pt0] = ode45(@(tsanon,Ptanon) cme_derivatives(tsanon,Ptanon,A),ts,Pt0init,options); Pt0=Pt0'; ts=ts';
+    E0=zeros(1,size(ts,2));
+    V0=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E0(ti)=sum(x'.*Pt0(:,ti));
+        V0(ti)=sum(((x'-E0(ti)).^2).*Pt0(:,ti));
+    end
+    
+    % Plot a comparison of nsm versus mpd for various timesteps.
+    R=100000;
+    methods={'mpd', 'mpd', 'mpd', 'mpd'};
+    taus=[3e-3 1.5e-3 6e-4 3e-4];
+    symbols={'^',   '>',   'v',   '<'};
+    di=5;
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    load(sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat','nsm',Ds(di),100000),'Pt'); Ptnsm=Pt;
+    Ensm=zeros(1,size(ts,2));
+    Vnsm=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        Ensm(ti)=sum(x'.*Ptnsm(:,ti));
+        Vnsm(ti)=sum(((x'-Ensm(ti)).^2).*Ptnsm(:,ti));
+    end
+    for mi=[1:size(methods,2)]
+        if taus(mi) < 3e-3
+            load(sprintf('data/reversible_bimolecular_%s_%8.2e_%7.1e_%d.mat',methods{mi},Ds(di),taus(mi),R),'Pt');
+        else
+            load(sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{mi},Ds(di),R),'Pt');
+        end
+        legendStrings{end+1,1}=sprintf('%s \\tau=%8.1e s',methods{mi}, taus(mi));
+        E=zeros(1,size(ts,2));
+        V=zeros(1,size(ts,2));
+        for ti=[1:size(ts,2)]
+            E(ti)=sum(x'.*Pt(:,ti));
+            V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+        end
+        subplot(2,2,1);
+        semilogy(ts(2:2:end), E(2:2:end), symbols{mi}, 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+        subplot(2,2,2);
+        semilogy(ts, abs(E-Ensm)./Ensm, 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+        subplot(2,2,3);
+        semilogy(ts(2:2:end), V(2:2:end), symbols{mi}, 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+        subplot(2,2,4);
+        semilogy(ts, abs(V-Vnsm)./Vnsm, 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+    end
+    subplot(2,2,1);
+    semilogy(ts, Ensm, 'b');
+    hold('off');
+    axis([0 10 1e2 2e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,2,2);
+    hold('off');
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,2,3);
+    semilogy(ts, Vnsm, 'b');
+    hold('off');
+    axis([0 10 1e0 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,2,4);
+    hold('off');
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error'); legend(legendStrings,'Location','SouthEast');
+    
+    % Plot the expectation and variance errors between nsm and mpd as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'mpd', 'mpd', 'mpd', 'mpd', 'nsm'};
+    taus=[3e-3 1.5e-3 6e-4 3e-4 3e-3];
+    symbols={'^',   '>',   'v',   '<',   'o'};
+    %Rs=[10000];
+    %methods={'nsm', 'mpd', 'mpd', 'mpd'};
+    %taus=[3e-3 3e-3 3e-4 3e-5];
+    di=5;
+    load(sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat','nsm',Ds(di),100000),'Pt'); Ptnsm=Pt;
+    Ensm=zeros(1,size(ts,2));
+    Vnsm=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        Ensm(ti)=sum(x'.*Ptnsm(:,ti));
+        Vnsm(ti)=sum(((x'-Ensm(ti)).^2).*Ptnsm(:,ti));
+    end
+    errE=zeros(size(Rs,2),size(methods,2));
+    errV=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        Rs(ri)
+        for mi=[1:size(methods,2)]
+            if taus(mi) < 3e-3
+                load(sprintf('data/reversible_bimolecular_%s_%8.2e_%7.1e_%d.mat',methods{mi},Ds(di),taus(mi),Rs(ri)),'Pt');
+            else
+                load(sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{mi},Ds(di),Rs(ri)),'Pt');
+            end
+            E=zeros(1,size(ts,2));
+            V=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                E(ti)=sum(x'.*Pt(:,ti));
+                V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+            end
+            errE(ri,mi)=mean(abs(E(2:end)-Ensm(2:end))./Ensm(2:end));
+            errV(ri,mi)=mean(abs(V(2:end)-Vnsm(2:end))./Vnsm(2:end));
+        end
+    end
+    colors=getplotcolors();
+    subplot(2,1,1);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errE(:,mi), symbols{mi}, 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    hold('off');
+    axis([5e1 2e5 1e-5 1e-2]); xlabel('Number Replicates'); ylabel('Mean Relative Error in E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,1,2);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errV(:,mi), symbols{mi}, 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    hold('off');
+    axis([5e1 2e5 1e-3 1e0]); xlabel('Number Replicates'); ylabel('Maximum Relative Error in Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');    
+    
+    % Plot the mean and variance of RDME versus well-stirred as a function of time.
+    R=10000;
+    methods={'mpd','nsm', 'mpd', 'mpd'};
+    taus=[0.0 0.0 3e-4 3e-5];
+    di=5;
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        if taus(mi) > 0
+            legendStrings{end+1,1}=sprintf('%s \\tau=%8.1e s',methods{mi}, taus(mi));
+            load(sprintf('data/reversible_bimolecular_%s_%8.2e_%7.1e_%d.mat',methods{mi},Ds(di),taus(mi),R),'Pt');
+        else
+            legendStrings{end+1,1}=methods{mi};
+            load(sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{mi},Ds(di),R),'Pt');
+        end
+        E=zeros(1,size(ts,2));
+        V=zeros(1,size(ts,2));
+        for ti=[1:size(ts,2)]
+            E(ti)=sum(x'.*Pt(:,ti));
+            V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+        end
+        subplot(2,2,1);
+        semilogy(ts(2:2:end), E(2:2:end), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+        subplot(2,2,2);
+        semilogy(ts, abs(E-E0)./E0, 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+        subplot(2,2,3);
+        semilogy(ts(2:2:end), V(2:2:end), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+        subplot(2,2,4);
+        semilogy(ts, abs(V-V0)./V0, 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+    end
+    subplot(2,2,1);
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 10 1e2 2e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,2,2);
+    hold('off');
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,2,3);
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 10 1e0 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,2,4);
+    hold('off');
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error'); legend(legendStrings,'Location','SouthEast');
+    
+    % Plot a comparison of the PDFs.
+    rows=1; cols=1; plotIndex=1;
+    x=[0:1000];
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    ti=15;
+    methods={'mpd','nsm'};
+    colors=getplotcolors();
+    dis=[5];
+    for di=dis
+        for ri=[1]
+            R=Rs(ri);
+            legendStrings=cell(0,1);
+            subplot(rows,cols,plotIndex);
+            for mi=[1:size(methods,2)]
+                load(sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{mi},Ds(di),R),'Pt');
+                KL=0;
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL=KL+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+                legendStrings{end+1,1}=sprintf('%s (KL=%0.2e)',methods{mi},KL);
+                semilogy(x(1:3:end), Pt(1:3:end,ti), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))});
+                hold('on');
+            end
+            semilogy(x, Pt0(:,ti), 'b');
+            hold('off');
+            ax=axis; axis([700 900 1e-6 1e0]); xlabel('Count (A)'); ylabel('Probability'); title(sprintf('D=%0.2e, N=%d, KL=%0.2e',Ds(di),R)); legend(legendStrings,'Location','NorthEast');
+            plotIndex=plotIndex+1;
+        end
+    end
+    
+    % Plot the expectation and variance errors as a function of the number of replicates.
+    Rs=[50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'nsm'};
+    errE=zeros(size(Rs,2),size(methods,2));
+    errV=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_bimolecular_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            E=zeros(1,size(ts,2));
+            V=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                E(ti)=sum(x'.*Pt(:,ti));
+                V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+            end
+            errE(ri,mi)=mean(abs(E(2:end)-E0(2:end))./E0(2:end));
+            errV(ri,mi)=mean(abs(V(2:end)-V0(2:end))./V0(2:end));
+            E(2:end)
+        end
+    end
+    colors=getplotcolors();
+    subplot(2,1,1);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errE(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errE,2));
+    hold('off');
+    axis([5e1 2e5 1e-5 1e-2]); xlabel('Number Replicates'); ylabel('Mean Relative Error in E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,1,2);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errV(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errV,2));
+    hold('off');
+    axis([5e1 2e5 1e-3 1e0]); xlabel('Number Replicates'); ylabel('Mean Relative Error in Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+
+    % Plot the maximum KL divergence as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'mpd','nsm'};
+    di=5;
+    maxKL=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{mi},Ds(di),Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            KL=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL(ti)=KL(ti)+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+            end
+            if ri == 10 && mi == 1, plot(ts,KL);, end;
+            maxKL(ri,mi)=max(KL);
+        end
+    end
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,maxKL(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(maxKL,2));
+    hold('off');
+    axis([5e1 2e5 1e-4 1e0]); xlabel('Number Replicates'); ylabel('Max KL Divergence'); legend(legendStrings,'Location','NorthEast');
+
+    % Plot a comparison of the mean and variance versus the diffusion rate.
+    R=10000;
+    methods={'mpd','nsm'};
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    dis=[1:4 6:10];
+    for mi=[1:size(methods,2)]
+        legendStrings{end+1,1}=methods{mi};
+        y1s=[];
+        y2s=[];
+        for di=dis
+            load(sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{mi},Ds(di),R),'Pt');
+            E=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                E(ti)=sum(x'.*Pt(:,ti));
+                V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+            end
+            KL=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL(ti)=KL(ti)+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+            end
+            y1s(end+1) = max(abs(E-E0));
+            y2s(end+1) = max(KL());
+        end
+        subplot(2,1,1);
+        semilogx(Ds(dis), y1s, 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+        subplot(2,1,2);
+        loglog(Ds(dis), y2s, 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))});
+        hold('on');
+    end
+    subplot(2,1,1);
+    hold('off');
+    axis([Ds(dis(1))-0.1*Ds(dis(1)) Ds(dis(end))+0.1*Ds(dis(end)) 0 50]); xlabel('D (m^2 s^{-1})'); ylabel('Max |E\{A(t)\}-E\{A_0(t)\}|');
+    subplot(2,1,2);
+    hline(7e-3);
+    hold('off');
+    axis([Ds(dis(1))-0.1*Ds(dis(1)) Ds(dis(end))+0.1*Ds(dis(end)) 1e-4 1e1]); xlabel('D (m^2 s^{-1})'); ylabel('Max KL Divergence');
+
+    % Plot the maximum KL divergence of MPD with respect to NSM as a fucntion of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'mpd','nsm'};
+    di=5;
+    maxKL=zeros(size(Rs,2),1);
+    for ri=[1:size(Rs,2)]
+        filename=sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{1},Ds(di),Rs(ri));
+        disp(sprintf('Loading file %s',filename));
+        load(filename,'Pt'); Pt1=Pt;
+        filename=sprintf('data/reversible_bimolecular_%s_%8.2e_%d.mat',methods{2},Ds(di),Rs(ri));
+        disp(sprintf('Loading file %s',filename));
+        load(filename,'Pt'); Pt2=Pt;
+        KL=zeros(1,size(ts,2));
+        for ti=[1:size(ts,2)]
+            for xi=[1:size(x,2)]
+                if Pt1(xi,ti) > 0 && Pt2(xi,ti) > 0
+                    KL(ti)=KL(ti)+Pt1(xi,ti)*log(Pt1(xi,ti)/Pt2(xi,ti));
+                end
+            end
+        end
+        maxKL(ri,1)=max(KL);
+    end
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    loglog(Rs,maxKL(:,1), 'rx');
+    axis([5e1 2e5 1e-4 1e0]); xlabel('Number Replicates'); ylabel('Max KL Divergence'); title(sprintf('%s vs %s',methods{1},methods{2})); legend(legendStrings,'Location','NorthEast');
+
+    
+    #### reaction_validation ####
+    
+    %%%% Decay reaction %%%%
+    
+    # Setup the decay simulations.
+    rm -f decay*.lm
+    lm_sbml_import decay.lm decay.xml
+    lm_setp decay.lm writeInterval=1e-2 maxTime=5e0
+    cp decay.lm data/decay_direct.lm
+    cp decay.lm data/decay_nextr.lm
+    cp decay.lm data/decay_direct_nogpu.lm
+    cp decay.lm data/decay_nextr_nogpu.lm
+    
+    # Run the simulations.
+    lm-submit data/decay_direct.lm -r 1-100000 -sl lm::cme::GillespieDSolver -cr 1 -gr 1/3 logs/decay_direct.log eir 3 12 4 erobert3
+    lm-submit data/decay_nextr.lm -r 1-100000 -sl lm::cme::NextReactionSolver -cr 1 -gr 1/3 logs/decay_nextr.log eir 3 12 4 erobert3
+    lm-submit data/decay_direct_nogpu.lm -r 1-100000 -sl lm::cme::GillespieDSolver -cr 1 -gr 0 logs/decay_direct_nogpu.log eir 3 12 4 erobert3
+    lm-submit data/decay_nextr_nogpu.lm -r 1-100000 -sl lm::cme::NextReactionSolver -cr 1 -gr 0 logs/decay_nextr_nogpu.log eir 3 12 4 erobert3
+
+    % Calculate P(x,t)
+    Ris="1 2 3 4 5 6 7 8 9"; Rs=(100000 50000 25000 10000 5000 2500 1000 500 250 100);
+    for Ri in $Ris; do
+        R=${Rs[Ri]};
+        matlab-submit calc_pt "'data/decay_direct_${R}.mat'" "'data/decay_direct.lm'" ${R} 0 1000 1 logs/pt_decay_direct_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/decay_nextr_${R}.mat'" "'data/decay_nextr.lm'" ${R} 0 1000 1 logs/pt_decay_nextr_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/decay_direct_nogpu_${R}.mat'" "'data/decay_direct_nogpu.lm'" ${R} 0 1000 1 logs/pt_decay_direct_nogpu_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/decay_nextr_nogpu_${R}.mat'" "'data/decay_nextr_nogpu.lm'" ${R} 0 1000 1 logs/pt_decay_nextr_nogpu_${R}.log sif 1 erobert3;
+    done;
+    
+    % Calculate the PDF, E, and Var from the CME.
+    x=[0:1000]; ts=[0:1e-2:5e0]; k=3.33;
+    E0=x(end).*exp(-k.*ts);
+    V0=x(end).*exp(-k.*ts).*(1-exp(-k.*ts));
+    Pt0=zeros(size(x,2),size(ts,2));
+    for ti=[1:size(ts,2)]
+        for xi=[1:size(x,2)]
+            Pt0(xi,ti)=nchoosek(x(end),x(xi))*exp(-k*ts(ti)*x(xi))*((1-exp(-k*ts(ti)))^(x(end)-x(xi)));
+        end
+    end    
+        
+    % Integrate the CME for the reaction and compare with theory.
+    x=[0:1000]; ts=[0:1e-2:5e0]; k=3.33;
+    A=zeros(length(x),length(x));
+    Pt0=zeros(size(x));
+    Pt0(end)=1.0;
+    for i=[2:length(x)]
+        A(i-1,i) = (i-1)*k;
+        A(i,i)   = -(i-1)*k;
+    end
+    options = odeset('RelTol',1e-10,'AbsTol',1e-10,'NonNegative',ones(length(Pt0),1));
+    [ts,Pt] = ode45(@(tsanon,Ptanon) cme_derivatives(tsanon,Ptanon,A),ts,Pt0,options); Pt=Pt'; ts=ts';
+    
+    % Plot the mean and variance of the integrated CME as a function of time.
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+    end
+    E0=x(end).*exp(-k.*ts);
+    V0=x(end).*exp(-k.*ts).*(1-exp(-k.*ts));
+    subplot(2,2,1);
+    semilogy(ts(2:30:end), E(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 5 1e-5 1e3]); xlabel('Time (s)'); ylabel('E\{x(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 5 1e-15 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:30:end), V(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 5 1e-5 1e3]); xlabel('Time (s)'); ylabel('Var\{x(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 5 1e-15 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+    
+    % Plot the mean and variance as a function of time.
+    R=1000;
+    method='nextr';
+    load(sprintf('data/decay_%s_%d.mat',method,R),'Pt');
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+    end
+    subplot(2,2,1);
+    semilogy(ts(2:15:end), E(2:15:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 5 1e-9 1e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 5 1e-6 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:15:end), V(2:15:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 5 1e-9 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 5 1e-6 1e0]); xlabel('Time (s)'); ylabel('Relative Error');
+    
+    % Plot the expectation and variance errors as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'direct','nextr','direct_nogpu','nextr_nogpu'};
+    errE=zeros(size(Rs,2),size(methods,2));
+    errV=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/decay_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            E=zeros(1,size(ts,2));
+            V=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                E(ti)=sum(x'.*Pt(:,ti));
+                V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+            end
+            errE(ri,mi)=mean(abs(E(2:end)-E0(2:end))./E0(2:end));
+            errV(ri,mi)=mean(abs(V(2:end)-V0(2:end))./V0(2:end));
+        end
+    end
+    colors=getplotcolors();
+    subplot(2,1,1);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errE(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errE,2));
+    hold('off');
+    axis([5e1 2e5 1e-2 1e0]); xlabel('Number Replicates'); ylabel('Mean Relative Error in E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,1,2);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errV(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errV,2));
+    hold('off');
+    axis([5e1 2e5 1e-2 1e0]); xlabel('Number Replicates'); ylabel('Mean Relative Error in Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+
+    % Plot the maximum KL divergence as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'direct','nextr','direct_nogpu','nextr_nogpu'};
+    maxKL=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/decay_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            KL=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL(ti)=KL(ti)+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+            end
+            if ri == 10 && mi == 1, plot(ts,KL);, end;
+            maxKL(ri,mi)=max(KL);
+        end
+    end
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,maxKL(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(maxKL,2));
+    hold('off');
+    axis([5e1 2e5 1e-4 1e0]); xlabel('Number Replicates'); ylabel('Max KL Divergence'); legend(legendStrings,'Location','NorthEast');
+    
+    % Plot a comparison of the PDFs.
+    rows=2; cols=5; plotIndex=1;
+    x=[0:1000];
+    Rs=[100 250 500 1000 2500 5000 10000 25000 50000 100000];
+    ti=250;
+    method='nextr';
+    for ri=[1:length(Rs)]
+        R=Rs(ri);
+        load(sprintf('data/decay_%s_%d.mat',method,R),'Pt');
+        subplot(rows,cols,plotIndex);
+        semilogy(x, Pt(:,ti), 'rx');
+        hold('on');
+        semilogy(x, Pt0(:,ti), 'b');
+        hold('off');
+        KL=0;
+        for xi=[1:size(x,2)]
+            if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                KL=KL+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+            end
+        end
+        ax=axis; axis([0 10 1e-6 1e0]); xlabel('Count (A)'); ylabel('Probability'); title(sprintf('N=%d, KL=%0.2e',R,KL));
+        plotIndex=plotIndex+1;
+    end
+    
+    %%%% Reversible unimolecular reaction %%%%
+    
+    # Setup the reversible_unimolecular simulations.
+    rm -f reversible_unimolecular*.lm
+    lm_sbml_import reversible_unimolecular.lm reversible_unimolecular.xml
+    lm_setp reversible_unimolecular.lm writeInterval=1e-2 maxTime=1e1
+    cp reversible_unimolecular.lm data/reversible_unimolecular_direct.lm
+    cp reversible_unimolecular.lm data/reversible_unimolecular_nextr.lm
+    cp reversible_unimolecular.lm data/reversible_unimolecular_direct_nogpu.lm
+    cp reversible_unimolecular.lm data/reversible_unimolecular_nextr_nogpu.lm
+    
+    # Run the simulations.
+    lm-submit data/reversible_unimolecular_direct.lm -r 1-100000 -sl lm::cme::GillespieDSolver -cr 1 -gr 1/3 logs/reversible_unimolecular_direct.log eir 4 12 4 erobert3
+    lm-submit data/reversible_unimolecular_nextr.lm -r 1-100000 -sl lm::cme::NextReactionSolver -cr 1 -gr 1/3 logs/reversible_unimolecular_nextr.log eir 4 12 4 erobert3
+    lm-submit data/reversible_unimolecular_direct_nogpu.lm -r 1-100000 -sl lm::cme::GillespieDSolver -cr 1 -gr 0 logs/reversible_unimolecular_direct_nogpu.log eir 4 12 4 erobert3
+    lm-submit data/reversible_unimolecular_nextr_nogpu.lm -r 1-100000 -sl lm::cme::NextReactionSolver -cr 1 -gr 0 logs/reversible_unimolecular_nextr_nogpu.log eir 4 12 4 erobert3
+
+    % Calculate P(x,t)
+    Ris="0 1 2 3 4 5 6 7 8 9"; Rs=(100000 50000 25000 10000 5000 2500 1000 500 250 100);
+    for Ri in $Ris; do
+        R=${Rs[Ri]};
+        matlab-submit calc_pt "'data/reversible_unimolecular_direct_${R}.mat'" "'data/reversible_unimolecular_direct.lm'" ${R} 0 1000 1 logs/pt_reversible_unimolecular_direct_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/reversible_unimolecular_nextr_${R}.mat'" "'data/reversible_unimolecular_nextr.lm'" ${R} 0 1000 1 logs/pt_reversible_unimolecular_nextr_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/reversible_unimolecular_direct_nogpu_${R}.mat'" "'data/reversible_unimolecular_direct_nogpu.lm'" ${R} 0 1000 1 logs/pt_reversible_unimolecular_direct_nogpu_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/reversible_unimolecular_nextr_nogpu_${R}.mat'" "'data/reversible_unimolecular_nextr_nogpu.lm'" ${R} 0 1000 1 logs/pt_reversible_unimolecular_nextr_nogpu_${R}.log sif 1 erobert3;
+    done;
+    
+    % Calculate the PDF, E, and Var from the CME.
+    x=[0:1000]; ts=[0:1e-2:1e1]; k1=0.178; k2=0.351;
+    E0=(x(end)/(k1+k2)).*(k1.*exp(-(k1+k2).*ts)+k2);
+    lambda=k1/k2;
+    k=k1+k2;
+    omega=lambda.*exp(-k.*ts)+1;
+    V0=(x(end).*omega./(1+lambda)).*(1-(omega./(1+lambda)));
+    
+    % Integrate the CME for the reaction and compare with theory.
+    A=zeros(length(x),length(x));
+    Pt0init=zeros(size(x));
+    Pt0init(end)=1.0;
+    for i=[1:length(x)]
+        if i > 1
+            A(i,i-1) = k2*(x(end)-x(i)+1);
+        end
+        A(i,i)   = -(k1*x(i)+k2*(x(end)-x(i)));
+        if i < length(x)
+            A(i,i+1) = k1*(x(i)+1);
+        end
+    end
+    options = odeset('RelTol',1e-15,'AbsTol',1e-15,'NonNegative',ones(length(Pt0init),1));
+    [ts,Pt0] = ode45(@(tsanon,Ptanon) cme_derivatives(tsanon,Ptanon,A),ts,Pt0init,options); Pt0=Pt0'; ts=ts';
+    
+    % Plot the mean and variance of the integrated CME as a function of time.
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt0(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt0(:,ti));
+    end
+    E0=(x(end)/(k1+k2)).*(k1.*exp(-(k1+k2).*ts)+k2);
+    lambda=k1/k2;
+    k=k1+k2;
+    omega=lambda.*exp(-k.*ts)+1;
+    V0=(x(end).*omega./(1+lambda)).*(1-(omega./(1+lambda)));
+    subplot(2,2,1);
+    semilogy(ts(2:30:end), E(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 10 1e2 2e3]); xlabel('Time (s)'); ylabel('E\{x(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 10 1e-15 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:30:end), V(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 10 1e0 1e3]); xlabel('Time (s)'); ylabel('Var\{x(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 10 1e-15 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    
+    % Plot the mean and variance as a function of time.
+    R=100000;
+    method='nextr';
+    load(sprintf('data/reversible_unimolecular_%s_%d.mat',method,R),'Pt');
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+    end
+    subplot(2,2,1);
+    semilogy(ts(2:30:end), E(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 10 1e2 2e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:30:end), V(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 10 1e0 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    
+    % Plot the expectation and variance errors as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'direct','nextr','direct_nogpu','nextr_nogpu'};
+    errE=zeros(size(Rs,2),size(methods,2));
+    errV=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_unimolecular_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            E=zeros(1,size(ts,2));
+            V=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                E(ti)=sum(x'.*Pt(:,ti));
+                V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+            end
+            errE(ri,mi)=mean(abs(E(2:end)-E0(2:end))./E0(2:end));
+            errV(ri,mi)=mean(abs(V(2:end)-V0(2:end))./V0(2:end));
+        end
+    end
+    colors=getplotcolors();
+    subplot(2,1,1);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errE(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errE,2));
+    hold('off');
+    axis([5e1 2e5 1e-5 1e-2]); xlabel('Number Replicates'); ylabel('Mean Relative Error in E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,1,2);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errV(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errV,2));
+    hold('off');
+    axis([5e1 2e5 1e-3 1e0]); xlabel('Number Replicates'); ylabel('Mean Relative Error in Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+
+    % Plot the maximum KL divergence as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'direct','nextr','direct_nogpu','nextr_nogpu'};
+    maxKL=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_unimolecular_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            KL=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL(ti)=KL(ti)+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+            end
+            if ri == 10 && mi == 1, plot(ts,KL);, end;
+            maxKL(ri,mi)=max(KL);
+        end
+    end
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,maxKL(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(maxKL,2));
+    hold('off');
+    axis([5e1 2e5 1e-4 1e0]); xlabel('Number Replicates'); ylabel('Max KL Divergence'); legend(legendStrings,'Location','NorthEast');
+    
+    % Plot a comparison of the PDFs.
+    rows=2; cols=5; plotIndex=1;
+    x=[0:1000];
+    Rs=[100 250 500 1000 2500 5000 10000 25000 50000 100000];
+    ti=1000;
+    method='nextr';
+    for ri=[1:length(Rs)]
+        R=Rs(ri);
+        load(sprintf('data/reversible_unimolecular_%s_%d.mat',method,R),'Pt');
+        subplot(rows,cols,plotIndex);
+        semilogy(x, Pt(:,ti), 'rx');
+        hold('on');
+        semilogy(x, Pt0(:,ti), 'b');
+        hold('off');
+        KL=0;
+        for xi=[1:size(x,2)]
+            if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                KL=KL+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+            end
+        end
+        ax=axis; axis([550 750 1e-6 1e0]); xlabel('Count (A)'); ylabel('Probability'); title(sprintf('N=%d, KL=%0.2e',R,KL));
+        plotIndex=plotIndex+1;
+    end
+    
+    %%%% Reversible bimolecular reaction %%%%
+    
+    # Setup the reversible_bimolecular simulations.
+    rm -f reversible_bimolecular*.lm
+    lm_sbml_import reversible_bimolecular.lm reversible_bimolecular.xml
+    lm_setp reversible_bimolecular.lm writeInterval=1e-2 maxTime=1e1
+    cp reversible_bimolecular.lm data/reversible_bimolecular_direct.lm
+    cp reversible_bimolecular.lm data/reversible_bimolecular_nextr.lm
+    cp reversible_bimolecular.lm data/reversible_bimolecular_direct_nogpu.lm
+    cp reversible_bimolecular.lm data/reversible_bimolecular_nextr_nogpu.lm
+    
+    # Run the simulations.
+    lm-submit data/reversible_bimolecular_direct.lm -r 1-100000 -sl lm::cme::GillespieDSolver -cr 1 -gr 1/3 logs/reversible_bimolecular_direct.log eir 4 12 4 erobert3
+    lm-submit data/reversible_bimolecular_nextr.lm -r 1-100000 -sl lm::cme::NextReactionSolver -cr 1 -gr 1/3 logs/reversible_bimolecular_nextr.log eir 4 12 4 erobert3
+    lm-submit data/reversible_bimolecular_direct_nogpu.lm -r 1-100000 -sl lm::cme::GillespieDSolver -cr 1 -gr 0 logs/reversible_bimolecular_direct_nogpu.log eir 4 12 4 erobert3
+    lm-submit data/reversible_bimolecular_nextr_nogpu.lm -r 1-100000 -sl lm::cme::NextReactionSolver -cr 1 -gr 0 logs/reversible_bimolecular_nextr_nogpu.log eir 4 12 4 erobert3
+
+    # Calculate P(x,t)
+    Ris="0 1 2 3 4 5 6 7 8 9"; Rs=(100000 50000 25000 10000 5000 2500 1000 500 250 100);
+    for Ri in $Ris; do
+        R=${Rs[Ri]};
+        matlab-submit calc_pt "'data/reversible_bimolecular_direct_${R}.mat'" "'data/reversible_bimolecular_direct.lm'" ${R} 0 1000 1 logs/pt_reversible_bimolecular_direct_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/reversible_bimolecular_nextr_${R}.mat'" "'data/reversible_bimolecular_nextr.lm'" ${R} 0 1000 1 logs/pt_reversible_bimolecular_nextr_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/reversible_bimolecular_direct_nogpu_${R}.mat'" "'data/reversible_bimolecular_direct_nogpu.lm'" ${R} 0 1000 1 logs/pt_reversible_bimolecular_direct_nogpu_${R}.log sif 1 erobert3;
+        matlab-submit calc_pt "'data/reversible_bimolecular_nextr_nogpu_${R}.mat'" "'data/reversible_bimolecular_nextr_nogpu.lm'" ${R} 0 1000 1 logs/pt_reversible_bimolecular_nextr_nogpu_${R}.log sif 1 erobert3;
+    done;
+    
+    % Integrate the CME for the reaction to compare with theory.
+    x=[0:1000]; ts=[0:1e-2:1e1]; k1=1.7774e-4; k2=0.351;
+    A=zeros(length(x),length(x));
+    Pt0init=zeros(size(x));
+    Pt0init(end)=1.0;
+    for i=[1:length(x)]
+        if i > 1
+            A(i,i-1) = k2*(x(end)-x(i)+1);
+        end
+        A(i,i)   = -(k1*(x(i)^2)+k2*(x(end)-x(i)));
+        if i < length(x)
+            A(i,i+1) = k1*((x(i)+1)^2);
+        end
+    end
+    options = odeset('RelTol',1e-15,'AbsTol',1e-15,'NonNegative',ones(length(Pt0init),1));
+    [ts,Pt0] = ode45(@(tsanon,Ptanon) cme_derivatives(tsanon,Ptanon,A),ts,Pt0init,options); Pt0=Pt0'; ts=ts';
+    E0=zeros(1,size(ts,2));
+    V0=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E0(ti)=sum(x'.*Pt0(:,ti));
+        V0(ti)=sum(((x'-E0(ti)).^2).*Pt0(:,ti));
+    end
+    
+    % Plot the mean and variance as a function of time.
+    x=[0:1000]; ts=[0:1e-2:1e1]; k1=1.7774e-4; k2=0.351;
+    R=100000;
+    method='nextr';
+    load(sprintf('data/reversible_bimolecular_%s_%d.mat',method,R),'Pt');
+    E=zeros(1,size(ts,2));
+    V=zeros(1,size(ts,2));
+    for ti=[1:size(ts,2)]
+        E(ti)=sum(x'.*Pt(:,ti));
+        V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+    end
+    subplot(2,2,1);
+    semilogy(ts(2:30:end), E(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, E0, 'b');
+    hold('off');
+    axis([0 10 1e2 2e3]); xlabel('Time (s)'); ylabel('E\{A(t)\}');
+    subplot(2,2,2);
+    semilogy(ts, abs(E-E0)./E0);
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    subplot(2,2,3);
+    semilogy(ts(2:30:end), V(2:30:end), 'rx');
+    hold('on');
+    semilogy(ts, V0, 'b');
+    hold('off');
+    axis([0 10 1e0 1e3]); xlabel('Time (s)'); ylabel('Var\{A(t)\}');
+    subplot(2,2,4);
+    semilogy(ts, abs(V-V0)./V0);
+    axis([0 10 1e-6 1e-1]); xlabel('Time (s)'); ylabel('Relative Error');
+    
+    % Plot the expectation and variance errors as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'direct','nextr','direct_nogpu','nextr_nogpu'};
+    errE=zeros(size(Rs,2),size(methods,2));
+    errV=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_bimolecular_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            E=zeros(1,size(ts,2));
+            V=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                E(ti)=sum(x'.*Pt(:,ti));
+                V(ti)=sum(((x'-E(ti)).^2).*Pt(:,ti));
+            end
+            errE(ri,mi)=mean(abs(E(2:end)-E0(2:end))./E0(2:end));
+            errV(ri,mi)=mean(abs(V(2:end)-V0(2:end))./V0(2:end));
+        end
+    end
+    colors=getplotcolors();
+    subplot(2,1,1);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errE(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errE,2));
+    hold('off');
+    axis([5e1 2e5 1e-5 1e-2]); xlabel('Number Replicates'); ylabel('Mean Relative Error in E\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+    subplot(2,1,2);
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,errV(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(errV,2));
+    hold('off');
+    axis([5e1 2e5 1e-3 1e0]); xlabel('Number Replicates'); ylabel('Mean Relative Error in Var\{A(t)\}'); legend(legendStrings,'Location','NorthEast');
+
+    % Plot the maximum KL divergence as a function of the number of replicates.
+    Rs=[100000 50000 25000 10000 5000 2500 1000 500 250 100];
+    methods={'direct','nextr','direct_nogpu','nextr_nogpu'};
+    maxKL=zeros(size(Rs,2),size(methods,2));
+    for ri=[1:size(Rs,2)]
+        for mi=[1:size(methods,2)]
+            filename=sprintf('data/reversible_bimolecular_%s_%d.mat',methods{mi},Rs(ri));
+            disp(sprintf('Loading file %s',filename));
+            load(filename,'Pt');
+            KL=zeros(1,size(ts,2));
+            for ti=[1:size(ts,2)]
+                for xi=[1:size(x,2)]
+                    if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                        KL(ti)=KL(ti)+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+                    end
+                end
+            end
+            if ri == 10 && mi == 1, plot(ts,KL);, end;
+            maxKL(ri,mi)=max(KL);
+        end
+    end
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog(Rs,maxKL(:,mi), 'x', 'Color',colors{mod(size(legendStrings,1),length(colors))+1});
+        legendStrings{end+1,1}=methods{mi};
+        hold('on');
+    end
+    loglog(Rs,mean(maxKL,2));
+    hold('off');
+    axis([5e1 2e5 1e-4 1e0]); xlabel('Number Replicates'); ylabel('Max KL Divergence'); legend(legendStrings,'Location','NorthEast');
+    
+    % Plot a comparison of the PDFs.
+    rows=2; cols=5; plotIndex=1;
+    x=[0:1000];
+    Rs=[100 250 500 1000 2500 5000 10000 25000 50000 100000];
+    ti=1000;
+    method='nextr';
+    for ri=[1:length(Rs)]
+        R=Rs(ri);
+        load(sprintf('data/reversible_bimolecular_%s_%d.mat',method,R),'Pt');
+        subplot(rows,cols,plotIndex);
+        semilogy(x, Pt(:,ti), 'rx');
+        hold('on');
+        semilogy(x, Pt0(:,ti), 'b');
+        hold('off');
+        KL=0;
+        for xi=[1:size(x,2)]
+            if Pt(xi,ti) > 0 && Pt0(xi,ti) > 0
+                KL=KL+Pt(xi,ti)*log(Pt(xi,ti)/Pt0(xi,ti));
+            end
+        end
+        ax=axis; axis([650 800 1e-6 1e0]); xlabel('Count (A)'); ylabel('Probability'); title(sprintf('N=%d, KL=%0.2e',R,KL));
+        plotIndex=plotIndex+1;
+    end
+    
+
+    #### rebinding_time_dists ####
+    
+    % Figure out the mean distance between repressors and the lac operator in an E coli cell: 538 nm; most likely dist for nearest: 400 nm
+    cellLength=2e-6;
+    cellRadius=400e-9;
+    count=0;
+    allDists=[];
+    meanDists=[];
+    for j=[1:100000];
+        dists=[];
+        for i=[1:10]
+            while 1
+                count=count+1;
+                pos=rand(3,1);
+                pos=[pos(1)*2*cellRadius pos(2)*2*cellRadius pos(3)*cellLength];
+                if pos(3) <= cellRadius
+                    if ((pos(1)-cellRadius)^2)+((pos(2)-cellRadius)^2)+((pos(3)-cellRadius)^2) <= cellRadius^2
+                        break;
+                    end
+                elseif pos(3) <= cellLength-cellRadius
+                    if ((pos(1)-cellRadius)^2)+((pos(2)-cellRadius)^2) <= cellRadius^2
+                        break;
+                    end
+                else
+                    if ((pos(1)-cellRadius)^2)+((pos(2)-cellRadius)^2)+((pos(3)-(cellLength-cellRadius))^2) <= cellRadius^2
+                        break;
+                    end
+                end
+            end
+            dists(end+1)=sqrt(((pos(1)-cellRadius)^2)+((pos(2)-cellRadius)^2)+((pos(3)-(cellLength/2))^2));
+        end
+        meanDists(end+1)=mean(dists);
+        allDists=[allDists dists];
+    end
+    subplot(2,1,1);
+    hist(allDists,100);
+    subplot(2,1,2);
+    hist(meanDists,100);
+    
+    # Setup the simulations.
+    rm -f rebinding*.lm
+    lm_sbml_import rebinding.lm rebinding.sbml
+    #lm_setdm rebinding.lm PlaceParticles=False numberReactions=2 numberSpecies=4 numberSiteTypes=3 "latticeSize=[224,224,224]" latticeSpacing=2e-9 particlesPerSite=8 "ReactionLocationMatrix=[0,1,0;1,0,0]" "DiffusionMatrix(1,0:1,1)=[1.0e-11]";
+    lm_setdm rebinding.lm PlaceParticles=False numberReactions=2 numberSpecies=4 numberSiteTypes=3 "latticeSize=[224,224,224]" latticeSpacing=2e-9 particlesPerSite=8 "ReactionLocationMatrix=[0,1,0;0,0,0]" "DiffusionMatrix=[0.0]" "DiffusionMatrix(1,1,1)=[1.0e-11]";
+    lm_setp rebinding.lm fptTrackingList=2,3 
+    
+    # Test the simulation.
+    cp rebinding.lm data/lm/test_rebinding.lm
+    lm_python -s build_reaction_volume.py -sa data/lm/test_rebinding.lm 1 0.40
+    lm_setp data/lm/test_rebinding.lm writeInterval=1e-2 latticeWriteInterval=1e-1 maxTime=1e1
+    #lm_setp data/lm/test_rebinding.lm writeInterval=1e-6 latticeWriteInterval=1e-6 maxTime=4e-5
+    lm-submit data/lm/test_rebinding.lm -r 1 -sl lm::rdme::NextSubvolumeSolver -cr 1 -gr 0 logs/rebinding.log local 1 8 0 erobert3
+    
+    # Visualize in VMD.
+    set env(LM_CREATE_SITE_ATOMS) 1
+    set env(LM_CREATE_OBSTACLE_ATOMS) 1
+    graphics top material Ghost
+    
+    # Run the simulations on the cluster to calculate the rebinding time.
+    is=`seq -f "%g" 0 12`; Ms=(0 1 1 1 1 1 1 1 1 1 1 1 1); Ps=(0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60);
+    js=`seq -f "%g" 0 29`; Rs=(000 001 002 003 004 005 006 007 008 009 010 011 012 013 014 015 016 017 018 019 020 021 022 023 024 025 026 027 028 029 030 031 032 033 034 035 036 037 038 039 040 041 042 043 044 045 046 047 048 049 050 051 052 053 054 055 056 057 058 059 060 061 062 063 064 065 066 067 068 069 070 071 072 073 074 075 076 077 078 079 080 081 082 083 084 085 086 087 088 089 090 091 092 093 094 095 096 097 098 099 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298 299);
+    writeInterval=1e4 latticeWriteInterval=0 maxTime=1e4
+    replicates="1-7";
+    for i in $is; do
+        for j in $js; do
+            M=${Ms[i]}; P=${Ps[i]};
+            R=${Rs[j]};
+            filename="rebinding_${P}_${R}.lm";
+            if [ `lm_check_complete logs/$filename.log` -ne 7 ]; then
+                if [ -e logs/$filename.log ]; then
+                    echo "Removing ${filename}";
+                    mv logs/$filename.log logs/$filename.log.old;
+                    rm data/lm/${filename};
+                fi
+                if [ ! -e data/lm/${filename} ]; then
+                    echo "Generating ${filename}";
+                    cp rebinding.lm data/lm/${filename};
+                    lm_python-submit build_reaction_volume.py data/lm/${filename} ${M} ${P} logs/build.${filename}.log odin 1 erobert3;
+                    lm_setp data/lm/${filename} writeInterval=${writeInterval} latticeWriteInterval=${latticeWriteInterval} maxTime=${maxTime} > /dev/null;
+                else
+                    echo "Running ${filename}";
+                    #lm-submit data/lm/${filename} -sl lm::rdme::NextSubvolumeSolver -r ${replicates} -cr 1 -gr 1/3 logs/${filename}.log eir 1 12 4 erobert3;
+                    lm-submit data/lm/${filename} -sl lm::rdme::NextSubvolumeSolver -r ${replicates} -cr 1 logs/${filename}.log odin 1 8 0 erobert3;
+                    #lm-submit data/lm/${filename} -sl lm::rdme::NextSubvolumeSolver -r ${replicates} -cr 1 logs/${filename}.log ge1 1 2 0 erobert3;
+                    #lm-submit data/lm/${filename} -sl lm::rdme::NextSubvolumeSolver -r ${replicates} -cr 1 -gr 0 logs/${filename}.log local 1 2 0 erobert3;
+                fi
+            fi
+        done;
+    done;
+    
+    % Set some parameters in Matlab.
+    packings=[0:0.05:0.60];
+    
+    % Analyze the rebinding trajectories.
+    samplesPerReplicate=7; numberReplicates=7; numberConfigurations=30;
+    rebindingStats=cell(length(packings),2);
+    for i=[9]
+        packing=packings(i);
+        rebindingStats{i,1}=[];
+        rebindingStats{i,2}=[];
+        disp(sprintf('Processing packing %0.02f',packing));
+        for configuration=[1:numberConfigurations]
+            disp(sprintf('Processing configuration %d',configuration-1));
+            for replicate=[1:numberReplicates]
+                times=permute(h5read(sprintf('data/lm/rebinding_%4.2f_%03d.lm',packing,configuration-1),sprintf('/Simulations/%07d/FirstPassageTimes/02/Times',replicate)),[2:-1:1]);
+                rebindingStats{i,1}(end+1:end+length(times)-1)=times(2:end);
+                times=permute(h5read(sprintf('data/lm/rebinding_%4.2f_%03d.lm',packing,configuration-1),sprintf('/Simulations/%07d/FirstPassageTimes/03/Times',replicate)),[2:-1:1]);
+                rebindingStats{i,2}(end+1:end+length(times)-1)=times(2:end);
+            end
+        end
+    end
+    
+     % Save the stats.
+    save('data/matlab/rebindingStats.mat','rebindingStats');
+    
+    % Load the stats.
+    load('data/matlab/rebindingStats.mat','rebindingStats');
+    
+    % Plot all of the pdfs.
+    colors=getplotcolors();
+    rows=1; cols=1; plotIndex=1;
+    for i=[1:8 10:13]
+        subplot(rows,cols,plotIndex);
+        bindingTimes=rebindingStats{i,1};
+        [N,X]=hist(bindingTimes,20);
+        D=[N./(sum(N)*(X(2)-X(1)))];
+        semilogy((X),(D), 'x-', 'Color',colors{mod(i-1,length(colors))+1});
+        %plotIndex=plotIndex+1;
+        hold('on');
+    end
+    %plot([0:80],exppdf([0:80],3.42));
+    hold('off');
+    
+    % Plot the exponential fits versus packing.
+    subplot(1,1,1);
+    ys=[];
+    y2s=[];
+    for i=[1:length(packings)]
+        ys(end+1)=expfit(rebindingStats{i,1});
+        y2s(end+1)=8.3*(1-packings(i));
+    end
+    plot(packings, ys);
+    hold('on');
+    plot(packings, y2s, 'r:');
+    hold('off');
+    axis([0 0.6 0 10]);
+    
+
+    
+    % Plot the rebinding probability versus packing.
+    subplot(1,1,1);
+    ys=[];
+    for i=[1:length(packings)]
+        ys(end+1)=[length(rebindingStats{i,1})/(length(rebindingStats{i,1})+length(rebindingStats{i,2}))];
+    end
+    plot(packings, ys, 'o-');
+    axis([0 0.6 0 0.1]); xlabel('Packing Fraction'); ylabel('Fraction Particles');
+    
+    % Plot the mean rebinding times.
+    subplot(1,1,1);
+    ys=[];
+    for i=[1:length(packings)]
+        ys(end+1)=mean(rebindingStats{i,1});
+    end
+    plot(packings, ys);
+    ax=axis; axis([0 0.6 ax(3) ax(4)]);
+    
+    % Test plotting power law distributions.
+    x=[0.01:0.01:100];
+    y1=x.^-2;
+    y1=y1./(1/3);
+    y2=x.^-3;
+    y2=y2./(1/3);
+    y3=exp(-x);
+    ccdf1=[];
+    ccdf2=[];
+    ccdf3=[];
+    for i=[1:length(x)]
+        ccdf1(i)=sum(y1(i:end)).*(x(2)-x(1));
+        ccdf2(i)=sum(y2(i:end)).*(x(2)-x(1));
+        ccdf3(i)=sum(y3(i:end)).*(x(2)-x(1));
+    end
+    subplot(3,2,1);
+    plot(x,y1,'r');
+    hold('on');
+    plot(x,y2,'g');
+    plot(x,y3,'b:');
+    hold('off');
+    subplot(3,2,2);
+    plot(x,ccdf1,'r');
+    hold('on');
+    plot(x,ccdf2,'g');
+    plot(x,ccdf3,'b:');
+    hold('off');
+    subplot(3,2,3);
+    plot(log10(x),log10(y1),'r');
+    hold('on');
+    plot(log10(x),log10(y2),'g');
+    plot(log10(x),log10(y3),'b:');
+    hold('off');
+    subplot(3,2,4);
+    plot(log10(x(1:end)),log10(ccdf1(1:end)),'r');
+    hold('on');
+    plot(log10(x(1:end)),log10(ccdf2(1:end)),'g');
+    plot(log10(x(1:end)),log10(ccdf3(1:end)),'b:');
+    hold('off');
+    subplot(3,2,5);
+    plot((x),log10(y1),'r');
+    hold('on');
+    plot((x),log10(y2),'g');
+    plot((x),log10(y3),'b:');
+    hold('off');
+    subplot(3,2,6);
+    plot((x(1:end)),log10(ccdf1(1:end)),'r');
+    hold('on');
+    plot((x(1:end)),log10(ccdf2(1:end)),'g');
+    plot((x(1:end)),log10(ccdf3(1:end)),'b:');
+    hold('off');
+    
+    
+    % Plot the rebinding and escape times.
+    subplot(3,1,1);
+    bindingTimes=rebindingStats{13,1};
+    escapeTimes=rebindingStats{13,2};
+    [N,X]=hist(bindingTimes,100);
+    D=[N./(sum(N)*(X(2)-X(1)))];
+    plot(log10(X),log10(D));
+    subplot(3,1,2);
+    for i=[1:length(X)]
+        CCDF(i)=sum(D(i:end))*(X(2)-X(1));
+    end
+    plot(log10(X),log10(CCDF));
+    subplot(3,1,3);
+    [N,X]=hist(escapeTimes,100);
+    D=[N./(sum(N)*(X(2)-X(1)))];
+    plot(X,D);
+    
+    
+    
+    legendStrings=cell(0,1);
+    for mi=[1:size(methods,2)]
+        loglog((Rs),(maxKL(:,mi)), 'x', );
+    
+    % Plot all of the pdfs.
+    colors=getplotcolors();
+    X=[1e-10:1e-10:1e-9 1e-9:1e-9:1e-8 1e-8:1e-8:1e-7 1e-7:1e-7:1e-6 1e-6:1e-6:1e-5 1e-5:1e-5:1e-4 1e-4:1e-4:1e-3 1e-3:1e-3:1e-2 1e-2:1e-2:1e-1];
+    rows=1; cols=1; plotIndex=1;
+    for i=[1:13]
+        subplot(rows,cols,plotIndex);
+        N=zeros(length(X),1);
+        bindingTimes=rebindingStats{i,1};
+        [N,X]=hist(bindingTimes,100);
+        D=[N./(sum(N)*(X(2)-X(1)))];
+        plot((X),(D), 'x-', 'Color',colors{mod(i-1,length(colors))+1});
+        %plotIndex=plotIndex+1;
+        hold('on');
+    end
+    hold('off');
+    
+    % Plot all of the cdfs for rebinding times.
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    X=[1e-10:1e-10:1e-9 1e-9:1e-9:1e-8 1e-8:1e-8:1e-7 1e-7:1e-7:1e-6 1e-6:1e-6:1e-5 1e-5:1e-5:1e-4 1e-4:1e-4:1e-3 1e-3:1e-3:1e-2 1e-2:1e-2:1e-1]; 
+    subplot(1,1,1);
+    plotIndex=1;
+    for i=[1:2:13]
+        bindingTimes=rebindingStats{i,1};
+        CDF=[];
+        for j=[1:length(X)]
+            CDF(j)=sum(bindingTimes<=X(j))./length(bindingTimes);
+        end
+        semilogx((X),(CDF), 'o-', 'Color',colors{mod(plotIndex-1,length(colors))+1});
+        legendStrings{end+1,1}=sprintf('%0.2f',packings(i));
+        plotIndex=plotIndex+1;
+        hold('on');
+    end
+    hold('off');
+    axis([X(1) X(end) 0 1.0]); xlabel('Rebinding Time (s)'); ylabel('Pr(T{\leq}t)'); legend(legendStrings,'Location','SouthEast');
+    
+    % Plot all of the cdfs for escape times.
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    X=[1e-10:1e-10:1e-9 1e-9:1e-9:1e-8 1e-8:1e-8:1e-7 1e-7:1e-7:1e-6 1e-6:1e-6:1e-5 1e-5:1e-5:1e-4 1e-4:1e-4:1e-3 1e-3:1e-3:1e-2 1e-2:1e-2:1e-1]; 
+    subplot(1,1,1);
+    plotIndex=1;
+    for i=[1:2:13]
+        escapeTimes=rebindingStats{i,2};
+        CDF=[];
+        for j=[1:length(X)]
+            CDF(j)=sum(escapeTimes<=X(j))./length(escapeTimes);
+        end
+        semilogx((X),(CDF), 'o-', 'Color',colors{mod(plotIndex-1,length(colors))+1});
+        legendStrings{end+1,1}=sprintf('%0.2f',packings(i));
+        plotIndex=plotIndex+1;
+        hold('on');
+    end
+    hold('off');
+    axis([X(1) X(end) 0 1.0]); xlabel('Escape Time (s)'); ylabel('Pr(T{\leq}t)'); legend(legendStrings,'Location','SouthEast');
+    
+    % Plot the fraction of particles that rebound by a given time.
+    colors=getplotcolors();
+    legendStrings=cell(0,1);
+    X=[1e-10:1e-10:1e-9 1e-9:1e-9:1e-8 1e-8:1e-8:1e-7 1e-7:1e-7:1e-6 1e-6:1e-6:1e-5 1e-5:1e-5:1e-4 1e-4:1e-4:1e-3 1e-3:1e-3:1e-2 1e-2:1e-2:1e-1]; 
+    subplot(1,1,1);
+    plotIndex=1;
+    for i=[1:2:13]
+        bindingTimes=rebindingStats{i,1};
+        CDF=[];
+        for j=[1:length(X)]
+            CDF(j)=sum(bindingTimes<=X(j))/(length(rebindingStats{i,1})+length(rebindingStats{i,2}));
+        end
+        semilogx((X),(CDF), '-', 'Color',colors{mod(plotIndex-1,length(colors))+1});
+        legendStrings{end+1,1}=sprintf('%0.2f',packings(i));
+        plotIndex=plotIndex+1;
+        hold('on');
+    end
+    hold('off');
+    axis([1e-9 1e-2 0 0.1]); xlabel('Rebinding Time (s)'); ylabel('Fraction Particles'); legend(legendStrings,'Location','SouthEast');
+    
+
+    % Plot all of the ccdfs.
+    colors=getplotcolors();
+    X=[1e-10:1e-10:1e-9 1e-9:1e-9:1e-8 1e-8:1e-8:1e-7 1e-7:1e-7:1e-6 1e-6:1e-6:1e-5 1e-5:1e-5:1e-4 1e-4:1e-4:1e-3 1e-3:1e-3:1e-2 1e-2:1e-2:1e-1]; 
+    rows=1; cols=1; plotIndex=1;
+    for i=[1:13]
+        subplot(rows,cols,plotIndex);
+        bindingTimes=rebindingStats{i,1};
+        CCDF=[];
+        for j=[1:length(X)]
+            CCDF(j)=sum(bindingTimes>=X(j))./length(bindingTimes);
+        end
+        plot(log10(X),log10(CCDF), 'x-', 'Color',colors{mod(i-1,length(colors))+1});
+        %plotIndex=plotIndex+1;
+        hold('on');
+    end
+    hold('off');
+    
+    
+    [mu,ci]=expfit(allTimes(:,1), 0.05, allTimes(:,2));
+    [N,X]=hist(allTimes(:,1),20);
+    pdf=[N./(sum(N)*(X(2)-X(1)))];
+    bar(X,pdf);
+    hold('on');
+    plot([0:0.05:10],exppdf([0:0.05:10],mu));
+    plot([0:0.05:10],exppdf([0:0.05:10],ci(1)),':');
+    plot([0:0.05:10],exppdf([0:0.05:10],ci(2)),':');
+    hold('off');
+    axis([0 9.5 0 0.3]);
+
+    
+    % Analyze the rebinding times.
+    tf=10.0; samplesPerReplicate=7; numberReplicates=25; numberConfigurations=40;
+    allTimes=[ones(numberReplicates*samplesPerReplicate,1).*tf ones(numberReplicates*samplesPerReplicate,1)];
+    for configuration=[1:numberConfigurations]
+        for replicate=[1:numberReplicates]
+            times=permute(h5read(sprintf('data/lm/rebinding_0.00_%02d.lm',configuration),sprintf('/Simulations/%07d/FirstPassageTimes/02/Times',replicate)),[2:-1:1]);
+            startIndex=(replicate-1)*samplesPerReplicate+1;
+            allTimes(startIndex:startIndex+length(times)-2,1)=times(2:end);
+            allTimes(startIndex:startIndex+length(times)-2,2)=0;
+        end
+    end
+    [mu,ci]=expfit(allTimes(:,1), 0.05, allTimes(:,2));
+    [N,X]=hist(allTimes(:,1),20);
+    pdf=[N./(sum(N)*(X(2)-X(1)))];
+    bar(X,pdf);
+    hold('on');
+    plot([0:0.05:10],exppdf([0:0.05:10],mu));
+    plot([0:0.05:10],exppdf([0:0.05:10],ci(1)),':');
+    plot([0:0.05:10],exppdf([0:0.05:10],ci(2)),':');
+    hold('off');
+    axis([0 9.5 0 0.3]);
+    
+    
+    
+
+    #### sbml_import_testing ####
+    
+    # Create an lm file from the sbml file.
+    lm_sbml_import dimerization.lm dimerization.xml
+    
+    # Set the other necessary parameters.
+    lm_setp dimerization.lm writeInterval=0.1 maxTime=100
+    
+    # Run the simulation.
+    lm -c 2 -r 1 -sl lm::cme::GillespieDSolver -f dimerization.lm
+
+    
+    #### trajectory_output ####
+    
+    # Generate some trajectories that run to completion.
+    m="burst"; a=106.6667; b=22.5; h=2.00; n50=1000; kap0=`echo "scale=2;${a}/100" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; h0=${h}; n050=${n50}; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; h1=${h}; n150=${n50}; d1=1; gamma=50; initialProtein=0;
+    filename="traj_complete.lm5"; writeInterval=1e0; maxTime=1e3;
+    rm -f ${filename} && lm_setp ${filename} 4 proteinModel=${m} a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    replicates="1-10" && lm-submit ${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 0 ${filename}.log eir@compute-6-2.local 1 2 0 erobert3;
+
+    # Generate some trajectories that exceed the max protein.
+    m="burst"; a=106.6667; b=22.5; h=2.00; n50=1000; kap0=`echo "scale=2;${a}/100" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; h0=${h}; n050=${n50}; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; h1=${h}; n150=${n50}; d1=1; gamma=50; initialProtein=0;
+    filename="traj_max_protein.lm5"; writeInterval=1e0; maxTime=1e3; maxProtein=1000;
+    rm -f ${filename} && lm_setp ${filename} 4 proteinModel=${m} a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} maxProtein=${maxProtein} > /dev/null;
+    replicates="1-10" && lm-submit ${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 1 ${filename}.log eir@compute-6-2.local 1 2 1 erobert3;
+    
+    
+    #### two_state_switch_testing ####
+    
+    # Run a series of simulations to calculate the pdfs
+    his="0 1"; hs=(2.00 10.00);
+    p1s=( 161  123 );
+    p2s=( 676 1949 );
+    p3s=(2332 3152 );
+    ab=3200; b=2.00; n50=2000; d1=1; gamma=50;
+    writeInterval=1e0; maxTime=1e3;
+    replicates="1-10000";
+    for hi in $his; do
+        h=${hs[hi]};
+        pi=$hi; p1=${p1s[pi]}; p2=${p2s[pi]}; p3=${p3s[pi]};
+        a=`echo "scale=2;${ab}/${b}" |bc`;
+        h0=${h}; n050=${n50}; h1=${h}; n150=${n50};
+        kap0=`echo "scale=2;${a}/50" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/2" |bc`;
+        
+        # Start the off state.
+        initialProtein=${p1}; maxProtein=${p2};
+        filename="pdf_off_${a}_${b}_${kap0}_${kap00}_${h0}_${n050}_${kap11}_${kap1}_${h1}_${n150}_${d1}_${gamma}.lm5";
+        echo "${filename} with $p1 $p2 $p3 start $initialProtein"
+        rm -f data/lm/${filename} && lm_setp data/lm/${filename} 4 a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} maxProtein=${maxProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+        #lm-submit data/lm/${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 1/3 logs/${filename}.log eir@compute-6-0.local 1 12 4 erobert3;
+        lm-submit data/lm/${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 1/8 logs/${filename}.log local 1 8 1 erobert3;
+
+        # Start the on state.
+        initialProtein=${p3}; minProtein=${p2};
+        filename="pdf_on_${a}_${b}_${kap0}_${kap00}_${h0}_${n050}_${kap11}_${kap1}_${h1}_${n150}_${d1}_${gamma}.lm5";
+        echo "${filename} with $p1 $p2 $p3 start $initialProtein"
+        rm -f data/lm/${filename} && lm_setp data/lm/${filename} 4 a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} minProtein=${minProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+        #lm-submit data/lm/${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 1/3 logs/${filename}.log eir@compute-6-1.local 1 12 4 erobert3;
+        lm-submit data/lm/${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 1/8 logs/${filename}.log local 1 8 1 erobert3;
+    done;
+    
+    % Setup some matlab parameters.
+    ab=3200; b=2.0; a=ab/b; n50=2000; kap0=a/50; kap00=a/1; n050=n50; hs=[2.0 10.0]; kap11=a/100; kap1=a/2; n150=n50; d1=1; gamma=50; fp=[161 676 2332; 123 1949 3152]; states={'off','on'};
+    
+    % Calculate the pdfs.
+    Rs=[1:10000]; ts=[0:1000];
+    %testpdfs=cell(length(hs),length(states),3);
+    for si=[1 2]
+        state=char(states(si));
+        for hi=[1 2]
+            h=hs(hi); h0=h; h1=h; p1=fp(hi,1); p2=fp(hi,2); p3=fp(hi,3);
+            filename=sprintf('data/lm/pdf_%s_%0.2f_%0.2f_%0.2f_%0.2f_%0.2f_%d_%0.2f_%0.2f_%0.2f_%d_%d_%d.lm5',state,a,b,kap0,kap00,h0,n050,kap11,kap1,h1,n150,d1,gamma);
+            disp(sprintf('Loading %s',filename));
+            counts=zeros(length(Rs)*length(ts),3);
+            countsUsed=0;
+            for R=Rs
+                if mod(R,1000) == 0, disp(sprintf('Replicate %d',R));, end
+                tmp=cast(permute(hdf5read(filename,sprintf('/Simulations/%07d/SpeciesCounts',R)),[2,1]),'double'); %I A M Y
+                first=6;
+                last=length(tmp)-1;
+                if last ~= 1000, disp(sprintf('Short run %d: %d',R,last));, end
+                counts((countsUsed+1):(countsUsed+1+last-first),1)=tmp(first:last,2);
+                counts((countsUsed+1):(countsUsed+1+last-first),2)=tmp(first:last,3);
+                counts((countsUsed+1):(countsUsed+1+last-first),3)=tmp(first:last,4);
+                countsUsed=countsUsed+last-first+1;
+            end
+            [N,X]=hist(counts(1:countsUsed,2),[0:max(counts(1:countsUsed,2))]);
+            testpdfs{hi,si,1}=[N./(sum(N)*(X(2)-X(1)))];
+            [N,X]=hist(counts(1:countsUsed,3),[0:max(counts(1:countsUsed,3))]);
+            testpdfs{hi,si,2}=N./(sum(N)*(X(2)-X(1)));
+            [N,X,Y]=hist2d(counts(1:countsUsed,2), counts(1:countsUsed,3), [0:max(counts(1:countsUsed,2))], [0:max(counts(1:countsUsed,3))]);
+            testpdfs{hi,si,3}=N./(sum(sum(N))*(X(2)-X(1))*(Y(2)-Y(1)));
+        end
+    end
+    
+     % Save the pdfs.
+    save('data/matlab/testpdfs.mat','testpdfs');
+    
+    % Load the pdfs.
+    load('data/matlab/testpdfs.mat','testpdfs');
+    load('data/matlab/goldpdfs.mat','pdfs'); goldpdfs=pdfs; clear pdfs;
+    
+    % Compare the test pdfs to the gold standards.
+    rows=4; cols=2; plotIndex=1;
+    for hi=[1 2]
+        for si=[1 2]
+            h=hs(hi); p1=fp(hi,1); p2=fp(hi,2); p3=fp(hi,3);
+            subplot(rows,cols,plotIndex);
+            P=goldpdfs{hi,1,si,2};
+            Q=testpdfs{hi,si,2};
+            KL=0;
+            for i=[1:min(length(P),length(Q))]
+                if (P(i) > 0 && Q(i) > 0)
+                    KL=KL+(P(i)*log(P(i)/Q(i)));
+                end
+            end
+            X=[0:length(Q)-1];
+            semilogy(X, Q, 'b');
+            hold('on');
+            X=[0:length(P)-1];
+            semilogy(X, P, 'r');
+            pdf=goldpdfs{hi,1,si,4};
+            X=[0:length(pdf)-1];
+            semilogy(X, pdf, 'k:');
+            hold('off');
+            ax=axis; axis([ax(1) ax(2) 1e-8 1e-1]); xlabel('n'); ylabel('P_n'); title(sprintf('Protein QSD (h=%0.2f,pop=%s,KL=%1.4e)',h,states{si},KL));
+            if si == 1, vline(p1,'g:'); vline(p2,'r:');, elseif si == 2, vline(p3,'g:'); vline(p2,'r:');, end
+            plotIndex=plotIndex+1;
+            subplot(rows,cols,plotIndex);
+            P=goldpdfs{hi,1,si,1};
+            Q=testpdfs{hi,si,1};
+            KL=0;
+            for i=[1:min(length(P),length(Q))]
+                if (P(i) > 0 && Q(i) > 0)
+                    KL=KL+(P(i)*log(P(i)/Q(i)));
+                end
+            end
+            X=[0:length(Q)-1];
+            semilogy(X, Q, 'b');
+            hold('on');
+            X=[0:length(P)-1];
+            semilogy(X, P, 'r');
+            hold('off');
+            xlabel('m'); ylabel('P_m'); title(sprintf('mRNA QSD (h=%0.2f,pop=%s,KL=%1.4e)',h,states{si},KL));
+            plotIndex=plotIndex+1;
+        end
+    end
+    
+    
+    #### two_state_switch_profiling ####
+    
+    # Profile the cme direct method using the cpu only.
+    a=106.6667; b=22.5; h=2.00; n50=1000; kap0=`echo "scale=2;${a}/100" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; h0=${h}; n050=${n50}; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; h1=${h}; n150=${n50}; d1=1; gamma=50; initialProtein=0;
+    filename="cme_direct_cpu.lm5"; writeInterval=1e6; maxTime=1e14;
+    rm -f ${filename} && lm_setp ${filename} 4 maxSteps=100000000 proteinModel=${m} a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    replicates="1-10" && lm-submit ${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 0 ${filename}.log eir@compute-6-2.local 1 2 1 erobert3;
+    
+    # Profile the cme direct method using the cpu/gpu
+    a=106.6667; b=22.5; h=2.00; n50=1000; kap0=`echo "scale=2;${a}/100" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; h0=${h}; n050=${n50}; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; h1=${h}; n150=${n50}; d1=1; gamma=50; initialProtein=0;
+    filename="cme_direct_cpugpu.lm5"; writeInterval=1e6; maxTime=1e14;
+    rm -f ${filename} && lm_setp ${filename} 4 maxSteps=100000000 proteinModel=${m} a=${a} b=${b} kap0=${kap0} kap00=${kap00} h0=${h0} n050=${n050} kap11=${kap11} kap1=${kap1} h1=${h1} n150=${n150} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    replicates="1-10" && lm-submit ${filename} -m lm::cme::TwoStateHillSwitch -r ${replicates} -cr 1 -gr 1 ${filename}.log eir@compute-6-2.local 1 2 1 erobert3;
+
+    # Profile using stochkit.
+    a=106.6667; b=22.5; h=2.00; n50=1000; kap0=`echo "scale=2;${a}/100" |bc`; kap00=`echo "scale=2;${a}/1" |bc`; h0=${h}; n050=${n50}; kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; h1=${h}; n150=${n50}; d1=1; gamma=50; initialProtein=0;
+    mkdir -p conf && cat stochkit_template.xml | sed s/VAR_a/${a}/ | sed s/VAR_b/${b}/ | sed s/VAR_kap00/${kap00}/ | sed s/VAR_kap0/${kap0}/ | sed s/VAR_h0/${h0}/ | sed s/VAR_n050/${n050}/ | sed s/VAR_kap11/${kap11}/ | sed s/VAR_kap1/${kap1}/ | sed s/VAR_h1/${h1}/ | sed s/VAR_n150/${n150}/ | sed s/VAR_d1/${d1}/ | sed s/VAR_gamma/${gamma}/ | sed s/VAR_initialProtein/${initialProtein}/ > conf/stochkit.xml
+    mkdir -p stochkit && ssa-submit 1 10 /scratch stochkit -m conf/stochkit.xml -t 1e6 -i 2 stochkit.log eir@compute-6-2.local 1 erobert3
+    
+    
+    #### two_state_expression_testing ####
+    
+    # Run a series of simulations to calculate the pdfs
+    ab=3200; b=2.00; d1=1; gamma=50;
+    writeInterval=1e0; maxTime=1e3;
+    replicates="1-10000";
+    a=`echo "scale=2;${ab}/${b}" |bc`;
+    kap0=`echo "scale=2;${a}/50" |bc`; kap00=`echo "scale=2;${a}/1" |bc`;
+    kap11=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/2" |bc`;
+        
+    # Start the off state.
+    initialProtein=0;
+    filename="pdf_off_${a}_${b}_${kap0}_${kap1}_${d1}_${gamma}.lm5";
+    echo "${filename} with $initialProtein"
+    rm -f data/lm/${filename} && lm_setp data/lm/${filename} 4 a=${a} b=${b} kap0=${kap0} kap1=${kap1} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    lm-submit data/lm/${filename} -m lm::cme::TwoStateExpression -r ${replicates} -cr 1 -gr 1/8 logs/${filename}.log local 1 8 1 erobert3;
+
+    # Start the off state.
+    initialProtein=0;
+    filename="pdf_on_${a}_${b}_${kap00}_${kap11}_${d1}_${gamma}.lm5";
+    echo "${filename} with $initialProtein"
+    rm -f data/lm/${filename} && lm_setp data/lm/${filename} 4 a=${a} b=${b} kap0=${kap00} kap1=${kap11} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    lm-submit data/lm/${filename} -m lm::cme::TwoStateExpression -r ${replicates} -cr 1 -gr 1/3 logs/${filename}.log eir@compute-6-2.local 1 12 4 erobert3;
+    
+    % Setup some matlab parameters.
+    ab=3200; b=2.0; a=ab/b; n50=2000; kap0=a/50; kap00=a/1; kap11=a/100; kap1=a/2; d1=1; gamma=50; states={'off','on'};
+    
+    % Calculate the pdfs.
+    Rs=[1:10000]; ts=[0:1000];
+    %testpdfs=cell(length(states),3);
+    for si=[2]
+        if si == 1
+            filename=sprintf('data/lm/pdf_%s_%0.2f_%0.2f_%0.2f_%0.2f_%d_%d.lm5',states{si},a,b,kap0,kap1,d1,gamma);
+        elseif si == 2
+            filename=sprintf('data/lm/pdf_%s_%0.2f_%0.2f_%0.2f_%0.2f_%d_%d.lm5',states{si},a,b,kap00,kap11,d1,gamma);
+        else
+            filename='';
+        end
+        disp(sprintf('Loading %s',filename));
+        counts=zeros(length(Rs)*length(ts),3);
+        countsUsed=0;
+        for R=Rs
+            if mod(R,1000) == 0, disp(sprintf('Replicate %d',R));, end
+            tmp=cast(permute(hdf5read(filename,sprintf('/Simulations/%07d/SpeciesCounts',R)),[2,1]),'double'); %I A M Y
+            first=6;
+            last=length(tmp)-1;
+            if last ~= 1000, disp(sprintf('Short run %d: %d',R,last));, end
+            counts((countsUsed+1):(countsUsed+1+last-first),1)=tmp(first:last,2);
+            counts((countsUsed+1):(countsUsed+1+last-first),2)=tmp(first:last,3);
+            counts((countsUsed+1):(countsUsed+1+last-first),3)=tmp(first:last,4);
+            countsUsed=countsUsed+last-first+1;
+        end
+        [N,X]=hist(counts(1:countsUsed,2),[0:max(counts(1:countsUsed,2))]);
+        testpdfs{si,1}=[N./(sum(N)*(X(2)-X(1)))];
+        [N,X]=hist(counts(1:countsUsed,3),[0:max(counts(1:countsUsed,3))]);
+        testpdfs{si,2}=N./(sum(N)*(X(2)-X(1)));
+        [N,X,Y]=hist2d(counts(1:countsUsed,2), counts(1:countsUsed,3), [0:max(counts(1:countsUsed,2))], [0:max(counts(1:countsUsed,3))]);
+        testpdfs{si,3}=N./(sum(sum(N))*(X(2)-X(1))*(Y(2)-Y(1)));
+    end
+    
+     % Save the pdfs.
+    save('data/matlab/testpdfs.mat','testpdfs');
+    
+    % Load the pdfs.
+    load('data/matlab/testpdfs.mat','testpdfs');
+    load('data/matlab/goldpdfs.mat','pdfs'); goldpdfs=pdfs; clear pdfs;
+    
+    % Compare the test pdfs to the gold standards.
+    rows=2; cols=1; plotIndex=1;
+    for si=[1 2]
+        subplot(rows,cols,plotIndex);
+        P=goldpdfs{2,1,si,4};
+        Q=testpdfs{si,2};
+        KL=0;
+        for i=[1:min(length(P),length(Q))]
+            if (P(i) > 0 && Q(i) > 0)
+                KL=KL+(P(i)*log(P(i)/Q(i)));
+            end
+        end
+        X=[0:length(Q)-1];
+        semilogy(X, Q, 'b');
+        hold('on');
+        X=[0:length(P)-1];
+        semilogy(X, P, 'r');
+        hold('off');
+        ax=axis; axis([ax(1) ax(2) 1e-8 1e-1]); xlabel('n'); ylabel('P_n'); title(sprintf('Protein QSD (pop=%s,KL=%1.4e)',states{si},KL));
+        plotIndex=plotIndex+1;
+    end
+
+    
+    #### two_state_expression_profiling ####
+    
+    # Profile the cme direct method using the cpu only.
+    a=106.6667; b=22.5; kap0=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; d1=1; gamma=50; initialProtein=0;
+    filename="cme_direct_cpu.lm5"; writeInterval=1e6; maxTime=1e14;
+    rm -f ${filename} && lm_setp ${filename} 4 maxSteps=100000000 a=${a} b=${b} kap0=${kap0} kap1=${kap1} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    replicates="1-10" && lm-submit ${filename} -m lm::cme::TwoStateExpression -r ${replicates} -cr 1 -gr 0 ${filename}.log eir@compute-6-2.local 1 2 1 erobert3;
+    
+    # Profile the cme direct method using the cpu/gpu
+    a=106.6667; b=22.5; kap0=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; d1=1; gamma=50; initialProtein=0;
+    filename="cme_direct_cpugpu.lm5"; writeInterval=1e6; maxTime=1e14;
+    rm -f ${filename} && lm_setp ${filename} 4 maxSteps=100000000 a=${a} b=${b} kap0=${kap0} kap1=${kap1} d1=${d1} gamma=${gamma} initialProtein=${initialProtein} writeInterval=${writeInterval} maxTime=${maxTime} > /dev/null;
+    replicates="1-10" && lm-submit ${filename} -m lm::cme::TwoStateExpression -r ${replicates} -cr 1 -gr 1 ${filename}.log eir@compute-6-2.local 1 2 1 erobert3;
+
+    # Profile using stochkit.
+    a=106.6667; b=22.5; kap0=`echo "scale=2;${a}/100" |bc`; kap1=`echo "scale=2;${a}/1" |bc`; d1=1; gamma=50; initialProtein=0;
+    mkdir -p conf && cat two_state_expression_template.xml | sed s/VAR_a/${a}/ | sed s/VAR_b/${b}/ | sed s/VAR_kap0/${kap0}/ | sed s/VAR_kap1/${kap1}/ | sed s/VAR_d1/${d1}/ | sed s/VAR_gamma/${gamma}/ | sed s/VAR_initialProtein/${initialProtein}/ > conf/stochkit.xml
+    mkdir -p stochkit && ssa-submit 1 10 /scratch stochkit -m conf/stochkit.xml -t 1e7 -i 2 stochkit.log eir@compute-6-2.local 1 erobert3
+    
+    
+    

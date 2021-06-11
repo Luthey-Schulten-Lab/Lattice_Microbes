@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <title>{{modelName}}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+    <script src="http://www.x3dom.org/download/x3dom.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://www.x3dom.org/download/x3dom.css" />
+    <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" />
+</head>
+<body>
+<style>
+html, body {
+    overflow: hidden;
+}
+{% include "jupyter.css" %}
+</style>
+
+
+<script type="text/javascript">
+function {{renderId}}toggleKey() {
+    var key = document.getElementById("{{renderId}}key");
+    var minkey = document.getElementById("{{renderId}}minkey");
+    var help = document.getElementById("{{renderId}}help");
+
+    if (key.style.display == "none") { 
+        key.style.display = "block";
+        minkey.style.display = "none";
+    } else {
+        key.style.display = "none";
+        minkey.style.display = "block";
+        help.style.display = "none";
+    }
+}
+    
+function {{renderId}}toggleView(elem) {    
+    var mat = document.getElementById("{{renderId}}material"+elem.toString());
+    var fa = document.getElementById("{{renderId}}viewButton"+elem.toString());
+    var dm = document.getElementById("{{renderId}}dm" + elem.toString());
+    var sh = document.getElementById("{{renderId}}shape" + elem.toString());
+
+    if (fa.className == "icon-circle") {
+        fa.className = "icon-adjust";
+        dm.readOnly = true;
+        mat.transparency = "0.5";
+        sh.render = true;
+    } else if (fa.className == "icon-adjust") {
+        fa.className = "icon-circle-blank";
+        mat.transparency = "1";
+        sh.render = false;
+    } else {
+        fa.className = "icon-circle";
+        dm.readOnly = false;
+        mat.transparency = "0";
+        sh.render = true;
+    }
+}
+    
+function {{renderId}}toggleHelp() {
+    var em = document.getElementById("{{renderId}}help");
+    if (em.style.display == "block") {
+        em.style.display = "none";
+    } else {
+        em.style.display = "block";
+    }
+}
+</script>
+
+<div class="jLMx3Dstandalone" id="{{renderId}}">
+    {% include "structure.x3d" %}
+
+    <div class="jLMx3Dkey jLMx3Dkeymin" id="{{renderId}}minkey">
+        <button onclick="{{renderId}}toggleKey();"><i class="icon-reorder"></i></button>
+    </div>
+
+    <div class="jLMx3Dkeyhelpstandalone" id="{{renderId}}help">
+        <table class='jLMtbl'>
+            <caption>Key bindings</caption>
+            <tr>
+                <th scope='col'> Key binding </th>
+                <th scope='col'> Function</th>
+            </tr>
+            <tr><td><tt>e</tt></td><td>Examine mode</td></tr>
+            <tr><td><tt>f</tt></td><td>Fly mode</td></tr>
+            <tr><td><tt>w</tt></td><td>Walk mode</td></tr>
+            <tr><td><tt>l</tt></td><td>Look mode</td></tr>
+            <tr><td><tt>r</tt></td><td>Reset view</td></tr>
+            <tr><td><tt>a</tt></td><td>Show all</td></tr>
+            <tr><td><tt>u</tt></td><td>Upright</td></tr>
+        </table>
+
+        <table class='jLMtbl'>
+            <caption>Examine mode</caption>
+            <tr>
+                <th scope='col'> Key binding </th>
+                <th scope='col'> Function</th>
+            </tr>
+            <tr><td>Left-click / Shift+Left-click</td><td>Rotate</td></tr>
+            <tr><td>Middle-click / Ctrl+Left-click</td><td>Pan</td></tr>
+            <tr><td>Right-click / Alt+Left-click</td><td>Zoom</td></tr>
+            <tr><td>Double-click</td><td>Set center of rotation</td></tr>
+            </tr>
+        </table>
+
+        <table class='jLMtbl'>
+            <caption>Fly mode</caption>
+            <tr>
+                <th scope='col'> Key binding </th>
+                <th scope='col'> Function</th>
+            </tr>
+            <tr><td>Left-click</td><td>Move forward</td></tr>
+            <tr><td>Right-click</td><td>Move backward</td></tr>
+        </table>
+
+        <table class='jLMtbl'>
+            <caption>Walk mode</caption>
+            <tr>
+                <th scope='col'> Key binding </th>
+                <th scope='col'> Function</th>
+            </tr>
+            <tr><td>Left-click</td><td>Move forward</td></tr>
+            <tr><td>Right-click</td><td>Move backward</td></tr>
+        </table>
+
+        <table class='jLMtbl'>
+            <caption>Look mode</caption>
+            <tr>
+                <th scope='col'> Key binding </th>
+                <th scope='col'> Function</th>
+            </tr>
+            <tr><td>Left-click</td><td>Move closer</td></tr>
+            <tr><td>Right-click</td><td>Move back</td></tr>
+        </table>
+    </div>
+
+    <div class="jLMx3Dkey" id="{{renderId}}key">
+        <div class="jLMx3dbt">
+            <button class="jLMx3Dkey jLMx3dbtstandalone" onclick="{{renderId}}toggleKey();">Minimize</button>
+            <button class="jLMx3Dkey jLMx3dbtstandalone" onclick="{{renderId}}toggleHelp();">Bindings</button>
+        </div>
+        <ul class="reg">
+        {% for shape in sites %} 
+            <li>
+                <label>
+                    <button onClick='{{renderId}}toggleView({{shape.idx}})'> <i class="icon-circle" id="{{renderId}}viewButton{{shape.idx}}"></i></button>
+                    {{shape.label}}
+                </label>
+            </li> 
+        {% endfor %}
+        {% for shape in species %} 
+            <li>
+                <label>
+                    <button onClick='{{renderId}}toggleView({{shape.idx}})'> <i class='icon-circle' id="{{renderId}}viewButton{{shape.idx}}"></i></button>
+                    <span class="jLMparticleKey" style=color:{{shape.hexColor}};">&#9679;</span> {{shape.label}}
+                </label>
+            </li> 
+        {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

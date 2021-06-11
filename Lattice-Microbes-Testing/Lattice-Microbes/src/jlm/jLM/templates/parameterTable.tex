@@ -1,0 +1,15 @@
+{% if annotationCol %}
+\begin{tabular}{l r l l}
+\toprule
+Symbol & Value & Unit & Description\\
+{% else %}
+\begin{tabular}{l r l}
+\toprule
+Symbol & Value & Unit \\
+{% endif %}
+\midrule
+{% for p in params %}
+    ${{p.symbol}}$ & ${{p.value}}$ & ${{p.unit}}$ {% if annotationCol %}& {{p.annotation or ''}}{% endif %}\\
+{% endfor %}
+\bottomrule
+\end{tabular}

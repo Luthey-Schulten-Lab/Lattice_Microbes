@@ -1,0 +1,686 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.PostProcessing &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pySTDLM.SBMLReader" href="pySTDLM.SBMLReader.html" />
+    <link rel="prev" title="pySTDLM.OnTheFly" href="pySTDLM.OnTheFly.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pySTDLM.PostProcessing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pySTDLM.PostProcessing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pySTDLM.PostProcessing">
+<span id="pystdlm-postprocessing"></span><h1>pySTDLM.PostProcessing<a class="headerlink" href="#module-pySTDLM.PostProcessing" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.closeLMFile" title="pySTDLM.PostProcessing.closeLMFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">closeLMFile</span></code></a>(f)</td>
+<td>Close a Lattice Microbes File</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.getAvgVarTrace" title="pySTDLM.PostProcessing.getAvgVarTrace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAvgVarTrace</span></code></a>(f,&nbsp;specie[,&nbsp;doublingTime])</td>
+<td>Get the average and variance of the specie trace over time</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.getHistogram" title="pySTDLM.PostProcessing.getHistogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getHistogram</span></code></a>(f,&nbsp;species)</td>
+<td>Get the histogram for a specie</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.getOccupancyKymograph" title="pySTDLM.PostProcessing.getOccupancyKymograph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getOccupancyKymograph</span></code></a>(f[,&nbsp;species,&nbsp;replicate])</td>
+<td>Compute the specie density(occupancy) among a slice of the simulation domain as a function over time for the given direciton</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.getPhaseSpace" title="pySTDLM.PostProcessing.getPhaseSpace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPhaseSpace</span></code></a>(f,&nbsp;species,&nbsp;replicate)</td>
+<td>Get the nD phase space associated with the traces of species.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.getSpecieTrace" title="pySTDLM.PostProcessing.getSpecieTrace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSpecieTrace</span></code></a>(f,&nbsp;specie[,&nbsp;replicate,&nbsp;…])</td>
+<td>Extract data for a particular specie for the specified replicate</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.getSpecies" title="pySTDLM.PostProcessing.getSpecies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSpecies</span></code></a>(f)</td>
+<td>Exract the species names</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.getTimesteps" title="pySTDLM.PostProcessing.getTimesteps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTimesteps</span></code></a>(f)</td>
+<td>Extract the timestep times</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.openLMFile" title="pySTDLM.PostProcessing.openLMFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">openLMFile</span></code></a>(filename)</td>
+<td>Open a Lattice Microbes File for reading</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.plotAvgVar" title="pySTDLM.PostProcessing.plotAvgVar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotAvgVar</span></code></a>(f[,&nbsp;species,&nbsp;filename])</td>
+<td>Plot a specific species average over time and variance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.plotAvgVarFromFile" title="pySTDLM.PostProcessing.plotAvgVarFromFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotAvgVarFromFile</span></code></a>(filename,&nbsp;species,&nbsp;…)</td>
+<td>Plot species from an output file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.plotOccupancyKymograph" title="pySTDLM.PostProcessing.plotOccupancyKymograph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotOccupancyKymograph</span></code></a>(f[,&nbsp;species,&nbsp;…])</td>
+<td>Plot a specific specie density(occupancy) among a slice of the simulation domain as a function of a direction over time</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.plotPhaseSpace" title="pySTDLM.PostProcessing.plotPhaseSpace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotPhaseSpace</span></code></a>(f[,&nbsp;species,&nbsp;replicate,&nbsp;…])</td>
+<td>Plot the 2D or 3D phase space associated with the given species over the replicates indicated</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.plotTrace" title="pySTDLM.PostProcessing.plotTrace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotTrace</span></code></a>(f[,&nbsp;species,&nbsp;replicate,&nbsp;filename])</td>
+<td>Plot a specific species trace</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.plotTraceFromFile" title="pySTDLM.PostProcessing.plotTraceFromFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotTraceFromFile</span></code></a>(filename,&nbsp;species,&nbsp;…)</td>
+<td>Plot species from an output file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.showAvgVar" title="pySTDLM.PostProcessing.showAvgVar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showAvgVar</span></code></a>(f,&nbsp;species,&nbsp;**kwargs)</td>
+<td>Show a specific species average over time and variance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.showAvgVarFromFile" title="pySTDLM.PostProcessing.showAvgVarFromFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showAvgVarFromFile</span></code></a>(filename,&nbsp;species,&nbsp;**kwargs)</td>
+<td>Show species from an output file :param filename: The name of an HDF5 output file generated by LatticeMicrobes :param species: A list of species to plot :param kwargs: Additional arguments to be passed on to matplotlib.plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.showOccupancyKymograph" title="pySTDLM.PostProcessing.showOccupancyKymograph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showOccupancyKymograph</span></code></a>(f[,&nbsp;species,&nbsp;replicate])</td>
+<td>Show a specific specie density(occupancy) among a slice of the simulation domain as a function of a direction over time</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.PostProcessing.showTrace" title="pySTDLM.PostProcessing.showTrace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showTrace</span></code></a>(f,&nbsp;species,&nbsp;replicate,&nbsp;**kwargs)</td>
+<td>Show a specific species trace</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.PostProcessing.showTraceFromFile" title="pySTDLM.PostProcessing.showTraceFromFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">showTraceFromFile</span></code></a>(filename,&nbsp;species,&nbsp;…)</td>
+<td>Show species trace from a particular replicate</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.closeLMFile">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">closeLMFile</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#closeLMFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.closeLMFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close a Lattice Microbes File</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> – A previously opened lattice microbes file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.getAvgVarTrace">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">getAvgVarTrace</code><span class="sig-paren">(</span><em>f</em>, <em>specie</em>, <em>doublingTime=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#getAvgVarTrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.getAvgVarTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the average and variance of the specie trace over time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> – The HDF5 file handle to extract from or the name of a file to open</li>
+<li><strong>specie</strong> – The specie to extract</li>
+<li><strong>doublingTime</strong> – An optional doubling time parameter that will normalize average each trace by time
+in the cell cycle assuming exponentially growing cell (2log2 * x/2^(t/DT)),
+effectively normalizing against cell size. Default: no averaging is performed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">avg, var, time</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.getHistogram">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">getHistogram</code><span class="sig-paren">(</span><em>f</em>, <em>species</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#getHistogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.getHistogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the histogram for a specie</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> – The HDF5 file handle to extract from or the name of a file to open</li>
+<li><strong>specie</strong> – An array of specie/s to extract. returns a nD histogram of the data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bins, edges (len(bins)+1)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.getOccupancyKymograph">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">getOccupancyKymograph</code><span class="sig-paren">(</span><em>f</em>, <em>species=None</em>, <em>replicate=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#getOccupancyKymograph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.getOccupancyKymograph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the specie density(occupancy) among a slice of the simulation domain as a function over time for the given direciton</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – Name of file to extract data from</li>
+<li><strong>specie</strong> – A particular specie to plot density for</li>
+<li><strong>replicate</strong> – The replicate to show trace for</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.getPhaseSpace">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">getPhaseSpace</code><span class="sig-paren">(</span><em>f</em>, <em>species</em>, <em>replicate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#getPhaseSpace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.getPhaseSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the nD phase space associated with the traces of species.</p>
+<p>If a single replicate is specified, a single trace will be returned, otherwise a 2/3D density matrix will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> – The HDF5 file handle to extract from or the name of a file to open</li>
+<li><strong>specie</strong> – An iterable of 2 more specie names</li>
+<li><strong>replicate</strong> – The replicate for which to extract the phase space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A numpy array of a trace from a single replicate (specie1, specie2, …)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.getSpecieTrace">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">getSpecieTrace</code><span class="sig-paren">(</span><em>f</em>, <em>specie</em>, <em>replicate=1</em>, <em>doublingTime=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#getSpecieTrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.getSpecieTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract data for a particular specie for the specified replicate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> – The HDF5 file handle to extract from or the name of a file to open</li>
+<li><strong>specie</strong> – The specie to extract data</li>
+<li><strong>replicate</strong> – The number of the replicate to extract from (default: 1)</li>
+<li><strong>doublingTime</strong> – An optional doubling time parameter that will normalize average each trace by
+time in the cell cycle assuming exponentially growing cell
+(2log2 * x/2^(t/DT)), effectively normalizing against cell size.
+Default: no averaging is performed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The species time trace in a numpy array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.getSpecies">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">getSpecies</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#getSpecies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.getSpecies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exract the species names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> – The HDF5 file handle to extract from or the name of a file to open</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.getTimesteps">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">getTimesteps</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#getTimesteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.getTimesteps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the timestep times</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> – The HDF5 file handle to extract from or the name of a file to open</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The timestep times in a numpy array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.openLMFile">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">openLMFile</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#openLMFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.openLMFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a Lattice Microbes File for reading</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – Name of the file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a handle to the file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.plotAvgVar">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">plotAvgVar</code><span class="sig-paren">(</span><em>f</em>, <em>species=None</em>, <em>filename=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#plotAvgVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.plotAvgVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a specific species average over time and variance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> – An h5py object handle</li>
+<li><strong>species</strong> – A list of species to show</li>
+<li><strong>filename</strong> – A filename to print to (default None, gives the same behavior as showAvgVar(…))</li>
+<li><strong>kwargs</strong> – Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A handle to the figure object created which allows customization of plot attributes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.plotAvgVarFromFile">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">plotAvgVarFromFile</code><span class="sig-paren">(</span><em>filename</em>, <em>species</em>, <em>outfile</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#plotAvgVarFromFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.plotAvgVarFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot species from an output file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The name of an HDF5 output file generated by LatticeMicrobes</li>
+<li><strong>species</strong> – A list of species to plot</li>
+<li><strong>kwargs</strong> – Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</li>
+<li><strong>outfile</strong> – A filename to plot to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.plotOccupancyKymograph">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">plotOccupancyKymograph</code><span class="sig-paren">(</span><em>f</em>, <em>species=None</em>, <em>replicate=1</em>, <em>filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#plotOccupancyKymograph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.plotOccupancyKymograph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a specific specie density(occupancy) among a slice of the simulation domain as a function of a direction over time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>f</strong> – The name of the LM file</li>
+<li><strong>specie</strong> – A particular specie to plot density for</li>
+<li><strong>filename</strong> – A filename to print to (default None, gives the same behavior as showAvgVar(…))</li>
+<li><strong>replicate</strong> – The replicate to show trace for the kymograph from the file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.plotPhaseSpace">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">plotPhaseSpace</code><span class="sig-paren">(</span><em>f</em>, <em>species=None</em>, <em>replicate=1</em>, <em>withHistogram=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#plotPhaseSpace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.plotPhaseSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the 2D or 3D phase space associated with the given species over the replicates indicated</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>f</strong> – An h5py object handle</li>
+<li><strong>specie</strong> – An iterable of 2 or 3 specie names indicating whether to plot in 2D or 3D space</li>
+<li><strong>replicate</strong> – The replicate to show trace for</li>
+<li><strong>withHistogram</strong> – If set to true, a heatmap of the phase space over all replicates will be plotted in the background.  (NOTE: this only works in 2D.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.plotTrace">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">plotTrace</code><span class="sig-paren">(</span><em>f</em>, <em>species=None</em>, <em>replicate=1</em>, <em>filename=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#plotTrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.plotTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a specific species trace</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> – An h5py object handle</li>
+<li><strong>species</strong> – A specie name or a list of species to show; can be a single string or a iterable list of species</li>
+<li><strong>filename</strong> – A filename to print to (default None, gives the same behavior as showAvgVar(…))</li>
+<li><strong>replicate</strong> – The replicate to show trace for. Can be an integer or an iterable list of replicte numbers</li>
+<li><strong>kwargs</strong> – Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A handle to the figure object created which allows customization of plot attributes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.plotTraceFromFile">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">plotTraceFromFile</code><span class="sig-paren">(</span><em>filename</em>, <em>species</em>, <em>replicate</em>, <em>outfile</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#plotTraceFromFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.plotTraceFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot species from an output file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The patch to an HDF5 output file generated by LatticeMicrobes</li>
+<li><strong>species</strong> – A list of species to plot</li>
+<li><strong>replicate</strong> – The replicate to show trace for</li>
+<li><strong>kwargs</strong> – Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</li>
+<li><strong>outfile</strong> – A filename to plot to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.showAvgVar">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">showAvgVar</code><span class="sig-paren">(</span><em>f</em>, <em>species</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#showAvgVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.showAvgVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a specific species average over time and variance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>f</strong> – An h5py object handle</li>
+<li><strong>species</strong> – A list of species to show</li>
+<li><strong>kwargs</strong> – Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.showAvgVarFromFile">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">showAvgVarFromFile</code><span class="sig-paren">(</span><em>filename</em>, <em>species</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#showAvgVarFromFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.showAvgVarFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show species from an output file
+:param filename: The name of an HDF5 output file generated by LatticeMicrobes
+:param species: A list of species to plot
+:param kwargs: Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.showOccupancyKymograph">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">showOccupancyKymograph</code><span class="sig-paren">(</span><em>f</em>, <em>species=None</em>, <em>replicate=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#showOccupancyKymograph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.showOccupancyKymograph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a specific specie density(occupancy) among a slice of the simulation domain as a function of a direction over time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>f</strong> – An h5py object handle</li>
+<li><strong>specie</strong> – A particular specie to plot density for</li>
+<li><strong>replicate</strong> – The replicate to show trace for</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.showTrace">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">showTrace</code><span class="sig-paren">(</span><em>f</em>, <em>species</em>, <em>replicate</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#showTrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.showTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a specific species trace</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>f</strong> – An h5py object handle</li>
+<li><strong>species</strong> – A list of species to show</li>
+<li><strong>replicate</strong> – The replicate to show trace for</li>
+<li><strong>kwargs</strong> – Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.PostProcessing.showTraceFromFile">
+<code class="descclassname">pySTDLM.PostProcessing.</code><code class="descname">showTraceFromFile</code><span class="sig-paren">(</span><em>filename</em>, <em>species</em>, <em>replicate</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/PostProcessing.html#showTraceFromFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.PostProcessing.showTraceFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show species trace from a particular replicate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The patch to an HDF5 output file generated by LatticeMicrobes</li>
+<li><strong>species</strong> – A list of species to plot</li>
+<li><strong>replicate</strong> – The replicate to show trace for</li>
+<li><strong>kwargs</strong> – Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pySTDLM.SBMLReader.html" class="btn btn-neutral float-right" title="pySTDLM.SBMLReader" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pySTDLM.OnTheFly.html" class="btn btn-neutral" title="pySTDLM.OnTheFly" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

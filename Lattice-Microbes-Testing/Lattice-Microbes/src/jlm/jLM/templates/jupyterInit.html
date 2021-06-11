@@ -1,0 +1,14 @@
+<style>
+{% include "jupyter.css" %}
+</style>
+<script type="text/javascript">
+ var fontawesome_css = document.getElementById("fontawesome-css");
+ if (fontawesome_css === null) {
+    var l = document.createElement("link");
+    l.setAttribute("rel", "stylesheet");
+    l.setAttribute("type", "text/css");
+    l.setAttribute("href", "https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css");
+    l.setAttribute("id", "fontawesome-css");
+    $("head").append(l);
+}
+</script>

@@ -1,0 +1,603 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.NetworkVisualization &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.NetworkVisualization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.NetworkVisualization</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">pyLM</span>
+<span class="kn">from</span> <span class="nn">pyLM.LMLogger</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">igraph</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">except</span> <span class="n">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="k">if</span> <span class="s1">&#39;sphinx&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="k">raise</span>
+
+<span class="c1"># For HDF5 file support:</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="k">import</span> <span class="n">etree</span>
+<span class="c1"># For dynamic graphs:</span>
+<span class="k">try</span><span class="p">:</span>
+	<span class="kn">import</span> <span class="nn">gexf</span>
+	<span class="n">hasGexf</span> <span class="o">=</span> <span class="kc">True</span> 
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+	<span class="n">hasGexf</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># #################################</span>
+<span class="c1"># Reaction Network Visualizations #</span>
+<span class="c1"># #################################</span>
+<div class="viewcode-block" id="plotReactionNetwork"><a class="viewcode-back" href="../../_autosummary/pySTDLM.NetworkVisualization.html#pySTDLM.NetworkVisualization.plotReactionNetwork">[docs]</a><span class="k">def</span> <span class="nf">plotReactionNetwork</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">collapseReversible</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot the reaction scheme as a network </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation or CMESimulation object</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A file to which to output</span>
+<span class="sd">        collapseReversible:</span>
+<span class="sd">            Collapsee reversible reactions into one node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Bulletproofing</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">CMESimulation</span><span class="p">)):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;When trying to plot reaction network, was given object that was not RDMESimulation or CMESimulation&quot;</span><span class="p">)</span>
+		<span class="k">return</span>
+
+	<span class="c1"># Call helper functions</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">plotRDMEReactionNetwork</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span> <span class="n">collapseReversible</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">CMESimulation</span><span class="p">):</span>
+		<span class="n">plotCMEReactionNetwork</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span> <span class="n">collapseReversible</span><span class="p">)</span></div>
+		
+
+<div class="viewcode-block" id="plotCMEReactionNetwork"><a class="viewcode-back" href="../../_autosummary/pySTDLM.NetworkVisualization.html#pySTDLM.NetworkVisualization.plotCMEReactionNetwork">[docs]</a><span class="k">def</span> <span class="nf">plotCMEReactionNetwork</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">withRxnNodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">collapseReversible</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot the reaction scheme as a network </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An CMESimulation object</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A file to which to output</span>
+<span class="sd">        withRxnNodes:</span>
+<span class="sd">            Plot the graph with reactions as nodes (default: false)</span>
+<span class="sd">        collapseReversible:</span>
+<span class="sd">            Collapsee reversible reactions into one node (default: false)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Get handles to CME internals</span>
+	<span class="n">rs</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">reactions</span>
+	<span class="n">nr</span><span class="o">=</span><span class="mi">0</span>
+	<span class="n">ss</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">species_id</span>
+	<span class="n">ns</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>
+	<span class="n">sc</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">initial_counts</span>
+
+	<span class="c1"># Create Graph</span>
+	<span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="n">totNodes</span><span class="o">=</span><span class="n">ns</span>
+	<span class="k">if</span> <span class="n">withRxnNodes</span><span class="p">:</span>
+		<span class="n">nr</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+		<span class="n">totNodes</span> <span class="o">+=</span> <span class="n">nr</span>
+	<span class="n">g</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">totNodes</span><span class="p">)</span>
+
+	<span class="c1"># Add reactions and species to graph</span>
+	<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+	<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">nr</span><span class="p">:</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;reaction&quot;</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rs</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">rs</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;rate&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">rs</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;specie&quot;</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">ss</span><span class="p">[</span><span class="n">count</span><span class="o">-</span><span class="n">nr</span><span class="p">]</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;icount&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">sc</span><span class="p">[</span><span class="n">ss</span><span class="p">[</span><span class="n">count</span><span class="o">-</span><span class="n">nr</span><span class="p">]]</span>
+			
+		<span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+	
+	<span class="c1"># Add edge dependencies</span>
+	<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+	<span class="k">if</span> <span class="n">withRxnNodes</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">rxn</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">:</span>
+			<span class="c1"># Add reactants</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+				<span class="n">rctnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+				<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">rctnum</span><span class="o">+</span><span class="n">nr</span><span class="p">,</span><span class="n">count</span><span class="p">)])</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># FIXME</span>
+					<span class="n">rctnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+					<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">rctnum</span><span class="o">+</span><span class="n">nr</span><span class="p">,</span><span class="n">count</span><span class="p">)])</span>
+			<span class="c1"># Add products</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+					<span class="n">pdtnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+					<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">count</span><span class="p">,</span> <span class="n">pdtnum</span><span class="o">+</span><span class="n">nr</span><span class="p">)])</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># FIXME</span>
+					<span class="n">pdtnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+					<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">count</span><span class="p">,</span> <span class="n">pdtnum</span><span class="o">+</span><span class="n">nr</span><span class="p">)])</span>
+
+			<span class="n">count</span><span class="o">+=</span><span class="mi">1</span>	
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">rxn</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">tuple</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+					<span class="n">rctnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+					<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nb">tuple</span><span class="p">):</span>
+						<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+							<span class="n">prdnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+							<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">rctnum</span><span class="p">,</span><span class="n">prdnum</span><span class="p">)])</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="k">if</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># FIXME</span>
+							<span class="n">prdnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+							<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">rctnum</span><span class="p">,</span><span class="n">prdnum</span><span class="p">)])</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">rctnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nb">tuple</span><span class="p">):</span>
+					<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+						<span class="n">prdnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+						<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">rctnum</span><span class="p">,</span><span class="n">prdnum</span><span class="p">)])</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">if</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># FIXME</span>
+						<span class="n">prdnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+						<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">([(</span><span class="n">rctnum</span><span class="p">,</span><span class="n">prdnum</span><span class="p">)])</span>
+				
+
+	<span class="c1"># Save the graph...</span>
+	<span class="n">g</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;gml&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="plotRDMEReactionNetwork"><a class="viewcode-back" href="../../_autosummary/pySTDLM.NetworkVisualization.html#pySTDLM.NetworkVisualization.plotRDMEReactionNetwork">[docs]</a><span class="k">def</span> <span class="nf">plotRDMEReactionNetwork</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">collapseReversible</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot the reaction scheme as a network </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation object</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A file to which to output</span>
+<span class="sd">        collapseReversible:</span>
+<span class="sd">            Collapsee reversible reactions into one node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;plotRDMEReactionNetwork unimplemented&quot;</span><span class="p">)</span>
+	<span class="k">return</span>
+	<span class="c1"># Get handles to RDME internals</span>
+	<span class="n">regs</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">regions</span>
+	<span class="n">sc</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">initial_counts</span>
+
+	<span class="n">nr</span><span class="o">=</span><span class="mi">0</span>
+	<span class="n">ns</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">species_id</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span>
+		<span class="n">nr</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">reactions</span><span class="p">)</span>
+
+	<span class="c1"># Create Graph</span>
+	<span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="n">g</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">nr</span><span class="o">+</span><span class="n">ns</span><span class="p">)</span>
+
+	<span class="c1"># Add reactions and species to graph</span>
+	<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+	<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">nr</span><span class="p">:</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;reaction&quot;</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rs</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">rs</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;rate&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">rs</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;specie&quot;</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">ss</span><span class="p">[</span><span class="n">count</span><span class="o">-</span><span class="n">nr</span><span class="p">]</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">vs</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;icount&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">sc</span><span class="p">[</span><span class="n">ss</span><span class="p">[</span><span class="n">count</span><span class="o">-</span><span class="n">nr</span><span class="p">]]</span>
+			
+		<span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+	
+	<span class="c1"># Add edge dependencies</span>
+	<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+	<span class="k">for</span> <span class="n">rxn</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="n">rxn</span><span class="p">)</span>
+		<span class="c1"># Add reactants</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+				<span class="n">rctnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+				<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">((</span><span class="n">rctnum</span><span class="o">+</span><span class="n">nr</span><span class="p">,</span><span class="n">count</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">rctnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">((</span><span class="n">rctnum</span><span class="o">+</span><span class="n">nr</span><span class="p">,</span><span class="n">count</span><span class="p">))</span>
+		<span class="c1"># Add products</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+				<span class="n">pdtnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+				<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">((</span><span class="n">count</span><span class="p">,</span> <span class="n">pdtnum</span><span class="o">+</span><span class="n">nr</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">pdtnum</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">rxn</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">add_edges</span><span class="p">((</span><span class="n">count</span><span class="p">,</span> <span class="n">pdtnum</span><span class="o">+</span><span class="n">nr</span><span class="p">))</span>
+
+		<span class="n">count</span><span class="o">+=</span><span class="mi">1</span>	
+
+	<span class="c1"># Save the graph...</span>
+	<span class="n">g</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;gml&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="plotCMEDynamicReactionNetwork"><a class="viewcode-back" href="../../_autosummary/pySTDLM.NetworkVisualization.html#pySTDLM.NetworkVisualization.plotCMEDynamicReactionNetwork">[docs]</a><span class="k">def</span> <span class="nf">plotCMEDynamicReactionNetwork</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">stride</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">showMax</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showMin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot the dynamics of the species on the network into a dynamic graph file (extension: .gexf)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A CMESimulation object</span>
+<span class="sd">        filename:</span>
+<span class="sd">            An file from which to read</span>
+<span class="sd">        outfile:</span>
+<span class="sd">            A filename for which to output without the extension (.gexf)</span>
+<span class="sd">        stride:</span>
+<span class="sd">            Stride through the times (Default=1)</span>
+<span class="sd">        showMax:</span>
+<span class="sd">            Show the maximum value achieved over the timecourse on the node (Default=False)</span>
+<span class="sd">        showMin:</span>
+<span class="sd">            Show the maximum value achieved over the timecourse on the node (Default=False)</span>
+<span class="sd">        threshold:</span>
+<span class="sd">            Only show nodes that attain this value for at least one timepoint of the simulation. </span>
+<span class="sd">            Set -1 to show all nodes (Default=-1) replicate The replicate to show (Default=1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">hasGexf</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;pygexf not installed, cannot use plotCMEDynamicReactionNetwork.&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Get handles to the internals</span>
+	<span class="n">species</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">species_id</span>
+	<span class="n">speciesNumbers</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">particleMap</span>
+	<span class="n">reactions</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">reactions</span>
+
+	<span class="c1"># Open HDF5 file</span>
+	<span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+	<span class="n">repStr</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">replicate</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">rep</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">repStr</span><span class="p">]</span>
+	
+	<span class="c1"># Read time related variables</span>
+	<span class="n">times</span><span class="o">=</span><span class="n">rep</span><span class="p">[</span><span class="s1">&#39;SpeciesCountTimes&#39;</span><span class="p">]</span>
+	       
+	<span class="c1"># Create a graph object</span>
+	<span class="n">gexfGraph</span><span class="o">=</span><span class="n">gexf</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;directed&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;dynamic&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;AutomaticGeneratedTimeCounts&quot;</span><span class="p">,</span> <span class="n">time_format</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+	<span class="c1"># Add Node attributes</span>
+	<span class="n">countAttrID</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">addNodeAttribute</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;dynamic&quot;</span><span class="p">,</span> <span class="n">force_id</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">showMin</span><span class="p">:</span>
+		<span class="n">minAttrID</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">addNodeAttribute</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;minCount&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="n">force_id</span><span class="o">=</span><span class="s2">&quot;minCount&quot;</span><span class="p">)</span>
+		<span class="n">minTAttrID</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">addNodeAttribute</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;minCountTime&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="n">force_id</span><span class="o">=</span><span class="s2">&quot;minCountTime&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">showMax</span><span class="p">:</span>
+		<span class="n">maxAttrID</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">addNodeAttribute</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;maxCount&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="n">force_id</span><span class="o">=</span><span class="s2">&quot;maxCount&quot;</span><span class="p">)</span>
+		<span class="n">maxTAttrID</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">addNodeAttribute</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;maxCountTime&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="n">force_id</span><span class="o">=</span><span class="s2">&quot;maxCountTime&quot;</span><span class="p">)</span>
+	<span class="c1"># Add Edge attributes</span>
+<span class="c1">#	gexfGraph.addEdgeAttribute(title=&quot;rate&quot;,defaultValue=&quot;0&quot;,type=&quot;float&quot;,mode=&quot;static&quot;,force_id=99)</span>
+
+	<span class="c1"># Add nodes to the graph</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">)):</span>
+		<span class="n">gexfGraph</span><span class="o">.</span><span class="n">addNode</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="n">species</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+	
+	<span class="c1"># Add edges to the graph</span>
+	<span class="n">countID</span><span class="o">=</span><span class="mi">0</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reactions</span><span class="p">)):</span>
+		<span class="n">rct</span><span class="o">=</span><span class="n">reactions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">prd</span><span class="o">=</span><span class="n">reactions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rct</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prd</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rct</span><span class="p">:</span>
+					<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prd</span><span class="p">:</span>
+						<span class="n">gexfGraph</span><span class="o">.</span><span class="n">addEdge</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">countID</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">target</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+						<span class="n">countID</span><span class="o">+=</span><span class="mi">1</span>	
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rct</span><span class="p">:</span>
+					<span class="n">gexfGraph</span><span class="o">.</span><span class="n">addEdge</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">countID</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">target</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">prd</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+					<span class="n">countID</span><span class="o">+=</span><span class="mi">1</span>	
+					
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prd</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prd</span><span class="p">:</span>
+					<span class="n">gexfGraph</span><span class="o">.</span><span class="n">addEdge</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">countID</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">rct</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">target</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+					<span class="n">countID</span><span class="o">+=</span><span class="mi">1</span>	
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">gexfGraph</span><span class="o">.</span><span class="n">addEdge</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">countID</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">rct</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">target</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">speciesNumbers</span><span class="p">[</span><span class="n">prd</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+				<span class="n">countID</span><span class="o">+=</span><span class="mi">1</span>	
+					
+		
+
+	<span class="c1"># Declare the time based attribute on the nodes and fill in values</span>
+	<span class="n">specCounts</span><span class="o">=</span><span class="n">rep</span><span class="p">[</span><span class="s1">&#39;SpeciesCounts&#39;</span><span class="p">]</span>
+	<span class="n">tt</span><span class="o">=</span><span class="mi">0</span>
+	<span class="n">mins</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">666666666</span><span class="p">]</span>
+	<span class="n">minT</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">maxs</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">maxT</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="c1"># Account for thresholding</span>
+	<span class="n">exceedsThreshold</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">threshold</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span><span class="n">stride</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">[</span><span class="n">t</span><span class="p">])):</span>
+				<span class="c1"># Get mins and maxs</span>
+				<span class="n">sc</span><span class="o">=</span><span class="n">specCounts</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">sc</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+					<span class="n">exceedsThreshold</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span>
+				<span class="k">if</span> <span class="n">sc</span> <span class="o">&lt;</span> <span class="n">mins</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+					<span class="n">mins</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span>
+					<span class="n">minT</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+				<span class="k">if</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">maxs</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+					<span class="n">maxs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span>
+					<span class="n">maxT</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+				<span class="n">tt</span><span class="o">+=</span><span class="mi">1</span>
+	<span class="k">else</span><span class="p">:</span> <span class="c1"># Don&#39;t account for thresholding</span>
+		<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span><span class="n">stride</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">[</span><span class="n">t</span><span class="p">])):</span>
+				<span class="c1"># Get mins and maxs</span>
+				<span class="n">sc</span><span class="o">=</span><span class="n">specCounts</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">sc</span> <span class="o">&lt;</span> <span class="n">mins</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+					<span class="n">mins</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span>
+					<span class="n">minT</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+				<span class="k">if</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">maxs</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+					<span class="n">maxs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span>
+					<span class="n">maxT</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+				<span class="n">tt</span><span class="o">+=</span><span class="mi">1</span>
+
+	<span class="c1"># Add minimum and maximum values</span>
+	<span class="k">if</span> <span class="n">showMax</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+			<span class="n">localNode</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
+			<span class="n">localNode</span><span class="o">.</span><span class="n">addAttribute</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;maxCount&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="n">s</span><span class="p">]))</span>
+			<span class="n">localNode</span><span class="o">.</span><span class="n">addAttribute</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;maxCountTime&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">maxT</span><span class="p">[</span><span class="n">s</span><span class="p">]))</span>
+	<span class="k">if</span> <span class="n">showMin</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+			<span class="n">localNode</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
+			<span class="n">localNode</span><span class="o">.</span><span class="n">addAttribute</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;minCount&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">mins</span><span class="p">[</span><span class="n">s</span><span class="p">]))</span>
+			<span class="n">localNode</span><span class="o">.</span><span class="n">addAttribute</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;minCountTime&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">minT</span><span class="p">[</span><span class="n">s</span><span class="p">]))</span>
+
+	<span class="c1"># Apply thresholding</span>
+	<span class="k">if</span> <span class="n">threshold</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">specCounts</span><span class="p">[</span><span class="n">t</span><span class="p">])):</span>
+			<span class="n">localNode</span><span class="o">=</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
+			<span class="k">if</span> <span class="n">exceedsThreshold</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+				<span class="n">localNode</span><span class="o">.</span><span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+				<span class="n">localNode</span><span class="o">.</span><span class="n">end</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">localNode</span><span class="o">.</span><span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+				<span class="n">localNode</span><span class="o">.</span><span class="n">end</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+			
+
+
+	<span class="c1"># Save the graph</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="o">+</span><span class="s2">&quot;.gexf&quot;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">text_file</span><span class="p">:</span>
+		<span class="n">text_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">gexfGraph</span><span class="o">.</span><span class="n">getXML</span><span class="p">(),</span><span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span><span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% if annotationCol %}
+\begin{tabular}{c l l l}
+\toprule
+Description & Reaction & Rate & Regions \\
+{% else %}
+\begin{tabular}{c l l}
+\toprule
+Reaction & Rate & Regions \\
+{% endif %}
+\midrule
+{% for r in rxns %}
+    {% if annotationCol %}{{r.annotation or ''}}&{% endif %} ${{r.rxn}}$ & ${{r.rate}}\;{{r.rateUnit}}$ & {{r.reg}} \\
+{% endfor %}
+\bottomrule
+\end{tabular}

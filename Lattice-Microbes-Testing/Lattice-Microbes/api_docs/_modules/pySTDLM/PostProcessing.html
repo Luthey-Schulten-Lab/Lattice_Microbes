@@ -1,0 +1,1043 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.PostProcessing &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.PostProcessing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.PostProcessing</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">lm</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">mlab</span><span class="p">,</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">pyLM.LMLogger</span> <span class="k">import</span> <span class="o">*</span>
+
+
+
+<span class="c1"># #######################</span>
+<span class="c1"># HDF5 Handle Functions #</span>
+<span class="c1"># #######################</span>
+<div class="viewcode-block" id="openLMFile"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.openLMFile">[docs]</a><span class="k">def</span> <span class="nf">openLMFile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Open a Lattice Microbes File for reading</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename:</span>
+<span class="sd">            Name of the file</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        a handle to the file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="closeLMFile"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.closeLMFile">[docs]</a><span class="k">def</span> <span class="nf">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Close a Lattice Microbes File</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            A previously opened lattice microbes file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<span class="c1"># #################</span>
+<span class="c1"># Trace Functions #</span>
+<span class="c1"># #################</span>
+<div class="viewcode-block" id="showTraceFromFile"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.showTraceFromFile">[docs]</a><span class="k">def</span> <span class="nf">showTraceFromFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Show species trace from a particular replicate</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename:</span>
+<span class="sd">            The patch to an HDF5 output file generated by LatticeMicrobes</span>
+<span class="sd">        species:</span>
+<span class="sd">            A list of species to plot</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open the HDF5 output data file</span>
+	<span class="n">f</span><span class="o">=</span><span class="n">openLMFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">showTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="n">replicate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+	<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="plotTraceFromFile"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.plotTraceFromFile">[docs]</a><span class="k">def</span> <span class="nf">plotTraceFromFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot species from an output file</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename:</span>
+<span class="sd">            The patch to an HDF5 output file generated by LatticeMicrobes</span>
+<span class="sd">        species:</span>
+<span class="sd">            A list of species to plot</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+<span class="sd">        outfile:</span>
+<span class="sd">            A filename to plot to</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open the HDF5 output data file</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plotTrace</span><span class="p">(</span><span class="n">openLMFile</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="n">replicate</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">outfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="showTrace"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.showTrace">[docs]</a><span class="k">def</span> <span class="nf">showTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Show a specific species trace</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            An h5py object handle</span>
+<span class="sd">        species:</span>
+<span class="sd">            A list of species to show</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plotTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span><span class="n">replicate</span><span class="o">=</span><span class="n">replicate</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+
+<div class="viewcode-block" id="plotTrace"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.plotTrace">[docs]</a><span class="k">def</span> <span class="nf">plotTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot a specific species trace</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            An h5py object handle</span>
+<span class="sd">        species:</span>
+<span class="sd">            A specie name or a list of species to show; can be a single string or a iterable list of species</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A filename to print to (default None, gives the same behavior as showAvgVar(...))</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for. Can be an integer or an iterable list of replicte numbers</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A handle to the figure object created which allows customization of plot attributes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Get a handle to the Simulations group, where results are stored</span>
+	<span class="n">sim</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]</span>
+
+	<span class="c1"># Count the number of replicates that were run</span>
+	<span class="n">replicates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">replicates</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No simulations have been performed.&quot;</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cannot plot trace, no simulations in LM file.&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">replicate</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+		<span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">replicates</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No replicate number </span><span class="si">%d</span><span class="s2"> found in file </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">),</span> <span class="n">f</span><span class="p">)</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cannot plot trace, replicate not found:&quot;</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">replicate</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">replicates</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">replicates</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No replicate number </span><span class="si">%d</span><span class="s2"> found in file </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">),</span> <span class="n">f</span><span class="p">)</span>
+				<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cannot plot trace, replicate not found:&quot;</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">replicate</span><span class="p">))</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Incompatible type for replicate argument&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Get the list of timesteps from the first replicate</span>
+	<span class="c1"># SpeciesCountTimes is a 1D vector</span>
+	<span class="n">times</span><span class="o">=</span><span class="n">getTimesteps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="c1"># Initialize the array to store the mean count</span>
+	<span class="n">traces</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">))</span> <span class="p">)</span>
+
+	<span class="c1"># Which species we are looking at</span>
+	<span class="n">names</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;speciesNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+	<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;names: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">species</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">species_nums</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">species_names</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">species_nums</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+		<span class="n">species_names</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">species</span><span class="p">):</span>
+			<span class="c1"># Get species name for plotting</span>
+			<span class="n">species_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">s</span>
+			<span class="c1"># Pull out array for faster access</span>
+			<span class="n">traces</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sim</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">)][</span><span class="s1">&#39;SpeciesCounts&#39;</span><span class="p">][:,</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">s</span><span class="p">)])</span>
+
+	<span class="c1"># Actually create a figure handl</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+	<span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+	<span class="c1"># Plot the line graph of mean vs. time.</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Number&quot;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">traces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+		<span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">traces</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="c1"># Add a legend if the species number is &gt; 1</span>
+	<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+
+	<span class="c1"># Save the plot</span>
+	<span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;portrait&#39;</span><span class="p">)</span>
+
+	<span class="c1"># Return a handle to the figure for customization</span>
+	<span class="k">return</span> <span class="n">fig</span></div>
+
+
+
+<span class="c1"># ######################################</span>
+<span class="c1"># Average/Standard Deviation Functions #</span>
+<span class="c1"># ######################################</span>
+<div class="viewcode-block" id="showAvgVarFromFile"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.showAvgVarFromFile">[docs]</a><span class="k">def</span> <span class="nf">showAvgVarFromFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Show species from an output file</span>
+<span class="sd">    Args:</span>
+<span class="sd">        filename:</span>
+<span class="sd">            The name of an HDF5 output file generated by LatticeMicrobes</span>
+<span class="sd">        species:</span>
+<span class="sd">            A list of species to plot</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open the HDF5 output data file</span>
+	<span class="n">f</span><span class="o">=</span><span class="n">openLMFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+	<span class="n">fig</span><span class="o">=</span><span class="n">showAvgVar</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+	<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="plotAvgVarFromFile"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.plotAvgVarFromFile">[docs]</a><span class="k">def</span> <span class="nf">plotAvgVarFromFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot species from an output file</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename:</span>
+<span class="sd">            The name of an HDF5 output file generated by LatticeMicrobes</span>
+<span class="sd">        species:</span>
+<span class="sd">            A list of species to plot</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+<span class="sd">        outfile:</span>
+<span class="sd">            A filename to plot to</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open the HDF5 output data file</span>
+	<span class="n">f</span><span class="o">=</span><span class="n">openLMFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+	<span class="n">plotAvgVar</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">outfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+	<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="showAvgVar"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.showAvgVar">[docs]</a><span class="k">def</span> <span class="nf">showAvgVar</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Show a specific species average over time and variance</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            An h5py object handle</span>
+<span class="sd">        species:</span>
+<span class="sd">            A list of species to show</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plotAvgVar</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="plotAvgVar"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.plotAvgVar">[docs]</a><span class="k">def</span> <span class="nf">plotAvgVar</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot a specific species average over time and variance</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            An h5py object handle</span>
+<span class="sd">        species:</span>
+<span class="sd">            A list of species to show</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A filename to print to (default None, gives the same behavior as showAvgVar(...))</span>
+<span class="sd">        kwargs:</span>
+<span class="sd">            Additional arguments to be passed on to matplotlib.plot.  These are any arguments that are valid with matplotlib.plot</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A handle to the figure object created which allows customization of plot attributes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Get a handle to the Simulations group, where results are stored</span>
+	<span class="n">sim</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]</span>
+
+	<span class="c1"># Count the number of replicates that were run</span>
+	<span class="n">replicates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">replicates</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No simulations have been performed.&quot;</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not return timesteps, no simulations have been performed.&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Get the list of timesteps from the first replicate</span>
+	<span class="c1"># SpeciesCountTimes is a 1D vector</span>
+	<span class="n">times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sim</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">sim</span><span class="p">))][</span><span class="s1">&#39;SpeciesCountTimes&#39;</span><span class="p">])</span>
+
+	<span class="c1"># Initialize the array to store the mean count</span>
+	<span class="n">means</span>    <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">))</span> <span class="p">)</span>
+	<span class="n">variances</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">))</span> <span class="p">)</span>
+
+	<span class="c1"># Which species we are looking at</span>
+	<span class="n">names</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;speciesNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+	<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;names: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">species</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">species_nums</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">species_names</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">species_nums</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+		<span class="n">species_names</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">species</span><span class="p">):</span>
+			<span class="n">species_nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+			<span class="n">species_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">s</span>
+
+			<span class="c1"># Get the mean and variacne for the specie</span>
+			<span class="n">means</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">variances</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">getAvgVarTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+	<span class="c1"># Actually create a figure handl</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+	<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+
+	<span class="c1"># Plot the line graph of mean vs. time.</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">means</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">means</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="c1"># Plot the variance</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Var&quot;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">variances</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">variances</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="c1"># Add a legend if the species number is &gt; 1</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+
+	<span class="c1"># Save the plot</span>
+	<span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;portrait&#39;</span><span class="p">)</span>
+	
+	<span class="c1"># Return a handle to the figure for customization</span>
+	<span class="k">return</span> <span class="n">fig</span></div>
+
+
+
+<span class="c1"># ####################</span>
+<span class="c1"># 2D and 3D Plotting #</span>
+<span class="c1"># ####################</span>
+<div class="viewcode-block" id="getOccupancyKymograph"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.getOccupancyKymograph">[docs]</a><span class="k">def</span> <span class="nf">getOccupancyKymograph</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Compute the specie density(occupancy) among a slice of the simulation domain as a function over time for the given direciton</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename:</span>
+<span class="sd">            Name of file to extract data from</span>
+<span class="sd">        specie:</span>
+<span class="sd">            A particular specie to plot density for</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Get particle type</span>
+	<span class="n">h5</span><span class="o">=</span><span class="n">openLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+	<span class="n">names</span><span class="o">=</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;speciesNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+	<span class="n">partType</span><span class="o">=</span><span class="mi">0</span>
+	<span class="k">if</span> <span class="n">species</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Specie: </span><span class="si">%s</span><span class="s2"> was not in file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="n">species</span><span class="p">:</span>
+			<span class="k">break</span>
+		<span class="n">partType</span> <span class="o">+=</span> <span class="mi">1</span>
+	<span class="c1"># Make sure it is an RDMESimulation</span>
+	<span class="k">if</span> <span class="s1">&#39;Lattice&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">][</span><span class="s1">&#39;Diffusion&#39;</span><span class="p">]:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> may not be an RDME file, bailing out.&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+		<span class="k">return</span>
+
+	<span class="n">h5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+	<span class="c1"># Get the simulation file</span>
+	<span class="n">sim</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">SimulationFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="c1"># Get diffusion model</span>
+	<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Getting old Lattices&quot;</span><span class="p">)</span>
+	<span class="n">dm</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">DiffusionModel</span><span class="p">()</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">getDiffusionModel</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span> <span class="c1"># Pulls DM out and puts it in the local object</span>
+
+	<span class="c1"># Get the times</span>
+	<span class="n">times</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">getLatticeTimes</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span>
+	<span class="n">timesteps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+
+	<span class="c1"># Get number of sites in each direction</span>
+	<span class="n">sitesX</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">lattice_x_size</span><span class="p">()</span>
+	<span class="n">sitesY</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">lattice_y_size</span><span class="p">()</span>
+	<span class="n">sitesZ</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">lattice_z_size</span><span class="p">()</span>
+	<span class="n">delX</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">lattice_spacing</span><span class="p">()</span>
+	<span class="n">pps</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">particles_per_site</span><span class="p">()</span>
+
+	<span class="c1"># Get the last lattice</span>
+	<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Building new Lattice&quot;</span><span class="p">)</span>
+
+	<span class="n">lattice</span>     <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">ByteLattice</span><span class="p">(</span><span class="n">sitesX</span><span class="p">,</span> <span class="n">sitesY</span><span class="p">,</span> <span class="n">sitesZ</span><span class="p">,</span> <span class="n">delX</span><span class="p">,</span> <span class="n">pps</span><span class="p">)</span>
+	<span class="n">siteLattice</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">ByteLattice</span><span class="p">(</span><span class="n">sitesX</span><span class="p">,</span> <span class="n">sitesY</span><span class="p">,</span> <span class="n">sitesZ</span><span class="p">,</span> <span class="n">delX</span><span class="p">,</span> <span class="n">pps</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">getDiffusionModelLattice</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">siteLattice</span><span class="p">)</span>
+
+	<span class="c1"># Data structures</span>
+	<span class="n">kymograph</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">timesteps</span><span class="p">,</span><span class="n">sitesZ</span><span class="p">))</span>
+
+
+	<span class="c1"># loop through lattice</span>
+	<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Looping through times&quot;</span><span class="p">)</span>
+	<span class="n">MIN</span><span class="o">=</span><span class="mf">1.0e16</span>
+	<span class="n">MAX</span><span class="o">=</span><span class="mf">0.0</span>
+	<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">timesteps</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;timestep: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">getLattice</span><span class="p">(</span><span class="n">replicate</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">lattice</span><span class="p">)</span>
+		<span class="n">normer</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sitesZ</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sitesZ</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sitesY</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sitesX</span><span class="p">):</span>
+					<span class="n">normer</span><span class="p">[</span><span class="n">z</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span>
+					<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+						<span class="k">if</span> <span class="n">lattice</span><span class="o">.</span><span class="n">getParticle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+							<span class="k">break</span><span class="p">;</span>
+						<span class="k">if</span> <span class="n">lattice</span><span class="o">.</span><span class="n">getParticle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">partType</span><span class="p">:</span>
+							<span class="n">kymograph</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">z</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span>
+		<span class="c1"># Find the min and max and also normalize the kymograph by the occupancy</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sitesZ</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">normer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+				<span class="n">kymograph</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">/=</span> <span class="n">normer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">kymograph</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">MIN</span><span class="p">:</span>
+					<span class="n">MIN</span><span class="o">=</span><span class="n">kymograph</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+				<span class="k">if</span> <span class="n">kymograph</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">MAX</span><span class="p">:</span>
+					<span class="n">MAX</span><span class="o">=</span><span class="n">kymograph</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">kymograph</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+	<span class="k">return</span> <span class="n">kymograph</span></div>
+
+<div class="viewcode-block" id="plotOccupancyKymograph"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.plotOccupancyKymograph">[docs]</a><span class="k">def</span> <span class="nf">plotOccupancyKymograph</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot a specific specie density(occupancy) among a slice of the simulation domain as a function of a direction over time</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            The name of the LM file</span>
+<span class="sd">        specie:</span>
+<span class="sd">            A particular specie to plot density for</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A filename to print to (default None, gives the same behavior as showAvgVar(...))</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for the kymograph from the file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">kymograph</span> <span class="o">=</span> <span class="n">getOccupancyKymograph</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="p">)</span>
+
+	<span class="c1"># Do the plotting</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">kymograph</span><span class="p">)</span>	
+	<span class="c1"># Save the plot</span>
+	<span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;portrait&#39;</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="showOccupancyKymograph"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.showOccupancyKymograph">[docs]</a><span class="k">def</span> <span class="nf">showOccupancyKymograph</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Show a specific specie density(occupancy) among a slice of the simulation domain as a function of a direction over time</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            An h5py object handle</span>
+<span class="sd">        specie:</span>
+<span class="sd">            A particular specie to plot density for</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plotOccupancyKymograph</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="plotPhaseSpace"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.plotPhaseSpace">[docs]</a><span class="k">def</span> <span class="nf">plotPhaseSpace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">withHistogram</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Plot the 2D or 3D phase space associated with the given species over the replicates indicated</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            An h5py object handle</span>
+<span class="sd">        specie:</span>
+<span class="sd">            An iterable of 2 or 3 specie names indicating whether to plot in 2D or 3D space</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate to show trace for</span>
+<span class="sd">        withHistogram:</span>
+<span class="sd">            If set to true, a heatmap of the phase space over all replicates will be plotted in the background.  (NOTE: this only works in 2D.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">dimensions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">dimensions</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">dimensions</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Phase spaces can only be plotted for 2 or 3 species.&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">withHistogram</span> <span class="ow">and</span> <span class="n">dimensions</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Histogram plot can only be created for 2D phase space.&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Get the phase space for the specified species	</span>
+	<span class="n">phaseSpace</span> <span class="o">=</span> <span class="n">getPhaseSpace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="p">)</span>
+
+	<span class="c1"># Do the color/contour map if needed</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">withHistogram</span><span class="p">:</span>
+		<span class="n">histPhase</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">getHistogram</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span>
+		<span class="n">xs</span><span class="p">,</span><span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+		<span class="c1"># Draw contours</span>
+		<span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">histPhase</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">histPhase</span><span class="p">),</span><span class="mi">5</span><span class="p">)</span>	
+		<span class="n">norm</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmax</span><span class="o">=</span><span class="n">histPhase</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">vmin</span><span class="o">=</span><span class="n">histPhase</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+		<span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">PRGn</span>
+		<span class="n">contours</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="n">ys</span><span class="p">,</span><span class="n">histPhase</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">levels</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+		<span class="c1"># Draw contour lines</span>
+		<span class="n">countrouLevels</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="n">ys</span><span class="p">,</span> <span class="n">histPhase</span><span class="p">,</span> <span class="n">contours</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+		
+
+	<span class="c1"># Plot the trace</span>
+	<span class="k">if</span> <span class="n">dimensions</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+		<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+		<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phaseSpace</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phaseSpace</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">phaseSpace</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+		<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">species</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+		<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+		<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+	<span class="k">elif</span> <span class="n">dimensions</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+		<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+		<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phaseSpace</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">phaseSpace</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+		<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+	<span class="k">return</span> <span class="n">fig</span>	</div>
+
+
+<span class="c1"># ##############################################################</span>
+<span class="c1"># Functions to extract particular features from the simulation #</span>
+<span class="c1"># ##############################################################</span>
+
+<div class="viewcode-block" id="getSpecies"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.getSpecies">[docs]</a><span class="k">def</span> <span class="nf">getSpecies</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exract the species names</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            The HDF5 file handle to extract from or the name of a file to open</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Open file if a string is passed</span>
+    <span class="n">wasString</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">openLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">wasString</span> <span class="o">=</span> <span class="kc">True</span>
+    
+    <span class="c1"># Get a handle a copy of the species names</span>
+    <span class="n">species</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;speciesNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># close file if need be</span>
+    <span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+        <span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">species</span></div>
+
+<div class="viewcode-block" id="getTimesteps"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.getTimesteps">[docs]</a><span class="k">def</span> <span class="nf">getTimesteps</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Extract the timestep times</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            The HDF5 file handle to extract from or the name of a file to open</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The timestep times in a numpy array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open file if a string is passed</span>
+	<span class="n">wasString</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">openLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="n">wasString</span> <span class="o">=</span> <span class="kc">True</span>
+
+	<span class="c1"># Get a handle to the Simulations group, where results are stored</span>
+	<span class="n">sim</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]</span>
+	
+	<span class="c1"># Count the number of replicates that were run</span>
+	<span class="n">replicates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">replicates</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No simulations have been performed.&quot;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+			<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not return timesteps, no simulations have been performed.&quot;</span><span class="p">)</span>
+	<span class="n">times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sim</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">sim</span><span class="p">))][</span><span class="s1">&#39;SpeciesCountTimes&#39;</span><span class="p">])</span>
+
+	<span class="c1"># close file if need be</span>
+	<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+		<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">times</span></div>
+
+<div class="viewcode-block" id="getSpecieTrace"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.getSpecieTrace">[docs]</a><span class="k">def</span> <span class="nf">getSpecieTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">specie</span><span class="p">,</span> <span class="n">replicate</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">doublingTime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Extract data for a particular specie for the specified replicate</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            The HDF5 file handle to extract from or the name of a file to open</span>
+<span class="sd">        specie:</span>
+<span class="sd">            The specie to extract data </span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The number of the replicate to extract from (default: 1)</span>
+<span class="sd">        doublingTime:</span>
+<span class="sd">            An optional doubling time parameter that will normalize average each trace by </span>
+<span class="sd">            time in the cell cycle assuming exponentially growing cell </span>
+<span class="sd">            (2log2 * x/2^(t/DT)), effectively normalizing against cell size. </span>
+<span class="sd">            Default: no averaging is performed</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The species time trace in a numpy array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open file if a string is passed</span>
+	<span class="n">wasString</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">openLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="n">wasString</span> <span class="o">=</span> <span class="kc">True</span>
+
+	<span class="c1"># Get a handle to the Simulations group, where results are stored</span>
+	<span class="n">sim</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]</span>
+	
+	<span class="c1"># Count the number of replicates that were run</span>
+	<span class="n">replicates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">replicates</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No simulations have been performed.&quot;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+			<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not return timesteps, no simulations have been performed.&quot;</span><span class="p">)</span>
+	
+	<span class="c1"># Which species we are looking at</span>
+	<span class="n">names</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;speciesNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+	<span class="c1"># bulletproofing</span>
+	<span class="k">if</span> <span class="n">specie</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Species: </span><span class="si">%s</span><span class="s2"> was not found in list: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">specie</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Species not found: &quot;</span><span class="p">,</span> <span class="n">specie</span><span class="p">)</span>
+	<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;names: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+
+	<span class="c1"># get name of replicate and handle to that replicate&#39;s species counts</span>
+	<span class="n">speciesCountHandle</span><span class="o">=</span><span class="n">sim</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">7</span><span class="p">)][</span><span class="s1">&#39;SpeciesCounts&#39;</span><span class="p">]</span>
+
+	<span class="c1"># Get species number</span>
+	<span class="n">specieIdx</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">specie</span><span class="p">)</span>
+	<span class="n">trace</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">speciesCountHandle</span><span class="p">[:,</span><span class="n">specieIdx</span><span class="p">])</span>
+
+	<span class="c1"># Average if necessary</span>
+	<span class="k">if</span> <span class="n">doublingTime</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">times</span> <span class="o">=</span> <span class="n">getTimesteps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+			<span class="n">tmod</span> <span class="o">=</span> <span class="n">t</span> <span class="o">%</span> <span class="n">doublingTime</span>
+			<span class="n">trace</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">trace</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.0</span><span class="o">**</span><span class="p">(</span><span class="n">tmod</span><span class="o">/</span><span class="n">doublingTime</span><span class="p">)</span>
+
+	<span class="c1"># close file if need be</span>
+	<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+		<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="c1"># pull out trace</span>
+	<span class="k">return</span> <span class="n">trace</span></div>
+
+
+<div class="viewcode-block" id="getAvgVarTrace"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.getAvgVarTrace">[docs]</a><span class="k">def</span> <span class="nf">getAvgVarTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">specie</span><span class="p">,</span> <span class="n">doublingTime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Get the average and variance of the specie trace over time</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            The HDF5 file handle to extract from or the name of a file to open</span>
+<span class="sd">        specie:</span>
+<span class="sd">            The specie to extract</span>
+<span class="sd">        doublingTime:</span>
+<span class="sd">            An optional doubling time parameter that will normalize average each trace by time </span>
+<span class="sd">            in the cell cycle assuming exponentially growing cell (2log2 * x/2^(t/DT)), </span>
+<span class="sd">            effectively normalizing against cell size. Default: no averaging is performed</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        avg, var, time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open file if a string is passed</span>
+	<span class="n">wasString</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">openLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="n">wasString</span> <span class="o">=</span> <span class="kc">True</span>
+
+	<span class="c1"># Get a handle of the simulation group where results are stored</span>
+	<span class="n">sim</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]</span>
+
+	<span class="c1"># Count replicates</span>
+	<span class="n">replicates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">replicates</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No simulations have been performed.&quot;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+			<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not return timesteps, no simulations have been performed.&quot;</span><span class="p">)</span>
+	
+	<span class="c1"># Grab the times</span>
+	<span class="n">times</span> <span class="o">=</span> <span class="n">getTimesteps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="c1"># Grab each specie trace into average</span>
+	<span class="n">lenT</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+	<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lenT</span><span class="p">,</span><span class="n">replicates</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">replicates</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+		<span class="c1"># Don&#39;t pass doublingTime here because it would cause &#39;getSpecieTrace&#39;</span>
+		<span class="c1">#  to load the times for every call, which could be very costly</span>
+		<span class="n">data</span><span class="p">[:,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">getSpecieTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">specie</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> 
+
+	<span class="c1"># Average if necessary</span>
+	<span class="k">if</span> <span class="n">doublingTime</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+			<span class="n">tmod</span> <span class="o">=</span> <span class="n">t</span> <span class="o">%</span> <span class="n">doublingTime</span>
+			<span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">/</span> <span class="mf">2.0</span><span class="o">**</span><span class="p">(</span><span class="n">tmod</span><span class="o">/</span><span class="n">doublingTime</span><span class="p">)</span>
+
+	<span class="c1"># Compute the average/variance/etc.</span>
+	<span class="n">avg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+	<span class="c1"># close file if need be</span>
+	<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+		<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">avg</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">times</span></div>
+
+<div class="viewcode-block" id="getHistogram"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.getHistogram">[docs]</a><span class="k">def</span> <span class="nf">getHistogram</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Get the histogram for a specie</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            The HDF5 file handle to extract from or the name of a file to open</span>
+<span class="sd">        specie:</span>
+<span class="sd">            An array of specie/s to extract. returns a nD histogram of the data.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bins, edges (len(bins)+1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Open file if a string is passed</span>
+	<span class="n">wasString</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">openLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="n">wasString</span> <span class="o">=</span> <span class="kc">True</span>
+
+	<span class="c1"># Get a handle of the simulation group where results are stored</span>
+	<span class="n">sim</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]</span>
+
+	<span class="c1"># Count replicates</span>
+	<span class="n">replicates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">replicates</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No simulations have been performed.&quot;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+			<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="c1"># Grab the times</span>
+	<span class="n">times</span> <span class="o">=</span> <span class="n">getTimesteps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="c1"># Grab each specie trace into average</span>
+	<span class="n">bins</span> <span class="o">=</span> <span class="kc">None</span>
+	<span class="n">edges</span> <span class="o">=</span> <span class="kc">None</span>
+	<span class="n">lenT</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lenT</span><span class="p">,</span><span class="n">replicates</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">replicates</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+			<span class="n">data</span><span class="p">[:,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">getSpecieTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span> 
+
+		<span class="c1"># Compute the histogram for the specie</span>
+		<span class="n">bins</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+		<span class="n">data1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lenT</span><span class="p">,</span><span class="n">replicates</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">replicates</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+			<span class="n">data1</span><span class="p">[:,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">getSpecieTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span> 
+		<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lenT</span><span class="p">,</span><span class="n">replicates</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">replicates</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+			<span class="n">data2</span><span class="p">[:,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">getSpecieTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span> 
+
+		<span class="c1"># Compute the histogram for the specie</span>
+		<span class="n">bins</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">data1</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">data2</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">data1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">data2</span><span class="p">)),</span> <span class="n">normed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">replicates</span><span class="o">*</span><span class="n">lenT</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">))</span> <span class="p">)</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">replicates</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">species</span><span class="p">):</span>
+				<span class="n">rep</span> <span class="o">=</span> <span class="n">replicates</span> <span class="o">-</span> <span class="mi">1</span>
+				<span class="n">data</span><span class="p">[</span><span class="n">rep</span><span class="o">*</span><span class="n">lenT</span><span class="p">:((</span><span class="n">rep</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">lenT</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">getSpecieTrace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+		<span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">bins</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogramdd</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+	<span class="c1"># Close file if need be</span>
+	<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+		<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">bins</span><span class="p">,</span> <span class="n">edges</span></div>
+	
+<div class="viewcode-block" id="getPhaseSpace"><a class="viewcode-back" href="../../_autosummary/pySTDLM.PostProcessing.html#pySTDLM.PostProcessing.getPhaseSpace">[docs]</a><span class="k">def</span> <span class="nf">getPhaseSpace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">species</span><span class="p">,</span> <span class="n">replicate</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Get the nD phase space associated with the traces of species. </span>
+<span class="sd">    </span>
+<span class="sd">    If a single replicate is specified, a single trace will be returned, otherwise a 2/3D density matrix will be returned.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        f:</span>
+<span class="sd">            The HDF5 file handle to extract from or the name of a file to open</span>
+<span class="sd">        specie:</span>
+<span class="sd">            An iterable of 2 more specie names</span>
+<span class="sd">        replicate:</span>
+<span class="sd">            The replicate for which to extract the phase space</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A numpy array of a trace from a single replicate (specie1, specie2, ...) </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="n">dimension</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Phase space must be either 2 or 3 dimensional.&quot;</span><span class="p">)</span>
+	<span class="n">dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+
+	<span class="c1"># Open file if a string is passed</span>
+	<span class="n">wasString</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">openLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="n">wasString</span> <span class="o">=</span> <span class="kc">True</span>
+
+	<span class="c1"># Determine whether we are to obtain just a specie trace or a histogram in that many dimensions</span>
+	<span class="c1"># Compute just a trace</span>
+	<span class="n">times</span> <span class="o">=</span> <span class="n">getTimesteps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+	<span class="n">lenT</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+	<span class="c1"># Grab each specie trace into average</span>
+	<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lenT</span><span class="p">,</span><span class="n">dimension</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">species</span><span class="p">):</span>
+		<span class="n">data</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">getSpecieTrace</span><span class="p">(</span><span class="n">fHandle</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">replicate</span><span class="p">)</span>
+
+	<span class="c1"># Close file if need be</span>
+	<span class="k">if</span> <span class="n">wasString</span><span class="p">:</span>
+		<span class="n">closeLMFile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">data</span></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

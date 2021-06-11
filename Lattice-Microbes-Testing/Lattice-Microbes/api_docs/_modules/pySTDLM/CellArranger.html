@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.CellArranger &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.CellArranger</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.CellArranger</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">lm</span>
+<span class="kn">import</span> <span class="nn">pyLM</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pyLM.LMLogger</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.Cells</span> <span class="k">import</span> <span class="o">*</span>
+
+	
+
+<div class="viewcode-block" id="CellArranger"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.CellArranger">[docs]</a><span class="k">class</span> <span class="nc">CellArranger</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;A base class for laying out cells in a 3D space.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cellType:</span>
+<span class="sd">            The type of cell this packer represents, can be one of: [&quot;Sphere&quot;, &quot;Capsule&quot;, &quot;Box&quot;, &quot;CapsuleShell&quot;]</span>
+<span class="sd">        cellAttributes:</span>
+<span class="sd">            A dictionary with the required attributes specified for the cell and the form</span>
+<span class="sd">        arrangerAttributes:</span>
+<span class="sd">            A dictionary with the required/optional requirements for the individiual arranger</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">allowedCellTypes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sphere&quot;</span><span class="p">,</span> <span class="s2">&quot;Capsule&quot;</span><span class="p">,</span> <span class="s2">&quot;Box&quot;</span><span class="p">,</span> <span class="s2">&quot;CapsuleShell&quot;</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">allowedForms</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Random&quot;</span><span class="p">,</span> <span class="s2">&quot;RandomSpherical&quot;</span><span class="p">,</span> <span class="s2">&quot;TightGrid&quot;</span><span class="p">,</span> <span class="s2">&quot;LooseGrid&quot;</span><span class="p">,</span> <span class="s2">&quot;SkewedGrid&quot;</span><span class="p">]</span>		
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">cellType</span><span class="o">=</span><span class="n">cellType</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">cellAttributes</span><span class="o">=</span><span class="n">cellAttributes</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">=</span><span class="p">[]</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">packerName</span> <span class="o">=</span> <span class="n">name</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span> <span class="o">=</span> <span class="n">arrangerAttributes</span>
+
+	<span class="c1"># Internal function</span>
+<div class="viewcode-block" id="CellArranger.cellFactory"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.CellArranger.cellFactory">[docs]</a>	<span class="k">def</span> <span class="nf">cellFactory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellType</span> <span class="o">==</span> <span class="s2">&quot;Sphere&quot;</span><span class="p">:</span>
+			<span class="n">s</span><span class="o">=</span><span class="n">SphereCell</span><span class="p">()</span>
+			<span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">createModelCell</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cellAttributes</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellType</span> <span class="o">==</span><span class="s2">&quot;Capsule&quot;</span><span class="p">:</span>
+			<span class="n">c</span><span class="o">=</span><span class="n">CapsuleCell</span><span class="p">()</span>
+			<span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">createModelCell</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cellAttributes</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellType</span> <span class="o">==</span><span class="s2">&quot;CapsuleShell&quot;</span><span class="p">:</span>
+			<span class="n">c</span><span class="o">=</span><span class="n">CapsuleShellCell</span><span class="p">()</span>
+			<span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">createModelCell</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cellAttributes</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellType</span> <span class="o">==</span><span class="s2">&quot;Box&quot;</span><span class="p">:</span>
+			<span class="n">b</span><span class="o">=</span><span class="n">BoxCell</span><span class="p">()</span>
+			<span class="k">return</span> <span class="n">b</span><span class="o">.</span><span class="n">createModelCell</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cellAttributes</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unknown cell type: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">cellType</span><span class="p">)</span>
+			<span class="k">return</span></div>
+
+	
+<div class="viewcode-block" id="CellArranger.packVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.CellArranger.packVolume">[docs]</a>	<span class="k">def</span> <span class="nf">packVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Pack a specified volume with cells</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            volume:</span>
+<span class="sd">                A volume specified as [[xmin,ymin,zmin],[xmax,ymax,zmax]] (TODO: Add angles)</span>
+<span class="sd">            form:</span>
+<span class="sd">                The form of the packing, which can one of: [&quot;Random&quot;, &quot;RandomSpherical&quot;, &quot;TightGrid&quot;, &quot;LooseGrid&quot;, &quot;SkewedGrid&quot;]</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple of the form [volumePacked, volumePercent, numberCells]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">):</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;CellArranger only works for RDMESimulations.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowedCellTypes</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No cell type specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">packerName</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowedForms</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Name for CellArranger unknown: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">packerName</span><span class="p">)</span>
+
+
+		<span class="c1"># Figure out extents</span>
+		<span class="n">mins</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
+		<span class="n">maxs</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">continousDimensions</span>
+		<span class="k">if</span> <span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">mins</span> <span class="o">=</span> <span class="n">volume</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">maxs</span> <span class="o">=</span> <span class="n">volume</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mins</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">maxs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Incorrect volume to pack: [</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">]&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">mins</span><span class="p">,</span><span class="n">maxs</span><span class="p">))</span>
+			<span class="k">return</span>
+		
+		<span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intPackVolume</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">)</span>
+
+		<span class="c1"># Compute final packing statistics</span>
+		<span class="n">packedVol</span><span class="o">=</span><span class="nb">sum</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">getVolume</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">])</span>
+		<span class="n">totVol</span><span class="o">=</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">mins</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">mins</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">mins</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+		<span class="k">return</span> <span class="p">[</span><span class="n">packedVol</span><span class="p">,</span> <span class="n">packedVol</span><span class="o">/</span><span class="n">totVol</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">count</span><span class="p">]</span></div>
+
+		
+	<span class="c1">## Add packed volume to RDME simulation</span>
+	<span class="c1"># @param self</span>
+	<span class="c1"># @param sim An RDMESimulation object</span>
+<div class="viewcode-block" id="CellArranger.addToSimulation"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.CellArranger.addToSimulation">[docs]</a>	<span class="k">def</span> <span class="nf">addToSimulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">):</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;CellArranger only works for RDMESimulations.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		
+		<span class="c1"># Add cell to the RDMESimulation</span>
+		<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+			<span class="c1"># Add the regions if they have yet to be defined</span>
+			<span class="n">sim</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cyttype</span><span class="p">)</span>
+			<span class="n">sim</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">memtype</span><span class="p">)</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">addToSimulation</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span></div></div>
+
+<span class="c1"># ########################## #</span>
+<span class="c1"># Subclasses of the Arranger #</span>
+<span class="c1"># ########################## #</span>
+<span class="c1">## @class RandomArranger</span>
+<div class="viewcode-block" id="RandomArranger"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.RandomArranger">[docs]</a><span class="k">class</span> <span class="nc">RandomArranger</span><span class="p">(</span><span class="n">CellArranger</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;An arranger that randomly orients a number of cells in a regin until either a count or a volume fraction target is met.</span>
+
+<span class="sd">    This class requires either &quot;fraction&quot; or &quot;number&quot; attributes specified in the arrangerAttributes.  It also has an optional</span>
+<span class="sd">    parameter &quot;padding&quot; which maintains that much padding between the cells and their neighbors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">):</span>
+		<span class="n">CellArranger</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">,</span> <span class="s1">&#39;Random&#39;</span><span class="p">)</span>
+		
+	<span class="c1"># internal functions</span>
+<div class="viewcode-block" id="RandomArranger.newBBox"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.RandomArranger.newBBox">[docs]</a>	<span class="k">def</span> <span class="nf">newBBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">padding</span><span class="p">):</span>
+		<span class="n">minsloc</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">maxsloc</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+		
+		<span class="n">newmins</span> <span class="o">=</span> <span class="p">[</span><span class="n">minsloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">padding</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">newmaxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">maxsloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">padding</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+	
+		<span class="k">return</span> <span class="p">[</span><span class="n">newmins</span><span class="p">,</span> <span class="n">newmaxs</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="RandomArranger.doesIntersect"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.RandomArranger.doesIntersect">[docs]</a>	<span class="k">def</span> <span class="nf">doesIntersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+		<span class="n">mid1</span> <span class="o">=</span> <span class="p">[(</span><span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">mid2</span> <span class="o">=</span> <span class="p">[(</span><span class="n">b2</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">b2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">dim1</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">((</span><span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>	
+		<span class="n">dim2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">((</span><span class="n">b2</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">b2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>	
+
+		<span class="c1"># distance between centers</span>
+		<span class="n">dist</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">mid2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mid1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">dim1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dim2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dim1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dim2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dist</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dim1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">dim2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dist</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+			<span class="k">return</span> <span class="kc">True</span>
+		<span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="RandomArranger.outsideDomain"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.RandomArranger.outsideDomain">[docs]</a>	<span class="k">def</span> <span class="nf">outsideDomain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">mins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">maxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">mins</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">maxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">mins</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">maxs</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;outside&quot;</span><span class="p">)</span>
+			<span class="k">return</span> <span class="kc">True</span>	
+		<span class="k">return</span> <span class="kc">False</span>	</div>
+		
+
+<div class="viewcode-block" id="RandomArranger.intPackVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.RandomArranger.intPackVolume">[docs]</a>	<span class="k">def</span> <span class="nf">intPackVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">):</span>
+
+		<span class="c1"># Pack volume</span>
+		<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+		<span class="c1"># Boudning box</span>
+		<span class="n">tempCell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellFactory</span><span class="p">()</span>
+		<span class="n">bbox</span><span class="o">=</span><span class="n">tempCell</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">()</span>
+
+		<span class="c1"># Determine number of cells in each direction</span>
+		<span class="n">dimCell</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">dimDomain</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+
+		<span class="c1"># bulletproofing</span>
+		<span class="k">if</span> <span class="s2">&quot;fraction&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span> <span class="ow">and</span> <span class="s2">&quot;number&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;fraction or number must be specified for the RandomArranger&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="n">fraction</span> <span class="o">=</span> <span class="mf">0.</span>
+		<span class="k">if</span> <span class="s2">&quot;fraction&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span><span class="p">:</span>
+			<span class="n">fraction</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span><span class="p">[</span><span class="s2">&quot;fraction&quot;</span><span class="p">])</span>
+			<span class="k">if</span> <span class="n">fraction</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="ow">or</span> <span class="n">fraction</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">:</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;fraction of volume to fill must be in range [0,1]&quot;</span><span class="p">)</span>
+				<span class="k">return</span>
+		<span class="n">number</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">if</span> <span class="s2">&quot;number&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span><span class="p">:</span>
+			<span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span><span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">])</span>
+			<span class="k">if</span> <span class="n">number</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;number of cells to add must be positive&quot;</span><span class="p">)</span>
+				<span class="k">return</span>
+		<span class="n">padding</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">]</span>
+		<span class="k">if</span> <span class="s2">&quot;padding&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span><span class="p">:</span>
+			<span class="n">padding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrangerAttributes</span><span class="p">[</span><span class="s2">&quot;padding&quot;</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;padding must be a list of form [x,y,z]&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+
+		<span class="c1"># begin Monte carlo</span>
+		<span class="n">notDone</span><span class="o">=</span><span class="kc">True</span>
+		<span class="n">volAdded</span> <span class="o">=</span> <span class="mf">0.</span>
+		<span class="n">totVol</span> <span class="o">=</span> <span class="n">dimDomain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dimDomain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">dimDomain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+		<span class="k">while</span> <span class="n">notDone</span><span class="p">:</span>
+			<span class="c1"># escape</span>
+			<span class="k">if</span> <span class="n">number</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="n">number</span><span class="p">:</span>
+					<span class="n">notDone</span> <span class="o">=</span> <span class="kc">False</span>
+					<span class="k">break</span>
+			<span class="k">elif</span> <span class="n">fraction</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">totVol</span><span class="o">*</span><span class="n">fraction</span> <span class="o">&lt;=</span> <span class="n">volAdded</span><span class="p">:</span>
+					<span class="n">notDone</span> <span class="o">=</span> <span class="kc">False</span>
+					<span class="k">break</span>
+
+			<span class="c1"># get a random (x,y,z)</span>
+			<span class="n">pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+			<span class="c1">#print pos		</span>
+	
+			<span class="c1"># set temporary cell to work in that volume</span>
+			<span class="n">trialCell</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">tempCell</span><span class="p">)</span>
+			<span class="n">trialCell</span><span class="o">.</span><span class="n">translateCell</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+			<span class="n">intersects</span> <span class="o">=</span> <span class="kc">False</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doesIntersect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">newBBox</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">(),</span> <span class="n">padding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">newBBox</span><span class="p">(</span><span class="n">trialCell</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">(),</span> <span class="n">padding</span><span class="p">)):</span>
+					<span class="n">intersects</span> <span class="o">=</span> <span class="kc">True</span>
+					<span class="k">break</span>
+
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">intersects</span><span class="p">:</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">outsideDomain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">newBBox</span><span class="p">(</span><span class="n">trialCell</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">(),</span><span class="n">padding</span><span class="p">),</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">):</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trialCell</span><span class="p">)</span>
+					<span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+					<span class="n">volAdded</span> <span class="o">+=</span> <span class="n">trialCell</span><span class="o">.</span><span class="n">getVolume</span><span class="p">()</span>			
+					<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="s2">&quot;adding </span><span class="si">%g</span><span class="s2">,</span><span class="si">%g</span><span class="s2">,</span><span class="si">%g</span><span class="s2"> vol: </span><span class="si">%g</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">trialCell</span><span class="o">.</span><span class="n">getVolume</span><span class="p">()))</span>
+
+		<span class="k">return</span> <span class="n">count</span></div></div>
+
+
+<div class="viewcode-block" id="RandomSphericalArranger"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.RandomSphericalArranger">[docs]</a><span class="k">class</span> <span class="nc">RandomSphericalArranger</span><span class="p">(</span><span class="n">CellArranger</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;An arranger that randomly orients a number of cells in a sphere inside a regin until either a count or a volume fraction target is met.</span>
+
+<span class="sd">    This class requires either &quot;fraction&quot; or &quot;number&quot; attributes specified in the arrangerAttributes.  It also has an optional</span>
+<span class="sd">    parameter &quot;padding&quot; which maintains that much padding between the cells and their neighbors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">):</span>
+		<span class="n">CellArranger</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">,</span> <span class="s1">&#39;RandomSpherical&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RandomSphericalArranger.intPackVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.RandomSphericalArranger.intPackVolume">[docs]</a>	<span class="k">def</span> <span class="nf">intPackVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">):</span>
+		<span class="c1"># Pack volume</span>
+		<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+		<span class="c1"># Boudning box</span>
+		<span class="n">tempCell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellFactory</span><span class="p">()</span>
+		<span class="n">bbox</span><span class="o">=</span><span class="n">tempCell</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">()</span>
+
+		<span class="c1"># Determine number of cells in each direction</span>
+		<span class="n">dimCell</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">dimDomain</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+
+		<span class="k">return</span> <span class="n">count</span></div></div>
+
+
+<div class="viewcode-block" id="TightGridArranger"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.TightGridArranger">[docs]</a><span class="k">class</span> <span class="nc">TightGridArranger</span><span class="p">(</span><span class="n">CellArranger</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;An arranger that orients cells in square grid.&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">):</span>
+		<span class="n">CellArranger</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">,</span> <span class="s1">&#39;TightGrid&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TightGridArranger.intPackVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.TightGridArranger.intPackVolume">[docs]</a>	<span class="k">def</span> <span class="nf">intPackVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">):</span>
+		<span class="c1"># Pack volume</span>
+		<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+		<span class="c1"># Boudning box</span>
+		<span class="n">tempCell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellFactory</span><span class="p">()</span>
+		<span class="n">bbox</span><span class="o">=</span><span class="n">tempCell</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">()</span>
+
+		<span class="c1"># Determine number of cells in each direction</span>
+		<span class="n">dimCell</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">dimDomain</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">cellCounts</span><span class="o">=</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">dimDomain</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">dimCell</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		
+		<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cellCounts</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+			<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cellCounts</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+				<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cellCounts</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+					<span class="c1"># Add to internal representation</span>
+					<span class="n">addCell</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">tempCell</span><span class="p">)</span>
+					<span class="n">addCell</span><span class="o">.</span><span class="n">translateCell</span><span class="p">([</span><span class="n">x</span><span class="o">*</span><span class="n">dimCell</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">*</span><span class="n">dimCell</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="o">*</span><span class="n">dimCell</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">addCell</span><span class="p">)</span>
+					<span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+
+		<span class="k">return</span> <span class="n">count</span></div></div>
+
+
+<div class="viewcode-block" id="LooseGridArranger"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.LooseGridArranger">[docs]</a><span class="k">class</span> <span class="nc">LooseGridArranger</span><span class="p">(</span><span class="n">CellArranger</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;An arranger that orients cells in square grid with padding in between. </span>
+<span class="sd">    </span>
+<span class="sd">    The attribute dictionary requires &quot;offset&quot; which is a list of the form [dx, dy, dz].&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">):</span>
+		<span class="n">CellArranger</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellAttributes</span><span class="p">,</span> <span class="n">arrangerAttributes</span><span class="p">,</span> <span class="s1">&#39;LooseGrid&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LooseGridArranger.intPackVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.CellArranger.html#pySTDLM.CellArranger.LooseGridArranger.intPackVolume">[docs]</a>	<span class="k">def</span> <span class="nf">intPackVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">):</span>
+		<span class="c1"># Pack volume</span>
+		<span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+		<span class="c1"># Boudning box</span>
+		<span class="n">tempCell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellFactory</span><span class="p">()</span>
+		<span class="n">bbox</span><span class="o">=</span><span class="n">tempCell</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">()</span>
+
+		<span class="c1"># Determine number of cells in each direction</span>
+		<span class="n">dimCell</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="n">dimDomain</span><span class="o">=</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+
+		<span class="k">if</span> <span class="s2">&quot;offset&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellAttributes</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;offset must be specified for LooseGrid arranger&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="n">offset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellAttributes</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;offset must a vector [x,y,z]&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		
+		<span class="c1"># compute number of cell in each direction</span>
+		<span class="n">cellCounts</span><span class="o">=</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">dimDomain</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">offset</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">dimCell</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">offset</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cellCounts</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+			<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cellCounts</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+				<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cellCounts</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+					<span class="c1"># Add to internal representation</span>
+					<span class="n">addCell</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">tempCell</span><span class="p">)</span>
+					<span class="n">addCell</span><span class="o">.</span><span class="n">translateCell</span><span class="p">([</span><span class="n">x</span><span class="o">*</span><span class="p">(</span><span class="n">dimCell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">y</span><span class="o">*</span><span class="p">(</span><span class="n">dimCell</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">z</span><span class="o">*</span><span class="p">(</span><span class="n">dimCell</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">offset</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">addCell</span><span class="p">)</span>
+					<span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+
+		<span class="k">return</span> <span class="n">count</span></div></div>
+
+<span class="c1">#</span>
+<span class="c1">#class SkewedGridArranger(CellArranger):</span>
+<span class="c1">#	def __init__(self, cellType, cellAttributes, arrangerAttributes):</span>
+<span class="c1">#		CellArranger.__init__(self, cellType, cellAttributes, arrangerAttributes, &#39;SkewedGrid&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#	def intPackVolume(self, sim, mins, maxs):</span>
+<span class="c1">#		# Pack volume</span>
+<span class="c1">#		count=0</span>
+<span class="c1">#		# Boudning box</span>
+<span class="c1">#		tempCell=self.cellFactory()</span>
+<span class="c1">#		bbox=tempCell.boundingBox()</span>
+<span class="c1">#</span>
+<span class="c1">#		# Determine number of cells in each direction</span>
+<span class="c1">#		dimCell=[abs(bbox[0][i]-bbox[1][i]) for i in range(3)]</span>
+<span class="c1">#		dimDomain=[abs(maxs[i] - mins[i]) for i in range(3)]</span>
+<span class="c1">#</span>
+<span class="c1">#		if &quot;skew&quot; not in self.cellAttributes.keys():</span>
+<span class="c1">#			LMLogger.error(&quot;skew must be specified for a SkewedGrid arranger&quot;)</span>
+<span class="c1">#			return</span>
+<span class="c1">#		skew=self.cellAttributes[&#39;skew&#39;]</span>
+<span class="c1">#		if len(skew) != 3:</span>
+<span class="c1">#			LMLogger.error(&quot;skew must a vector [x,y,z]&quot;)</span>
+<span class="c1">#			return</span>
+<span class="c1">#</span>
+<span class="c1">#		# compute the number of cells in each direction</span>
+<span class="c1">#		cellCounts=[int(math.floor(dimDomain[i]/dimCell[i])) for i in range(3)]</span>
+<span class="c1">#		</span>
+<span class="c1">#		fracx=0.0</span>
+<span class="c1">#		fracy=0.0</span>
+<span class="c1">#		fracz=0.0</span>
+<span class="c1">#		for z in range(cellCounts[2]):</span>
+<span class="c1">#			for y in range(cellCounts[1]):</span>
+<span class="c1">#				for x in range(cellCounts[0]):</span>
+<span class="c1">#					# Add to internal representation</span>
+<span class="c1">#					addCell=copy.deepcopy(tempCell)</span>
+<span class="c1">#					addCell.translateCell([x*(dimCell[0]+fracx), y*(dimCell[1]+fracy), z*(dimCell[2])])</span>
+<span class="c1">#					self.cells.append(addCell)</span>
+<span class="c1">#					count+=1</span>
+<span class="c1">#					print &quot;adding cell %d&quot;%count</span>
+<span class="c1">#				fracx+=skew[0]</span>
+<span class="c1">#				if fracx &gt; 1.0:</span>
+<span class="c1">#					fracx-=1.0</span>
+<span class="c1">#			fracy+=skew[1]</span>
+<span class="c1">#			if fracy &gt; 1.0:</span>
+<span class="c1">#				fracy-=1.0</span>
+<span class="c1">#						</span>
+<span class="c1">#		return count</span>
+<span class="c1">#</span>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

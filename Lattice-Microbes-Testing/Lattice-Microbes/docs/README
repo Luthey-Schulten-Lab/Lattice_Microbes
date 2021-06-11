@@ -1,0 +1,141 @@
+                             Lattice Microbes 2.3.0
+================================================================================
+
+http://www.scs.illinois.edu/schulten/lm
+latticemicrobes-users@lists.illinois.edu
+
+Lattice Microbes is a software package for efficiently sampling trajectories
+from the chemical and reaction-diffusion master equations (CME/RDME) on high
+performance computing (HPC) infrastructure using both exact and approximate
+methods. pyLM is a problem solving environment written in Python that provides
+an easy to use and highly customizable simulation construction tools for complex
+biological scenarios.  
+
+================================================================================
+
+The following known issues are present in 2.3.0:
+
+- The VMD plugin does not read time-varying site type lattices for site atoms or densities.
+- MPD-RDME's configuration of 8 or 16 particles is set at compile time and is
+  unable to read files that are written by builds compiled with a different
+  lattice capacity.
+
+================================================================================
+
+* New features in version 2.3.0
+
+ - MPD-RDME can support either 8 or 16 particles per lattice site.
+ - A new algorithm for reactions in MPD-RDME accelerates simulation of large
+   reaction networks.
+ - A new local overflow handling algorithm for MPD-RDME 
+ - MPI support for MPD-RDME to distribute a single replicate over multiple
+   machines (lm-mpmpd).
+ - Ability to access and modify MPD-RDME site information via python.
+ - The VMD plugin now includes density representations of site types
+
+* New features in version 2.2.1
+
+ - Zeroth-order reactions in MPD-RDME
+
+* New features in version 2.2.0
+
+ - Initial release of pyLM, the python framework for simulation construction
+   and analysis.
+ - Multi-GPU support for MPD-RDME simulations.
+ - pyLM species names can be used for selections via the VMD plugin.
+ - Support for larger stoichiometric matricies by MPD-RDME.
+
+================================================================================
+
+* Binary Package Installation
+
+Lattice Microbes is distributed as a binary package for Linux and Mac systems.
+The binary package also includes pyLM and the VMD plugin for visualizing RDME
+trajectories.
+
+The binary package can be installed locally in your home directory via the
+following commands: 
+
+	tar zxvf lm-2.3a-<platform>.tgz
+	mkdir -p ~/usr/bin
+	cp lm-2.3a/bin/* ~/usr/bin
+	mkdir -p ~/usr/lib
+	cp -r lm-2.3a/lib/* ~/usr/lib
+	cp -r lm-2.3a/lib/python ~/usr/lib/
+
+Then, you will need to modify your .bashrc to alter the following environment
+variables:
+
+	export PATH=$PATH:$HOME/usr/bin
+	export PYTHONPATH=$HOME/usr/lib/lm:$HOME/usr/lib/python:$PYTHONPATH
+
+* Source Compilation
+
+Compilation from source requires the following:
+
+  - Protocol Buffers (https://code.google.com/p/protobuf)
+  - HDF5 (http://www.hdfgroup.org/HDF5/)
+
+Optional support can be added via the following packages:
+
+  - Python (www.python.org) and NumPy (numpy.org)
+  - VMD (www.ks.uiuc.edu/Research/vmd/)
+  - SBML (sbml.org/Software/libSBML)
+  - OpenMPI (www.open-mpi.org)
+
+To build from source, unpack the source tarball into a directory of your
+choosing.  Copy the appropriate build file under docs/configs to the file
+local.mk in the root directory of where the source was unpacked.  For example,
+on Linux, do:
+
+	cp docs/config/local.mk.linux local.mk
+
+Please see the contents of the file for instrucions on how to configure the
+build for your system.
+
+Once local.mk is configured, use `make' and `make install' to build and
+install.  You should configure your PATH and PYTHONPATH in a similar fashion as
+if it was a binary package install.
+
+For more information on installation and detailed instructions for compilation
+from source, please consult the User's Guide.
+
+================================================================================
+
+* Using MPI MPD-RDME (lm-mpmpd)
+
+  Currently, lm-mpmpd supports only a single GPU per rank, and each rank will
+use GPU 0.  Launch lm-mpmpd using mpirun (or the appropriate command for your
+MPI implementation), and use lm::rdme::MPIMpdRdmeSolver.  For example:
+	
+	mpirun lm-mpmpd -r 1 -sl lm::rdme::MPIMpdRdmeSolver -f input.lm
+
+* Using Multi-GPU MPD-RDME
+
+MPD-RDME can now take advantage of multiple GPUs on a single machine for
+cooperative simulation of a single RDME replicate.  To use, you should specify
+the following LM command-line options:
+  - The solver to use (-sl lm::rdme::MGPUMpdRdmeSolver)
+  - The GPUs to use (-g)
+  - The GPUs per replicate to use (-gr)
+  - The CPU cores per replicate to use (-cr)
+
+There must be at least one core per GPU for best performance.
+For example, to use four GPUs on a machine:
+
+  lm -f input.lm -g 0,1,2,3 -gr 4 -cr 4 -sl lm::rdme::MGPUMpdRdmeSolver
+
+* pyLM species names in VMD
+
+In the past, using the particle number as the name for a VMD atomselect was the
+way to visualize all the particles of one species.  With this release, the
+particle number is now selected by resid.  The name field is now the species
+name that was given to pyLM for preparing the input system.
+
+* Enabling large stoichiometric matrix support for MPD-RDME
+
+The stoichiometric matrix is limited to a fixed maximum size by default in
+MPD-RDME for optimal performance.  New in version 2.2 is the ability to have an
+S matrix that is larger than 16,384 elements.  To enable, please add the
+option "-DGLOBAL_S_MATRIX" to CCFLAGS and CUDA_FLAGS in local.mk.
+

@@ -1,0 +1,135 @@
+{% if regs.objs %}
+<table class='jLMtbl'>
+    <caption>New Regions</caption>
+    <tr>
+        <th>Index</th>
+        <th>Name</th>
+        {% if regs.annotationCol %}
+        <th>Annotation</th>
+        {% endif %}
+    </tr>
+    {% for o in regs.objs %}
+    <tr>
+        <td> {{o.id}} </td>
+        <td> {{o.html}} </td>
+        {% if regs.annotationCol %}
+        <td> {{o.annotation or ''}} </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if sps.objs %}
+<table class='jLMtbl'>
+    <caption>New Species</caption>
+    <tr>
+        <th>Index</th>
+        <th>Name</th>
+        {% if sps.annotationCol %}
+        <th>Annotation</th>
+        {% endif %}
+        {% if sps.texStr %}
+        <th>TeX representation</th>
+        {% endif %}
+    </tr>
+    {% for o in sps.objs %}
+    <tr>
+        <td> {{o.id}} </td>
+        <td> {{o.html}} </td>
+        {% if sps.annotationCol %}
+        <td> {{o.annotation or ''}} </td>
+        {% endif %}
+        {% if sps.texStr %}
+        <td>${{o.tex}}$</th>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if rxns.objs %}
+<table class='jLMtbl'>
+    <caption>New reactions</caption>
+    <tr>
+        <th>Index</th>
+        <th>Reaction</th>
+        <th>Rate</th>
+        <th>Regions</th>
+        {% if rxns.annotationCol %}
+        <th>Annotation</th>
+        {% endif %}
+    </tr>
+    {% for o in rxns.objs %}
+    <tr>
+        <td> {{o.id}} </td>
+        <td class="rxnCol"> {{ o.html }} </td>
+        <td class='jLMnum noWrap'> {{ o.rate }}&nbsp;{{o.unit}} </td>
+        <td class='noWrap'> {{ o.reg }} </td>
+        {% if rxns.annotationCol %}
+        <td> {{o.annotation or ''}} </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if ks.objs %}
+<table class='jLMtbl'>
+    <caption>New reaction rates</caption>
+    <tr>
+        <th>Index</th>
+        <th>Name</th>
+        <th>Value</th>
+        {% if ks.annotationCol %}
+        <th>Annotation</th>
+        {% endif %}
+        {% if ks.texStr %}
+        <th>TeX representation</th>
+        {% endif %}
+    </tr>
+    {% for o in ks.objs %}
+    <tr>
+        <td> {{o.id}} </td>
+        <td> {{o.html}} </td>
+        <td class='jLMnum noWrap'> {{ o.rate }}&nbsp;{{o.unit}} </td>
+        {% if ks.annotationCol %}
+        <td> {{o.annotation or ''}} </td>
+        {% endif %}
+        {% if ks.texStr %}
+        <td>${{o.tex}}$</th>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if ds.objs %}
+<table class='jLMtbl'>
+    <caption>New diffusion constants</caption>
+    <tr>
+        <th>Index</th>
+        <th>Name</th>
+        <th>Value</th>
+        {% if ds.annotationCol %}
+        <th>Annotation</th>
+        {% endif %}
+        {% if ds.texStr %}
+        <th>TeX representation</th>
+        {% endif %}
+    </tr>
+    {% for o in ds.objs %}
+    <tr>
+        <td> {{o.id}} </td>
+        <td> {{o.html}} </td>
+        <td class='jLMnum noWrap'> {{ o.rate }}&nbsp;{{o.unit}} </td>
+        {% if ds.annotationCol %}
+        <td> {{o.annotation or ''}} </td>
+        {% endif %}
+        {% if ds.texStr %}
+        <td>${{o.tex}}$</th>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}

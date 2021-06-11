@@ -1,0 +1,10 @@
+target_sources(lmcore
+    PRIVATE
+        "${CMAKE_CURRENT_LIST_DIR}/Thread.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/Worker.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/WorkerManager.cpp"
+    PUBLIC
+        "${CMAKE_CURRENT_LIST_DIR}/Thread.h"
+        "${CMAKE_CURRENT_LIST_DIR}/Worker.h"
+        "${CMAKE_CURRENT_LIST_DIR}/WorkerManager.h"
+)

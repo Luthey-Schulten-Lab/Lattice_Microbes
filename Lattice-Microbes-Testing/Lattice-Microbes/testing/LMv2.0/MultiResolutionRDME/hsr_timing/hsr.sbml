@@ -1,0 +1,1241 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1" level="3" version="1">
+
+  <model id="hsr" substanceUnits="item" timeUnits="second" volumeUnits="litre" extentUnits="item">
+        <listOfUnitDefinitions>
+            <unitDefinition id="per_second">
+                <listOfUnits>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+            <unitDefinition id="per_item_per_second">
+                <listOfUnits>
+                    <unit kind="item"   exponent="-1" scale="0" multiplier="1"/>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+            <unitDefinition id="per_molar_per_second">
+                <listOfUnits>
+                    <unit kind="litre"  exponent="1" scale="0" multiplier="1"/>
+                    <unit kind="mole"   exponent="-1" scale="0" multiplier="1"/>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+        </listOfUnitDefinitions>
+        
+    <listOfCompartments>
+      <compartment id="cell" size="1"/>
+    </listOfCompartments>
+    
+    <listOfSpecies>
+      <species id="S1" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S2" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S3" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S4" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S5" compartment="cell" initialAmount="1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S6" compartment="cell" initialAmount="4645670" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S7" compartment="cell" initialAmount="1324" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S8" compartment="cell" initialAmount="80" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S9" compartment="cell" initialAmount="16" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S10" compartment="cell" initialAmount="3413" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S11" compartment="cell" initialAmount="29" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S12" compartment="cell" initialAmount="584" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S13" compartment="cell" initialAmount="1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S14" compartment="cell" initialAmount="22" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S15" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S16" compartment="cell" initialAmount="171440" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S17" compartment="cell" initialAmount="9150" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S18" compartment="cell" initialAmount="2280" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S19" compartment="cell" initialAmount="6" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S20" compartment="cell" initialAmount="596" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S21" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S22" compartment="cell" initialAmount="13" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S23" compartment="cell" initialAmount="3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S24" compartment="cell" initialAmount="3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S25" compartment="cell" initialAmount="7" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S26" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S27" compartment="cell" initialAmount="260" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+      <species id="S28" compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    
+    <listOfParameters>
+      <parameter id="C1" value="2.54"/>
+      <parameter id="C2" value="1"/>
+      <parameter id="C3" value="0.254"/>
+      <parameter id="C4" value="1"/>
+      <parameter id="C5" value="0.0254"/>
+      <parameter id="C6" value="10"/>
+      <parameter id="C7" value="254"/>
+      <parameter id="C8" value="10000"/>
+      <parameter id="C9" value="0.000254"/>
+      <parameter id="C10" value="0.01"/>
+      <parameter id="C11" value="0.000254"/>
+      <parameter id="C12" value="1"/>
+      <parameter id="C13" value="0.000254"/>
+      <parameter id="C14" value="1"/>
+      <parameter id="C15" value="2.54"/>
+      <parameter id="C16" value="1"/>
+      <parameter id="C17" value="2540"/>
+      <parameter id="C18" value="1000"/>
+      <parameter id="C19" value="0.0254"/>
+      <parameter id="C20" value="1"/>
+      <parameter id="C21" value="6.62"/>
+      <parameter id="C22" value="0.5"/>
+      <parameter id="C23" value="20"/>
+      <parameter id="C24" value="0.03"/>
+      <parameter id="C25" value="0.03"/>
+      <parameter id="C26" value="0.03"/>
+      <parameter id="C27" value="0.03"/>
+      <parameter id="C28" value="0.03"/>
+      <parameter id="C29" value="1.67"/>
+      <parameter id="C30" value="0.5"/>
+      <parameter id="C31" value="20"/>
+      <parameter id="C32" value="0.03"/>
+      <parameter id="C33" value="0.03"/>
+      <parameter id="C34" value="0.00625"/>
+      <parameter id="C35" value="0.5"/>
+      <parameter id="C36" value="7"/>
+      <parameter id="C37" value="0.03"/>
+      <parameter id="C38" value="3"/>
+      <parameter id="C39" value="0.7"/>
+      <parameter id="C40" value="0.5"/>
+      <parameter id="C41" value="1"/>
+      <parameter id="C42" value="0.5"/>
+      <parameter id="C43" value="20"/>
+      <parameter id="C44" value="0.03"/>
+      <parameter id="C45" value="0.03"/>
+      <parameter id="C46" value="2.54"/>
+      <parameter id="C47" value="10000"/>
+      <parameter id="C48" value="0.43333"/>
+      <parameter id="C49" value="0.5"/>
+      <parameter id="C50" value="20"/>
+      <parameter id="C51" value="0.03"/>
+      <parameter id="C52" value="0.03"/>
+      <parameter id="C53" value="2.54"/>
+      <parameter id="C54" value="10000"/>
+      <parameter id="C55" value="0.03"/>
+      <parameter id="C56" value="0.03"/>
+      <parameter id="C57" value="0.03"/>
+      <parameter id="C58" value="0.03"/>
+      <parameter id="C59" value="0.03"/>
+      <parameter id="C60" value="0.03"/>
+      <parameter id="C61" value="0.03"/>
+    </listOfParameters>
+    <listOfReactions>
+
+      <reaction id="Reaction1" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S2" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C1</m:ci>
+              <m:ci>S1</m:ci>
+              <m:ci>S2</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction2" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S2" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C2</m:ci>
+              <m:ci>S3</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction3" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S4" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S5" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C3</m:ci>
+              <m:ci>S1</m:ci>
+              <m:ci>S4</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction4" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S5" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S4" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C4</m:ci>
+              <m:ci>S5</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction5" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S6" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S7" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C5</m:ci>
+              <m:ci>S1</m:ci>
+              <m:ci>S6</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction6" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S7" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S6" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C6</m:ci>
+              <m:ci>S7</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction7" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S4" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S14" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S15" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C7</m:ci>
+              <m:ci>S4</m:ci>
+              <m:ci>S14</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction8" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S15" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S4" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S14" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C8</m:ci>
+              <m:ci>S15</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction9" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S16" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S14" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S17" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C9</m:ci>
+              <m:ci>S14</m:ci>
+              <m:ci>S16</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction10" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S17" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S16" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S14" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C10</m:ci>
+              <m:ci>S17</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction11" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S6" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S8" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C11</m:ci>
+              <m:ci>S3</m:ci>
+              <m:ci>S6</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction12" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S8" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S6" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C12</m:ci>
+              <m:ci>S8</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction13" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S5" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S6" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S9" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C13</m:ci>
+              <m:ci>S5</m:ci>
+              <m:ci>S6</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction14" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S9" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S5" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S6" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C14</m:ci>
+              <m:ci>S9</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction15" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S10" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S12" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C15</m:ci>
+              <m:ci>S3</m:ci>
+              <m:ci>S10</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction16" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S12" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S10" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C16</m:ci>
+              <m:ci>S12</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction17" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S5" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S11" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S13" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C17</m:ci>
+              <m:ci>S5</m:ci>
+              <m:ci>S11</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction18" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S13" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S5" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S11" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C18</m:ci>
+              <m:ci>S13</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction19" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S15" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S18" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S19" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C19</m:ci>
+              <m:ci>S15</m:ci>
+              <m:ci>S18</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction20" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S19" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S15" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S18" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C20</m:ci>
+              <m:ci>S19</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction21" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S13" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S22" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S13" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C21</m:ci>
+              <m:ci>S13</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction22" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S22" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C22</m:ci>
+              <m:ci>S22</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction23" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S14" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S22" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C23</m:ci>
+              <m:ci>S22</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction24" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S14" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C24</m:ci>
+              <m:ci>S14</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction25" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S17" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S16" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C25</m:ci>
+              <m:ci>S17</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction26" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S15" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S4" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C26</m:ci>
+              <m:ci>S15</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction27" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S19" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S4" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S18" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C27</m:ci>
+              <m:ci>S19</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction28" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S28" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S4" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+          <speciesReference species="S27" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C28</m:ci>
+              <m:ci>S28</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction29" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S23" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S13" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C29</m:ci>
+              <m:ci>S13</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction30" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S23" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C30</m:ci>
+              <m:ci>S23</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction31" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S18"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S23"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C31</m:ci>
+              <m:ci>S23</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction32" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S18"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C32</m:ci>
+              <m:ci>S18</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction33" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S19"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S15"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C33</m:ci>
+              <m:ci>S19</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction34" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S25"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S12"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C34</m:ci>
+              <m:ci>S12</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction35" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S25"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C35</m:ci>
+              <m:ci>S25</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction36" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S4"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S25"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C36</m:ci>
+              <m:ci>S25</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction37" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S4"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C37</m:ci>
+              <m:ci>S4</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction38" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S19"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S18"/>
+          <speciesReference species="S14"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C38</m:ci>
+              <m:ci>S19</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction39" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S21"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S20"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C39</m:ci>
+              <m:ci>S21</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction40" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S28"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S14"/>
+          <speciesReference species="S27"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C40</m:ci>
+              <m:ci>S28</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction41" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S24"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S13"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C41</m:ci>
+              <m:ci>S13</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction42" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S24"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C42</m:ci>
+              <m:ci>S24</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction43" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S20"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S24"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C43</m:ci>
+              <m:ci>S24</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction44" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S20"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C44</m:ci>
+              <m:ci>S20</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction45" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S21"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S4"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C45</m:ci>
+              <m:ci>S21</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction46" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S4"/>
+          <speciesReference species="S20"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S21"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C46</m:ci>
+              <m:ci>S4</m:ci>
+              <m:ci>S20</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction47" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S21"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S4"/>
+          <speciesReference species="S20"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C47</m:ci>
+              <m:ci>S21</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction48" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S26"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S13"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C48</m:ci>
+              <m:ci>S13</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction49" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S26"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C49</m:ci>
+              <m:ci>S26</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction50" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S27"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S26"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C50</m:ci>
+              <m:ci>S26</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction51" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S27"/>
+        </listOfReactants>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C51</m:ci>
+              <m:ci>S27</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction52" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S28"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S15"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C52</m:ci>
+              <m:ci>S28</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction53" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S15"/>
+          <speciesReference species="S27"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S28"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C53</m:ci>
+              <m:ci>S15</m:ci>
+              <m:ci>S27</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction54" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S28"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S15"/>
+          <speciesReference species="S27"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C54</m:ci>
+              <m:ci>S28</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction55" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S5"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C55</m:ci>
+              <m:ci>S5</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction56" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S13"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S1"/>
+          <speciesReference species="S11"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C56</m:ci>
+              <m:ci>S13</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction57" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S9"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S7"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C57</m:ci>
+              <m:ci>S9</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction58" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S15"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S14"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C58</m:ci>
+              <m:ci>S15</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction59" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S19"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S14"/>
+          <speciesReference species="S18"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C59</m:ci>
+              <m:ci>S19</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction60" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S28"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S14"/>
+          <speciesReference species="S27"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C60</m:ci>
+              <m:ci>S28</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+      <reaction id="Reaction61" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S21"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="S20"/>
+        </listOfProducts>
+        <kineticLaw>
+          <m:math>
+            <m:apply>
+              <m:times/>
+              <m:ci>C61</m:ci>
+              <m:ci>S21</m:ci>
+            </m:apply>
+          </m:math>
+        </kineticLaw>
+      </reaction>
+
+    </listOfReactions>
+  </model>
+</sbml>

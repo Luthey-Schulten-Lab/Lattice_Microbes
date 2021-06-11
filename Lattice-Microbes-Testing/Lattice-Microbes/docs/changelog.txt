@@ -1,0 +1,5 @@
+== Version 2.2.1 09/07/2015 ==
+
+- Added Zeroth order reaction support in MpdRdmeSolver and MGPUMprdRdmeSolver
+- Changed MPD-RDME reaction limit from 1024 to 1536
+- Added progress output to MpdRdmeSolver and MGPUMprdRdmeSolver

@@ -1,0 +1,72 @@
+<style>
+{{renderId}}spsTab {
+    display: none;
+    padding: 6px 12px;
+    border: none;
+}
+</style>
+
+<form>
+    <label for="Species">Select species</label>
+    <select name="Species" id="{{renderId}}spsSel" onchange="{{renderId}}spSelFn()">
+    {% for sp in spData %}
+        <option>{{sp.name}}</option>
+    {% endfor %}
+    </select>
+    <button type="button" id="{{renderId}}buttonPrev" onclick="{{renderId}}spSelPrev()">&lt;</button>
+    <button type="button" id="{{renderId}}buttonNext" onclick="{{renderId}}spSelNext()">&gt;</button>
+</form>
+
+{% for sp in spData %}
+{% set label = sp.label %}
+{% set totalCount = sp.totalCount %}
+{% set totalReactions = sp.totalReactions %}
+{% set placement = sp.placement %}
+{% set nPlaced = sp.nPlaced %}
+{% set distribution = sp.distribution %}
+{% set annotation = sp.annotation %}
+{% set diffTbl = sp.diffTbl %}
+{% set trajData = sp.trajData %}
+{% set otherAttrs = sp.otherAttrs %}
+{% set rxns = sp.rxns %}
+{% set idx = sp.idx %}
+{% set tex = sp.tex %}
+<div class="{{renderId}}spsTab" id="{{renderId}}spsTab_{{loop.index0}}">
+{% include "species.html" %}
+</div>
+{% endfor %}
+
+<script>
+function {{renderId}}spSelFn() {
+    var i, idx, tabs;
+    idx = document.getElementById("{{renderId}}spsSel").selectedIndex;
+    tabs = document.getElementsByClassName("{{renderId}}spsTab");
+
+    for (i=0; i < tabs.length; i++) {
+        tabs[i].style.display="none";
+    }
+
+    document.getElementById("{{renderId}}spsTab_"+idx).style.display = "block";
+}
+
+function {{renderId}}spSelPrev() {
+    var dd = document.getElementById("{{renderId}}spsSel");
+    var idx0 = dd.selectedIndex;
+    var n = dd.length;
+    var idx = (idx0 - 1 + n) % n;
+    dd.selectedIndex = idx;
+    {{renderId}}spSelFn();
+}
+
+function {{renderId}}spSelNext() {
+    var dd = document.getElementById("{{renderId}}spsSel");
+    var idx0 = dd.selectedIndex;
+    var n = dd.length;
+    var idx = (idx0 + 1) % n;
+    dd.selectedIndex = idx;
+    {{renderId}}spSelFn();
+}
+
+{{renderId}}spSelFn();
+</script>
+

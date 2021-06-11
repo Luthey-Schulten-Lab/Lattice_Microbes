@@ -1,0 +1,46 @@
+%%% Begin General Table
+\begin{tabular}{l r l}
+\toprule
+Parameter & Value\\
+\midrule
+Simulation name & {{name}}  &\\
+Time step & ${{timeStep}}\,{{timeStepUnit}}$ \\
+Simulation time & ${{simTime}}\,{{timeUnit}}$ \\
+Lattice write interval & ${{latticeWriteInterval}}\,{{timeUnit}}$ \\
+Particle count write interval & ${{speciesWriteInterval}}\,{{timeUnit}}$ \\
+Number of replicates & ${{nReplicates}}$ \\
+Dimensions & ${{lx}}\times{{ly}}\times{{lz}}$ \\
+Particles per site & ${{pps}}$ \\
+Bytes per particle & ${{bytesPerParticle}}$ \\
+Lattice spacing & ${{latticeSpacing}}\,{{lengthUnit}}$ \\
+Subvolume size & ${{siteVol}}\,{{volumeUnit}}$\\
+Output file & \textrt{ {{filename}} } \\
+Number of species & ${{nsps}}$ \\
+Number of reactions & ${{nrxns}}$ \\
+Number of region types & ${{nsts}}$ \\
+Number of rate constants & ${{nrconst}}$ \\
+Number of diffusion constants & ${{ndconst}}$ \\
+Number of placed particles& ${{nPlacedParticles}}$ \\
+\bottomrule
+\end{tabular}
+%%% End General Table
+
+{% if replicates %}
+%%% Begin Replicate Table
+\begin{tabular}{l r r r r r}
+\toprule
+Replicate &
+Simulated time$/{{timeUnit}}$ &
+Lattice evals &
+Count evals &
+Initial count &
+Final count \\
+\midrule
+{% for r in replicates %}
+\texttt{ {{r.label}} } & ${{r.time}}$ & ${{r.latticeEvals}}$ & ${{r.speciesEvals}}$ & ${{r.startCt}}$ & ${{r.endCt}}$ \\
+{% endfor %}
+\bottomrule
+\end{tabular}
+%%% End Replicate Table
+{% endif %}
+

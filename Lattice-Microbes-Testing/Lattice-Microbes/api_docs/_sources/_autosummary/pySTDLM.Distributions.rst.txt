@@ -1,0 +1,22 @@
+pySTDLM.Distributions
+=====================
+
+.. automodule:: pySTDLM.Distributions
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ParticleGenerator
+   
+   
+
+   
+   
+   

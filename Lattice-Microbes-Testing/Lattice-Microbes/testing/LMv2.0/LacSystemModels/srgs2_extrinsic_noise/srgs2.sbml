@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+    <model id="srgs" substanceUnits="item" timeUnits="second" volumeUnits="litre" extentUnits="item">
+        <listOfUnitDefinitions>
+            <unitDefinition id="per_second">
+                <listOfUnits>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+        </listOfUnitDefinitions>
+        <listOfCompartments>
+            <compartment id="Cell" size="1e-15" spatialDimensions="3" constant="true"/>
+        </listOfCompartments>
+        <listOfSpecies>
+            <species id="b"  compartment="Cell" initialAmount="1"
+                             hasOnlySubstanceUnits="true" boundaryCondition="false"
+                             constant="false"/>
+            <species id="n"  compartment="Cell" initialAmount="0"
+                             hasOnlySubstanceUnits="true" boundaryCondition="false"
+                             constant="false"/>
+        </listOfSpecies>
+        <listOfReactions>
+        
+            <reaction id="birth" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="b" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="b" stoichiometry="1" constant="true"/>
+                    <speciesReference species="n" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> ka </ci>
+                            <ci> i </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="ka" value="1" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="death" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="n" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> n </ci>
+                        </apply>
+                    </math>
+                </kineticLaw>
+            </reaction>
+            
+        </listOfReactions>
+    </model>
+</sbml>

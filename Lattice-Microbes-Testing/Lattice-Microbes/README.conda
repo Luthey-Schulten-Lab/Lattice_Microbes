@@ -1,0 +1,12 @@
+# Portable conda build
+
+Install miniconda and dependencies
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh &&
+    bash /tmp/miniconda.sh -b -p $HOME/miniconda &&
+    rm /tmp/miniconda.sh &&
+    source $HOME/miniconda/bin/activate root &&
+    conda install -y protobuf hdf5 numpy cython cmake ninja swig jupyter matplotlib ipywidgets h5py tqdm pillow jinja2 scipy &&
+    conda install -y -c anaconda git gcc_linux-64 gxx_linux-64 binutils_linux-64
+
+then, 
+    mkdir build; cd build; cmake -GNinja  [path to Lattice-Microbes/src]; ninja install

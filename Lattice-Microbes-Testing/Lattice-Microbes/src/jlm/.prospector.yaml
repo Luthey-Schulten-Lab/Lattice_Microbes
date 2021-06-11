@@ -1,0 +1,22 @@
+doc-warnings: true
+
+ignore-paths: 
+    - build
+    - dist
+    - jLM.egg-info
+    - docs
+
+pep8:
+    options:
+        max-line-length: 150
+
+pep257:
+    run: false
+    disable:
+        - D203
+        - D105
+pyroma:
+    run: true
+
+vulture:
+    run: false

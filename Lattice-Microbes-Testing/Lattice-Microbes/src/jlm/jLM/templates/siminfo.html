@@ -1,0 +1,134 @@
+<h2>{{name}}</h2>
+
+{% include "region.html" %}
+
+<table class='jLMtbl'>
+    <caption>Simulation</caption>
+    <tr>
+        <th> Time step </th>
+        <td class='jLMparam jLMnum'> {{timeStep}} </td>
+    </tr>
+    <tr>
+        <th> Simulation time </th>
+        <td class='jLMparam jLMnum'> {{simTime}} </td>
+    </tr>
+    <tr>
+        <th> Lattice write interval </th>
+        <td class='jLMparam jLMnum'> {{latticeWriteInterval}} </td>
+    </tr>
+    <tr>
+        <th scope='row'> Particle count write interval </th>
+        <td class='jLMparam jLMnum'> {{speciesWriteInterval}} </td>
+    </tr>
+{% if replicates %}
+    <tr>
+        <th scope='row'> Number of replicates </th>
+        <td class='jLMparam jLMnum'> {{nReplicates}} </td>
+    </tr>
+{% endif %}
+</table>
+
+{% if replicates %}
+<table class='jLMtbl'>
+    <caption>Trajectory data</caption>
+    <tr>
+        <th scope='col'> Replicate </th>
+        <th scope='col'> Simulated time </th>
+        <th scope='col'> Lattice times </th>
+        <th scope='col'> Count times </th>
+        <th scope='col'> Initial count </th>
+        <th scope='col'> Final count </th>
+    </tr>
+    {% for r in replicates %}
+    <tr> 
+        <td><tt>{{r.label}}</tt></td>
+        <td class='jLMnum'>{{r.time}}</td>
+        <td class="jLMnum">{{r.latticeEvals}}</td>
+        <td class="jLMnum">{{r.speciesEvals}}</td>
+        <td class="jLMnum">{{r.startCt}}</td>
+        <td class="jLMnum">{{r.endCt}}</td>
+    </tr> 
+    {% endfor %}
+</table>
+{% endif %}
+
+
+
+<table class='jLMtbl'>
+    <caption>Lattice</caption>
+    <tr>
+        <th scope='row'> Dimensions </th>
+        <td class='jLMparam jLMnum'>{{dims}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Particles per site </th>
+        <td class='jLMparam jLMnum'>{{pps}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Bytes per particle </th>
+        <td class='jLMparam jLMnum'>{{bytesPerParticle}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Lattice spacing </th>
+        <td class='jLMparam jLMnum'> {{latticeSpacing}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Subvolume size </th>
+        <td class='jLMparam jLMnum'> {{siteVol}} </td>
+    </tr>
+</table>
+
+
+<table class='jLMtbl'>
+    <caption>Model summary</caption>
+    <tr>
+        <th scope='row'> Output file </th>
+        <td class='jLMparam'> <tt>{{filename}}</tt> </td>
+    </tr>
+    <tr>
+        <th scope='row'> Number of species </th>
+        <td class='jLMparam jLMnum'>{{nsps}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Number of reactions </th>
+        <td class='jLMparam jLMnum'>{{nrxns}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Number of region types </th>
+        <td class='jLMparam jLMnum'>{{nsts}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Number of rate constants </th>
+        <td class='jLMparam jLMnum'>{{nrconst}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Number of diffusion constants </th>
+        <td class='jLMparam jLMnum'>{{ndconst}}</td>
+    </tr>
+    <tr>
+        <th scope='row'> Number of placed particles</th>
+        <td class='jLMparam jLMnum'>{{nPlacedParticles}}</td>
+    </tr>
+</table>
+
+<table class='jLMtbl'>
+    <caption>Region summary</caption>
+    <tr>
+        <th scope='col'> Region </th>
+        <th scope='col'> Subvolumes </th>
+        <th scope='col'> Volume </th>
+        <th scope='col'> Particles</th>
+        <th scope='col'> Concentration </th>
+        <th scope='col'> Occupancy </th>
+    </tr>
+    {% for r in regions %}
+    <tr>
+        <td>{{r.label}}</td>
+        <td class='jLMnum'>{{r.siteCount}}</td>
+        <td class='jLMnum'>{{r.volume}}</td>
+        <td class='jLMnum'>{{r.counts}}</td>
+        <td class='jLMnum'>{{r.conc}}</td>
+        <td class='jLMnum'>{{r.occ}}</td>
+    </tr>
+    {% endfor %}
+</table>

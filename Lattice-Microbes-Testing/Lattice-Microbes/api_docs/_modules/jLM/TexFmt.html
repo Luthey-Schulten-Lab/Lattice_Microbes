@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.TexFmt &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../jLM.html">jLM</a> &raquo;</li>
+        
+      <li>jLM.TexFmt</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for jLM.TexFmt</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2016-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Tyler M. Earnest</span>
+<span class="c1"># </span>
+
+<span class="sd">&quot;&quot;&quot;Dump simulation parameters as LaTeX&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">DisplayUtils</span> <span class="k">as</span> <span class="n">Dsp</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Template</span> <span class="k">as</span> <span class="n">Tmp</span>
+
+<span class="k">def</span> <span class="nf">_texHeader</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;% </span><span class="si">{0.name}</span><span class="s2">: (</span><span class="si">{0.filename}</span><span class="s2">), {1:%Y}-{1:%m}-{1:</span><span class="si">%d</span><span class="s2">} {1:%H}:{1:%M}:{1:%S}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()),</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="regionTable"><a class="viewcode-back" href="../../_autosummary/jLM.TexFmt.html#jLM.TexFmt.regionTable">[docs]</a><span class="k">def</span> <span class="nf">regionTable</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">regions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write a TeX formated table of regions</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        net (:py:class:`~jLM.RDME.SpatialModel`):</span>
+<span class="sd">            Model</span>
+<span class="sd">        regions ([:py:class:`~jLM.Types.Region`]):</span>
+<span class="sd">            Regions to report</span>
+<span class="sd">        file (file-like):</span>
+<span class="sd">            File object of output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="k">if</span> <span class="n">regions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">regions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">regionList</span><span class="p">)</span> 
+
+    <span class="n">ctx</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">regions</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">particleStatistics</span><span class="p">()</span>
+    <span class="n">annotate</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">:</span>
+        <span class="n">annotate</span> <span class="o">|=</span> <span class="n">r</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;regions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="nb">dict</span><span class="p">(</span> <span class="n">label</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">_TeX</span><span class="p">(),</span>
+                      <span class="n">counts</span><span class="o">=</span><span class="n">cs</span><span class="p">[</span><span class="s2">&quot;countByRegion&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">],</span>
+                      <span class="n">conc</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">cs</span><span class="p">[</span><span class="s2">&quot;concByRegion&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span><span class="o">*</span><span class="mf">1e6</span><span class="p">),</span>
+                      <span class="n">volume</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">cs</span><span class="p">[</span><span class="s2">&quot;regionVol&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span><span class="o">*</span><span class="mf">1e15</span><span class="p">),</span>
+                      <span class="n">siteCount</span><span class="o">=</span><span class="n">cs</span><span class="p">[</span><span class="s2">&quot;regionCounts&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">],</span>
+                      <span class="n">annotation</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">annotation</span><span class="p">,</span>
+                      <span class="n">occ</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">cs</span><span class="p">[</span><span class="s2">&quot;countByRegion&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span><span class="o">/</span><span class="n">cs</span><span class="p">[</span><span class="s2">&quot;regionCounts&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span><span class="o">/</span><span class="n">net</span><span class="o">.</span><span class="n">pps</span><span class="p">)))</span>
+    <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;annotationCol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotate</span>
+
+    <span class="n">_texHeader</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Tmp</span><span class="o">.</span><span class="n">j2render</span><span class="p">(</span><span class="s2">&quot;regionTable.tex&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="parameterTable"><a class="viewcode-back" href="../../_autosummary/jLM.TexFmt.html#jLM.TexFmt.parameterTable">[docs]</a><span class="k">def</span> <span class="nf">parameterTable</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write a TeX formated table of parameters</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        net (:py:class:`~jLM.RDME.SpatialModel`):</span>
+<span class="sd">            Model</span>
+<span class="sd">        parameters ([:py:class:`~jLM.Types.RateConst`]):</span>
+<span class="sd">            Parameters to report</span>
+<span class="sd">        file (file-like):</span>
+<span class="sd">            File object of output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">)</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">),</span> <span class="n">params</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="mi">0</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">params</span><span class="p">}</span>
+
+    <span class="n">ds</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">params</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">rx</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">reactionList</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">counts</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">rate</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">_transitionRates</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">counts</span><span class="p">[</span><span class="n">ds</span><span class="p">[</span><span class="n">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="n">annotate</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">annotate</span> <span class="o">|=</span> <span class="n">p</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> 
+                                 <span class="n">symbol</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">_TeXMath</span><span class="p">(),</span> 
+                                 <span class="n">annotation</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">annotation</span><span class="p">,</span>
+                                 <span class="n">value</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+                                 <span class="n">unit</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texUnits</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">_unit</span><span class="p">),</span>
+                                 <span class="n">count</span><span class="o">=</span><span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">]))</span> 
+
+    <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;annotationCol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotate</span>
+
+    <span class="n">_texHeader</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Tmp</span><span class="o">.</span><span class="n">j2render</span><span class="p">(</span><span class="s2">&quot;parameterTable.tex&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="reactionTable"><a class="viewcode-back" href="../../_autosummary/jLM.TexFmt.html#jLM.TexFmt.reactionTable">[docs]</a><span class="k">def</span> <span class="nf">reactionTable</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">rxns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write a TeX formated table of reactions</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        net (:py:class:`~jLM.RDME.SpatialModel`):</span>
+<span class="sd">            Model</span>
+<span class="sd">        rxns ([:py:class:`~jLM.Types.Reaction`]):</span>
+<span class="sd">            Reactions to report</span>
+<span class="sd">        file (file-like):</span>
+<span class="sd">            File object of output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="k">if</span> <span class="n">rxns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rxns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">reactionList</span><span class="p">)</span>
+
+    <span class="n">ctx</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">rxns</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">annotate</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rxns</span><span class="p">:</span>
+        <span class="n">annotate</span> <span class="o">|=</span> <span class="n">r</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">r</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;rxns&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">annotation</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">annotation</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">r</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">annotation</span><span class="p">,</span>
+                                <span class="n">idx</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
+                                <span class="n">rxn</span><span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">_TeXMath</span><span class="p">(),</span>
+                                <span class="n">reg</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">regionList</span><span class="p">[</span><span class="n">rgidx</span><span class="p">]</span><span class="o">.</span><span class="n">_TeX</span><span class="p">()</span> <span class="k">for</span> <span class="n">rxidx</span><span class="p">,</span> <span class="n">rgidx</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">_reactionLocations</span> <span class="k">if</span> <span class="n">rxidx</span><span class="o">==</span><span class="n">r</span><span class="o">.</span><span class="n">idx</span><span class="p">),</span>
+                                <span class="n">rate</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+                                <span class="n">rateUnit</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texUnits</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">_unit</span><span class="p">)))</span>
+
+    <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;annotationCol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotate</span>
+
+    <span class="n">_texHeader</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Tmp</span><span class="o">.</span><span class="n">j2render</span><span class="p">(</span><span class="s2">&quot;reactionTable.tex&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="modelTables"><a class="viewcode-back" href="../../_autosummary/jLM.TexFmt.html#jLM.TexFmt.modelTables">[docs]</a><span class="k">def</span> <span class="nf">modelTables</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write a TeX formated description of the model</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        net (:py:class:`~jLM.RDME.SpatialModel`):</span>
+<span class="sd">            Model</span>
+<span class="sd">        file (file-like):</span>
+<span class="sd">            File object of output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span>                 <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+               <span class="n">filename</span>             <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+               <span class="n">nsps</span>                 <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">speciesList</span><span class="p">),</span>
+               <span class="n">nrxns</span>                <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">reactionList</span><span class="p">),</span>
+               <span class="n">nsts</span>                 <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">regionList</span><span class="p">),</span>
+               <span class="n">nrconst</span>              <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">),</span>
+               <span class="n">ndconst</span>              <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">),</span>
+               <span class="n">siteVol</span>              <span class="o">=</span> <span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="mf">1e15</span><span class="o">*</span><span class="n">net</span><span class="o">.</span><span class="n">siteV</span><span class="p">),</span>
+               <span class="n">volumeUnit</span>           <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\mathrm</span><span class="si">{fl}</span><span class="s2">&quot;</span><span class="p">,</span>
+               <span class="n">latticeSpacing</span>       <span class="o">=</span> <span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">net</span><span class="o">.</span><span class="n">latticeSpacing</span><span class="p">),</span>
+               <span class="n">lengthUnit</span>           <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\mathrm</span><span class="si">{nm}</span><span class="s2">&quot;</span><span class="p">,</span>
+               <span class="n">nPlacedParticles</span>     <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">_particlePlacement</span><span class="p">),</span>
+               <span class="n">pps</span>                  <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">pps</span><span class="p">,</span>
+               <span class="n">bytesPerParticle</span>     <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">bytesPerParticle</span><span class="p">,</span>
+               <span class="n">regions</span>              <span class="o">=</span> <span class="p">[],</span>
+               <span class="n">timeStepUnit</span>         <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\upmu\mathrm</span><span class="si">{s}</span><span class="s1">&#39;</span><span class="p">,</span>
+               <span class="n">timeUnit</span>             <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\mathrm</span><span class="si">{s}</span><span class="s1">&#39;</span><span class="p">,</span>
+               <span class="n">timeStep</span>             <span class="o">=</span> <span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="mf">1e6</span><span class="o">*</span><span class="n">net</span><span class="o">.</span><span class="n">timestep</span><span class="p">),</span>
+               <span class="n">simTime</span>              <span class="o">=</span> <span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">simulationTime</span><span class="p">),</span>
+               <span class="n">hookInterval</span>         <span class="o">=</span> <span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">hookInterval</span><span class="p">),</span>
+               <span class="n">latticeWriteInterval</span> <span class="o">=</span> <span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">latticeWriteInterval</span><span class="p">),</span>
+               <span class="n">speciesWriteInterval</span> <span class="o">=</span> <span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">speciesWriteInterval</span><span class="p">),</span>
+               <span class="n">concUnit</span>             <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\upmu\mathrm</span><span class="si">{M}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;nReplicates&#39;</span><span class="p">]</span><span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">])</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;replicates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]:</span>
+            <span class="n">tsp</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">][</span><span class="s1">&#39;SpeciesCountTimes&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">tlt</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">][</span><span class="s1">&#39;LatticeTimes&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">nsp</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">][</span><span class="s1">&#39;SpeciesCountTimes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">nlt</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">][</span><span class="s1">&#39;LatticeTimes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ct0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">][</span><span class="s1">&#39;SpeciesCounts&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:])</span>
+            <span class="n">ct1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">][</span><span class="s1">&#39;SpeciesCounts&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+
+            <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;replicates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">Dsp</span><span class="o">.</span><span class="n">texfmt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">tsp</span><span class="p">,</span><span class="n">tlt</span><span class="p">)),</span>
+                                          <span class="n">latticeEvals</span><span class="o">=</span><span class="n">nlt</span><span class="p">,</span> <span class="n">speciesEvals</span><span class="o">=</span><span class="n">nsp</span><span class="p">,</span> <span class="n">startCt</span><span class="o">=</span><span class="n">ct0</span><span class="p">,</span> <span class="n">endCt</span><span class="o">=</span><span class="n">ct1</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+
+    <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;lz&#39;</span><span class="p">],</span> <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;ly&#39;</span><span class="p">],</span> <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;lx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">_texHeader</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Tmp</span><span class="o">.</span><span class="n">j2render</span><span class="p">(</span><span class="s2">&quot;siminfo.tex&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.SBMLReader &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pySTDLM.StandardCells" href="pySTDLM.StandardCells.html" />
+    <link rel="prev" title="pySTDLM.PostProcessing" href="pySTDLM.PostProcessing.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pySTDLM.SBMLReader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pySTDLM.SBMLReader.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pySTDLM.SBMLReader">
+<span id="pystdlm-sbmlreader"></span><h1>pySTDLM.SBMLReader<a class="headerlink" href="#module-pySTDLM.SBMLReader" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.SBMLReader.getRate" title="pySTDLM.SBMLReader.getRate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRate</span></code></a>(rxn,&nbsp;rcts,&nbsp;prds,&nbsp;sim,&nbsp;globalP,&nbsp;globalPV)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.SBMLReader.importSBMLModel" title="pySTDLM.SBMLReader.importSBMLModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">importSBMLModel</span></code></a>(filename)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.SBMLReader.importSBMLModelL3V1" title="pySTDLM.SBMLReader.importSBMLModelL3V1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">importSBMLModelL3V1</span></code></a>(model,&nbsp;sim[,&nbsp;region])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.SBMLReader.readSBMLtoCME" title="pySTDLM.SBMLReader.readSBMLtoCME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readSBMLtoCME</span></code></a>(sim,&nbsp;filename)</td>
+<td>Read an SBML file for the reaction model for a CME simulation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.SBMLReader.readSBMLtoRDME" title="pySTDLM.SBMLReader.readSBMLtoRDME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readSBMLtoRDME</span></code></a>(sim,&nbsp;filename)</td>
+<td>Read an SBML file for the reaction model for a RDME simulation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.SBMLReader.readSBMLtoRegion" title="pySTDLM.SBMLReader.readSBMLtoRegion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readSBMLtoRegion</span></code></a>(sim,&nbsp;region,&nbsp;filename)</td>
+<td>Read an SBML file for the reaction model into a specific region of the RDME simulation</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pySTDLM.SBMLReader.getRate">
+<code class="descclassname">pySTDLM.SBMLReader.</code><code class="descname">getRate</code><span class="sig-paren">(</span><em>rxn</em>, <em>rcts</em>, <em>prds</em>, <em>sim</em>, <em>globalP</em>, <em>globalPV</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/SBMLReader.html#getRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.SBMLReader.getRate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.SBMLReader.importSBMLModel">
+<code class="descclassname">pySTDLM.SBMLReader.</code><code class="descname">importSBMLModel</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/SBMLReader.html#importSBMLModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.SBMLReader.importSBMLModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.SBMLReader.importSBMLModelL3V1">
+<code class="descclassname">pySTDLM.SBMLReader.</code><code class="descname">importSBMLModelL3V1</code><span class="sig-paren">(</span><em>model</em>, <em>sim</em>, <em>region=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/SBMLReader.html#importSBMLModelL3V1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.SBMLReader.importSBMLModelL3V1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.SBMLReader.readSBMLtoCME">
+<code class="descclassname">pySTDLM.SBMLReader.</code><code class="descname">readSBMLtoCME</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/SBMLReader.html#readSBMLtoCME"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.SBMLReader.readSBMLtoCME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an SBML file for the reaction model for a CME simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – A CMESimulation object</li>
+<li><strong>filename</strong> – A SBML filename/filepath</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.SBMLReader.readSBMLtoRDME">
+<code class="descclassname">pySTDLM.SBMLReader.</code><code class="descname">readSBMLtoRDME</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/SBMLReader.html#readSBMLtoRDME"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.SBMLReader.readSBMLtoRDME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an SBML file for the reaction model for a RDME simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – A RDMESimulation object</li>
+<li><strong>filename</strong> – A SBML filename/filepath</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.SBMLReader.readSBMLtoRegion">
+<code class="descclassname">pySTDLM.SBMLReader.</code><code class="descname">readSBMLtoRegion</code><span class="sig-paren">(</span><em>sim</em>, <em>region</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/SBMLReader.html#readSBMLtoRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.SBMLReader.readSBMLtoRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an SBML file for the reaction model into a specific region of the RDME simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – A RDMESimulation object</li>
+<li><strong>region</strong> – A region name that already exists in the RDMESimulation</li>
+<li><strong>filename</strong> – A SBML filename/filepath</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pySTDLM.StandardCells.html" class="btn btn-neutral float-right" title="pySTDLM.StandardCells" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pySTDLM.PostProcessing.html" class="btn btn-neutral" title="pySTDLM.PostProcessing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

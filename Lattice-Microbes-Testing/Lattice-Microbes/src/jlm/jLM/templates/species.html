@@ -1,0 +1,170 @@
+<div class="jLMbigSps">${{tex}}$</div>
+{% if annotation %}
+<div class="jLMdescription">{{annotation}}</div>
+{% endif %}
+<table class='jLMtbl'>
+    <tr>
+        <th scope='row'>Index</th>
+        <td class='jLMparam'><tt>{{idx}}</tt></td>
+    </tr>
+    <tr>
+        <th scope='row'>Label</th>
+        <td class='jLMparam'><tt>{{label}}</tt></td>
+    </tr>
+    <tr>
+        <th scope='row'>Total counts</th>
+        <td class='jLMparam jLMnum'>{{totalCount}}</td>
+    </tr>
+    <tr>
+        <th scope='row'>Total reactions</th>
+        <td class='jLMparam jLMnum'>{{totalReactions}}</td>
+    </tr>
+    {% for k,v in otherAttrs.items() %}
+    <tr>
+        <th scope='row'>{{k}}</th>
+        <td class='jLMparam jLMnum'>{{v|e}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if nPlaced == 0 %}
+{% elif nPlaced <= 200 %}
+<table class='jLMtbl'>
+    <caption>Species placement</caption>
+    <tr>
+        <th scope='col'> Region </th>
+        <th scope='col'> Position </th>
+        <th scope='col'> Count </th>
+    </tr>
+    {% for p in placement %}
+    <tr>
+        <td>{{ p.region }}</td>
+        <td class="jLMnum">({{ p.x }}, {{ p.y }}, {{ p.z }})</td>
+        <td class="jLMnum">{{ p.count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<table class='jLMtbl'>
+    <caption>Species placement</caption>
+    <tr>
+        <th scope='col'> Region </th>
+        <th scope='col'> Count </th>
+    </tr>
+    {% for p in placement %}
+    <tr>
+        <td>{{ p.region }}</td>
+        <td class="jLMnum">{{ p.count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if distribution %}
+<table class='jLMtbl'>
+    <caption>Species distribution</caption>
+    <tr>
+        <th scope='col'> Region </th>
+        <th scope='col'> Count </th>
+        <th scope='col'> Concentration </th>
+    </tr>
+    {% for p in distribution %}
+    <tr>
+        <td>{{ p.region }}</td>
+        <td class="jLMnum">{{ p.count }}</td>
+        <td class="jLMnum">{{ p.conc }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if rxns %}
+{% include "reactionTable.html" %}
+{% endif %}
+
+{% if diffTbl %}
+<table class='diffTbl'>
+    <caption>Diffusion rates</caption>
+    <tr>
+        <td class='units'></td>
+        <td class='units'></td>
+        <td colspan='{{diffTbl|length - 1}}'>Destination</td>
+    </tr>
+    {% for row in diffTbl %}
+    {% set rowIdx = loop.index %}
+    <tr>
+    {% if loop.first %}
+        {% for d in row %}
+        {% if loop.first %}
+        <td class='units'></td>
+        <td class='units'>{{d.v}}</td>
+        {% else %}
+        <td class='chdr'>{{d.v}}</td>
+        {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for d in row %}
+        {% if loop.first %}
+        {% if rowIdx == 2 %}
+        <td rowspan='{{diffTbl|length}}'><span class='rot'>Origin</span></td>
+        {% endif %}
+        <td class='rhdr'>{{d.v}}</td>
+        {% else %}
+        {% if d.style == "zero" %}
+        <td class='noWrap zero jLMnum'>{{d.v}}</td>
+        {% elif d.style == "inf" %}
+        <td class='noWrap inf jLMnum'>{{d.v}}</td>
+        {% elif d.style == 'undef' %}
+        <td class='noWrap undef jLMnum'>undefined</td>
+        {% else %}
+        <td class='jLMnum noWrap'>{{d.v}}</td>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if trajData %}
+<div class="jLMflex">
+    <div class="trajLeft">
+        <table class='jLMtbl'>
+            <caption>Trajectory statistics</caption>
+            <tr>
+                <th scope='row'> Replicate </th>
+                <td class='jLMparam'> <tt>{{trajData.replicate}}</tt> </td>
+            </tr>
+            <tr>
+                <th scope='row'> Duration </th>
+                <td class='jLMparam jLMnum'> {{trajData.duration}} </td>
+            </tr>
+            <tr>
+                <th scope='row'> Start count </td>
+                <td class='jLMparam jLMnum'>{{trajData.startCt}}</td>
+            </tr>
+            <tr>
+                <th scope='row'> Mean count </td>
+                <td class='jLMparam jLMnum'>{{trajData.meanCt}}</td>
+            </tr>
+            <tr>
+                <th scope='row'> End count </td>
+                <td class='jLMparam jLMnum'>{{trajData.endCt}}</td>
+            </tr>
+            <tr>
+                <th scope='row'> Minimum </td>
+                <td class='jLMparam jLMnum'>{{trajData.minCt}}</td>
+            </tr>
+            <tr>
+                <th scope='row'> Maximum </td>
+                <td class='jLMparam jLMnum'>{{trajData.maxCt}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="trajRight">
+        {{ trajData.svg }}
+    </div>
+</div>
+{% endif %}
+

@@ -1,0 +1,97 @@
+\pdfminorversion=5
+
+\usepackage[usenames]{color}
+
+% Import some basic packages.
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{chemarr}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{rotating}
+\usepackage{setspace}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+
+% Define some colors.
+\definecolor{orange}{rgb}{1,0.65,0}
+
+% Set the page style.
+\usepackage[left=1.0in,top=1.0in,right=1.0in,bottom=1.0in,nohead,foot=0.5in]{geometry}
+\usepackage{times}
+
+% Turn off paragraph indentation.
+\setlength{\parindent}{0.0in}
+
+% Set the table of contents style
+\usepackage{tocloft}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\cfttoctitlefont}{\Large\bf}
+\renewcommand{\cftloftitlefont}{\Large\bf}
+\renewcommand{\cftlottitlefont}{\Large\bf}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftchappresnum}{Chapter } 
+\newlength{\mylen} % a "scratch" length 
+\settowidth{\mylen}{\cftchappresnum\cftchapaftersnum} % extra space 
+\addtolength{\cftchapnumwidth}{\mylen} % add the extra space 
+\makeatletter
+\newcommand*\updatechaptername{%
+   \addtocontents{toc}{\protect\renewcommand*\protect\cftchappresnum{\@chapapp\ }}
+}
+\makeatother
+
+% Set the bibliography style.
+%\usepackage[square,sort&compress]{natbib}
+%\renewcommand{\cite}[1]{\citep{#1}}
+%\renewcommand{\citet}[2]{#1 \citep{#2}}
+
+% Load cite and set the default behavior of the cite command. (Enable EITHER natbib OR cite).
+\usepackage{cite}
+
+% Set the section heading styles.
+\usepackage{sectsty}
+\chapterfont{\Large}
+\sectionfont{\large}
+\subsectionfont{\large}
+
+% Font definitions.
+\newcommand{\codesize}{\footnotesize}
+
+% Editing commands.
+\newcommand{\ed} [1] {\textcolor{blue}{#1}}
+\newcommand{\cmt} [1] {\textcolor{red}{(#1)}}
+\newcommand{\gr} [1] {\textcolor{orange}{#1}}
+\newcommand{\todo} [1] {\textcolor{green}{(TODO: #1)}}
+
+% Make latex more likely to put figures and text on the same page.
+\renewcommand\floatpagefraction{.9}
+\renewcommand\topfraction{.9}
+\renewcommand\bottomfraction{.9}
+\renewcommand\textfraction{.1}   
+\setcounter{totalnumber}{50}
+\setcounter{topnumber}{50}
+\setcounter{bottomnumber}{50}
+
+% Set the table and figure label style.
+\newcommand{\tablesize}{\small}
+\renewcommand\tablename{\tablesize Table}
+\newcommand{\figuresize}{\small}
+\renewcommand\figurename{\figuresize Figure}
+
+% Courtesy caption shortcut.
+\newcommand{\courtesy}[1]{(\itshape Figure courtesy of #1)}
+
+% Create a symbolic footnote command.
+\long\def\symbolfootnote[#1]#2{\begingroup%
+\def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{#2}\endgroup}
+
+% Macros.
+\newcommand{\file}[1]{{\tt\small #1}}
+\newcommand{\gui}[1]{{\bf #1}}
+\newcommand{\command}[2]{{\tt\small [user@host #1]\$ {#2}}}
+\newcommand{\commandcont}[1]{{\tt\small \, \hspace{1in}#1}}
+ 
+\newcommand{\Figure}[1]{Figure \ref{#1}}
+

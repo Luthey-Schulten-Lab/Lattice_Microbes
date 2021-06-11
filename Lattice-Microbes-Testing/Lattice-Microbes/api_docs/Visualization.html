@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Visualization using VMD &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lattice Microbes API Reference" href="API.html" />
+    <link rel="prev" title="Installation" href="Installation.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Visualization using VMD</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Visualization.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="visualization-using-vmd">
+<h1>Visualization using VMD<a class="headerlink" href="#visualization-using-vmd" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/">Visual Molecular Dynamics</a> can be used
+to visualize RDME simulation output. If LM was built and installed with VMD
+support, the required molfile plugin to load LM trajectories will be installed
+automatically. VMD has excellent <a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/current/docs.html">documentation</a>,  so only LM specific
+features of the plugin will be discussed here.</p>
+<p>After loading a trajectory, both the site type lattice and the RDME particles
+will be displayed as points. Since this will be cluttered and hard to
+interpret, the <code class="docutils literal notranslate"><span class="pre">atomselect</span></code> syntax used in the Representations dialog can be
+used to select which components of the simulation to display. The lattice
+geometry can be visualized using the selector <code class="docutils literal notranslate"><span class="pre">segname</span> <span class="pre">SITE</span></code>, where as the
+chemical particles can be visualized using <code class="docutils literal notranslate"><span class="pre">segname</span> <span class="pre">RDME</span></code>. For example, for a
+cell <span class="math notranslate nohighlight">\(1\;\mu\mathrm{m}\)</span> thick with its  longest dimension aligned with
+the <span class="math notranslate nohighlight">\(z\)</span> axis, the <code class="docutils literal notranslate"><span class="pre">atomselect</span></code> syntax to show only the bottom part of
+the cell is</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>segname SITE and name membrane and y &lt; 5000
+</pre></div>
+</div>
+<p>where the name of the membrane site type is <code class="docutils literal notranslate"><span class="pre">membrane</span></code>, and we display only
+the bottom <span class="math notranslate nohighlight">\(500\;\mathrm{nm}\)</span> of the  cell. Note that units in VMD are in
+Ångstroms, not nanometers.</p>
+<p>Consider the system</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{A} + \mathrm{B} &amp;\to \mathrm{AB}\\
+\mathrm{A} + \mathrm{C} &amp;\to \mathrm{AC}\end{split}\]</div>
+<p>To view only the dimers in the simulation volume, one could write</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>segname RDME and (name AB or name AC)
+</pre></div>
+</div>
+<p>or instead use a regular expression</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>segname RDME and name &quot;A[BC]&quot;
+</pre></div>
+</div>
+<p>By combining multiple representations with different <code class="docutils literal notranslate"><span class="pre">atomselect</span></code> statements
+and drawing methods, it is possible to quickly create interactively
+visualizations in VMD which allow the dynamics of interest to be investigated.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="API.html" class="btn btn-neutral float-right" title="Lattice Microbes API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

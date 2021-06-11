@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.StandardReactionSystems &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.StandardReactionSystems</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.StandardReactionSystems</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">from</span> <span class="nn">pyLM</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pyLM.CME</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pyLM.RDME</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="c1"># ######################</span>
+<span class="c1"># E. coli MinDE System #</span>
+<span class="c1"># ######################</span>
+<div class="viewcode-block" id="addMinDESystem"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactionSystems.html#pySTDLM.StandardReactionSystems.addMinDESystem">[docs]</a><span class="k">def</span> <span class="nf">addMinDESystem</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Adds the MinDE system in Ecoli as a standard reaction network.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A RDMESimulation object with the &quot;cytoplasm&quot; and &quot;membrane&quot; regions defined</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        A pointer to the simulation object that was passed in</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;addMinDESystem Failed&#39;</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: In addMinDESystem, argument is not RDMESimulation.&quot;</span><span class="p">)</span>
+
+	<span class="n">species</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;minDatp&#39;</span><span class="p">,</span> <span class="s1">&#39;minDadp&#39;</span><span class="p">,</span> <span class="s1">&#39;minE&#39;</span><span class="p">,</span> <span class="s1">&#39;minDm&#39;</span><span class="p">,</span> <span class="s1">&#39;minDEm&#39;</span><span class="p">]</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+
+	<span class="c1"># Modify the cytoplasm to add diffusion rates and reactions</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">setDefaultDiffusionRate</span><span class="p">(</span><span class="mf">2.5e-12</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;minDadp&#39;</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="s1">&#39;minDatp&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+	<span class="c1"># Modify the membrane to add reactions</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;membrane&#39;</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">setDefaultDiffusionRate</span><span class="p">(</span><span class="mf">2.5e-12</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="s1">&#39;minDm&#39;</span><span class="p">,</span>  <span class="n">rate</span><span class="o">=</span> <span class="mf">0.0125e-6</span> <span class="o">/</span> <span class="n">nm</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">latticeSpacing</span><span class="p">))</span> \
+		<span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="s1">&#39;minDEm&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="s1">&#39;minE&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;minDatp&#39;</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="s1">&#39;minDm&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;minDatp&#39;</span><span class="p">,</span><span class="s1">&#39;minDm&#39;</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;minDm&#39;</span><span class="p">,</span><span class="s1">&#39;minDm&#39;</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="mf">9e6</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;minDm&#39;</span><span class="p">,</span><span class="s1">&#39;minE&#39;</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="s1">&#39;minDEm&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">5.56e7</span><span class="p">)</span> \
+		<span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;minDEm&#39;</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;minE&#39;</span><span class="p">,</span><span class="s1">&#39;minDadp&#39;</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+	<span class="c1"># Set diffusive properties between regions</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="s1">&#39;minDatp&#39;</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">2.5e-12</span> <span class="p">)</span>
+
+	<span class="c1"># Populate the model with particles</span>
+	<span class="c1"># TODO: Compute the volume of the cell and modify counts</span>
+	<span class="c1">#sim.addParticles(species=&#39;minDatp&#39;, region=&#39;cytoplasm&#39;, count=1758)</span>
+	<span class="c1">#sim.addParticles(species=&#39;minDadp&#39;, region=&#39;cytoplasm&#39;, count=1758)</span>
+	<span class="c1">#sim.addParticles(species=&#39;minE&#39;,    region=&#39;cytoplasm&#39;, count=914)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+
+
+<span class="c1"># #####################</span>
+<span class="c1"># E. coli Lac Systems #</span>
+<span class="c1"># #####################</span>
+<div class="viewcode-block" id="addLacTwoStateSystem"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactionSystems.html#pySTDLM.StandardReactionSystems.addLacTwoStateSystem">[docs]</a><span class="k">def</span> <span class="nf">addLacTwoStateSystem</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">inducerType</span> <span class="o">=</span> <span class="s1">&#39;TMG&#39;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Lac switch reaction with two states of the DNA.</span>
+
+<span class="sd">    Reference: E. Roberts, A. Magis, J.O. Ortiz, W. Baumeister, Z. Luthey-Schulten.</span>
+<span class="sd">      Noise Contributions in an Inducible Genetic Switch: A Whole-Cell</span>
+<span class="sd">      Simulation Study. PLoS Comput. Bio. 7(3): 2011, e1002010.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A CMESimulation or RDMESimulation object with the &quot;cytoplasm&quot; region defined</span>
+<span class="sd">        inducerType:</span>
+<span class="sd">            The type of inducer used for the switch, either TMG or IPTG</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A pointer to the simulation object that was passed in</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Bulletproofing</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">inducerType</span> <span class="o">!=</span> <span class="s1">&#39;TMG&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">inducerType</span> <span class="o">!=</span> <span class="s1">&#39;IPTG&#39;</span><span class="p">):</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;ERROR: When attaching E. coli two state switch, second argument not valid string, either TMG or IPTG&#39;</span><span class="p">)</span>
+
+	<span class="c1"># Define species</span>
+	<span class="n">species</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;R2&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">,</span><span class="s1">&#39;R2O&#39;</span><span class="p">,</span><span class="s1">&#39;IR2&#39;</span><span class="p">,</span><span class="s1">&#39;IR2O&#39;</span><span class="p">,</span><span class="s1">&#39;I2R2&#39;</span><span class="p">,</span><span class="s1">&#39;I2R2O&#39;</span><span class="p">,</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;Iex&#39;</span><span class="p">,</span><span class="s1">&#39;YI&#39;</span><span class="p">]</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">(</span><span class="n">species</span><span class="p">)</span>
+	
+	<span class="c1"># Get cytosol</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">cytregion</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">)</span>
+		<span class="n">extregion</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+		<span class="n">memregion</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;membrane&#39;</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">CMESimulation</span><span class="p">):</span>
+		<span class="n">cytregion</span><span class="o">=</span><span class="n">sim</span>
+		<span class="n">extregion</span><span class="o">=</span><span class="n">sim</span>
+		<span class="n">memregion</span><span class="o">=</span><span class="n">sim</span>
+
+	<span class="c1"># Add reactions #</span>
+	<span class="n">scalar</span> <span class="o">=</span> <span class="mf">2.076e-9</span> <span class="c1"># Rate conversion from experiments to stochastic</span>
+	<span class="c1"># Lac operon regulation</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;R2&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">),</span>   <span class="n">product</span><span class="o">=</span><span class="s1">&#39;R2O&#39;</span><span class="p">,</span>        <span class="n">rate</span><span class="o">=</span><span class="mf">2.43e6</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;IR2&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">),</span>  <span class="n">product</span><span class="o">=</span><span class="s1">&#39;IR2O&#39;</span><span class="p">,</span>       <span class="n">rate</span><span class="o">=</span><span class="mf">1.21e6</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I2R2&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="s1">&#39;I2R2O&#39;</span><span class="p">,</span>      <span class="n">rate</span><span class="o">=</span><span class="mf">2.43e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;R2O&#39;</span><span class="p">,</span>        <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;R2&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">),</span>   <span class="n">rate</span><span class="o">=</span><span class="mf">6.30e-4</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;IR2O&#39;</span><span class="p">,</span>       <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;IR2&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">),</span>  <span class="n">rate</span><span class="o">=</span><span class="mf">6.30e-4</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;I2R2O&#39;</span><span class="p">,</span>      <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I2R2&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="mf">3.15e-1</span><span class="p">)</span>
+
+	<span class="c1"># Transcription, translation, and degredation</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;O&#39;</span><span class="p">,</span>          <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span><span class="s1">&#39;mY&#39;</span><span class="p">),</span>   <span class="n">rate</span><span class="o">=</span><span class="mf">1.26e-1</span><span class="p">)</span>
+	<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span>         <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">),</span>   <span class="n">rate</span><span class="o">=</span><span class="mf">4.44e-2</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span>         <span class="n">product</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>           <span class="n">rate</span><span class="o">=</span><span class="mf">1.11e-2</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span>         <span class="n">product</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>           <span class="n">rate</span><span class="o">=</span><span class="mf">1.11e-2</span><span class="p">)</span>
+	<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span>          <span class="n">product</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>           <span class="n">rate</span><span class="o">=</span><span class="mf">2.10e-4</span><span class="p">)</span>
+
+	<span class="c1"># Inducer-repressor interactions</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">inducerType</span> <span class="o">==</span> <span class="s1">&#39;TMG&#39;</span><span class="p">):</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;R2&#39;</span><span class="p">),</span>   <span class="n">product</span><span class="o">=</span><span class="s1">&#39;IR2&#39;</span><span class="p">,</span>        <span class="n">rate</span><span class="o">=</span><span class="mf">2.27e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;IR2&#39;</span><span class="p">),</span>  <span class="n">product</span><span class="o">=</span><span class="s1">&#39;I2R2&#39;</span><span class="p">,</span>       <span class="n">rate</span><span class="o">=</span><span class="mf">1.14e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;R2O&#39;</span><span class="p">),</span>  <span class="n">product</span><span class="o">=</span><span class="s1">&#39;IR2O&#39;</span><span class="p">,</span>       <span class="n">rate</span><span class="o">=</span><span class="mf">6.67e2</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;IR2O&#39;</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="s1">&#39;I2R2O&#39;</span><span class="p">,</span>      <span class="n">rate</span><span class="o">=</span><span class="mf">3.33e2</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;R2&#39;</span><span class="p">),</span>   <span class="n">product</span><span class="o">=</span><span class="s1">&#39;IR2&#39;</span><span class="p">,</span>        <span class="n">rate</span><span class="o">=</span><span class="mf">9.71e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;IR2&#39;</span><span class="p">),</span>  <span class="n">product</span><span class="o">=</span><span class="s1">&#39;I2R2&#39;</span><span class="p">,</span>       <span class="n">rate</span><span class="o">=</span><span class="mf">4.85e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;R2O&#39;</span><span class="p">),</span>  <span class="n">product</span><span class="o">=</span><span class="s1">&#39;IR2O&#39;</span><span class="p">,</span>       <span class="n">rate</span><span class="o">=</span><span class="mf">2.24e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;IR2O&#39;</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="s1">&#39;I2R2O&#39;</span><span class="p">,</span>      <span class="n">rate</span><span class="o">=</span><span class="mf">1.12e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;IR2&#39;</span><span class="p">,</span>        <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;R2&#39;</span><span class="p">),</span>   <span class="n">rate</span><span class="o">=</span><span class="mf">2.00e-1</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;I2R2&#39;</span><span class="p">,</span>       <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;IR2&#39;</span><span class="p">),</span>  <span class="n">rate</span><span class="o">=</span><span class="mf">4.00e-1</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;IR2O&#39;</span><span class="p">,</span>       <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;R2O&#39;</span><span class="p">),</span>  <span class="n">rate</span><span class="o">=</span><span class="mf">1.00</span><span class="p">)</span>
+	<span class="n">cytregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;I2R2O&#39;</span><span class="p">,</span>      <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;IR2O&#39;</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="mf">2.00</span><span class="p">)</span>
+
+	<span class="c1"># Inducer transport</span>
+	<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;Iex&#39;</span><span class="p">,</span>        <span class="n">product</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">,</span>          <span class="n">rate</span><span class="o">=</span><span class="mf">2.33e-3</span><span class="p">)</span>
+	<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">,</span>          <span class="n">product</span><span class="o">=</span><span class="s1">&#39;Iex&#39;</span><span class="p">,</span>        <span class="n">rate</span><span class="o">=</span><span class="mf">2.33e-3</span><span class="p">)</span>
+	<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;Iex&#39;</span><span class="p">),</span>  <span class="n">product</span><span class="o">=</span><span class="s1">&#39;YI&#39;</span><span class="p">,</span>         <span class="n">rate</span><span class="o">=</span><span class="mf">3.03e4</span><span class="o">*</span><span class="n">scalar</span><span class="p">)</span>
+	<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;YI&#39;</span><span class="p">,</span>         <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;Iex&#39;</span><span class="p">),</span>  <span class="n">rate</span><span class="o">=</span><span class="mf">1.20e-1</span><span class="p">)</span>
+	<span class="n">memregion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="s1">&#39;YI&#39;</span><span class="p">,</span>         <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;I&#39;</span><span class="p">),</span>    <span class="n">rate</span><span class="o">=</span><span class="mf">1.20e+1</span><span class="p">)</span>
+
+	<span class="c1"># Set up diffusion rates</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="c1"># Inducer Diffusion Processes</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="mf">1.28e-12</span><span class="p">)</span>
+		<span class="n">memregion</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="mf">1.28e-12</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;Iex&#39;</span><span class="p">,</span><span class="mf">1.28e-12</span><span class="p">)</span>
+		<span class="n">extregion</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;Iex&#39;</span><span class="p">,</span><span class="mf">1.28e-12</span><span class="p">)</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">setTwoWayTransitionRate</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">two</span><span class="o">=</span><span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">1.28e-12</span> <span class="p">)</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">setTwoWayTransitionRate</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="s1">&#39;Iex&#39;</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="n">two</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">1.28e-12</span> <span class="p">)</span>
+
+		<span class="c1"># Repressor Diffusion Processes </span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;R2&#39;</span><span class="p">,</span><span class="mf">1.0e-12</span><span class="p">)</span>
+
+		<span class="c1"># mRNA Diffusion Processes</span>
+		<span class="n">memregion</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span><span class="mf">0.1e-12</span><span class="p">)</span>
+		<span class="n">cytregion</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span><span class="mf">0.1e-12</span><span class="p">)</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">setTwoWayTransitionRate</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="s1">&#39;mY&#39;</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">two</span><span class="o">=</span><span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">0.1e-12</span> <span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+<div class="viewcode-block" id="addPTSPathway"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactionSystems.html#pySTDLM.StandardReactionSystems.addPTSPathway">[docs]</a><span class="k">def</span> <span class="nf">addPTSPathway</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Adds the Phosphoenolpyruvate-depenedent phosphotransferase reaction system.</span>
+
+<span class="sd">    Reference: J.V. Rodriguez, J.A. Kaandorp, M. Dobrzynski, J.G. Blom</span>
+<span class="sd">      Spatial stochastic modelling of the phosphoenolpyruvate-dependent</span>
+<span class="sd">      phosphotransferase (PTS) pathway in Escherichia coli.</span>
+<span class="sd">      Bioinform. 22:15 (2006), pp. 1895-1901.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A RDMESimulation object with the &quot;cytoplasm&quot;, &quot;default&quot; and &quot;membrane&quot; regions defined</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A pointer to the simulation object that was passed in</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Tried to add the PTS pathway to a non-RDME simulation. Bailing out.&#39;</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected RDMESimulation&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Define species</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">([</span><span class="s1">&#39;EI&#39;</span><span class="p">,</span><span class="s1">&#39;PEP&#39;</span><span class="p">,</span><span class="s1">&#39;EIPEP&#39;</span><span class="p">,</span><span class="s1">&#39;EIP&#39;</span><span class="p">,</span><span class="s1">&#39;Pyr&#39;</span><span class="p">,</span><span class="s1">&#39;HPr&#39;</span><span class="p">,</span><span class="s1">&#39;HPrPEI&#39;</span><span class="p">,</span><span class="s1">&#39;HPrP&#39;</span><span class="p">,</span><span class="s1">&#39;IIA&#39;</span><span class="p">,</span><span class="s1">&#39;IIAPHPr&#39;</span><span class="p">,</span> <span class="s1">&#39;IIAP&#39;</span><span class="p">,</span><span class="s1">&#39;IICB&#39;</span><span class="p">,</span><span class="s1">&#39;IICBPIIA&#39;</span><span class="p">,</span><span class="s1">&#39;IICBP&#39;</span><span class="p">,</span><span class="s1">&#39;Glc&#39;</span><span class="p">,</span><span class="s1">&#39;GlcPIICB&#39;</span><span class="p">,</span><span class="s1">&#39;GlcP&#39;</span><span class="p">])</span>
+
+	<span class="c1"># Get cytosol</span>
+	<span class="n">cyt</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;membrane&#39;</span><span class="p">)</span>
+	<span class="n">ext</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+
+	<span class="c1"># Set up diffusion rates</span>
+	<span class="n">um2minTom2s</span><span class="o">=</span><span class="mf">1.0e-12</span><span class="o">/</span><span class="mf">60.0</span>
+	<span class="n">diff1</span> <span class="o">=</span> <span class="mf">197.8</span><span class="o">*</span><span class="n">um2minTom2s</span>
+	<span class="n">diff2</span> <span class="o">=</span> <span class="mf">189.1</span><span class="o">*</span><span class="n">um2minTom2s</span>
+	<span class="n">diff3</span> <span class="o">=</span> <span class="mf">378.0</span><span class="o">*</span><span class="n">um2minTom2s</span>
+	<span class="n">diff4</span> <span class="o">=</span> <span class="mf">262.1</span><span class="o">*</span><span class="n">um2minTom2s</span>
+	<span class="n">diff5</span> <span class="o">=</span> <span class="mf">300.0</span><span class="o">*</span><span class="n">um2minTom2s</span>
+	<span class="n">diff6</span> <span class="o">=</span> <span class="mf">18000.0</span><span class="o">*</span><span class="n">um2minTom2s</span>
+	<span class="c1"># Cytosol diffusion</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDefaultDiffusionRate</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;EI&#39;</span><span class="p">,</span>     <span class="n">diff1</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;EIP&#39;</span><span class="p">,</span>    <span class="n">diff1</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;EIPEP&#39;</span><span class="p">,</span>  <span class="n">diff1</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;EIPHPyr&#39;</span><span class="p">,</span><span class="n">diff2</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;HPyr&#39;</span><span class="p">,</span>   <span class="n">diff3</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;HPyrP&#39;</span><span class="p">,</span>  <span class="n">diff3</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;HPrPIIA&#39;</span><span class="p">,</span><span class="n">diff4</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;IIA&#39;</span><span class="p">,</span>    <span class="n">diff5</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;IIAP&#39;</span><span class="p">,</span>   <span class="n">diff5</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;IIAPHPr&#39;</span><span class="p">,</span><span class="n">diff5</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;PEP&#39;</span><span class="p">,</span>    <span class="n">diff6</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;Pyr&#39;</span><span class="p">,</span>    <span class="n">diff6</span><span class="p">)</span>
+	<span class="c1"># Membrane diffusion</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">setDefaultDiffusionRate</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;IICB&#39;</span><span class="p">,</span>     <span class="mf">0.0</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;IICBPIIA&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;IICBP&#39;</span><span class="p">,</span>    <span class="mf">0.0</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;GlcPIICB&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+	<span class="c1"># Extracellular diffusion</span>
+	<span class="n">ext</span><span class="o">.</span><span class="n">setDefaultDiffusionRate</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+	<span class="n">ext</span><span class="o">.</span><span class="n">setDiffusionRate</span><span class="p">(</span><span class="s1">&#39;Glc&#39;</span><span class="p">,</span> <span class="n">diff6</span><span class="p">)</span>
+	<span class="c1"># EC-&gt; Memebrane, Membrane-&gt; Cytosol</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;Glc&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;membrane&#39;</span><span class="p">,</span>    <span class="n">diff6</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;Glc&#39;</span><span class="p">,</span> <span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="s1">&#39;diffusion&#39;</span><span class="p">,</span>  <span class="n">diff6</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;GlcP&#39;</span><span class="p">,</span> <span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">diff6</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;GlcP&#39;</span><span class="p">,</span> <span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="n">diff6</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;IIAP&#39;</span><span class="p">,</span> <span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">diff5</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;IIAP&#39;</span><span class="p">,</span> <span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="n">diff5</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;IIA&#39;</span><span class="p">,</span>  <span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">diff5</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="s1">&#39;IIA&#39;</span><span class="p">,</span>  <span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="s1">&#39;membrane&#39;</span><span class="p">,</span> <span class="n">diff5</span><span class="p">)</span>
+
+	<span class="c1"># Set up reactions</span>
+	<span class="n">uMminTos</span><span class="o">=</span><span class="mf">1.0</span><span class="o">/</span><span class="p">((</span><span class="n">sim</span><span class="o">.</span><span class="n">siteVolume</span><span class="p">()</span><span class="o">*</span><span class="mf">6.022e23</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0e-6</span><span class="p">)</span>
+	<span class="c1"># Rxn 1</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;EI&#39;</span><span class="p">,</span><span class="s1">&#39;PEP&#39;</span><span class="p">),</span> <span class="s1">&#39;EIPEP&#39;</span><span class="p">,</span>  <span class="mf">1960.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;EIPEP&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;EI&#39;</span><span class="p">,</span><span class="s1">&#39;PEP&#39;</span><span class="p">),</span>  <span class="mf">480000.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="c1"># Rxn 2</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;EIPEP&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;EIP&#39;</span><span class="p">,</span><span class="s1">&#39;Pyr&#39;</span><span class="p">),</span> <span class="mf">108000.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;EIP&#39;</span><span class="p">,</span><span class="s1">&#39;Pyr&#39;</span><span class="p">),</span> <span class="s1">&#39;EIPEP&#39;</span><span class="p">,</span> <span class="mf">294.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="c1"># Rxn 3</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;HPr&#39;</span><span class="p">,</span><span class="s1">&#39;EIP&#39;</span><span class="p">),</span> <span class="s1">&#39;HPrPEI&#39;</span><span class="p">,</span> <span class="mf">14000.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;HPrPEI&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;HPr&#39;</span><span class="p">,</span><span class="s1">&#39;EIP&#39;</span><span class="p">),</span> <span class="mf">14000.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="c1"># Rxn 4</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;HPrPEI&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;HPrP&#39;</span><span class="p">,</span><span class="s1">&#39;EI&#39;</span><span class="p">),</span> <span class="mf">84000.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;HPrP&#39;</span><span class="p">,</span><span class="s1">&#39;EI&#39;</span><span class="p">),</span> <span class="s1">&#39;HPrPEI&#39;</span><span class="p">,</span> <span class="mf">3360.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="c1"># Rxn 5</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;IIA&#39;</span><span class="p">,</span><span class="s1">&#39;HPrP&#39;</span><span class="p">),</span> <span class="s1">&#39;IIAPHPr&#39;</span><span class="p">,</span> <span class="mf">21960.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;IIAPHPr&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;IIA&#39;</span><span class="p">,</span><span class="s1">&#39;HPrP&#39;</span><span class="p">),</span> <span class="mf">21960.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="c1"># Rxn 6</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;IIAPHPr&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;IIAP&#39;</span><span class="p">,</span><span class="s1">&#39;HPr&#39;</span><span class="p">),</span> <span class="mi">4392</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="n">cyt</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;IIAP&#39;</span><span class="p">,</span><span class="s1">&#39;HPr&#39;</span><span class="p">),</span> <span class="s1">&#39;IIAPHPr&#39;</span><span class="p">,</span> <span class="mf">3384.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="c1"># Rxn 7</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;IICB&#39;</span><span class="p">,</span><span class="s1">&#39;IIAP&#39;</span><span class="p">),</span> <span class="s1">&#39;IICBPIIA&#39;</span><span class="p">,</span> <span class="mf">880.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;IICBPIIA&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;IIAP&#39;</span><span class="p">,</span><span class="s1">&#39;IICIB&#39;</span><span class="p">),</span> <span class="mf">880.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="c1"># Rxn 8</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;IICBPIIA&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;IICBP&#39;</span><span class="p">,</span><span class="s1">&#39;IIA&#39;</span><span class="p">),</span> <span class="mf">2640.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;IICBP&#39;</span><span class="p">,</span><span class="s1">&#39;IIA&#39;</span><span class="p">),</span> <span class="s1">&#39;IICBPIIA&#39;</span><span class="p">,</span> <span class="mf">960.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="c1"># Rxn 9</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;IICBP&#39;</span><span class="p">,</span><span class="s1">&#39;Glc&#39;</span><span class="p">),</span> <span class="s1">&#39;GlcPIICB&#39;</span><span class="p">,</span> <span class="mf">260.0</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;GlcPIICB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;IICBP&#39;</span><span class="p">,</span><span class="s1">&#39;Glc&#39;</span><span class="p">),</span> <span class="mf">389.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="c1"># Rxn 10</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="s1">&#39;GlcPIICB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;IICB&#39;</span><span class="p">,</span><span class="s1">&#39;GlcP&#39;</span><span class="p">),</span> <span class="mf">4800.0</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span>
+	<span class="n">mem</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="s1">&#39;IICB&#39;</span><span class="p">,</span><span class="s1">&#39;GlcP&#39;</span><span class="p">),</span> <span class="s1">&#39;GlcPIICB&#39;</span><span class="p">,</span> <span class="mf">5.4e-3</span><span class="o">*</span><span class="n">uMminToS</span><span class="p">)</span>
+
+
+
+	<span class="c1"># Set particle numbers</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;EI&#39;</span><span class="p">,</span>  <span class="n">cyt</span><span class="p">,</span><span class="mi">1577</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;HPr&#39;</span><span class="p">,</span> <span class="n">cyt</span><span class="p">,</span><span class="mi">15766</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;IIA&#39;</span><span class="p">,</span> <span class="n">cyt</span><span class="p">,</span><span class="mi">12613</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;IICB&#39;</span><span class="p">,</span><span class="n">mem</span><span class="p">,</span><span class="mi">3100</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;PEP&#39;</span><span class="p">,</span> <span class="n">cyt</span><span class="p">,</span><span class="mi">882890</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;Pyr&#39;</span><span class="p">,</span> <span class="n">cyt</span><span class="p">,</span><span class="mi">283780</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;Glc&#39;</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span><span class="mi">70767</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="s1">&#39;GlcP&#39;</span><span class="p">,</span><span class="n">cyt</span><span class="p">,</span><span class="mi">15766</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,848 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.LmInteract &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../jLM.html">jLM</a> &raquo;</li>
+        
+      <li>jLM.LmInteract</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for jLM.LmInteract</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2016-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Tyler M. Earnest</span>
+<span class="c1"># </span>
+
+<span class="sd">&quot;&quot;&quot;SpatialModel mixins for interaction with LM&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">itertools</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Lattice</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+
+<span class="k">class</span> <span class="nc">LmWriteMixin</span><span class="p">:</span>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">h5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">h5</span>
+
+
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">lm</span>
+        <span class="sd">&quot;&quot;&quot;Write LM data file&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_excludedVolumeSet</span> <span class="o">=</span>  <span class="nb">all</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_excludedVolumeSet</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Not all particle volumes set. EVRDME disabled.&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bdSet</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">is_bd_particle</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bdSet</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_partialBdSet</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Missing some species level definitions for BD. BD disabled.&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
+        <span class="n">lm</span><span class="o">.</span><span class="n">SimulationFile</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">lmFile</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">SimulationFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reactionList</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particlesPlaced</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">placeAllParticles</span><span class="p">()</span>
+
+        <span class="n">rm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reactionModel</span><span class="p">()</span>
+        <span class="n">dm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diffusionModel</span><span class="p">()</span>
+        <span class="n">sm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatialModel</span><span class="p">()</span>
+
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setReactionModel</span><span class="p">(</span><span class="n">rm</span><span class="p">)</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setDiffusionModel</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setSpatialModel</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setDiffusionModelLattice</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lattice</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;overflowHandler&quot;</span><span class="p">):</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;rdme.mpd.overflowhandler&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overflowHandler</span><span class="p">)</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;writeInterval&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.10e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesWriteInterval</span><span class="p">))</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;latticeWriteInterval&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.10e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latticeWriteInterval</span><span class="p">))</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;perfPrintInterval&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perfPrintInterval</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bdWriteInterval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;bdWriteInterval&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.10e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bdWriteInterval</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evWriteInterval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;evWriteInterval&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.10e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evWriteInterval</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hookInterval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;hookInterval&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.10e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hookInterval</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;hookInterval&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timingsSteps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timingsFile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Both or neither timingsSteps and timingsFile should be defined&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timingsSteps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;timingsSteps&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timingsSteps</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timingsFile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;timingsFile&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timingsFile</span><span class="p">)</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;maxTime&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.10e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simulationTime</span><span class="p">))</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;timestep&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.10e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timestep</span><span class="p">))</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;speciesNames&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">)))</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">setParameter</span><span class="p">(</span><span class="s2">&quot;siteTypeNames&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_excludedVolumeSet</span><span class="p">:</span>
+            <span class="n">lmFile</span><span class="o">.</span><span class="n">setModelExcludedVolume</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">excludedVolumeLattice</span><span class="o">.</span><span class="n">ravel</span><span class="p">()))</span>
+        <span class="n">lmFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postLmWrite</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">_postLmWrite</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_storeParamData</span><span class="p">(</span><span class="n">h5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_storeBdData</span><span class="p">(</span><span class="n">h5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setupRdmeTrace</span><span class="p">(</span><span class="n">h5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setupRdmeTrace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5</span><span class="p">):</span>
+        <span class="n">trix</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">rdmeTracerParticle</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">products</span> <span class="ow">or</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">reactants</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactionList</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;species `</span><span class="si">{}</span><span class="s2">&#39; is marked as a tracer, but it appears to participating in reactions&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+                <span class="n">trix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">trix</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdmeTraceInterval</span><span class="p">:</span>
+            <span class="n">h5</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/Parameters/TraceParticleTypes&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trix</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+            <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;traceWriteInterval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rdmeTraceInterval</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_storeBdData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bdSet</span><span class="p">:</span>
+            <span class="n">radii</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">stencils</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">diffCoeffs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">spTypes</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">siteTypes</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">solidRegions</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">sp</span><span class="o">.</span><span class="n">is_bd_particle</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">sp</span><span class="o">.</span><span class="n">bdStencil</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">sp</span><span class="o">.</span><span class="n">bdStencil</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">sp</span><span class="o">.</span><span class="n">bdStencil</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">sp</span><span class="o">.</span><span class="n">bdStencil</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">sp</span><span class="o">.</span><span class="n">bdStencil</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Stencil for species `</span><span class="si">{}</span><span class="s2">&#39; has the wrong shape&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sp</span><span class="p">))</span>
+                    <span class="n">radii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">bdRadius</span><span class="p">)</span>
+                    <span class="n">stencils</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">bdStencil</span><span class="p">)</span>
+                    <span class="n">diffCoeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">bdDiffCoeff</span><span class="p">)</span>
+                    <span class="n">spTypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">siteTypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">bdRegion</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">solidRegions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">idx</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">sp</span><span class="o">.</span><span class="n">bdSolidRegions</span><span class="p">])</span>
+
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Model/Diffusion&#39;</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">attrs</span>
+            <span class="n">attr</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;bdNumberSpecies&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">spTypes</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+            <span class="n">attr</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;bdMaxParticles&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bdMaxParticles</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+            <span class="n">attr</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;bdTemperature&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bdTemperature</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">attr</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;bdStepsPerRdme&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bdStepsPerRdmeStep</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+
+            <span class="n">dm</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;BDRadii&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+            <span class="n">dm</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;BDDiffusionCoefficients&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">diffCoeffs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+            <span class="n">dm</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;BDSpeciesTypes&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">spTypes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+            <span class="n">dm</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;BDSiteTypes&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">siteTypes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+
+            <span class="n">stgrp</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;BDStencils&quot;</span><span class="p">)</span>
+            <span class="n">slgrp</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;BDSolidTypes&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">spid</span><span class="p">,</span> <span class="n">sten</span><span class="p">,</span> <span class="n">sol</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">spTypes</span><span class="p">,</span> <span class="n">stencils</span><span class="p">,</span> <span class="n">solidRegions</span><span class="p">):</span>
+                <span class="n">stgrp</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spid</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sten</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+                <span class="n">slgrp</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spid</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Model/Diffusion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;bdNumberSpecies&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">copyParticleLattice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">diffusion_model</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">frame</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy particle lattice from existing simulation</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fname (str):</span>
+<span class="sd">                LM simulation H5 file</span>
+
+<span class="sd">        Keyword Args:</span>
+<span class="sd">            diffusion_model (bool):</span>
+<span class="sd">                Use the initial condition particle lattice</span>
+<span class="sd">            replicate (int):</span>
+<span class="sd">                LM simulation replicate</span>
+<span class="sd">            frame (int):</span>
+<span class="sd">                LM simulation particle lattice frame. Negative values</span>
+<span class="sd">                index from end.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">diffusion_model</span><span class="p">:</span>
+                <span class="n">plattice</span> <span class="o">=</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Model/Diffusion/Lattice&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ts</span> <span class="o">=</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Simulations/</span><span class="si">{:07d}</span><span class="s1">/LatticeTimes&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">replicate</span><span class="p">)][</span><span class="o">...</span><span class="p">]</span>
+                <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">frame</span><span class="p">)</span><span class="o">%</span><span class="n">ts</span><span class="o">.</span><span class="n">size</span>
+                <span class="n">plattice</span> <span class="o">=</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Simulations/</span><span class="si">{:07d}</span><span class="s1">/Lattice/</span><span class="si">{:010d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">replicate</span><span class="p">,</span> <span class="n">frame</span><span class="p">)][</span><span class="o">...</span><span class="p">]</span>
+            <span class="n">inSps</span> <span class="o">=</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;speciesNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+        <span class="n">spsTranslationMap</span> <span class="o">=</span> <span class="p">{</span><span class="n">inSps</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">idx</span> <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">}</span>
+        <span class="n">txMap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iOld</span><span class="p">,</span><span class="n">iNew</span> <span class="ow">in</span> <span class="n">spsTranslationMap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">txMap</span><span class="p">[</span><span class="n">iOld</span><span class="p">]</span> <span class="o">=</span> <span class="n">iNew</span>
+
+        <span class="n">Lattice</span><span class="o">.</span><span class="n">hdf2lmRep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particleLattice</span><span class="p">,</span> <span class="n">plattice</span><span class="p">,</span> <span class="n">txMap</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particlesPlaced</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">spCts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="n">pCount</span><span class="p">,</span> <span class="n">sCount</span> <span class="o">=</span> <span class="n">Lattice</span><span class="o">.</span><span class="n">latticeStatsAll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particleLattice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">siteLattice</span><span class="p">)</span>
+
+        <span class="n">pCount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pCount</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">spCts</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">pCount</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spCts</span> <span class="o">=</span> <span class="n">spCts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particlePlacement</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particleDistCount</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particleDistConc</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+    <span class="k">def</span> <span class="nf">_placeAllParticles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particlesPlaced</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">particleLattice</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">particleDensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+        <span class="n">siteCounts</span> <span class="o">=</span> <span class="n">Lattice</span><span class="o">.</span><span class="n">countSites</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">siteLattice</span><span class="p">)</span>
+
+        <span class="n">spCts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">regid</span><span class="p">,</span> <span class="n">spid</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particleDistCount</span><span class="p">:</span>
+            <span class="n">spCts</span><span class="p">[</span><span class="n">spid</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">count</span><span class="o">/</span><span class="n">siteCounts</span><span class="p">[</span><span class="n">regid</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">pps</span>
+            <span class="n">particleDensity</span><span class="p">[</span><span class="n">regid</span><span class="p">,</span><span class="n">spid</span><span class="p">]</span> <span class="o">+=</span> <span class="n">v</span>
+
+        <span class="k">for</span> <span class="n">regid</span><span class="p">,</span> <span class="n">spid</span><span class="p">,</span> <span class="n">conc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particleDistConc</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">siteNAV</span><span class="o">*</span><span class="n">conc</span><span class="o">*</span><span class="n">siteCounts</span><span class="p">[</span><span class="n">regid</span><span class="p">])</span>
+            <span class="n">spCts</span><span class="p">[</span><span class="n">spid</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">count</span><span class="o">/</span><span class="n">siteCounts</span><span class="p">[</span><span class="n">regid</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">pps</span>
+            <span class="n">particleDensity</span><span class="p">[</span><span class="n">regid</span><span class="p">,</span><span class="n">spid</span><span class="p">]</span> <span class="o">+=</span> <span class="n">v</span>
+
+        <span class="c1"># particleDensity is the probability that a particle will be placed</span>
+        <span class="c1"># we need to compute the probability to place empty particles</span>
+        <span class="n">particleDensity</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">particleDensity</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">particleDensity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Lattice capacity exceeded&quot;</span><span class="p">)</span>
+
+        <span class="n">Lattice</span><span class="o">.</span><span class="n">populateLattice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particleLattice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">siteLattice</span><span class="p">,</span> <span class="n">particleDensity</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particlePlacement</span><span class="p">:</span>
+            <span class="n">spCts</span><span class="p">[</span><span class="n">sp</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">Lattice</span><span class="o">.</span><span class="n">appendParticle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particleLattice</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">sp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Failed to add </span><span class="si">{}</span><span class="s2"> at </span><span class="si">{}</span><span class="s2">: site full.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">[</span><span class="n">sp</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spCts</span> <span class="o">=</span> <span class="n">spCts</span>
+
+
+    <span class="k">def</span> <span class="nf">_buildReactionMatricies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Nrxn</span><span class="p">,</span> <span class="n">Nsps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span>
+
+        <span class="c1"># Build reaction matricies</span>
+        <span class="n">rxtypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">rxconst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+        <span class="n">stoich</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Nrxn</span><span class="p">,</span><span class="n">Nsps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">depmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Nrxn</span><span class="p">,</span><span class="n">Nsps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">rxnParamMatrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">rx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactionList</span><span class="p">:</span>
+            <span class="n">rxconst</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">rx</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">_toLM</span><span class="p">()</span>
+            <span class="n">rxnParamMatrix</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">rx</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">idx</span>
+            <span class="k">if</span> <span class="n">rx</span><span class="o">.</span><span class="n">order</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># Second Order Reaction</span>
+                <span class="k">if</span> <span class="n">rx</span><span class="o">.</span><span class="n">reactants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">rx</span><span class="o">.</span><span class="n">reactants</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">rxtypes</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span>
+                    <span class="k">for</span> <span class="n">sr</span> <span class="ow">in</span> <span class="n">rx</span><span class="o">.</span><span class="n">reactants</span><span class="p">:</span>
+                        <span class="n">depmat</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span><span class="n">sr</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+                        <span class="n">stoich</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span><span class="n">sr</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># Second Order Self Reaction</span>
+                    <span class="n">rxtypes</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="mi">3</span>
+                    <span class="n">depmat</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span><span class="n">rx</span><span class="o">.</span><span class="n">reactants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+                    <span class="n">stoich</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span><span class="n">rx</span><span class="o">.</span><span class="n">reactants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="n">rx</span><span class="o">.</span><span class="n">order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># zeroth order</span>
+                <span class="n">rxtypes</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">rx</span><span class="o">.</span><span class="n">order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># First order</span>
+                    <span class="n">rxtypes</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+                    <span class="n">depmat</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">rx</span><span class="o">.</span><span class="n">reactants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+                    <span class="n">stoich</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">rx</span><span class="o">.</span><span class="n">reactants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> order reations&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rx</span><span class="o">.</span><span class="n">order</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="n">rx</span><span class="o">.</span><span class="n">products</span><span class="p">:</span>
+                <span class="n">stoich</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">rxtypes</span><span class="p">,</span> <span class="n">rxconst</span><span class="p">,</span> <span class="n">stoich</span><span class="p">,</span> <span class="n">depmat</span><span class="p">,</span> <span class="n">rxnParamMatrix</span>
+
+
+    <span class="k">def</span> <span class="nf">_reactionModel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">lm</span>
+        <span class="n">rm</span><span class="o">=</span><span class="n">lm</span><span class="o">.</span><span class="n">ReactionModel</span><span class="p">()</span>
+
+        <span class="n">Nrxn</span><span class="p">,</span> <span class="n">Nsps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span>
+
+        <span class="n">rm</span><span class="o">.</span><span class="n">set_number_reactions</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">)</span>
+        <span class="n">rm</span><span class="o">.</span><span class="n">set_number_species</span><span class="p">(</span><span class="n">Nsps</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spCts</span><span class="p">:</span>
+            <span class="n">rm</span><span class="o">.</span><span class="n">add_initial_species_count</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+        <span class="n">rxtypes</span><span class="p">,</span> <span class="n">rxconst</span><span class="p">,</span> <span class="n">stoich</span><span class="p">,</span> <span class="n">depmat</span><span class="p">,</span> <span class="n">rxnParamMatrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buildReactionMatricies</span><span class="p">()</span>
+
+        <span class="c1"># Populate reaction object data</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">):</span>
+            <span class="n">rm</span><span class="o">.</span><span class="n">add_reaction</span><span class="p">()</span>
+            <span class="n">rm</span><span class="o">.</span><span class="n">mutable_reaction</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">rxtypes</span><span class="p">[</span><span class="n">r</span><span class="p">]))</span>
+            <span class="n">rm</span><span class="o">.</span><span class="n">mutable_reaction</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">add_rate_constant</span><span class="p">(</span><span class="n">rxconst</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsps</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">):</span>
+                <span class="n">rm</span><span class="o">.</span><span class="n">add_stoichiometric_matrix</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">stoich</span><span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">s</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsps</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">):</span>
+                <span class="n">rm</span><span class="o">.</span><span class="n">add_dependency_matrix</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">depmat</span><span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">s</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rxnParamMatrix</span><span class="o">=</span><span class="n">rxnParamMatrix</span>
+
+        <span class="k">return</span> <span class="n">rm</span>
+
+
+    <span class="k">def</span> <span class="nf">_buildReactionLocationMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">RL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rxid</span><span class="p">,</span> <span class="n">regid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reactionLocations</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">regid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">RL</span><span class="p">[:,</span><span class="n">rxid</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">RL</span><span class="p">[</span><span class="n">regid</span><span class="p">,</span><span class="n">rxid</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">RL</span>
+
+
+
+    <span class="k">def</span> <span class="nf">_buildDiffusionMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">D</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+        <span class="n">diffParamMatrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">D</span><span class="p">[:,:,:]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># flag not visited</span>
+
+        <span class="k">for</span> <span class="n">sp</span><span class="p">,</span> <span class="n">rFrom</span><span class="p">,</span> <span class="n">rTo</span><span class="p">,</span> <span class="n">rateIdx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transitionRates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sp</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sp</span> <span class="o">=</span> <span class="n">sp</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">rFrom</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rFrom</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rTo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rTo</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+            <span class="n">D</span><span class="p">[</span><span class="n">rFrom</span><span class="p">,</span> <span class="n">rTo</span><span class="p">,</span><span class="n">sp</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">[</span><span class="n">rateIdx</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">diffParamMatrix</span><span class="p">[</span><span class="n">rFrom</span><span class="p">,</span> <span class="n">rTo</span><span class="p">,</span> <span class="n">sp</span><span class="p">]</span> <span class="o">=</span> <span class="n">rateIdx</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">D</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Diffusion table not complete, ensure that all &quot;</span>
+                               <span class="s2">&quot;combinations of (species, fromRegion, toRegion) are defined&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_diffParamMatrix</span> <span class="o">=</span> <span class="n">diffParamMatrix</span>
+
+        <span class="k">return</span> <span class="n">D</span>
+
+
+    <span class="k">def</span> <span class="nf">_diffusionModel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">lm</span>
+        <span class="n">dm</span><span class="o">=</span><span class="n">lm</span><span class="o">.</span><span class="n">DiffusionModel</span><span class="p">()</span>
+
+        <span class="n">Nsps</span><span class="p">,</span> <span class="n">Nsts</span><span class="p">,</span> <span class="n">Nrxn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span>
+
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_number_reactions</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">)</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_number_species</span><span class="p">(</span><span class="n">Nsps</span><span class="p">)</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_number_site_types</span><span class="p">(</span><span class="n">Nsts</span><span class="p">)</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_lattice_x_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_lattice_y_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_lattice_z_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_lattice_spacing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latticeSpacing</span><span class="p">)</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_particles_per_site</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pps</span><span class="p">)</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">set_bytes_per_particle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bytesPerParticle</span><span class="p">)</span>
+
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buildDiffusionMatrix</span><span class="p">()</span>
+        <span class="n">RL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buildReactionLocationMatrix</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">via</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsts</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">to</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsts</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsps</span><span class="p">):</span>
+                    <span class="n">dm</span><span class="o">.</span><span class="n">add_diffusion_matrix</span><span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">via</span><span class="p">,</span><span class="n">to</span><span class="p">,</span><span class="n">p</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsts</span><span class="p">):</span>
+                <span class="n">dm</span><span class="o">.</span><span class="n">add_reaction_location_matrix</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">RL</span><span class="p">[</span><span class="n">s</span><span class="p">,</span><span class="n">r</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_excludedVolumeSet</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">:</span>
+                <span class="n">dm</span><span class="o">.</span><span class="n">add_particle_volumes</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dm</span>
+
+    <span class="k">def</span> <span class="nf">_spatialModel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">lm</span>
+        <span class="k">return</span> <span class="n">lm</span><span class="o">.</span><span class="n">SpatialModel</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_storeParamData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5</span><span class="p">):</span>
+        <span class="c1"># need to store mapping between parameter objects and ids</span>
+
+        <span class="n">diffConstNames</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">)</span>
+        <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;diffConstNames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">diffConstNames</span><span class="p">)</span>
+        <span class="n">h5</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;Parameters/DiffusionParameterMatrix&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_diffParamMatrix</span><span class="p">)</span>
+        <span class="n">diffParams</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">:</span>
+            <span class="n">diffParams</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">h5</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;Parameters/DiffusionParameterValues&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">diffParams</span><span class="p">)</span>
+
+        <span class="n">rxnConstNames</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">)</span>
+        <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;reactionConstNames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">rxnConstNames</span><span class="p">)</span>
+        <span class="n">h5</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;Parameters/ReactionParameterMatrix&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rxnParamMatrix</span><span class="p">)</span>
+        <span class="n">rateParams</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">:</span>
+            <span class="n">rateParams</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">h5</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;Parameters/ReactionParameterValues&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rateParams</span><span class="p">)</span>
+        <span class="n">rxnConstOrder</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">order</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">h5</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;Parameters/ReactionParameterOrder&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rxnConstOrder</span><span class="p">)</span>
+        <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">LmReadMixin</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">_loadFromH5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replicate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initParameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initSpecies</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initRegions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initDiffParams</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initRateParams</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readDiffusionTable</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_readReactions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readReplicates</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initLattice</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initEV</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readBD</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readTracers</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replicates</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setReplicate</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_readTracers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">h5</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span>
+        <span class="k">if</span> <span class="s1">&#39;TraceParticleTypes&#39;</span> <span class="ow">in</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Parameters/TraceParticleTypes&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span><span class="o">.</span><span class="n">rdmeTracerParticle</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_readBD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">h5</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span>
+        <span class="n">dm</span> <span class="o">=</span> <span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Model/Diffusion&#39;</span><span class="p">]</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">attrs</span>
+        <span class="k">if</span> <span class="s1">&#39;bdNumberSpecies&#39;</span> <span class="ow">in</span> <span class="n">attr</span> <span class="ow">and</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;bdNumberSpecies&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">nBdSp</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;bdNumberSpecies&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bdMaxParticles</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;bdMaxParticles&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bdTemperature</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;bdTemperature&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bdStepsPerRdme</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;bdStepsPerRdme&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">bdRadii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDRadii&#39;</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">bdDiffCoeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDDiffusionCoefficients&#39;</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">bdSpTypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDSpeciesTypes&#39;</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">bdSiteTypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDSpeciesTypes&#39;</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+            <span class="n">stencils</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">solidTypes</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">stid</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDStencils&#39;</span><span class="p">]):</span>
+                <span class="n">stencils</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDStencils/&#39;</span><span class="o">+</span><span class="n">stid</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">sts</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDSolidTypes&#39;</span><span class="p">]):</span>
+                <span class="n">solidTypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="s1">&#39;BDSolidTypes/&#39;</span><span class="o">+</span><span class="n">stid</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nBdSp</span><span class="p">):</span>
+                <span class="n">sp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">[</span><span class="n">bdSpTypes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">bdRadius</span> <span class="o">=</span> <span class="n">bdRadii</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">bdDiffCoeff</span> <span class="o">=</span> <span class="n">bdDiffCoeffs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">bdStencil</span> <span class="o">=</span> <span class="n">stencils</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">bdSolidRegions</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">solidTypes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+    <span class="k">def</span> <span class="nf">_readReplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replicates</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">]]</span>
+
+    <span class="k">def</span> <span class="nf">setReplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Select replicate from HDF5 file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            replicate (int):</span>
+<span class="sd">                Replicate index (1-based)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replicate</span> <span class="o">=</span> <span class="n">replicate</span>
+        <span class="n">replicate</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:07d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">replicate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Simulations&#39;</span><span class="p">][</span><span class="n">replicate</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loadReplicate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_initLattice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">siteLattice</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Model/Diffusion/LatticeSites&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">inputPl</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;/Model/Diffusion/Lattice&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">Lattice</span><span class="o">.</span><span class="n">hdf2lmRep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particleLattice</span><span class="p">,</span> <span class="n">inputPl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_loadReplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">speciesCountTimes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajData</span><span class="p">[</span><span class="s1">&#39;SpeciesCountTimes&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+
+         <span class="n">cs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajData</span><span class="p">[</span><span class="s1">&#39;SpeciesCounts&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+
+         <span class="bp">self</span><span class="o">.</span><span class="n">speciesCounts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+         <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">:</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">speciesCounts</span><span class="p">[</span><span class="n">sp</span><span class="p">]</span> <span class="o">=</span> <span class="n">cs</span><span class="p">[:,</span><span class="n">sp</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+         <span class="bp">self</span><span class="o">.</span><span class="n">latticeTimes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajData</span><span class="p">[</span><span class="s1">&#39;LatticeTimes&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+
+         <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latticeTimes</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span>
+
+         <span class="n">inputPl</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajData</span><span class="p">[</span><span class="s1">&#39;Lattice&#39;</span><span class="p">][</span><span class="s1">&#39;</span><span class="si">{:010d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">last</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+         <span class="n">Lattice</span><span class="o">.</span><span class="n">hdf2lmRep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particleLattice</span><span class="p">,</span> <span class="n">inputPl</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_initSpecies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">speciesNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;speciesNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">speciesNames</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">speciesNames</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_initEV</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;Model/Diffusion/ParticleVolumes&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">vols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s2">&quot;Model/Diffusion/ParticleVolumes&quot;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">vols</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">excludedVolumeLattice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s2">&quot;Model/Diffusion/ExcludedVolume&quot;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="n">z</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">excludedVolumeLattice</span><span class="o">.</span><span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">excludedVolumeLattice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">excludedVolumeLattice</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_initRegions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">regionNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;siteTypeNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">regionNames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;site</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;numberSiteTypes&#39;</span><span class="p">]))]</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regionNames</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">regionNames</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_initParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;timestep&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latticeWriteInterval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;latticeWriteInterval&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speciesWriteInterval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;writeInterval&#39;</span><span class="p">])</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;hookInterval&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hookInterval</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hookInterval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulationTime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;maxTime&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bytesPerParticle</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bytes_per_particle&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;particlesPerSite&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;numberSpecies&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;numberReactions&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;numberSiteTypes&#39;</span><span class="p">])</span>
+
+
+    <span class="k">def</span> <span class="nf">_initDiffParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">diffRateNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;diffConstNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">diffParams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s2">&quot;Parameters/DiffusionParameterValues&quot;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diffRateNames</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diffusionConst</span><span class="p">(</span><span class="n">diffRateNames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">diffParams</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NdiffParams</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_readDiffusionTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion/DiffusionMatrix&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">D</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span><span class="p">)</span>
+
+        <span class="n">diffParamMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s2">&quot;Parameters/DiffusionParameterMatrix&quot;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">rFrom</span><span class="p">,</span> <span class="n">rTo</span><span class="p">,</span> <span class="n">sp</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">rFrom</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">rTo</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffRateList</span><span class="p">[</span><span class="n">diffParamMap</span><span class="p">[</span><span class="n">rFrom</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span><span class="n">rTo</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">assert</span> <span class="n">v</span><span class="o">==</span><span class="n">rate</span><span class="o">.</span><span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transitionRate</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rFrom</span><span class="p">,</span> <span class="n">rTo</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_initRateParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span>
+            <span class="n">rxnOrder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s2">&quot;Parameters/ReactionParameterOrder&quot;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+            <span class="n">rxnRateNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;reactionConstNames&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="n">rxnParams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters/ReactionParameterValues&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rxnRateNames</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rateConst</span><span class="p">(</span><span class="n">rxnRateNames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rxnParams</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rxnOrder</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NrxnParams</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NrxnParams</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+
+    <span class="k">def</span> <span class="nf">_readReactions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rxnParamMatrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Parameters/ReactionParameterMatrix&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Reaction/StoichiometricMatrix&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="n">rMat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Reaction/DependencyMatrix&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="n">pMat</span> <span class="o">=</span> <span class="n">S</span><span class="o">+</span><span class="n">rMat</span>
+
+        <span class="n">RL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Diffusion/ReactionLocationMatrix&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="n">rates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5</span><span class="p">[</span><span class="s1">&#39;Model/Reaction/ReactionRateConstants&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+        <span class="n">Nsps</span><span class="p">,</span> <span class="n">Nrxn</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">Nsts</span> <span class="o">=</span> <span class="n">RL</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">Nsps</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsps</span>
+        <span class="k">assert</span> <span class="n">Nrxn</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nrxn</span>
+        <span class="k">assert</span> <span class="n">Nsts</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nsts</span>
+
+        <span class="k">for</span> <span class="n">xid</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrxn</span><span class="p">):</span>
+            <span class="n">ps</span><span class="p">,</span> <span class="n">rs</span><span class="p">,</span> <span class="n">regions</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">sid</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsps</span><span class="p">):</span>
+                <span class="n">ct</span> <span class="o">=</span> <span class="n">rMat</span><span class="p">[</span><span class="n">sid</span><span class="p">,</span> <span class="n">xid</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">ct</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="n">ct</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">rs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">[</span><span class="n">sid</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+                        <span class="n">ct</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">ct</span> <span class="o">=</span> <span class="n">pMat</span><span class="p">[</span><span class="n">sid</span><span class="p">,</span> <span class="n">xid</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">ct</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="n">ct</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">ps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">speciesList</span><span class="p">[</span><span class="n">sid</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+                        <span class="n">ct</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">rid</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsts</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">RL</span><span class="p">[</span><span class="n">xid</span><span class="p">,</span> <span class="n">rid</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">regions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">regionList</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span> <span class="p">)</span>
+
+            <span class="n">v</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="n">xid</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxnRateList</span><span class="p">[</span><span class="n">rxnParamMatrix</span><span class="p">[</span><span class="n">xid</span><span class="p">]]</span>
+            <span class="k">assert</span> <span class="n">rate</span><span class="o">.</span><span class="n">_toLM</span><span class="p">()</span> <span class="o">==</span> <span class="n">v</span>
+            <span class="n">rxn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reaction</span><span class="p">(</span><span class="n">rs</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assignReaction</span><span class="p">(</span><span class="n">rxn</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

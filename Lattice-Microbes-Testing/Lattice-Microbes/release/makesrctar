@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Get the LM version string
+if [ ! -e "src/c/lm/Version.h" ]; then
+	echo "Could not find Version.h"
+	exit 1
+fi
+VER=`grep LM_VERSION_STRING src/c/lm/Version.h | tr -d \" | awk '{print $3}'`
+echo "Release $VER"
+
+BD=`mktemp -d`
+TARDIR=$BD/lm-$VER
+
+mkdir -p $TARDIR
+
+cp -a src $TARDIR
+cp -a utils $TARDIR
+cp -a vmd $TARDIR
+cp -a profile $TARDIR
+
+mkdir $TARDIR/docs
+cp -a docs/config $TARDIR/docs
+cp docs/guide/InstructionGuide/InstructionGuide.pdf $TARDIR/docs
+cp docs/guide/UserGuide/UsersGuide.pdf $TARDIR/docs
+cp docs/LICENSE $TARDIR
+cp docs/README $TARDIR
+
+cp Makefile $TARDIR
+
+tar -zcf lm-$VER-src.tar.gz -C $BD lm-$VER
+
+rm -rf $BD

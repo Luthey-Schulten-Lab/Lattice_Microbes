@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Get rhel version
+LVER=`perl -p -e 's/.* release ([0-9]+).[0-9.]+ .*/$1/' /etc/redhat-release`
+
+# Get the LM version string
+if [ ! -e "src/c/lm/Version.h" ]; then
+	echo "Could not find Version.h"
+	exit 1
+fi
+VER=`grep LM_VERSION_STRING src/c/lm/Version.h | tr -d \" | awk '{print $3}'`
+echo "Release $VER"
+
+CONFIGS=$@
+for CONF in $CONFIGS; do
+	if [ ! -e "$CONF" ]; then
+		echo "$CONF not found"
+		continue
+	else
+		make LOCALMK=$CONF
+		make LOCALMK=$CONF install
+	fi
+
+	FLAVOR=`grep FLAVOR= $CONF | cut -b 8-`
+	if [ ! -d "Build-$FLAVOR/RELEASE/lm-$VER" ]; then
+		echo Directory "Build-$FLAVOR/RELEASE/lm-$VER" does not exist!
+		continue
+	fi
+
+	tar -zcf lm-${VER}-${FLAVOR}-el$LVER.tar.gz -C Build-$FLAVOR/RELEASE lm-${VER}
+
+	echo Tarball built for $FLAVOR for el$LVER
+
+done

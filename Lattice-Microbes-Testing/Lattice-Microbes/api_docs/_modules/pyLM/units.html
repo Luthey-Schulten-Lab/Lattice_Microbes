@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyLM.units &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyLM.units</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyLM.units</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">lm</span>
+
+<span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">xs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+
+<span class="c1">############################</span>
+<span class="c1"># Length Wrapper Functions #</span>
+<span class="c1">############################</span>
+<div class="viewcode-block" id="angstrom"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.angstrom">[docs]</a><span class="k">def</span> <span class="nf">angstrom</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in angstroms</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">angstrom</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-10</span></div>
+
+<div class="viewcode-block" id="nm"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.nm">[docs]</a><span class="k">def</span> <span class="nf">nm</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in nanometers</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-9</span></div>
+
+<div class="viewcode-block" id="micron"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.micron">[docs]</a><span class="k">def</span> <span class="nf">micron</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in micrometers</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">micron</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-6</span></div>
+
+<div class="viewcode-block" id="mm"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.mm">[docs]</a><span class="k">def</span> <span class="nf">mm</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in millimeters</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">mm</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-3</span></div>
+
+<div class="viewcode-block" id="cm"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.cm">[docs]</a><span class="k">def</span> <span class="nf">cm</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in centimeters</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-2</span></div>
+
+<span class="c1">##########################</span>
+<span class="c1"># Time Wrapper Functions #</span>
+<span class="c1">##########################</span>
+<div class="viewcode-block" id="ns"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.ns">[docs]</a><span class="k">def</span> <span class="nf">ns</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in nanoseconds</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-9</span></div>
+
+<div class="viewcode-block" id="microsecond"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.microsecond">[docs]</a><span class="k">def</span> <span class="nf">microsecond</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in microseconds</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">microsecond</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-6</span></div>
+
+<div class="viewcode-block" id="ms"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.ms">[docs]</a><span class="k">def</span> <span class="nf">ms</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in milliseconds</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-3</span></div>
+
+<div class="viewcode-block" id="second"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.second">[docs]</a><span class="k">def</span> <span class="nf">second</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in seconds</span>
+
+<span class="sd">        Seems silly, but for completeness and ability to annotate the unit in code.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">second</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="minute"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.minute">[docs]</a><span class="k">def</span> <span class="nf">minute</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in minutes</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">60.0</span></div>
+
+<div class="viewcode-block" id="hr"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.hr">[docs]</a><span class="k">def</span> <span class="nf">hr</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in hours</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">hr</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">3600.0</span></div>
+
+<div class="viewcode-block" id="day"><a class="viewcode-back" href="../../_autosummary/pyLM.units.html#pyLM.units.day">[docs]</a><span class="k">def</span> <span class="nf">day</span><span class="p">(</span><span class="o">*</span><span class="n">qty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a representation of a number in days</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qty:</span>
+<span class="sd">                A list or singleton of a number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_map</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">qty</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">qty</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">3600.0</span><span class="o">*</span><span class="mf">24.0</span></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

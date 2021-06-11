@@ -1,0 +1,66 @@
+from setuptools import setup, find_packages
+from setuptools.extension import Extension
+import setuptools.command.build_py as duc
+import numpy, time, os, json, getpass, socket, subprocess, sys, glob
+from Cython.Distutils import build_ext
+
+pkgName = 'jLM'
+ver='@PROJECT_VERSION@'
+long_description="Experimental Jupyter interface to Lattice Microbes."
+
+classifiers = ['Development Status :: 3 - Alpha',
+               'Environment :: Console',
+               'Intended Audience :: Science/Research',
+               'License :: OSI Approved :: University of Illinois/NCSA Open Source License',
+               'Operating System :: POSIX',
+               'Programming Language :: C',
+               'Programming Language :: Python :: 3.5',
+               'Topic :: Scientific/Engineering :: Artificial Life',
+               'Topic :: Scientific/Engineering :: Bio-Informatics',
+               'Topic :: Scientific/Engineering :: Chemistry',
+               'Topic :: Scientific/Engineering :: Physics',
+               'Topic :: Scientific/Engineering :: Visualization']
+
+class build_py(duc.build_py):
+      def run(self):
+            if not self.dry_run:
+                  target_dir = os.path.join(self.build_lib, pkgName)
+                  self.mkpath(target_dir)
+
+                  try:
+                        gitCmd = subprocess.check_output(["git", "log", "--pretty=format:%H", "-n", "1"]).decode()
+                  except:
+                        gitCmd = '<<not build under version control>>'
+
+                  buildData = dict(buildTime=time.strftime("%Y-%m-%d %H:%M:%S"),
+                                   name=pkgName,
+                                   version=ver,
+                                   gitHash=gitCmd,
+                                   user=getpass.getuser(),
+                                   host=socket.gethostname())
+
+                  json.dump(buildData, open(os.path.join(target_dir, "build.json"), "w"))
+
+            duc.build_py.run(self)
+
+setup(name=pkgName,
+      classifiers=classifiers,
+      zip_safe=False,
+      packages=find_packages(),
+      keywords=['stochastic simulations', 'RDME', 'CME', 'chemical reactions', 'biology', 'Lattice Microbes'],
+      cmdclass={'build_py': build_py, 'build_ext': build_ext },
+      license='University of Illinois/NCSA Open Source License',
+      include_package_data=True,
+      version=ver,
+      description='Jupyter runtime for Lattice Microbes',
+      long_description=long_description,
+      author="Tyler M. Earnest",
+      author_email="tylere@rne.st",
+      url="http://www.scs.illinois.edu/schulten/lm/",
+      install_requires = ['Cython', 'numpy', 'scipy', 'h5py'],
+      extras_require = { "interactive": ['pillow', 'jinja2', 'cairocffi', 'ipython', 'webcolors', 'matplotlib']},
+      python_requires=">=3.5",
+      ext_modules = [
+          Extension("jLM.Lattice", sources=['jLM/Lattice.pyx'], include_dirs=[numpy.get_include()]),
+          ]
+)

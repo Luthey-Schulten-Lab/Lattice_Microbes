@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.StandardCells &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pySTDLM.StandardReactions" href="pySTDLM.StandardReactions.html" />
+    <link rel="prev" title="pySTDLM.SBMLReader" href="pySTDLM.SBMLReader.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pySTDLM.StandardCells</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pySTDLM.StandardCells.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pySTDLM.StandardCells">
+<span id="pystdlm-standardcells"></span><h1>pySTDLM.StandardCells<a class="headerlink" href="#module-pySTDLM.StandardCells" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.StandardCells.buildDividingEColiCell" title="pySTDLM.StandardCells.buildDividingEColiCell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buildDividingEColiCell</span></code></a>(sim[,&nbsp;crowded,&nbsp;…])</td>
+<td>Build a standard E coli cell 0.5 microns across and 4 microns long.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.StandardCells.buildEColiCell" title="pySTDLM.StandardCells.buildEColiCell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buildEColiCell</span></code></a>(sim[,&nbsp;crowded,&nbsp;crowdedMembrane])</td>
+<td>Build a standard E coli cell 0.5 microns across and 2 microns long.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.StandardCells.buildFilamentousEColiCell" title="pySTDLM.StandardCells.buildFilamentousEColiCell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buildFilamentousEColiCell</span></code></a>(sim[,&nbsp;length,&nbsp;…])</td>
+<td>Build a long filamentous E coli cell where the user can specify the length.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.StandardCells.buildSphericalEColiCell" title="pySTDLM.StandardCells.buildSphericalEColiCell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buildSphericalEColiCell</span></code></a>([crowded,&nbsp;…])</td>
+<td>Build a Spherical E coli cell, one that lacks the gene for elongation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.StandardCells.packFastGrowingEcoli" title="pySTDLM.StandardCells.packFastGrowingEcoli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">packFastGrowingEcoli</span></code></a>(sim)</td>
+<td>Pack a cell with the protein distribution for fast growing E coli.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.StandardCells.packSlowGrowingEcoli" title="pySTDLM.StandardCells.packSlowGrowingEcoli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">packSlowGrowingEcoli</span></code></a>(sim)</td>
+<td>Pack a cell with the protein distribution for fast growing E coli.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pySTDLM.StandardCells.buildDividingEColiCell">
+<code class="descclassname">pySTDLM.StandardCells.</code><code class="descname">buildDividingEColiCell</code><span class="sig-paren">(</span><em>sim</em>, <em>crowded=False</em>, <em>crowdedMembrane=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardCells.html#buildDividingEColiCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardCells.buildDividingEColiCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a standard E coli cell 0.5 microns across and 4 microns long.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – An RDMESimulation object</li>
+<li><strong>crowded</strong> – Should the cytosol be crowded (default: false)</li>
+<li><strong>crowdedMembrane</strong> – Should the membrane be crowded (default: false)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardCells.buildEColiCell">
+<code class="descclassname">pySTDLM.StandardCells.</code><code class="descname">buildEColiCell</code><span class="sig-paren">(</span><em>sim</em>, <em>crowded=False</em>, <em>crowdedMembrane=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardCells.html#buildEColiCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardCells.buildEColiCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a standard E coli cell 0.5 microns across and 2 microns long.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – An RDMESimulation object</li>
+<li><strong>crowded</strong> – Should the cytosol be crowded (default: false)</li>
+<li><strong>crowdedMembrane</strong> – Should the membrane be crowded (default: false)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardCells.buildFilamentousEColiCell">
+<code class="descclassname">pySTDLM.StandardCells.</code><code class="descname">buildFilamentousEColiCell</code><span class="sig-paren">(</span><em>sim</em>, <em>length=8.0</em>, <em>crowded=False</em>, <em>crowdedMembrane=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardCells.html#buildFilamentousEColiCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardCells.buildFilamentousEColiCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a long filamentous E coli cell where the user can specify the length.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – An RDMESimulation object</li>
+<li><strong>length</strong> – The length of the cell in microns (default: 8)</li>
+<li><strong>crowded</strong> – Should the cytosol be crowded (default: false)</li>
+<li><strong>crowdedMembrane</strong> – Should the membrane be crowded (default: false)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardCells.buildSphericalEColiCell">
+<code class="descclassname">pySTDLM.StandardCells.</code><code class="descname">buildSphericalEColiCell</code><span class="sig-paren">(</span><em>crowded=False</em>, <em>latticeSpacing=16</em>, <em>crowdedMembrane=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardCells.html#buildSphericalEColiCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardCells.buildSphericalEColiCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a Spherical E coli cell, one that lacks the gene for elongation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – An RDMESimulation object</li>
+<li><strong>crowded</strong> – Should the cytosol be crowded (default: false)</li>
+<li><strong>crowdedMembrane</strong> – Should the membrane be crowded (default: false)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardCells.packFastGrowingEcoli">
+<code class="descclassname">pySTDLM.StandardCells.</code><code class="descname">packFastGrowingEcoli</code><span class="sig-paren">(</span><em>sim</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardCells.html#packFastGrowingEcoli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardCells.packFastGrowingEcoli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack a cell with the protein distribution for fast growing E coli.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sim</strong> – A RDMESimulation object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardCells.packSlowGrowingEcoli">
+<code class="descclassname">pySTDLM.StandardCells.</code><code class="descname">packSlowGrowingEcoli</code><span class="sig-paren">(</span><em>sim</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardCells.html#packSlowGrowingEcoli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardCells.packSlowGrowingEcoli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack a cell with the protein distribution for fast growing E coli.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sim</strong> – A RDMESimulation object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pySTDLM.StandardReactions.html" class="btn btn-neutral float-right" title="pySTDLM.StandardReactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pySTDLM.SBMLReader.html" class="btn btn-neutral" title="pySTDLM.SBMLReader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

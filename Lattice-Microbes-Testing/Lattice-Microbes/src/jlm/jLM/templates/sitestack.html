@@ -1,0 +1,38 @@
+<div id="{{renderId}}top" class="jLMflex">
+    <div class="regLeft">
+        <h3>Key</h3>
+        <ul class="reg">
+            {% for r in reg %}
+            <li>{{ r }}</li>
+            {% endfor %}
+        </ul>
+        <button onclick="{{renderId}}delete()">Close viewer</button>
+    </div>
+    <div class="regRight">
+        <h3><i>{{ plane }}</i>-plane; <i>{{ direction }}</i>-index=<span id="{{renderId}}pos">{{start}}</span></h3>
+        <img id='{{renderId}}img' class="smallreg" width="{{w}}" height="{{h}}" />
+        <input class='stackSlider' orient='vertical' id="{{renderId}}slide" type="range" min="0" max="{{dim-1}}" step="1" value="{{start}}"/>
+    </div>
+</div>
+<script>
+var {{renderId}}pngData = {{pngData}},
+    {{renderId}}vsl = document.getElementById("{{renderId}}slide"),
+    {{renderId}}vsp = document.getElementById("{{renderId}}pos"),
+    {{renderId}}vim = document.getElementById("{{renderId}}img");
+
+function {{renderId}}delete() {
+    var ch = document.getElementById("{{renderId}}top");
+    var pt = ch.parentNode;
+    pt.removeChild(ch);
+}
+
+{{renderId}}vim.setAttribute("src", "data:image/png;base64," + {{renderId}}pngData[{{start}}]);
+
+{{renderId}}vsl.addEventListener("input", function() {
+    var idx = {{renderId}}vsl.value;
+    var img = {{renderId}}pngData[idx];
+
+    {{renderId}}vim.setAttribute("src", "data:image/png;base64," + img);
+    {{renderId}}vsp.innerHTML = idx;
+    }, false); 
+</script>

@@ -1,0 +1,52 @@
+                           Lattice Microbes 2.3.0 FAQ
+================================================================================
+
+1) Where can I find help?
+
+Email the user mailing list: latticemicrobes-users@lists.illinois.edu
+
+
+
+2) Can I contribute code to the project?
+
+Sure, email the user mailing list to learn how.
+
+
+
+3) The code compiles fine, but running a simulation causes the error: ""
+
+In this case the Cuda code is not being compiled for you GPU's correct 
+architecture.  Add the following to your "CUDA_FLAGS" in your local.mk file:
+
+-gencode arch=compute_20,code=sm_20 \
+-gencode arch=compute_30,code=sm_30 \
+-gencode arch=compute_35,code=sm_35 
+
+
+
+4) When compiling the code I get one of the errors: 
+"identifier 'TUNE_MPD_Z_BLOCK_Z_SIZE' is undefined"
+"identifier 'TUNE_MPD_Y_BLOCK_Y_SIZE' is undefined"
+"identifier 'CUDA_3D_GRID_LAUNCH' is undefined"
+
+These flags are required to set the optimal size for the memory on the GPU.
+Fix by add the following to your "CUDA_FLAGS" in your local.mk file: 
+-DCUDA_3D_GRID_LAUNCH \
+-DCUDA_DOUBLE_PRECISION \
+-DTUNE_MPD_Y_BLOCK_Y_SIZE=16 \
+-DTUNE_MPD_Z_BLOCK_Z_SIZE=8
+
+
+5) How do I support more than 64 reactions?
+
+Add the compile time flag to your "CUDA_FLAGS":
+
+-DGLOBAL_S_MATRIX
+
+	MPD-RDME will place the S matrix and the RL matrix in device global memory
+as opposed to storing them in constant memory.  The constant memory size
+limitation allows us to have an S matrix of 16KB, which at 256 species is only
+64 reactions.  Placing it in global memory allows "unbounded" size.  There is
+still a 1536 reaction count limit due to other statically sized arrays stored
+in constant memory.
+

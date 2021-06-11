@@ -1,0 +1,25 @@
+<table class='jLMtbl'>
+    <caption>{{title}}</caption>
+    <tr>
+        <th>Index</th>
+        <th>Symbol</th>
+        <th>Value</th>
+        <th>Unit</th>
+        <th>Usage</th>
+        {% if annotationCol %}
+        <th>Description</th>
+        {% endif %}
+    </tr>
+    {% for p in params %}
+    <tr>
+        <td> {{p.id}} </td>
+        <td> ${{p.symbol}}$ </td>
+        <td> {{p.value}} </td>
+        <td class='jLMnum'>{{p.unit}}</td>
+        <td class='jLMnum'>{{p.count}}</td>
+        {% if annotationCol %}
+        <td> {{p.annotation or ''}} </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyLM.LMLogger &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyLM.RDME" href="pyLM.RDME.html" />
+    <link rel="prev" title="pyLM.ipyInterface" href="pyLM.ipyInterface.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pyLM.LMLogger</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pyLM.LMLogger.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyLM.LMLogger">
+<span id="pylm-lmlogger"></span><h1>pyLM.LMLogger<a class="headerlink" href="#module-pyLM.LMLogger" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pyLM.LMLogger.setLMLogConsole" title="pyLM.LMLogger.setLMLogConsole"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setLMLogConsole</span></code></a>([level])</td>
+<td>Set the logger to write to the console as the code is working</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pyLM.LMLogger.setLMLogFile" title="pyLM.LMLogger.setLMLogFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setLMLogFile</span></code></a>(filename[,&nbsp;level])</td>
+<td>Set up file handler to print log to file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pyLM.LMLogger.setLMLoggerLevel" title="pyLM.LMLogger.setLMLoggerLevel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setLMLoggerLevel</span></code></a>(level)</td>
+<td>Set the level of the logger for the application</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pyLM.LMLogger.setLMLogConsole">
+<code class="descclassname">pyLM.LMLogger.</code><code class="descname">setLMLogConsole</code><span class="sig-paren">(</span><em>level=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/LMLogger.html#setLMLogConsole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.LMLogger.setLMLogConsole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the logger to write to the console as the code is working</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>level</strong> – The level of information to log</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyLM.LMLogger.setLMLogFile">
+<code class="descclassname">pyLM.LMLogger.</code><code class="descname">setLMLogFile</code><span class="sig-paren">(</span><em>filename</em>, <em>level=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/LMLogger.html#setLMLogFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.LMLogger.setLMLogFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up file handler to print log to file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The name of the file to log information</li>
+<li><strong>level</strong> – The level of information to log</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyLM.LMLogger.setLMLoggerLevel">
+<code class="descclassname">pyLM.LMLogger.</code><code class="descname">setLMLoggerLevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/LMLogger.html#setLMLoggerLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.LMLogger.setLMLoggerLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the level of the logger for the application</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>level</strong> – The level the logger should report (e.g. logger.WARNING, logger.INFO, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyLM.RDME.html" class="btn btn-neutral float-right" title="pyLM.RDME" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pyLM.ipyInterface.html" class="btn btn-neutral" title="pyLM.ipyInterface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

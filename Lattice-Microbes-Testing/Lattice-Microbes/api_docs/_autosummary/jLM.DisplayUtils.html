@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.DisplayUtils &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="jLM.Lattice" href="jLM.Lattice.html" />
+    <link rel="prev" title="jLM.ColorGen" href="jLM.ColorGen.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>jLM.DisplayUtils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/jLM.DisplayUtils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-jLM.DisplayUtils">
+<span id="jlm-displayutils"></span><h1>jLM.DisplayUtils<a class="headerlink" href="#module-jLM.DisplayUtils" title="Permalink to this headline">¶</a></h1>
+<p>Auxiliary helper functions for presentation</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.DisplayUtils.colorWheel" title="jLM.DisplayUtils.colorWheel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colorWheel</span></code></a>(h)</td>
+<td>RGB triple at a particular hue</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.DisplayUtils.numToStr" title="jLM.DisplayUtils.numToStr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numToStr</span></code></a>(val[,&nbsp;unit,&nbsp;scale,&nbsp;n,&nbsp;smallest_exp])</td>
+<td>Pretty print a number</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.DisplayUtils.sanitizeTex" title="jLM.DisplayUtils.sanitizeTex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitizeTex</span></code></a>(st)</td>
+<td>Replace control characters with escaped versions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.DisplayUtils.texUnits" title="jLM.DisplayUtils.texUnits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texUnits</span></code></a>(s)</td>
+<td>Reformat ascii number as TeX</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.DisplayUtils.texfmt" title="jLM.DisplayUtils.texfmt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texfmt</span></code></a>(xx[,&nbsp;n,&nbsp;tex_escape,&nbsp;smallest_exp])</td>
+<td>Format a float in LaTeXified scientific notation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.DisplayUtils.toHex" title="jLM.DisplayUtils.toHex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toHex</span></code></a>(c)</td>
+<td>RGB triple to hex string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.DisplayUtils.unicodeUnits" title="jLM.DisplayUtils.unicodeUnits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unicodeUnits</span></code></a>(s)</td>
+<td>Reformat ascii number as unicode</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="jLM.DisplayUtils.colorWheel">
+<code class="descclassname">jLM.DisplayUtils.</code><code class="descname">colorWheel</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/DisplayUtils.html#colorWheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.DisplayUtils.colorWheel" title="Permalink to this definition">¶</a></dt>
+<dd><p>RGB triple at a particular hue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>h</strong> (<em>float</em>) – Hue in range (0,1)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">RGB triple</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(int,int,int)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.DisplayUtils.numToStr">
+<code class="descclassname">jLM.DisplayUtils.</code><code class="descname">numToStr</code><span class="sig-paren">(</span><em>val</em>, <em>unit=None</em>, <em>scale=1</em>, <em>n=3</em>, <em>smallest_exp=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/DisplayUtils.html#numToStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.DisplayUtils.numToStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty print a number</p>
+<p>Units can be specified in the format, e.g. “m^{2}*s^{-1}”.
+In this format, it can be converted between TeX and unicode
+representations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>val</strong> (<em>float</em>) – Value</li>
+<li><strong>unit</strong> (<em>str</em>) – Unit</li>
+<li><strong>scale</strong> (<em>float</em>) – Factor to scale value</li>
+<li><strong>n</strong> (<em>int</em>) – Precision</li>
+<li><strong>smallest_exp</strong> (<em>int</em>) – Smallest absolute value of exponent to write in scientific notation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Formatted number</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.DisplayUtils.sanitizeTex">
+<code class="descclassname">jLM.DisplayUtils.</code><code class="descname">sanitizeTex</code><span class="sig-paren">(</span><em>st</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/DisplayUtils.html#sanitizeTex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.DisplayUtils.sanitizeTex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace control characters with escaped versions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>st</strong> (<em>str</em>) – Input string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Escaped version of <cite>st</cite></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.DisplayUtils.texUnits">
+<code class="descclassname">jLM.DisplayUtils.</code><code class="descname">texUnits</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/DisplayUtils.html#texUnits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.DisplayUtils.texUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reformat ascii number as TeX</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<em>str</em>) – Formatted number. See <a class="reference internal" href="#jLM.DisplayUtils.numToStr" title="jLM.DisplayUtils.numToStr"><code class="xref py py-func docutils literal notranslate"><span class="pre">numToStr()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">TeX math mode representation.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.DisplayUtils.texfmt">
+<code class="descclassname">jLM.DisplayUtils.</code><code class="descname">texfmt</code><span class="sig-paren">(</span><em>xx</em>, <em>n=3</em>, <em>tex_escape=False</em>, <em>smallest_exp=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/DisplayUtils.html#texfmt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.DisplayUtils.texfmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a float in LaTeXified scientific notation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xx</strong> (<em>float</em>) – Number</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>int</em>) – Precision</li>
+<li><strong>tex_escape</strong> (<em>bool</em>) – If true, wrap result in inline math.</li>
+<li><strong>smallest_exp</strong> (<em>int</em>) – Smallest absolute value of exponent to print in
+scientific notation.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Formatted number</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.DisplayUtils.toHex">
+<code class="descclassname">jLM.DisplayUtils.</code><code class="descname">toHex</code><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/DisplayUtils.html#toHex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.DisplayUtils.toHex" title="Permalink to this definition">¶</a></dt>
+<dd><p>RGB triple to hex string</p>
+<dl class="docutils">
+<dt>Args.</dt>
+<dd><dl class="first last docutils">
+<dt>c (float,float,float):</dt>
+<dd>RGB tuple of values 0 &lt;= c &lt;= 1</dd>
+</dl>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">HTML RGB hex code.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.DisplayUtils.unicodeUnits">
+<code class="descclassname">jLM.DisplayUtils.</code><code class="descname">unicodeUnits</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/DisplayUtils.html#unicodeUnits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.DisplayUtils.unicodeUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reformat ascii number as unicode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<em>str</em>) – Formatted number. See <a class="reference internal" href="#jLM.DisplayUtils.numToStr" title="jLM.DisplayUtils.numToStr"><code class="xref py py-func docutils literal notranslate"><span class="pre">numToStr()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Unicode formatted number.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="jLM.Lattice.html" class="btn btn-neutral float-right" title="jLM.Lattice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="jLM.ColorGen.html" class="btn btn-neutral" title="jLM.ColorGen" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

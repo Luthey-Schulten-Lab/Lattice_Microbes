@@ -1,0 +1,59 @@
+\usepackage{ifthen}
+
+% 2009-02-23; Elijah Roberts: moved into LaTeX package
+% 2009-02-26; Elijah Roberts: adjusted outline indentation and fixed following paragraph indentation.
+% 2009-06-29; Elijah Roberts: added horizontal rules above and below the outline sections.
+% 2011-01-06; Elijah Roberts: changed horizontal rule to be only across a column
+
+% Uncomment the folllowing two lines if not using chapters.
+%\newcounter{chapter}
+%\setcounter{chapter}{1}
+
+% Outline commands.
+\newboolean{showOutline}
+\setboolean{showOutline}{false}
+\newcounter{outlineCurrentChapter}
+\setcounter{outlineCurrentChapter}{\value{chapter}}
+\newcounter{outlineCurrentSection}
+\setcounter{outlineCurrentSection}{\value{section}}
+\newcounter{outlineCurrentSubsection}
+\setcounter{outlineCurrentSubsection}{\value{subsection}}
+\newcounter{outlineCounterHeading}
+\setcounter{outlineCounterHeading}{1}
+\newcounter{outlineCounterPoint}
+\setcounter{outlineCounterPoint}{1}
+\newcounter{outlineCounterSubPoint}
+\setcounter{outlineCounterSubPoint}{1}
+\newcommand{\outline}[1]%
+{%
+  \ifthenelse{\boolean{showOutline}}%
+  {\noindent\rule{\columnwidth}{1pt}\\OUTLINE#1\par\noindent\rule{\columnwidth}{1pt}}%
+  {}%
+}
+\newcommand{\outlineHeading}[1]%
+{%
+    \ifthenelse{\equal{\value{outlineCurrentChapter}}{\value{chapter}}%
+    \and\equal{\value{outlineCurrentSection}}{\value{section}}%
+    \and\equal{\value{outlineCurrentSubsection}}{\value{subsection}}}%
+    {}%
+    {\setcounter{outlineCurrentChapter}{\value{chapter}}%
+    \setcounter{outlineCurrentSection}{\value{section}}%
+    \setcounter{outlineCurrentSubsection}{\value{subsection}}%
+    \setcounter{outlineCounterHeading}{1}%
+    }%
+    \par\noindent\hspace{0.25in}\hangindent=0.40in{\it \small \Roman{outlineCounterHeading}. }{\it #1}%
+    \setcounter{outlineCounterPoint}{1}%
+    \addtocounter{outlineCounterHeading}{1}%
+}
+\newcommand{\outlinePoint}[1]%
+{%
+    \par\noindent\hspace{0.50in}\hangindent=0.65in{\it \small \Alph{outlineCounterPoint}. }{\it #1}%
+    \addtocounter{outlineCounterPoint}{1}%
+    \setcounter{outlineCounterSubPoint}{1}%
+}
+\newcommand{\outlineSubPoint}[1]%
+{%
+    \par\noindent\hspace{0.75in}\hangindent=0.90in{\it \small \arabic{outlineCounterSubPoint}. }{\it #1}%
+    \addtocounter{outlineCounterSubPoint}{1}%
+}
+

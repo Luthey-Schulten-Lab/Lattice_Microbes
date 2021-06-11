@@ -1,0 +1,73 @@
+# Legend
+# / = group
+# * = attribute
+# - = dataset
+
+
+/Root
+    *formatVersion                      (uint: 3)
+    /Parameters
+        *writeInterval                  (string)
+        *maxTime                        (string)
+        *latticeWriteInterval           (string)
+        *timestep                       (string)
+        *noiseRecalcFraction            (string)
+        *<keys>                         (string)
+        *fptTrackingList                (string, comma delimited list of species)
+        *speciesLowerLimitList          (string, comma delimited list of species lower limits, e.g., 0:1000,1:15)
+        *speciesUpperLimitList          (string, comma delimited list of species upper limits, e.g., 0:1000,1:15)
+    /Model
+        -SBML                           (dataset: n, uint8)
+        /Reaction
+            *numberSpecies              (uint)
+            *numberReactions            (uint)
+            -InitialSpeciesCounts       (dataset: numberSpecies, uint)
+            -ReactionTypes              (dataset: numberReactions, uint)
+            -ReactionRateConstants      (dataset: numberReactions x 10, double)
+            -ReactionRateNoise          (dataset: numberReactions x 2 (variance, tau), double)
+            -StoichiometricMatrix       (dataset: numberSpecies x numberReactions, int)
+            -DependencyMatrix           (dataset: numberSpecies x numberReactions, uint)
+        /Diffusion
+            *numberSpecies              (uint)
+            *numberReactions            (uint)
+            *numberSiteTypes            (uint)
+            -DiffusionMatrix            (dataset: numberSiteTypes x numberSiteTypes x numberSpecies (srcSite, destSite, particleType), double)
+            -ReactionLocationMatrix     (dataset: numberReactions x numberSiteTypes, uint)
+            *latticeSpacing             (double)
+            *latticeXSize               (uint)
+            *latticeYSize               (uint)
+            *latticeZSize               (uint)
+            *particlesPerSite           (uint)
+            -Lattice                    (dataset: latticeXSize x latticeYSize x latticeZSize x particlesPerSite, uint8)
+            -LatticeSites               (dataset: latticeXSize x latticeYSize x latticeZSize, uint8)
+        /Spatial
+            /Regions
+                *numberRegions          (uint)
+                -Types                  (dataset: numberRegions x 2 (shapeType, siteType), uint)
+                -ShapeParameters        (dataset: numberRegions x 10 (d1...d10), double)
+            /Obstacles
+                *numberObstacles        (uint)
+                -Types                  (dataset: numberObstacles x 2 (shapeType, siteType), uint)
+                -ShapeParameters        (dataset: numberObstacles x 10 (d1...d10), double)
+    /Simulations
+        /NNNNNNN
+            /Model
+                /Diffusion
+                    -Lattice            (dataset: latticeXSize x latticeYSize x latticeZSize x particlesPerSite, uint8)
+                    -LatticeSites       (dataset: latticeXSize x latticeYSize x latticeZSize, uint8)
+                /Spatial
+                    -Spheres            (dataset: n x 5 (xc, yc, zc, radius, type), double)
+            -SpeciesCountTimes          (dataset: n, double)
+            -SpeciesCounts              (dataset: n x numberSpecies, uint)
+            /FirstPassageTimes
+                /NN
+                    -Counts             (dataset: n, uint)
+                    -CountTimes         (dataset: n, double)
+            /ParameterValues
+                -SSSS                   (dataset: n x 2 (time,value), double)
+            -LatticeTimes               (dataset: n, double)
+            /Lattice
+                -NNNNNNNNNN             (dataset: latticeXSize x latticeYSize x latticeZSize x particlesPerSite, uint8)
+            -LatticeSitesTimes          (dataset: n, double)
+            /LatticeSites              
+                -NNNNNNNNNN             (dataset: latticeXSize x latticeYSize x latticeZSize, uint8)

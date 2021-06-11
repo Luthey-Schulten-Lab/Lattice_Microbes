@@ -1,0 +1,6 @@
+# This file defines all of the tests to be performed
+#  by the regression tester. 
+#
+# TestDirectory	InputFile
+CMEBase	testCME.py
+#RDMEBase	testRDME.py

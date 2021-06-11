@@ -1,0 +1,479 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyLM.CME &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyLM.ipyInterface" href="pyLM.ipyInterface.html" />
+    <link rel="prev" title="pyLM" href="pyLM.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pyLM.CME</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pyLM.CME.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyLM.CME">
+<span id="pylm-cme"></span><h1>pyLM.CME<a class="headerlink" href="#module-pyLM.CME" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pyLM.CME.CMESimulation" title="pyLM.CME.CMESimulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CMESimulation</span></code></a>([volume,&nbsp;name])</td>
+<td>A constructor for the CMESimulation</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pyLM.CME.CMESimulation">
+<em class="property">class </em><code class="descclassname">pyLM.CME.</code><code class="descname">CMESimulation</code><span class="sig-paren">(</span><em>volume=None</em>, <em>name='unnamed'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A constructor for the CMESimulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>volume</strong> – The reaction vessel volume (in Litres).  Specifying ‘None’ signifies that the user has already accounted for volume in rate constants.</li>
+<li><strong>name</strong> – The name of the CME simulation; Default: “unnamed”</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">CMESimulation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.addConcentration">
+<code class="descname">addConcentration</code><span class="sig-paren">(</span><em>species='unknown'</em>, <em>conc=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.addConcentration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.addConcentration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a concentration of particles of the specified type to the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>species</strong> – The name of the specie to add</li>
+<li><strong>concentration</strong> – The concentration of the species (Molar).  Particle count is rounded to nearest integer.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.addParticles">
+<code class="descname">addParticles</code><span class="sig-paren">(</span><em>species='unknown'</em>, <em>count=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.addParticles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.addParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a specified number of particles of the specified type to the  specified region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>species</strong> – The name of the specie to add particles to</li>
+<li><strong>count</strong> – The number of that particle to start with (default 1)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.addReaction">
+<code class="descname">addReaction</code><span class="sig-paren">(</span><em>reactant</em>, <em>product</em>, <em>rate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.addReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.addReaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a 0th, 1st or 2nd order reaction</p>
+<p>Reaction rates are specified as <em>stochastic</em> rates: i.e. in units of
+<span class="math notranslate nohighlight">\(1/\mathrm{s}\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>reactant</strong> – The list or reactants</li>
+<li><strong>product</strong> – The list of products</li>
+<li><strong>rate</strong> – The <em>stochastic</em> rate of reaction</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.buildReactionModel">
+<code class="descname">buildReactionModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.buildReactionModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.buildReactionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Lattice Microbes ReactionModel object for fine-tuning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The reaction model for the simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.defineSpecies">
+<code class="descname">defineSpecies</code><span class="sig-paren">(</span><em>species</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.defineSpecies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.defineSpecies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a species of particles that exist in the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>species</strong> – A list of species to add to the simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>filename</em>, <em>method</em>, <em>replicates=1</em>, <em>seed=None</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the simulation using the specified solver the specified amount of time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>method</strong> – The class name for the solver to use (e.g., lm::cme::GillespieDSolver”)</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+<li><strong>seed</strong> – A seed for the random number generator to use when running the simulation; None indicates default</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.runMPI">
+<code class="descname">runMPI</code><span class="sig-paren">(</span><em>filename</em>, <em>method</em>, <em>replicates=1</em>, <em>driver='mpirun'</em>, <em>ppe=1</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.runMPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.runMPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the simulation using a call to mpirun with the given options</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>method</strong> – The class name for the solver to use (e.g. lm::cme::GillespieDSolver”)</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+<li><strong>driver</strong> – The program to execute the parallel run, e.g. “mpirun”, “aprun”, “ibrun”, etc.</li>
+<li><strong>ppe</strong> – The number of processing elements to use (e.g. number of nodes)</li>
+<li><strong>seed</strong> – A seed for the random number generator to use when running the simulation; None indicates default</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.runSolver">
+<code class="descname">runSolver</code><span class="sig-paren">(</span><em>filename</em>, <em>solver</em>, <em>replicates=1</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.runSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.runSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a simulation with a given solver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>solver</strong> – An MESolver object</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an HDF5 version of the simulation amenable for later running or stand-alone running</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – The filename to save the simulation setup in</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.setHookInterval">
+<code class="descname">setHookInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.setHookInterval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.setHookInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation hook interval</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – Time length between hook calls</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.setRandomSeed">
+<code class="descname">setRandomSeed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.setRandomSeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.setRandomSeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a known random seed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> – Random seed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.setSimulationTime">
+<code class="descname">setSimulationTime</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.setSimulationTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.setSimulationTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the total simulation time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – Time length of the simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.setTimestep">
+<code class="descname">setTimestep</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.setTimestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.setTimestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the simulation time step
+:param time: The length of simulation timestep for CME</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.CME.CMESimulation.setWriteInterval">
+<code class="descname">setWriteInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/CME.html#CMESimulation.setWriteInterval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.CME.CMESimulation.setWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation state write-to-disk interval
+:param time: Time length between writes</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyLM.ipyInterface.html" class="btn btn-neutral float-right" title="pyLM.ipyInterface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pyLM.html" class="btn btn-neutral" title="pyLM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

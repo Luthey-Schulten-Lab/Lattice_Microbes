@@ -1,0 +1,2541 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.RDME &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="jLM.RegionBuilder" href="jLM.RegionBuilder.html" />
+    <link rel="prev" title="jLM" href="jLM.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>jLM.RDME</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/jLM.RDME.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-jLM.RDME">
+<span id="jlm-rdme"></span><h1>jLM.RDME<a class="headerlink" href="#module-jLM.RDME" title="Permalink to this headline">¶</a></h1>
+<p>Spatial model</p>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.RDME.File" title="jLM.RDME.File"><code class="xref py py-obj docutils literal notranslate"><span class="pre">File</span></code></a>(fname[,&nbsp;replicate])</td>
+<td>Load a previously defined simulation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.RDME.Sim" title="jLM.RDME.Sim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sim</span></code></a>(name,&nbsp;filename,&nbsp;dimensions,&nbsp;…[,&nbsp;dt])</td>
+<td>Prepare a simulation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpatialModel</span></code></a>(name,&nbsp;filename,&nbsp;dimensions,&nbsp;…)</td>
+<td>Base RDME model</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="jLM.RDME.File">
+<em class="property">class </em><code class="descclassname">jLM.RDME.</code><code class="descname">File</code><span class="sig-paren">(</span><em>fname</em>, <em>replicate=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.Analysis.TrajAnalysisMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.JupyterDisplay.FileJupyterMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.LmInteract.LmReadMixin</span></code>, <a class="reference internal" href="#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.RDME.SpatialModel</span></code></a></p>
+<p>Load a previously defined simulation</p>
+<dl class="method">
+<dt id="jLM.RDME.File.assignReaction">
+<code class="descname">assignReaction</code><span class="sig-paren">(</span><em>reaction</em>, <em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.assignReaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a reaction to a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>reaction</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Reaction" title="jLM.Types.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a>) – Reaction</li>
+<li><strong>region</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>) – Target region</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.bdMaxParticles">
+<code class="descname">bdMaxParticles</code><a class="headerlink" href="#jLM.RDME.File.bdMaxParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of BD particles during simulation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.bdStepsPerRdmeStep">
+<code class="descname">bdStepsPerRdmeStep</code><a class="headerlink" href="#jLM.RDME.File.bdStepsPerRdmeStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of BD steps to take each RDME timestep</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.bdTemperature">
+<code class="descname">bdTemperature</code><a class="headerlink" href="#jLM.RDME.File.bdTemperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temperature used for Brownian dynamics</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.bdWriteInterval">
+<code class="descname">bdWriteInterval</code><a class="headerlink" href="#jLM.RDME.File.bdWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of BD state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.construct">
+<code class="descname">construct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.construct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track newly created model objects and display in Notebook.</p>
+<p>Context manager which tracks new species, reactions, etc., and displays
+a HTML summary when used in Jupyter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.dc">
+<code class="descname">dc</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.dc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient diffusion constant access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.diffRateList">
+<code class="descname">diffRateList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.diffRateList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of diffusion constants</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.diffusionConst">
+<code class="descname">diffusionConst</code><span class="sig-paren">(</span><em>rate</em>, <em>value</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.diffusionConst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rate</strong> (<em>str</em>) – Name of diffusion constant</li>
+<li><strong>value</strong> (<em>float</em>) – Value of diffusion constant</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the rate constant</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DiffusionConst instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.diffusionFast">
+<code class="descname">diffusionFast</code><a class="headerlink" href="#jLM.RDME.File.diffusionFast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create a maximum-valued diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DiffusionConst instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.diffusionZero">
+<code class="descname">diffusionZero</code><a class="headerlink" href="#jLM.RDME.File.diffusionZero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create a zero-valued diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DiffusionConst instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.displayGeometry">
+<code class="descname">displayGeometry</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.displayGeometry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.distributeConcentration">
+<code class="descname">distributeConcentration</code><span class="sig-paren">(</span><em>sp</em>, <em>reg</em>, <em>conc</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.distributeConcentration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute a concentration of particles uniformly through a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type</li>
+<li><strong>reg</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type</li>
+<li><strong>conc</strong> (<em>float</em>) – Concentration of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.distributeNumber">
+<code class="descname">distributeNumber</code><span class="sig-paren">(</span><em>sp</em>, <em>reg</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.distributeNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute a number of particles uniformly through a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type</li>
+<li><strong>reg</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type</li>
+<li><strong>count</strong> (<em>int</em>) – Number of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.evWriteInterval">
+<code class="descname">evWriteInterval</code><a class="headerlink" href="#jLM.RDME.File.evWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of excluded volume lattice (RDME + BD + background)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getBdTrajectory">
+<code class="descname">getBdTrajectory</code><span class="sig-paren">(</span><em>regex=None</em>, <em>species=None</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getBdTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the trajectory of Brownian particles</p>
+<p>Species can be selected individually with the species key. If
+a list of species are given instead the sum of the particle
+numbers for those species types will be returned. A regular
+expression can also be used to select the species to return.
+Species types or species names in the form of a string are
+both acceptible to use in the <cite>species</cite> key. The <cite>regex</cite> and
+<cite>species</cite> options are mutually exclusive.  Instead of
+returning the entire trajectory, a segment can be selected
+either through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or
+through the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>regex</strong> (<em>str</em>) – Regular expression matching species names. Multiple
+matches will be summed.</li>
+<li><strong>species</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species</li>
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The evaluation times, particle IDs, particle types, and particle positions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(np,),</span> <span class="pre">dtype=int)</span></code>), <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(np,),</span> <span class="pre">dtype=int)</span></code>), <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,np,3),</span> <span class="pre">dtype=float)</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getExcludedVolumeTrajectory">
+<code class="descname">getExcludedVolumeTrajectory</code><span class="sig-paren">(</span><em>integrated=''</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getExcludedVolumeTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the total excluded volume as a function of time</p>
+<p>Instead of returning the entire trajectory, a segment can be selected
+either through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or through
+the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>). If the full 3-D data set
+is not needed, any of the directions can be averaged out.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>integrated</strong> (<em>str</em>) – Combination of ‘x’, ‘y’, ‘z’ specifying the directions
+to average out</li>
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The evaluation times and excluded volume fractions</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(dtype=float)</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getLattice">
+<code class="descname">getLattice</code><span class="sig-paren">(</span><em>*</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getLattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the particle lattice</p>
+<p>Instead of returning the entire trajectory, a segment can be selected
+either through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or through
+the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>). If the full 3-D lattice
+is not needed, any of the directions can be integrated out.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The evaluation times and particle lattices</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(dtype=lattice_dtype)</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getLatticeHistogram">
+<code class="descname">getLatticeHistogram</code><span class="sig-paren">(</span><em>regex=None</em>, <em>species=None</em>, <em>integrated='xyz'</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getLatticeHistogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the spatial distribution of particles over an interval</p>
+<p>Species can be selected individually with the species key. If
+a list of species are given instead the sum of the particle
+numbers for those species types will be returned. A regular
+expression can also be used to select the species to return.
+Species types or species names in the form of a string are
+both acceptible to use in the <cite>species</cite> key. The <cite>regex</cite> and
+<cite>species</cite> options are mutually exclusive.  The interval of
+time in which the histogram is computed can be selected either
+through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or
+through the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>). If the
+full 3-D lattice is not needed, any of the directions can be
+integrated out.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>regex</strong> (<em>str</em>) – Regular expression matching species names. Multiple
+matches will be summed.</li>
+<li><strong>species</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species</li>
+<li><strong>integrated</strong> (<em>str</em>) – Combination of ‘x’, ‘y’, ‘z’ specifying the directions
+to integrate out</li>
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The average particle counts</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(dtype=float)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since this calculation requires reading the entire particle
+lattice trajectory, it can be slow.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getLatticeTrajectory">
+<code class="descname">getLatticeTrajectory</code><span class="sig-paren">(</span><em>regex=None</em>, <em>species=None</em>, <em>integrated=''</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getLatticeTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the spatial distribution of particles versus time</p>
+<p>Species can be selected individually with the species key. If
+a list of species are given instead the sum of the particle
+numbers for those species types will be returned. A regular
+expression can also be used to select the species to return.
+Species types or species names in the form of a string are
+both acceptible to use in the <cite>species</cite> key. The <cite>regex</cite> and
+<cite>species</cite> options are mutually exclusive.  Instead of
+returning the entire trajectory, a segment can be selected
+either through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or
+through the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>). If the
+full 3-D lattice is not needed, any of the directions can be
+integrated out.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>regex</strong> (<em>str</em>) – Regular expression matching species names. Multiple
+matches will be summed.</li>
+<li><strong>species</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species</li>
+<li><strong>integrated</strong> (<em>str</em>) – Combination of ‘x’, ‘y’, ‘z’ specifying the directions
+to integrate out</li>
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The evaluation times and particle counts</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(dtype=float)</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since this calculation requires reading the entire particle
+lattice trajectory, it can be slow.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getNumberTrajectory">
+<code class="descname">getNumberTrajectory</code><span class="sig-paren">(</span><em>regex=None</em>, <em>species=None</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getNumberTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate particle number trajectories</p>
+<p>The time course of the particle numbers in the simulation can
+be queried with this function.  Species can be selected
+individually with the <cite>species</cite> key. If a list of species are
+given instead the sum of the particle numbers for those species
+types will be returned. A regular expression can also be used
+to select the species to return. Species types or species names
+in the form of a string are both acceptible to use in the
+<cite>species</cite> key. The <cite>regex</cite> and <cite>species</cite> options are mutually
+exclusive.  Instead of returning the entire trajectory, a
+segment can be selected either through the frame numbers
+(<cite>frameStart</cite>, <cite>frameEnd</cite>) or through the simulation time
+(<cite>timeStart</cite>, <cite>timeEnd</cite>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>regex</strong> (<em>str</em>) – Regular expression matching species names. Multiple
+matches will be summed.</li>
+<li><strong>species</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species</li>
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The evaluation times and particle counts</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getNumberTrajectoryFromRegion">
+<code class="descname">getNumberTrajectoryFromRegion</code><span class="sig-paren">(</span><em>spRegex=None</em>, <em>species=None</em>, <em>regRegex=None</em>, <em>region=None</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getNumberTrajectoryFromRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate particle number trajectories for specific regions</p>
+<p>The time course of the particle numbers in the simulation
+within specific regions can be queried with this function.
+Species can be selected individually with the species key. If
+a list of species are given instead the sum of the particle
+numbers for those species types will be returned. A regular
+expression can also be used to select the species to return.
+Species types or species names in the form of a string are
+both acceptible to use in the <cite>species</cite> key. The <cite>spRegex</cite> and
+<cite>species</cite> options are mutually exclusive.  Instead of
+returning the entire trajectory, a segment can be selected
+either through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or
+through the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>). The
+regions to compute particle numbers over are selected similar
+to the species through the options <cite>regRegex</cite> and <cite>region</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spRegex</strong> (<em>str</em>) – Regular expression matching species names. Multiple
+matches will be summed.</li>
+<li><strong>species</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species</li>
+<li><strong>regRegex</strong> (<em>str</em>) – Regular expression matching region names. Multiple
+matches will be summed.</li>
+<li><strong>region</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region</li>
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The evaluation times and particle counts</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since this calculation requires reading the entire
+particle lattice trajectory, it can be slow.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getParticleLattice">
+<code class="descname">getParticleLattice</code><span class="sig-paren">(</span><em>*</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getParticleLattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the particle lattice</p>
+<p>Instead of returning the entire trajectory, a segment can be selected
+either through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or through
+the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>). If the full 3-D lattice
+is not needed, any of the directions can be integrated out.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The evaluation times and particle lattices</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(dtype=lattice_dtype)</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.getRdmeTrace">
+<code class="descname">getRdmeTrace</code><span class="sig-paren">(</span><em>unwrap_pbc=False</em>, <em>replicate=None</em>, <em>frameStart=None</em>, <em>frameEnd=None</em>, <em>timeStart=None</em>, <em>timeEnd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.getRdmeTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the positions of all traced RDME particles as a function of time</p>
+<p>If the simulation was performed with periodic bounary conditions, the
+flag <cite>unwrap_pbc</cite> can be used to replace particles leaving the
+simulation volume with the image nearest the volume exited.  This will
+return the particle displacements from their original position, not
+their absolute position.</p>
+<p>Instead of returning the entire trajectory, a segment can be selected
+either through the frame numbers (<cite>frameStart</cite>, <cite>frameEnd</cite>) or through
+the simulation time (<cite>timeStart</cite>, <cite>timeEnd</cite>). If the full data set is
+not needed, any of the directions can be averaged out. Since particle
+numbers can change, a list of frames is returned instead of a single
+ndarray.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>unwrap_pbc</strong> (<em>bool</em>) – If true, unwrap periodic boundary conditions, and return
+particle displacement.</li>
+<li><strong>replicate</strong> (<em>int</em>) – Replicate to return, default is current replicate.</li>
+<li><strong>frameStart</strong> (<em>int</em>) – Starting frame</li>
+<li><strong>frameEnd</strong> (<em>int</em>) – Ending frame</li>
+<li><strong>timeStart</strong> (<em>int</em>) – Starting time</li>
+<li><strong>timeEnd</strong> (<em>int</em>) – Ending Time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><dl class="docutils">
+<dt>(<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nt,),</span> <span class="pre">dtype=float)</span></code>,</dt>
+<dd><dl class="first last docutils">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nr,nt,nd),</span> <span class="pre">dtype=float)</span></code>):</dt>
+<dd><p class="first last">The evaluation times and particle positions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.hookInterval">
+<code class="descname">hookInterval</code><a class="headerlink" href="#jLM.RDME.File.hookInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between calls to hookSimulation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.latticeWriteInterval">
+<code class="descname">latticeWriteInterval</code><a class="headerlink" href="#jLM.RDME.File.latticeWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writing the lattice to the HDF5 file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.maxDiffusionRate">
+<code class="descname">maxDiffusionRate</code><span class="sig-paren">(</span><em>latticeSpacing=None</em>, <em>dt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.maxDiffusionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute max allowed diffusion constant for the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>latticeSpacing</strong> (<em>float</em>) – Lattice spacing in meters</li>
+<li><strong>dt</strong> (<em>float</em>) – Timestep in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Maximum diffusion constant in m^/s</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.particleStatistics">
+<code class="descname">particleStatistics</code><span class="sig-paren">(</span><em>particleLattice=None</em>, <em>siteLattice=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.particleStatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute properties of the particle lattice</p>
+<p>Dictionary keys</p>
+<dl class="docutils">
+<dt>countBySpeciesRegion</dt>
+<dd>Particle counts for each species type for each region.</dd>
+<dt>concBySpeciesRegion</dt>
+<dd>Concentration for each species type for each region.</dd>
+<dt>countByRegion</dt>
+<dd>Total particle counts for each region.</dd>
+<dt>concByRegion</dt>
+<dd>Total concentration for each region.</dd>
+<dt>countBySpecies</dt>
+<dd>Total particle counts for each species.</dd>
+<dt>concBySpecies</dt>
+<dd>Total concentration of each species, averaged over
+simulation volume</dd>
+<dt>count</dt>
+<dd>Total particle count</dd>
+<dt>conc</dt>
+<dd>Total concentration, averaged over simulation volume</dd>
+<dt>vol</dt>
+<dd>Total simulation volume</dd>
+<dt>siteCount</dt>
+<dd>Total number of subvolumes</dd>
+<dt>regionVol</dt>
+<dd>Volume of each region</dd>
+<dt>regionCounts</dt>
+<dd>Number of subvolumes in each region</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Particle lattice statistics</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.perfPrintInterval">
+<code class="descname">perfPrintInterval</code><a class="headerlink" href="#jLM.RDME.File.perfPrintInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Real elapsed time between writing simulation progress to stdout</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.placeNumber">
+<code class="descname">placeNumber</code><span class="sig-paren">(</span><em>sp</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.placeNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place a number of particles at a specific subvolume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>) – Species type</li>
+<li><strong>x</strong> (<em>int</em>) – x-coordinate</li>
+<li><strong>y</strong> (<em>int</em>) – y-coordinate</li>
+<li><strong>z</strong> (<em>int</em>) – z-coordinate</li>
+<li><strong>n</strong> (<em>int</em>) – Number of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.rateConst">
+<code class="descname">rateConst</code><span class="sig-paren">(</span><em>rate</em>, <em>value</em>, <em>order</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.rateConst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create reaction rate constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rate</strong> (<em>str</em>) – Name of rate constant</li>
+<li><strong>value</strong> (<em>float</em>) – Value of rate constant</li>
+<li><strong>order</strong> (<em>int</em>) – Order of reaction</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the rate constant</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">RateConst instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.RateConst" title="jLM.Types.RateConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">RateConst</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.rc">
+<code class="descname">rc</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.rc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient reaction rate access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.rdmeTraceInterval">
+<code class="descname">rdmeTraceInterval</code><a class="headerlink" href="#jLM.RDME.File.rdmeTraceInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of tracer positions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.reaction">
+<code class="descname">reaction</code><span class="sig-paren">(</span><em>reactants</em>, <em>products</em>, <em>rate</em>, <em>value=None</em>, <em>regions=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.reaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create reaction instance</p>
+<p>The product/reactants can be specified as a string, Species
+instance, list of strings, list of Species instances, or the
+empty list, denoting no species. The reaction rate can be
+created in place if a string is given for <cite>rate</cite> and the value
+of the rate constant is specified by <cite>value</cite>.  Rates must be
+provided in standard chemical kinetic units, e.g. for a reaction</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{A} + \mathrm{B} \overset{k}{\to} \mathrm{C},\]</div>
+<p>the rate coefficent, <span class="math notranslate nohighlight">\(k\)</span> has units of
+<span class="math notranslate nohighlight">\(\mathrm{M}^{-1}\mathrm{s}^{-1}\)</span></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reactants</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species, or list of species acting as reactants</li>
+<li><strong>products</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species, or list of species acting as products</li>
+<li><strong>rate</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.RateConst" title="jLM.Types.RateConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">RateConst</span></code></a>]) – Rate constant</li>
+<li><strong>value</strong> (<em>float</em>) – Optional value of rate constant</li>
+<li><strong>regions</strong> (py:class:<cite>~jLM.Types.Region</cite>]) – List of applicable regions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Reaction instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Reaction" title="jLM.Types.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.reactionList">
+<code class="descname">reactionList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.reactionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of reactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.reg">
+<code class="descname">reg</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient region access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.region">
+<code class="descname">region</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create region instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Name of the region</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the region</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Region instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.regionList">
+<code class="descname">regionList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.regionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of regions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.resizeLattice">
+<code class="descname">resizeLattice</code><span class="sig-paren">(</span><em>dimensions</em>, <em>latticeSpacing</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.resizeLattice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>solver=None</em>, <em>replicate=1</em>, <em>seed=None</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the RDME simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>solver</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">lm.RDMESolver</span></code>) – Rdme solver</li>
+<li><strong>replicate</strong> (<em>int</em>) – Index of replicate</li>
+<li><strong>seed</strong> (<em>int</em>) – RNG seed</li>
+<li><strong>cudaDevices</strong> (<em>[</em><em>int</em><em>]</em>) – List of CUDA device indexes</li>
+<li><strong>checkpointInterval</strong> (<em>int</em>) – Number of seconds between checkpoints</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Simulation result</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.File</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.rxnRateList">
+<code class="descname">rxnRateList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.rxnRateList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of reaction rates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.setMaximumTimestep">
+<code class="descname">setMaximumTimestep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.setMaximumTimestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation timestep using the fastest diffusion rate</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.setReplicate">
+<code class="descname">setReplicate</code><span class="sig-paren">(</span><em>replicate=1</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.setReplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select replicate from HDF5 file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>replicate</strong> (<em>int</em>) – Replicate index (1-based)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showAllParameters">
+<code class="descname">showAllParameters</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showAllParameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showAllSpecies">
+<code class="descname">showAllSpecies</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showAllSpecies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showDiffusionConstants">
+<code class="descname">showDiffusionConstants</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showDiffusionConstants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showRateConstants">
+<code class="descname">showRateConstants</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showRateConstants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showReactions">
+<code class="descname">showReactions</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showReactions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showRegion">
+<code class="descname">showRegion</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showRegion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showRegionStack">
+<code class="descname">showRegionStack</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showRegionStack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.showSpecies">
+<code class="descname">showSpecies</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.showSpecies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.simulationTime">
+<code class="descname">simulationTime</code><a class="headerlink" href="#jLM.RDME.File.simulationTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total simulated time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.sp">
+<code class="descname">sp</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.sp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient species access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.species">
+<code class="descname">species</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.species" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create species instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Name of the species</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the species</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Species instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.speciesList">
+<code class="descname">speciesList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.File.speciesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of species types</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.speciesWriteInterval">
+<code class="descname">speciesWriteInterval</code><a class="headerlink" href="#jLM.RDME.File.speciesWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writing the species counts to the HDF5 file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.timingsFile">
+<code class="descname">timingsFile</code><a class="headerlink" href="#jLM.RDME.File.timingsFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timing output file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.File.timingsSteps">
+<code class="descname">timingsSteps</code><a class="headerlink" href="#jLM.RDME.File.timingsSteps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of timing data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.File.transitionRate">
+<code class="descname">transitionRate</code><span class="sig-paren">(</span><em>sp</em>, <em>rFrom</em>, <em>rTo</em>, <em>rate</em>, <em>value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.File.transitionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the diffusive transition rate between regions</p>
+<p>This allows for fine grained detail over the diffusion matrix.
+The transition is defined for the species <cite>sp</cite> from region
+<cite>rFrom</cite> to <cite>rTo</cite>. If <cite>None</cite> is given for any of these
+parameters, then the entire axis of the matrix is affected,
+i.e. <cite>None</cite> is a wildcard. The rate is specified with the
+<cite>rate</cite> parameter, either as a DiffusionConst instance, or as
+a string to lookup the previously created DiffusionConst. If a
+string is provided and a DiffusionConst instance has not been
+created, providing the parameter <cite>value</cite> will create the new
+constant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type or None</li>
+<li><strong>rFrom</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type or None</li>
+<li><strong>rTo</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type or None</li>
+<li><strong>rate</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a>]) – Diffusion rate</li>
+<li><strong>value</strong> (<em>float</em>) – Value of diffusion constant if new</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jLM.RDME.Sim">
+<em class="property">class </em><code class="descclassname">jLM.RDME.</code><code class="descname">Sim</code><span class="sig-paren">(</span><em>name</em>, <em>filename</em>, <em>dimensions</em>, <em>latticeSpacing</em>, <em>regionName</em>, <em>dt=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#Sim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.Sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.LmInteract.LmWriteMixin</span></code>, <a class="reference internal" href="#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.RDME.SpatialModel</span></code></a></p>
+<p>Prepare a simulation.</p>
+<dl class="method">
+<dt id="jLM.RDME.Sim.assignReaction">
+<code class="descname">assignReaction</code><span class="sig-paren">(</span><em>reaction</em>, <em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.assignReaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a reaction to a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>reaction</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Reaction" title="jLM.Types.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a>) – Reaction</li>
+<li><strong>region</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>) – Target region</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.bdMaxParticles">
+<code class="descname">bdMaxParticles</code><a class="headerlink" href="#jLM.RDME.Sim.bdMaxParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of BD particles during simulation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.bdStepsPerRdmeStep">
+<code class="descname">bdStepsPerRdmeStep</code><a class="headerlink" href="#jLM.RDME.Sim.bdStepsPerRdmeStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of BD steps to take each RDME timestep</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.bdTemperature">
+<code class="descname">bdTemperature</code><a class="headerlink" href="#jLM.RDME.Sim.bdTemperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temperature used for Brownian dynamics</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.bdWriteInterval">
+<code class="descname">bdWriteInterval</code><a class="headerlink" href="#jLM.RDME.Sim.bdWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of BD state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.construct">
+<code class="descname">construct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.construct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track newly created model objects and display in Notebook.</p>
+<p>Context manager which tracks new species, reactions, etc., and displays
+a HTML summary when used in Jupyter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.copyParticleLattice">
+<code class="descname">copyParticleLattice</code><span class="sig-paren">(</span><em>fname</em>, <em>diffusion_model=False</em>, <em>replicate=1</em>, <em>frame=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.copyParticleLattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy particle lattice from existing simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fname</strong> (<em>str</em>) – LM simulation H5 file</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>diffusion_model</strong> (<em>bool</em>) – Use the initial condition particle lattice</li>
+<li><strong>replicate</strong> (<em>int</em>) – LM simulation replicate</li>
+<li><strong>frame</strong> (<em>int</em>) – LM simulation particle lattice frame. Negative values
+index from end.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.dc">
+<code class="descname">dc</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.dc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient diffusion constant access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.diffRateList">
+<code class="descname">diffRateList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.diffRateList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of diffusion constants</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.diffusionConst">
+<code class="descname">diffusionConst</code><span class="sig-paren">(</span><em>rate</em>, <em>value</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.diffusionConst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rate</strong> (<em>str</em>) – Name of diffusion constant</li>
+<li><strong>value</strong> (<em>float</em>) – Value of diffusion constant</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the rate constant</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DiffusionConst instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.diffusionFast">
+<code class="descname">diffusionFast</code><a class="headerlink" href="#jLM.RDME.Sim.diffusionFast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create a maximum-valued diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DiffusionConst instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.diffusionZero">
+<code class="descname">diffusionZero</code><a class="headerlink" href="#jLM.RDME.Sim.diffusionZero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create a zero-valued diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DiffusionConst instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.displayGeometry">
+<code class="descname">displayGeometry</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.displayGeometry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.distributeConcentration">
+<code class="descname">distributeConcentration</code><span class="sig-paren">(</span><em>sp</em>, <em>reg</em>, <em>conc</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.distributeConcentration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute a concentration of particles uniformly through a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type</li>
+<li><strong>reg</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type</li>
+<li><strong>conc</strong> (<em>float</em>) – Concentration of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.distributeNumber">
+<code class="descname">distributeNumber</code><span class="sig-paren">(</span><em>sp</em>, <em>reg</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.distributeNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute a number of particles uniformly through a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type</li>
+<li><strong>reg</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type</li>
+<li><strong>count</strong> (<em>int</em>) – Number of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.evWriteInterval">
+<code class="descname">evWriteInterval</code><a class="headerlink" href="#jLM.RDME.Sim.evWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of excluded volume lattice (RDME + BD + background)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.finalize">
+<code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.finalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.h5">
+<code class="descname">h5</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.h5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.hookInterval">
+<code class="descname">hookInterval</code><a class="headerlink" href="#jLM.RDME.Sim.hookInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between calls to hookSimulation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.latticeWriteInterval">
+<code class="descname">latticeWriteInterval</code><a class="headerlink" href="#jLM.RDME.Sim.latticeWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writing the lattice to the HDF5 file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.maxDiffusionRate">
+<code class="descname">maxDiffusionRate</code><span class="sig-paren">(</span><em>latticeSpacing=None</em>, <em>dt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.maxDiffusionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute max allowed diffusion constant for the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>latticeSpacing</strong> (<em>float</em>) – Lattice spacing in meters</li>
+<li><strong>dt</strong> (<em>float</em>) – Timestep in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Maximum diffusion constant in m^/s</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.particleStatistics">
+<code class="descname">particleStatistics</code><span class="sig-paren">(</span><em>particleLattice=None</em>, <em>siteLattice=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#Sim.particleStatistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.Sim.particleStatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute properties of the particle lattice</p>
+<p>Dictionary keys</p>
+<dl class="docutils">
+<dt>countBySpeciesRegion</dt>
+<dd>Particle counts for each species type for each region.</dd>
+<dt>concBySpeciesRegion</dt>
+<dd>Concentration for each species type for each region.</dd>
+<dt>countByRegion</dt>
+<dd>Total particle counts for each region.</dd>
+<dt>concByRegion</dt>
+<dd>Total concentration for each region.</dd>
+<dt>countBySpecies</dt>
+<dd>Total particle counts for each species.</dd>
+<dt>concBySpecies</dt>
+<dd>Total concentration of each species, averaged over
+simulation volume</dd>
+<dt>count</dt>
+<dd>Total particle count</dd>
+<dt>conc</dt>
+<dd>Total concentration, averaged over simulation volume</dd>
+<dt>vol</dt>
+<dd>Total simulation volume</dd>
+<dt>siteCount</dt>
+<dd>Total number of subvolumes</dd>
+<dt>regionVol</dt>
+<dd>Volume of each region</dd>
+<dt>regionCounts</dt>
+<dd>Number of subvolumes in each region</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Particle lattice statistics</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.perfPrintInterval">
+<code class="descname">perfPrintInterval</code><a class="headerlink" href="#jLM.RDME.Sim.perfPrintInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Real elapsed time between writing simulation progress to stdout</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.placeAllParticles">
+<code class="descname">placeAllParticles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#Sim.placeAllParticles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.Sim.placeAllParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate particle lattice</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.placeNumber">
+<code class="descname">placeNumber</code><span class="sig-paren">(</span><em>sp</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.placeNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place a number of particles at a specific subvolume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>) – Species type</li>
+<li><strong>x</strong> (<em>int</em>) – x-coordinate</li>
+<li><strong>y</strong> (<em>int</em>) – y-coordinate</li>
+<li><strong>z</strong> (<em>int</em>) – z-coordinate</li>
+<li><strong>n</strong> (<em>int</em>) – Number of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.rateConst">
+<code class="descname">rateConst</code><span class="sig-paren">(</span><em>rate</em>, <em>value</em>, <em>order</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.rateConst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create reaction rate constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rate</strong> (<em>str</em>) – Name of rate constant</li>
+<li><strong>value</strong> (<em>float</em>) – Value of rate constant</li>
+<li><strong>order</strong> (<em>int</em>) – Order of reaction</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the rate constant</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">RateConst instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.RateConst" title="jLM.Types.RateConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">RateConst</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.rc">
+<code class="descname">rc</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.rc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient reaction rate access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.rdmeTraceInterval">
+<code class="descname">rdmeTraceInterval</code><a class="headerlink" href="#jLM.RDME.Sim.rdmeTraceInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of tracer positions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.reaction">
+<code class="descname">reaction</code><span class="sig-paren">(</span><em>reactants</em>, <em>products</em>, <em>rate</em>, <em>value=None</em>, <em>regions=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.reaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create reaction instance</p>
+<p>The product/reactants can be specified as a string, Species
+instance, list of strings, list of Species instances, or the
+empty list, denoting no species. The reaction rate can be
+created in place if a string is given for <cite>rate</cite> and the value
+of the rate constant is specified by <cite>value</cite>.  Rates must be
+provided in standard chemical kinetic units, e.g. for a reaction</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{A} + \mathrm{B} \overset{k}{\to} \mathrm{C},\]</div>
+<p>the rate coefficent, <span class="math notranslate nohighlight">\(k\)</span> has units of
+<span class="math notranslate nohighlight">\(\mathrm{M}^{-1}\mathrm{s}^{-1}\)</span></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reactants</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species, or list of species acting as reactants</li>
+<li><strong>products</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species, or list of species acting as products</li>
+<li><strong>rate</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.RateConst" title="jLM.Types.RateConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">RateConst</span></code></a>]) – Rate constant</li>
+<li><strong>value</strong> (<em>float</em>) – Optional value of rate constant</li>
+<li><strong>regions</strong> (py:class:<cite>~jLM.Types.Region</cite>]) – List of applicable regions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Reaction instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Reaction" title="jLM.Types.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.reactionList">
+<code class="descname">reactionList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.reactionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of reactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.reg">
+<code class="descname">reg</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient region access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.region">
+<code class="descname">region</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create region instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Name of the region</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the region</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Region instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.regionList">
+<code class="descname">regionList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.regionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of regions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.resizeLattice">
+<code class="descname">resizeLattice</code><span class="sig-paren">(</span><em>dimensions</em>, <em>latticeSpacing</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.resizeLattice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>solver=None</em>, <em>replicate=1</em>, <em>seed=None</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the RDME simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>solver</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">lm.RDMESolver</span></code>) – Rdme solver</li>
+<li><strong>replicate</strong> (<em>int</em>) – Index of replicate</li>
+<li><strong>seed</strong> (<em>int</em>) – RNG seed</li>
+<li><strong>cudaDevices</strong> (<em>[</em><em>int</em><em>]</em>) – List of CUDA device indexes</li>
+<li><strong>checkpointInterval</strong> (<em>int</em>) – Number of seconds between checkpoints</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Simulation result</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.File</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.rxnRateList">
+<code class="descname">rxnRateList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.rxnRateList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of reaction rates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.setMaximumTimestep">
+<code class="descname">setMaximumTimestep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.setMaximumTimestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation timestep using the fastest diffusion rate</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showAllParameters">
+<code class="descname">showAllParameters</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showAllParameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showAllSpecies">
+<code class="descname">showAllSpecies</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showAllSpecies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showDiffusionConstants">
+<code class="descname">showDiffusionConstants</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showDiffusionConstants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showRateConstants">
+<code class="descname">showRateConstants</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showRateConstants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showReactions">
+<code class="descname">showReactions</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showReactions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showRegion">
+<code class="descname">showRegion</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showRegion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showRegionStack">
+<code class="descname">showRegionStack</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showRegionStack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.showSpecies">
+<code class="descname">showSpecies</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.showSpecies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.simulationTime">
+<code class="descname">simulationTime</code><a class="headerlink" href="#jLM.RDME.Sim.simulationTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total simulated time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.sp">
+<code class="descname">sp</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.sp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convienient species access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace">Namespace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.species">
+<code class="descname">species</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.species" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create species instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Name of the species</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the species</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Species instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.speciesList">
+<code class="descname">speciesList</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.Sim.speciesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of species types</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="jLM.BaseTypes.html#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs">SimObjs</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.speciesWriteInterval">
+<code class="descname">speciesWriteInterval</code><a class="headerlink" href="#jLM.RDME.Sim.speciesWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writing the species counts to the HDF5 file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.timingsFile">
+<code class="descname">timingsFile</code><a class="headerlink" href="#jLM.RDME.Sim.timingsFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timing output file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.Sim.timingsSteps">
+<code class="descname">timingsSteps</code><a class="headerlink" href="#jLM.RDME.Sim.timingsSteps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of timing data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.Sim.transitionRate">
+<code class="descname">transitionRate</code><span class="sig-paren">(</span><em>sp</em>, <em>rFrom</em>, <em>rTo</em>, <em>rate</em>, <em>value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.Sim.transitionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the diffusive transition rate between regions</p>
+<p>This allows for fine grained detail over the diffusion matrix.
+The transition is defined for the species <cite>sp</cite> from region
+<cite>rFrom</cite> to <cite>rTo</cite>. If <cite>None</cite> is given for any of these
+parameters, then the entire axis of the matrix is affected,
+i.e. <cite>None</cite> is a wildcard. The rate is specified with the
+<cite>rate</cite> parameter, either as a DiffusionConst instance, or as
+a string to lookup the previously created DiffusionConst. If a
+string is provided and a DiffusionConst instance has not been
+created, providing the parameter <cite>value</cite> will create the new
+constant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type or None</li>
+<li><strong>rFrom</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type or None</li>
+<li><strong>rTo</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type or None</li>
+<li><strong>rate</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a>]) – Diffusion rate</li>
+<li><strong>value</strong> (<em>float</em>) – Value of diffusion constant if new</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jLM.RDME.SpatialModel">
+<em class="property">class </em><code class="descclassname">jLM.RDME.</code><code class="descname">SpatialModel</code><span class="sig-paren">(</span><em>name</em>, <em>filename</em>, <em>dimensions</em>, <em>latticeSpacing</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.Analysis.LatticeAnalysisMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.JupyterDisplay.JupyterDisplayMixin</span></code></p>
+<p>Base RDME model</p>
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.NA">
+<code class="descname">NA</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.SpatialModel.NA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Avogadro’s number</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.assignReaction">
+<code class="descname">assignReaction</code><span class="sig-paren">(</span><em>reaction</em>, <em>region</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.assignReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.assignReaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a reaction to a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>reaction</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Reaction" title="jLM.Types.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a>) – Reaction</li>
+<li><strong>region</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>) – Target region</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.bdMaxParticles">
+<code class="descname">bdMaxParticles</code><a class="headerlink" href="#jLM.RDME.SpatialModel.bdMaxParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of BD particles during simulation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.bdStepsPerRdmeStep">
+<code class="descname">bdStepsPerRdmeStep</code><a class="headerlink" href="#jLM.RDME.SpatialModel.bdStepsPerRdmeStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of BD steps to take each RDME timestep</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.bdTemperature">
+<code class="descname">bdTemperature</code><a class="headerlink" href="#jLM.RDME.SpatialModel.bdTemperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temperature used for Brownian dynamics</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.bdWriteInterval">
+<code class="descname">bdWriteInterval</code><a class="headerlink" href="#jLM.RDME.SpatialModel.bdWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of BD state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.construct">
+<code class="descname">construct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.construct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track newly created model objects and display in Notebook.</p>
+<p>Context manager which tracks new species, reactions, etc., and displays
+a HTML summary when used in Jupyter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.diffusionConst">
+<code class="descname">diffusionConst</code><span class="sig-paren">(</span><em>rate</em>, <em>value</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.diffusionConst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.diffusionConst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rate</strong> (<em>str</em>) – Name of diffusion constant</li>
+<li><strong>value</strong> (<em>float</em>) – Value of diffusion constant</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the rate constant</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DiffusionConst instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.diffusionFast">
+<code class="descname">diffusionFast</code><a class="headerlink" href="#jLM.RDME.SpatialModel.diffusionFast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create a maximum-valued diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DiffusionConst instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.diffusionZero">
+<code class="descname">diffusionZero</code><a class="headerlink" href="#jLM.RDME.SpatialModel.diffusionZero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create a zero-valued diffusion constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DiffusionConst instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.displayGeometry">
+<code class="descname">displayGeometry</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.displayGeometry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.distributeConcentration">
+<code class="descname">distributeConcentration</code><span class="sig-paren">(</span><em>sp</em>, <em>reg</em>, <em>conc</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.distributeConcentration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.distributeConcentration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute a concentration of particles uniformly through a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type</li>
+<li><strong>reg</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type</li>
+<li><strong>conc</strong> (<em>float</em>) – Concentration of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.distributeNumber">
+<code class="descname">distributeNumber</code><span class="sig-paren">(</span><em>sp</em>, <em>reg</em>, <em>count</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.distributeNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.distributeNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute a number of particles uniformly through a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type</li>
+<li><strong>reg</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type</li>
+<li><strong>count</strong> (<em>int</em>) – Number of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.evWriteInterval">
+<code class="descname">evWriteInterval</code><a class="headerlink" href="#jLM.RDME.SpatialModel.evWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of excluded volume lattice (RDME + BD + background)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.filename">
+<code class="descname">filename</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.SpatialModel.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>LM data filename</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.hookInterval">
+<code class="descname">hookInterval</code><a class="headerlink" href="#jLM.RDME.SpatialModel.hookInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between calls to hookSimulation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.latticeWriteInterval">
+<code class="descname">latticeWriteInterval</code><a class="headerlink" href="#jLM.RDME.SpatialModel.latticeWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writing the lattice to the HDF5 file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.maxDiffusionRate">
+<code class="descname">maxDiffusionRate</code><span class="sig-paren">(</span><em>latticeSpacing=None</em>, <em>dt=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.maxDiffusionRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.maxDiffusionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute max allowed diffusion constant for the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>latticeSpacing</strong> (<em>float</em>) – Lattice spacing in meters</li>
+<li><strong>dt</strong> (<em>float</em>) – Timestep in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Maximum diffusion constant in m^/s</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RDME.SpatialModel.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.particleStatistics">
+<code class="descname">particleStatistics</code><span class="sig-paren">(</span><em>particleLattice=None</em>, <em>siteLattice=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.particleStatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute properties of the particle lattice</p>
+<p>Dictionary keys</p>
+<dl class="docutils">
+<dt>countBySpeciesRegion</dt>
+<dd>Particle counts for each species type for each region.</dd>
+<dt>concBySpeciesRegion</dt>
+<dd>Concentration for each species type for each region.</dd>
+<dt>countByRegion</dt>
+<dd>Total particle counts for each region.</dd>
+<dt>concByRegion</dt>
+<dd>Total concentration for each region.</dd>
+<dt>countBySpecies</dt>
+<dd>Total particle counts for each species.</dd>
+<dt>concBySpecies</dt>
+<dd>Total concentration of each species, averaged over
+simulation volume</dd>
+<dt>count</dt>
+<dd>Total particle count</dd>
+<dt>conc</dt>
+<dd>Total concentration, averaged over simulation volume</dd>
+<dt>vol</dt>
+<dd>Total simulation volume</dd>
+<dt>siteCount</dt>
+<dd>Total number of subvolumes</dd>
+<dt>regionVol</dt>
+<dd>Volume of each region</dd>
+<dt>regionCounts</dt>
+<dd>Number of subvolumes in each region</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Particle lattice statistics</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.perfPrintInterval">
+<code class="descname">perfPrintInterval</code><a class="headerlink" href="#jLM.RDME.SpatialModel.perfPrintInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Real elapsed time between writing simulation progress to stdout</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.placeNumber">
+<code class="descname">placeNumber</code><span class="sig-paren">(</span><em>sp</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.placeNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.placeNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place a number of particles at a specific subvolume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>) – Species type</li>
+<li><strong>x</strong> (<em>int</em>) – x-coordinate</li>
+<li><strong>y</strong> (<em>int</em>) – y-coordinate</li>
+<li><strong>z</strong> (<em>int</em>) – z-coordinate</li>
+<li><strong>n</strong> (<em>int</em>) – Number of particles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.rateConst">
+<code class="descname">rateConst</code><span class="sig-paren">(</span><em>rate</em>, <em>value</em>, <em>order</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.rateConst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.rateConst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create reaction rate constant instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rate</strong> (<em>str</em>) – Name of rate constant</li>
+<li><strong>value</strong> (<em>float</em>) – Value of rate constant</li>
+<li><strong>order</strong> (<em>int</em>) – Order of reaction</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the rate constant</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">RateConst instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.RateConst" title="jLM.Types.RateConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">RateConst</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.rdmeTraceInterval">
+<code class="descname">rdmeTraceInterval</code><a class="headerlink" href="#jLM.RDME.SpatialModel.rdmeTraceInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of tracer positions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.reaction">
+<code class="descname">reaction</code><span class="sig-paren">(</span><em>reactants</em>, <em>products</em>, <em>rate</em>, <em>value=None</em>, <em>regions=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.reaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.reaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create reaction instance</p>
+<p>The product/reactants can be specified as a string, Species
+instance, list of strings, list of Species instances, or the
+empty list, denoting no species. The reaction rate can be
+created in place if a string is given for <cite>rate</cite> and the value
+of the rate constant is specified by <cite>value</cite>.  Rates must be
+provided in standard chemical kinetic units, e.g. for a reaction</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{A} + \mathrm{B} \overset{k}{\to} \mathrm{C},\]</div>
+<p>the rate coefficent, <span class="math notranslate nohighlight">\(k\)</span> has units of
+<span class="math notranslate nohighlight">\(\mathrm{M}^{-1}\mathrm{s}^{-1}\)</span></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reactants</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species, or list of species acting as reactants</li>
+<li><strong>products</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species, or list of species acting as products</li>
+<li><strong>rate</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.RateConst" title="jLM.Types.RateConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">RateConst</span></code></a>]) – Rate constant</li>
+<li><strong>value</strong> (<em>float</em>) – Optional value of rate constant</li>
+<li><strong>regions</strong> (py:class:<cite>~jLM.Types.Region</cite>]) – List of applicable regions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Reaction instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Reaction" title="jLM.Types.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.region">
+<code class="descname">region</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create region instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Name of the region</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the region</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Region instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.resizeLattice">
+<code class="descname">resizeLattice</code><span class="sig-paren">(</span><em>dimensions</em>, <em>latticeSpacing</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.resizeLattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.resizeLattice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>solver=None</em>, <em>replicate=1</em>, <em>seed=None</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the RDME simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>solver</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">lm.RDMESolver</span></code>) – Rdme solver</li>
+<li><strong>replicate</strong> (<em>int</em>) – Index of replicate</li>
+<li><strong>seed</strong> (<em>int</em>) – RNG seed</li>
+<li><strong>cudaDevices</strong> (<em>[</em><em>int</em><em>]</em>) – List of CUDA device indexes</li>
+<li><strong>checkpointInterval</strong> (<em>int</em>) – Number of seconds between checkpoints</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Simulation result</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">jLM.File</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.setMaximumTimestep">
+<code class="descname">setMaximumTimestep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.setMaximumTimestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.setMaximumTimestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation timestep using the fastest diffusion rate</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showAllParameters">
+<code class="descname">showAllParameters</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showAllParameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showAllSpecies">
+<code class="descname">showAllSpecies</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showAllSpecies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showDiffusionConstants">
+<code class="descname">showDiffusionConstants</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showDiffusionConstants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showRateConstants">
+<code class="descname">showRateConstants</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showRateConstants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showReactions">
+<code class="descname">showReactions</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showReactions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showRegion">
+<code class="descname">showRegion</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showRegion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showRegionStack">
+<code class="descname">showRegionStack</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showRegionStack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.showSpecies">
+<code class="descname">showSpecies</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RDME.SpatialModel.showSpecies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.simulationTime">
+<code class="descname">simulationTime</code><a class="headerlink" href="#jLM.RDME.SpatialModel.simulationTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total simulated time</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.species">
+<code class="descname">species</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.species"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.species" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup/create species instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Name of the species</li>
+<li><strong>texRepr</strong> (<em>str</em>) – TeX math mode representation of the species</li>
+<li><strong>annotation</strong> (<em>str</em>) – Description text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Species instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.speciesWriteInterval">
+<code class="descname">speciesWriteInterval</code><a class="headerlink" href="#jLM.RDME.SpatialModel.speciesWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writing the species counts to the HDF5 file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.timingsFile">
+<code class="descname">timingsFile</code><a class="headerlink" href="#jLM.RDME.SpatialModel.timingsFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timing output file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RDME.SpatialModel.timingsSteps">
+<code class="descname">timingsSteps</code><a class="headerlink" href="#jLM.RDME.SpatialModel.timingsSteps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulation time between writes of timing data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RDME.SpatialModel.transitionRate">
+<code class="descname">transitionRate</code><span class="sig-paren">(</span><em>sp</em>, <em>rFrom</em>, <em>rTo</em>, <em>rate</em>, <em>value=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RDME.html#SpatialModel.transitionRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RDME.SpatialModel.transitionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the diffusive transition rate between regions</p>
+<p>This allows for fine grained detail over the diffusion matrix.
+The transition is defined for the species <cite>sp</cite> from region
+<cite>rFrom</cite> to <cite>rTo</cite>. If <cite>None</cite> is given for any of these
+parameters, then the entire axis of the matrix is affected,
+i.e. <cite>None</cite> is a wildcard. The rate is specified with the
+<cite>rate</cite> parameter, either as a DiffusionConst instance, or as
+a string to lookup the previously created DiffusionConst. If a
+string is provided and a DiffusionConst instance has not been
+created, providing the parameter <cite>value</cite> will create the new
+constant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Species" title="jLM.Types.Species"><code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code></a>]) – Species type or None</li>
+<li><strong>rFrom</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type or None</li>
+<li><strong>rTo</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Region type or None</li>
+<li><strong>rate</strong> (<a class="reference internal" href="jLM.Types.html#jLM.Types.DiffusionConst" title="jLM.Types.DiffusionConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffusionConst</span></code></a>]) – Diffusion rate</li>
+<li><strong>value</strong> (<em>float</em>) – Value of diffusion constant if new</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="jLM.RegionBuilder.html" class="btn btn-neutral float-right" title="jLM.RegionBuilder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="jLM.html" class="btn btn-neutral" title="jLM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

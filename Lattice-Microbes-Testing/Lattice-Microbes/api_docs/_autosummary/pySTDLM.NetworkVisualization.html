@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.NetworkVisualization &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pySTDLM.OnTheFly" href="pySTDLM.OnTheFly.html" />
+    <link rel="prev" title="pySTDLM.Distributions" href="pySTDLM.Distributions.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pySTDLM.NetworkVisualization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pySTDLM.NetworkVisualization.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pySTDLM.NetworkVisualization">
+<span id="pystdlm-networkvisualization"></span><h1>pySTDLM.NetworkVisualization<a class="headerlink" href="#module-pySTDLM.NetworkVisualization" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.NetworkVisualization.plotCMEDynamicReactionNetwork" title="pySTDLM.NetworkVisualization.plotCMEDynamicReactionNetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotCMEDynamicReactionNetwork</span></code></a>(sim,&nbsp;filename,&nbsp;…)</td>
+<td>Plot the dynamics of the species on the network into a dynamic graph file (extension: .gexf)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.NetworkVisualization.plotCMEReactionNetwork" title="pySTDLM.NetworkVisualization.plotCMEReactionNetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotCMEReactionNetwork</span></code></a>(sim,&nbsp;filename[,&nbsp;…])</td>
+<td>Plot the reaction scheme as a network</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.NetworkVisualization.plotRDMEReactionNetwork" title="pySTDLM.NetworkVisualization.plotRDMEReactionNetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotRDMEReactionNetwork</span></code></a>(sim,&nbsp;filename[,&nbsp;…])</td>
+<td>Plot the reaction scheme as a network</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.NetworkVisualization.plotReactionNetwork" title="pySTDLM.NetworkVisualization.plotReactionNetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotReactionNetwork</span></code></a>(sim,&nbsp;filename[,&nbsp;…])</td>
+<td>Plot the reaction scheme as a network</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pySTDLM.NetworkVisualization.plotCMEDynamicReactionNetwork">
+<code class="descclassname">pySTDLM.NetworkVisualization.</code><code class="descname">plotCMEDynamicReactionNetwork</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>outfile</em>, <em>stride=1</em>, <em>showMax=False</em>, <em>showMin=False</em>, <em>threshold=-1</em>, <em>replicate=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/NetworkVisualization.html#plotCMEDynamicReactionNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.NetworkVisualization.plotCMEDynamicReactionNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the dynamics of the species on the network into a dynamic graph file (extension: .gexf)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – A CMESimulation object</li>
+<li><strong>filename</strong> – An file from which to read</li>
+<li><strong>outfile</strong> – A filename for which to output without the extension (.gexf)</li>
+<li><strong>stride</strong> – Stride through the times (Default=1)</li>
+<li><strong>showMax</strong> – Show the maximum value achieved over the timecourse on the node (Default=False)</li>
+<li><strong>showMin</strong> – Show the maximum value achieved over the timecourse on the node (Default=False)</li>
+<li><strong>threshold</strong> – Only show nodes that attain this value for at least one timepoint of the simulation.
+Set -1 to show all nodes (Default=-1) replicate The replicate to show (Default=1)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.NetworkVisualization.plotCMEReactionNetwork">
+<code class="descclassname">pySTDLM.NetworkVisualization.</code><code class="descname">plotCMEReactionNetwork</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>withRxnNodes=False</em>, <em>collapseReversible=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/NetworkVisualization.html#plotCMEReactionNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.NetworkVisualization.plotCMEReactionNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the reaction scheme as a network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – An CMESimulation object</li>
+<li><strong>filename</strong> – A file to which to output</li>
+<li><strong>withRxnNodes</strong> – Plot the graph with reactions as nodes (default: false)</li>
+<li><strong>collapseReversible</strong> – Collapsee reversible reactions into one node (default: false)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.NetworkVisualization.plotRDMEReactionNetwork">
+<code class="descclassname">pySTDLM.NetworkVisualization.</code><code class="descname">plotRDMEReactionNetwork</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>collapseReversible=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/NetworkVisualization.html#plotRDMEReactionNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.NetworkVisualization.plotRDMEReactionNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the reaction scheme as a network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – An RDMESimulation object</li>
+<li><strong>filename</strong> – A file to which to output</li>
+<li><strong>collapseReversible</strong> – Collapsee reversible reactions into one node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.NetworkVisualization.plotReactionNetwork">
+<code class="descclassname">pySTDLM.NetworkVisualization.</code><code class="descname">plotReactionNetwork</code><span class="sig-paren">(</span><em>sim</em>, <em>filename</em>, <em>collapseReversible=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/NetworkVisualization.html#plotReactionNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.NetworkVisualization.plotReactionNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the reaction scheme as a network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sim</strong> – An RDMESimulation or CMESimulation object</li>
+<li><strong>filename</strong> – A file to which to output</li>
+<li><strong>collapseReversible</strong> – Collapsee reversible reactions into one node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pySTDLM.OnTheFly.html" class="btn btn-neutral float-right" title="pySTDLM.OnTheFly" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pySTDLM.Distributions.html" class="btn btn-neutral" title="pySTDLM.Distributions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

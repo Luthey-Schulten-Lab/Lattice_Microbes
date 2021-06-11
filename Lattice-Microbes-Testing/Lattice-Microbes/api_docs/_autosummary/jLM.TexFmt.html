@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.TexFmt &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyLM" href="pyLM.html" />
+    <link rel="prev" title="jLM.Template" href="jLM.Template.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>jLM.TexFmt</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/jLM.TexFmt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-jLM.TexFmt">
+<span id="jlm-texfmt"></span><h1>jLM.TexFmt<a class="headerlink" href="#module-jLM.TexFmt" title="Permalink to this headline">¶</a></h1>
+<p>Dump simulation parameters as LaTeX</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.TexFmt.modelTables" title="jLM.TexFmt.modelTables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modelTables</span></code></a>(net[,&nbsp;file])</td>
+<td>Write a TeX formated description of the model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.TexFmt.parameterTable" title="jLM.TexFmt.parameterTable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parameterTable</span></code></a>(net[,&nbsp;params,&nbsp;file])</td>
+<td>Write a TeX formated table of parameters</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.TexFmt.reactionTable" title="jLM.TexFmt.reactionTable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reactionTable</span></code></a>(net[,&nbsp;rxns,&nbsp;file])</td>
+<td>Write a TeX formated table of reactions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.TexFmt.regionTable" title="jLM.TexFmt.regionTable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regionTable</span></code></a>(net[,&nbsp;regions,&nbsp;file])</td>
+<td>Write a TeX formated table of regions</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="jLM.TexFmt.modelTables">
+<code class="descclassname">jLM.TexFmt.</code><code class="descname">modelTables</code><span class="sig-paren">(</span><em>net</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/TexFmt.html#modelTables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.TexFmt.modelTables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a TeX formated description of the model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>net</strong> (<a class="reference internal" href="jLM.RDME.html#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpatialModel</span></code></a>) – Model</li>
+<li><strong>file</strong> (<em>file-like</em>) – File object of output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.TexFmt.parameterTable">
+<code class="descclassname">jLM.TexFmt.</code><code class="descname">parameterTable</code><span class="sig-paren">(</span><em>net</em>, <em>params=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/TexFmt.html#parameterTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.TexFmt.parameterTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a TeX formated table of parameters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>net</strong> (<a class="reference internal" href="jLM.RDME.html#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpatialModel</span></code></a>) – Model</li>
+<li><strong>parameters</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.RateConst" title="jLM.Types.RateConst"><code class="xref py py-class docutils literal notranslate"><span class="pre">RateConst</span></code></a>]) – Parameters to report</li>
+<li><strong>file</strong> (<em>file-like</em>) – File object of output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.TexFmt.reactionTable">
+<code class="descclassname">jLM.TexFmt.</code><code class="descname">reactionTable</code><span class="sig-paren">(</span><em>net</em>, <em>rxns=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/TexFmt.html#reactionTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.TexFmt.reactionTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a TeX formated table of reactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>net</strong> (<a class="reference internal" href="jLM.RDME.html#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpatialModel</span></code></a>) – Model</li>
+<li><strong>rxns</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Reaction" title="jLM.Types.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a>]) – Reactions to report</li>
+<li><strong>file</strong> (<em>file-like</em>) – File object of output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.TexFmt.regionTable">
+<code class="descclassname">jLM.TexFmt.</code><code class="descname">regionTable</code><span class="sig-paren">(</span><em>net</em>, <em>regions=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/TexFmt.html#regionTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.TexFmt.regionTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a TeX formated table of regions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>net</strong> (<a class="reference internal" href="jLM.RDME.html#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpatialModel</span></code></a>) – Model</li>
+<li><strong>regions</strong> ([<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>]) – Regions to report</li>
+<li><strong>file</strong> (<em>file-like</em>) – File object of output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyLM.html" class="btn btn-neutral float-right" title="pyLM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="jLM.Template.html" class="btn btn-neutral" title="jLM.Template" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

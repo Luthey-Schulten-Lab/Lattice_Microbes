@@ -1,0 +1,62 @@
+\usepackage{ifthen}
+\usepackage{forloop}
+
+% 2009-02-23; Elijah Roberts: moved into LaTeX package
+% 2010-03-09; Elijah Roberts: added \listofabbreviations command
+
+% Abreviation commands.
+\newcommand*{\abrList}{}
+\newcommand\defineAbbreviation[2]{%
+  \newcounter{abrvused#1}%
+  \setcounter{abrvused#1}{0}%
+  \expandafter\def\csname abrva#1\endcsname{#2 (#1)}%
+  \expandafter\def\csname abrvb#1\endcsname{#1}%
+  \expandafter\def\csname abrvs#1\endcsname{#1}%
+  \expandafter\def\csname abrvl#1\endcsname{#2}%
+  \ifx\abrList\empty%
+    \def\abrList{#1}%
+  \else%
+    \expandafter\def\expandafter\abrList\expandafter%
+      {\abrList,#1}%
+  \fi%
+}
+\newcommand\defineAbbreviationPlural[3]{%
+  \expandafter\def\csname abrvc#1\endcsname{#3 (#2)}%
+  \expandafter\def\csname abrvd#1\endcsname{#2}%
+}
+\newcommand\defineAbbreviationStrict[3]{%
+  \newcounter{abrvused#1}%
+  \setcounter{abrvused#1}{0}%
+  \expandafter\def\csname abrva#1\endcsname{#3}%
+  \expandafter\def\csname abrvb#1\endcsname{#2}%
+  \expandafter\def\csname abrvs#1\endcsname{#2}%
+  \expandafter\def\csname abrvl#1\endcsname{#3}%
+  \ifx\abrList\empty%
+    \def\abrList{#1}%
+  \else%
+    \expandafter\def\expandafter\abrList\expandafter%
+      {\abrList,#1}%
+  \fi%
+}
+\newcommand\abr[2][none]{%
+  \ifthenelse{\equal{#1}{none}}%
+    {\ifthenelse{\value{abrvused#2} = 0}%
+      {\csname abrva#2\endcsname}%
+      {\csname abrvb#2\endcsname}%
+    }%
+    {#1}%
+  \addtocounter{abrvused#2}{1}%
+}
+\newcommand\abrs[1]{%
+    \ifthenelse{\value{abrvused#1} = 0}%
+      {\csname abrvc#1\endcsname}%
+      {\csname abrvd#1\endcsname}%
+  \addtocounter{abrvused#1}{1}%
+}
+
+\newcommand\listofabbreviations{%
+{\noindent}{~\\~\\~\\~\\\Large \bf List of Abbreviations~\\~\\~\\}\\%
+\@for\TempVar:=\abrList\do{%
+\indent{\csname abrvs\TempVar\endcsname} -- {\csname abrvl\TempVar\endcsname}\\%
+}
+}

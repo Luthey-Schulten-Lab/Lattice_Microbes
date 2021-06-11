@@ -1,0 +1,214 @@
+# LM Build configuration for Linux
+
+# Instructions:
+#
+#  - The HDF5 and Protobuf sections are required for building LM.  Fill in 
+#    those sections with appropriate values.
+#  - The CUDA, MPI, Python, SBML, and VMD sections are optional.
+#    By default, CUDA, Python, and VMD are enabled.
+#  - At the end is an advanced options section that contains more variables
+#    to guide compilation.  You can probably get by without making changes
+#    there, although if you do have trouble compiling, check there for
+#    changes to make.
+
+#################################################
+#                                               #
+#                                               #
+# General Configuration                         #
+#                                               #
+#                                               #
+#################################################
+
+DEPDIR=/home/mhallock/deps/x86_64
+
+# Define a build directory for this configuration
+BUILD_DIR := Build-linux-cuda50
+
+# Compilation flags
+CCFLAGS := -m64 -O2 -fPIC -Wall -c -fmessage-length=0 -pthread -DLINUX -DCUDA_3D_GRID_LAUNCH -DMAPPED_OVERFLOWS
+
+# Where to install to
+INSTALL_PREFIX := $(BUILD_DIR)/RELEASE/lm-2.2.1
+
+#################################################
+#                                               #
+#                                               #
+# HDF5 Configuration (REQUIRED)                 #
+#                                               #
+#                                               #
+#################################################
+
+# HDF5_DIR: Set the base directory for the HDF5 library installation
+HDF5_DIR := $(DEPDIR)
+
+
+#################################################
+#                                               #
+#                                               #
+# Protocol Buffers  Configuration (REQUIRED)    #
+#                                               #
+#                                               #
+#################################################
+
+# PROTOBUF_DIR: Path to protobuf installation
+PROTOBUF_DIR := $(DEPDIR)
+
+
+#################################################
+#                                               #
+#                                               #
+# CUDA Configuration                            #
+#                                               #
+#                                               #
+#################################################
+
+# USE_CUDA: Set to 1 to enable CUDA support
+USE_CUDA := 1
+
+# CUDA_DIR: The base path for the CUDA Toolkit
+CUDA_DIR := /usr/local/cuda-5.0
+
+# CUDA_ARCH: Set the CUDA architectures to generate code for
+CUDA_ARCH := -gencode arch=compute_20,code=sm_20 
+CUDA_ARCH += -gencode arch=compute_30,code=sm_30
+CUDA_ARCH += -gencode arch=compute_35,code=sm_35
+CUDA_ARCH += -gencode arch=compute_35,code=compute_35
+
+# CUDA_FLAGS
+CUDA_FLAGS := -m64 -O2 --ptxas-options=-v $(CUDA_ARCH) -DLINUX -Xcompiler -fPIC -DCUDA_3D_GRID_LAUNCH -DCUDA_DOUBLE_PRECISION -DTUNE_MPD_Y_BLOCK_Y_SIZE=8 -DTUNE_MPD_Z_BLOCK_Z_SIZE=8 -DTUNE_MPD_REACTION_BLOCK_Y_SIZE=8 -DMAPPED_OVERFLOWS
+
+
+#################################################
+#                                               #
+#                                               #
+# MPI Configuration                             #
+#                                               #
+#                                               #
+#################################################
+
+# USE_MPI: set to 1 to enable MPI support
+USE_MPI := 0
+
+# If using OpenMPI, and mpicc is in your path, then no modification here is 
+# necessary.  Otherwise, fill in appropriate flags here
+MPI_COMPILE_FLAGS = -DOMPI_SKIP_MPICXX=1 $(shell mpicc --showme:compile)
+MPI_LINK_FLAGS = $(shell mpicc --showme:link)
+
+
+#################################################
+#                                               #
+#                                               #
+# Python Configuration                          #
+#                                               #
+#                                               #
+#################################################
+
+# USE_PYTHON: set to 1 to enable python support.
+# NOTE: Required for pyLM
+USE_PYTHON := 1
+
+# Path to swig, in order to compile the lm interface file
+PYTHON_SWIG := $(DEPDIR)/bin/swig
+
+# Have python-config in your path that matches the version of python
+# that the python LM interface should be built against
+PYTHON_INCLUDE_DIR := `python-config --includes`
+PYTHON_LIB := `python-config --ldflags` -L/home/mhallock/anaconda/lib
+
+#################################################
+#                                               #
+#                                               #
+# SBML Configuration                            #
+#                                               #
+#                                               #
+#################################################
+
+# Set to 1 to include SBML support
+USE_SBML := 1
+
+# Path to the SBML installation root
+SBML_DIR := $(DEPDIR)
+
+
+#################################################
+#                                               #
+#                                               #
+# VMD Configuration                             #
+#                                               #
+#                                               #
+#################################################
+
+# Set to 1 to enable VMD
+USE_VMD := 1
+
+# VMD_DIR: Set lib dir for VMD
+VMD_DIR := /usr/local/lib/vmd-1.9.1-x86_64
+
+VMD_INSTALL_DIR := $(INSTALL_PREFIX)/vmd/LINUXAMD64/molfile
+
+#################################################
+#                                               #
+#                                               #
+# Advanced Options                              #
+#                                               #
+#                                               #
+#################################################
+CXXFLAGS := $(CCFLAGS)
+RM := rm -rf
+CC := gcc
+CCDEPENDFLAGS := -MMD -MP
+CXXDEPENDFLAGS := -MMD -MP
+CXX := g++
+LD := g++
+LDFLAGS := -pthread -lpthread -lrt
+SHLD := g++
+SHLDFLAGS := -shared -fPIC
+SHLDOPTO := -o
+USE_VERBOSITY_LEVEL := 4
+
+#HDF5 
+HDF5_INCLUDE_DIR := -I$(HDF5_DIR)/include
+HDF5_LIB_DIR := -L$(HDF5_DIR)/lib
+HDF5_LIB := -lz ${HDF5_DIR}/lib/libsz.a ${HDF5_DIR}/lib/libhdf5_hl.a ${HDF5_DIR}/lib/libhdf5.a
+
+# Protobuf
+PROTOBUF_PROTOC := $(PROTOBUF_DIR)/bin/protoc
+PROTOBUF_INCLUDE_DIR := -I$(PROTOBUF_DIR)/include
+PROTOBUF_LIB_DIR := -L$(PROTOBUF_DIR)/lib
+PROTOBUF_LIB := $(PROTOBUF_DIR)/lib/libprotobuf.a
+
+#CUDA
+CUDA_NVCC := $(CUDA_DIR)/bin/nvcc
+CUDA_INCLUDE_DIR := -I$(CUDA_DIR)/include
+CUDA_LIB_DIR := -L$(CUDA_DIR)/lib64
+#CUDA_LIB := -ldl $(CUDA_DIR)/lib64/libcudart_static.a
+CUDA_LIB := -lcudart
+CUDA_GENERATE_PTX_CODE := 0
+CUDA_GENERATE_BIN_CODE := 0
+CUDA_GENERATE_ASM_CODE := 0
+
+# SBML
+SBML_INCLUDE_DIR := -I$(SBML_DIR)/include
+SBML_LIB_DIR := -L$(SBML_DIR)/lib
+SBML_LIB := -lxml2 /lib64/libbz2.so.1  ${DEPDIR}/lib/libsbml.a
+
+# VMD
+VMD_INCLUDE_DIR := -I$(VMD_DIR)/plugins/include
+
+# Profiler support
+USE_PROF := 0
+# Use NVTX instead of built-in LPTF
+USE_PROF_NVTX := 1
+# Enable profiling of CUDA via LPTF
+PROF_CUDA_ENABLE := 1
+# LPTF parameters
+PROF_MAX_THREADS := 9
+PROF_MAX_EVENTS := 1000
+PROF_OUT_FILE := prof.out
+
+# Boost
+USE_BOOST := 0
+BOOST_TEST_CXXFLAGS := 
+BOOST_TEST_INCLUDE_DIR := 
+BOOST_TEST_LIB_DIR := 
+BOOST_TEST_LIB := 

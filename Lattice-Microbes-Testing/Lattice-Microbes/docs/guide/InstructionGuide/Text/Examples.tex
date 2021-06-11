@@ -1,0 +1,30 @@
+Many examples demonstrating features of pyLM exist both on the website (\url{http://www.scs.illinois.edu/schulten/lm/download/lm22/ExampleFiles.tgz}) and in the source code (\texttt{src/python/Examples}).  Each demonstrates several different features of pyLM, and it is suggested that you read and work through all of the examples before starting to use pyLM for your project.  It is recommended that you work through the problems in the order shown, as functionality documented in an earlier file is not described again in later files.
+
+Various functionality is demonstrated in the examples, including:
+
+\begin{itemize}
+\item CME
+\begin{enumerate}
+\item example-bimol.py -- Demonstrates process of defining molecular species, reactions  and initial conditions in a CME simulation
+\item example-bimolConc.py -- Same as example-bimol.py using concentrations instead of particle numbers
+\item example-bimol-pp.py -- Demonstrates the general trends for writing post-processing code for a CME simulation
+\item example-rnaprotein.py -- An example of constitutive gene expression
+\item example-LotkaVolterra.py -- An example of the well known Lotka-Volterra problem (predator-prey) simulated with stochasticity
+\item example-stochasticResonator.py -- An example of a stochastic resonator problem with CME
+\item example-lac2state.py -- This file demonstrates a more complex reaction scheme
+\end{enumerate}
+
+\item RDME
+\begin{enumerate}
+\item example-MichaelisMenten.py -- This demonstrates how to define a simulation domain in a 3D RDME simulation and defines an enzyme/substrate reaction system to be simulated in the domain
+\item example-minde.py -- A demonstration of the popular Min system of {\it E. coli} showing how to construct default cell shapes, customize diffusion coefficients in regions and diffusion coefficients between regions
+\item example-restart.py -- This demonstrates how to restart an RDME simulation, however it is a hack as of now
+\end{enumerate}
+
+\item Advanced Setup
+\begin{enumerate}
+\item example-shapes.py -- An example showing how to define complex objects such as boxes, spheres, tori, ellipses and intersections, unions and differences of the various objects
+\item example-tightPackedCellArray.py -- This example shows a pySTDLM feature that packs a cell shape into a tight regular grid spanning the whole RDME domain
+\item example-extendrdme.py -- This example shows how to extend the basic RDME solver with a hook that is run on every lattice write, allowing the user to modify the simulation based on the simulation state
+\end{enumerate}
+\end{itemize}

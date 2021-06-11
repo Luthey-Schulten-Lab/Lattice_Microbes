@@ -1,0 +1,26 @@
+pySTDLM.CellArranger
+====================
+
+.. automodule:: pySTDLM.CellArranger
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CellArranger
+      LooseGridArranger
+      RandomArranger
+      RandomSphericalArranger
+      TightGridArranger
+   
+   
+
+   
+   
+   

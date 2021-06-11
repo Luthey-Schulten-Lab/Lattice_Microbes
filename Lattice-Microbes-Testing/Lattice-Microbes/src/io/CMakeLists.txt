@@ -1,0 +1,10 @@
+target_sources(lmcore
+    PRIVATE
+        "${CMAKE_CURRENT_LIST_DIR}/SimulationFile.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/SimulationFile_create.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/SimulationParameters.cpp"
+    PUBLIC
+        "${CMAKE_CURRENT_LIST_DIR}/lm_hdf5.h"
+        "${CMAKE_CURRENT_LIST_DIR}/SimulationFile.h"
+        "${CMAKE_CURRENT_LIST_DIR}/ArbitraryH5.h"
+        "${CMAKE_CURRENT_LIST_DIR}/SimulationParameters.h")

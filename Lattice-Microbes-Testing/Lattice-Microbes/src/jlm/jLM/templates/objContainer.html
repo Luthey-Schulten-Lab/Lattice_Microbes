@@ -1,0 +1,25 @@
+<table class='jLMtbl' style="width:600px;">
+    <caption>{{title}}</caption>
+    <tr>
+        <th>Index</th>
+        <th>Object</th>
+        {% if annotationCol %}
+        <th>Annotation</th>
+        {% endif %}
+        {% if texStr %}
+        <th>TeX representation</th>
+        {% endif %}
+    </tr>
+    {% for o in objs %}
+    <tr>
+        <td> {{o.id}} </td>
+        <td> {{o.html}} </td>
+        {% if annotationCol %}
+        <td> {{o.annotation or ''}} </td>
+        {% endif %}
+        {% if texStr %}
+        <td>${{o.tex}}$</th>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>

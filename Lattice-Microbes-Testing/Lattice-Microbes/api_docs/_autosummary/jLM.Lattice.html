@@ -1,0 +1,579 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.Lattice &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="jLM.Template" href="jLM.Template.html" />
+    <link rel="prev" title="jLM.DisplayUtils" href="jLM.DisplayUtils.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>jLM.Lattice</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/jLM.Lattice.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-jLM.Lattice">
+<span id="jlm-lattice"></span><h1>jLM.Lattice<a class="headerlink" href="#module-jLM.Lattice" title="Permalink to this headline">¶</a></h1>
+<p>Cythonized lattice manipulation functions</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.Lattice.appendParticle" title="jLM.Lattice.appendParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendParticle</span></code></a></td>
+<td>Add a particle to a lattice site</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.Lattice.checkParticle" title="jLM.Lattice.checkParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkParticle</span></code></a></td>
+<td>Generate a lattice set to 1 where if a particle in <cite>targets</cite> is present in at the lattice site, 0 otherwise.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.Lattice.checkSite" title="jLM.Lattice.checkSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkSite</span></code></a></td>
+<td>Generate a lattice set to 1 where the site type is in <cite>targets</cite>, 0 otherwise.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.Lattice.computeVolumeFraction" title="jLM.Lattice.computeVolumeFraction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeVolumeFraction</span></code></a></td>
+<td>Compute the spatially dependent excluded volume</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.Lattice.countParticlesInLattice" title="jLM.Lattice.countParticlesInLattice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">countParticlesInLattice</span></code></a></td>
+<td>Count particles.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.Lattice.countSites" title="jLM.Lattice.countSites"><code class="xref py py-obj docutils literal notranslate"><span class="pre">countSites</span></code></a></td>
+<td>Count number of subvolumes</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.Lattice.greedyMesh" title="jLM.Lattice.greedyMesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">greedyMesh</span></code></a></td>
+<td>Generate a simplified triangle mesh from a binary lattice.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.Lattice.hdf2lmRep" title="jLM.Lattice.hdf2lmRep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hdf2lmRep</span></code></a></td>
+<td>Convert an HDF5 particle lattice representation to LM native format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.Lattice.latticeHistogram" title="jLM.Lattice.latticeHistogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latticeHistogram</span></code></a></td>
+<td>Compute histogram of particle types.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.Lattice.latticeStatsAll" title="jLM.Lattice.latticeStatsAll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latticeStatsAll</span></code></a></td>
+<td>Compute number of particles in a particular site type, and the number of those site types</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.Lattice.latticeStatsAll_h5fmt" title="jLM.Lattice.latticeStatsAll_h5fmt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latticeStatsAll_h5fmt</span></code></a></td>
+<td>Compute number of particles in a particular site type, and the number of those site types</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.Lattice.populateLattice" title="jLM.Lattice.populateLattice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">populateLattice</span></code></a></td>
+<td>Add particles to lattice at random locations.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="jLM.Lattice.appendParticle">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">appendParticle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.appendParticle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a particle to a lattice site</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>plattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Particle lattice (H5 format: shape=(nw,nz,ny,nz,np), dtype=uint8)</li>
+<li><strong>x</strong> (<em>int</em>) – x coordinate</li>
+<li><strong>y</strong> (<em>int</em>) – y coordinate</li>
+<li><strong>z</strong> (<em>int</em>) – z coordinate</li>
+<li><strong>sp</strong> (<em>uint8</em>) – Species type</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">1 if added, 0 if site full</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.checkParticle">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">checkParticle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.checkParticle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a lattice set to 1 where if a particle in <cite>targets</cite> is present in at the lattice site, 0 otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lattice</strong> (<em>unsigned char</em><em>[</em><em>:</em><em>,</em><em>:</em><em>,</em><em>:</em><em>,</em><em>:</em><em>]</em>) – Particle lattice.</li>
+<li><strong>targets</strong> (<em>unsigned char</em><em>[</em><em>:</em><em>]</em>) – List of particle types to flag.</li>
+<li><strong>mask</strong> (<em>long int</em><em>[</em><em>:</em><em>,</em><em>:</em><em>,</em><em>:</em><em>]</em>) – Output lattice (preallocated)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.checkSite">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">checkSite</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.checkSite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a lattice set to 1 where the site type is in <cite>targets</cite>, 0 otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sites</strong> (<em>unsigned char</em><em>[</em><em>:</em><em>,</em><em>:</em><em>,</em><em>:</em><em>]</em>) – Site lattice.</li>
+<li><strong>targets</strong> (<em>unsigned char</em><em>[</em><em>:</em><em>]</em>) – List of site types to flag.</li>
+<li><strong>mask</strong> (<em>long int</em><em>[</em><em>:</em><em>,</em><em>:</em><em>,</em><em>:</em><em>]</em>) – Output lattice (preallocated)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.computeVolumeFraction">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">computeVolumeFraction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.computeVolumeFraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the spatially dependent excluded volume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Particle lattice (H5 format, shape=(nw,nz,ny,nx,np), dtype=uint8)</li>
+<li><strong>particleVolFrac</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Array of particle volume fractions indexed by particle lattice species</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>evLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Background excluded volume. If None, assumed to be zero.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Excluded volume</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">py:class:<cite>numpy.ndarray</cite></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.countParticlesInLattice">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">countParticlesInLattice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.countParticlesInLattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count particles.</p>
+<p>Given a list of region ids and species ids, count all particles of those
+types within those regions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Particle lattice (HDF5 format, shape=(nx,ny,nz,pps))</li>
+<li><strong>sLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Site lattice (shape=(nx,ny,nz))</li>
+<li><strong>spIdList</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – List of particle ids to count (shape=(nsps,))</li>
+<li><strong>regIdList</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – List of region ids to consider (shape=(nreg,))</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Count</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.countSites">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">countSites</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.countSites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count number of subvolumes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>slattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Site lattice</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Ndarray of shape=(256,) counting the number of site of each type</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.greedyMesh">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">greedyMesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.greedyMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a simplified triangle mesh from a binary lattice.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>binaryLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Site lattice. One if site occupied, zero otherwise.
+(shape=(nx,ny,nz), dtype=uint8)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Vertices (shape=(nverts,3), dtype=int32), and faces, each
+element which indexes into verticies. (shape=(nfaces, 3),
+dtype=uint8).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">The correct winding order is not always chosen.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.hdf2lmRep">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">hdf2lmRep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.hdf2lmRep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an HDF5 particle lattice representation to LM native format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>plattice1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Output LM format (dtype=uint8, shape=(nw,nz,ny,nx,np))</li>
+<li><strong>plattice0</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Input HDF5 format (dtype=uint8, shape=(nx,ny,nz,nw*np))</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last"><strong>txTable</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Optional particle id translation table: lmNative = txTable[h5Native]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.latticeHistogram">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">latticeHistogram</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.latticeHistogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute histogram of particle types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Result array, contains the number of particles at each lattice
+site in <cite>idxs</cite>. (shape=(nx,ny,nz,pps), dtype=uint8)</li>
+<li><strong>idxs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – List of particle types to bin (shape=(nparticles,), dtype=int32)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>axes</strong> (<em>list</em>) – Axis indexes to sum out (shape=(naxes,), dtype=int32)</li>
+<li><strong>target</strong> – Output array. None or an <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of the proper
+size</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New ndarray or reference to target</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.latticeStatsAll">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">latticeStatsAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.latticeStatsAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of particles in a particular site type, and the number of those site types</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>plattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Particle lattice (shape=(nw,nz,ny,nx,np), dtype=uint8)</li>
+<li><strong>slattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Site lattice (HDF5 format: shape=(nz,ny,nx), dtype=uint8)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Number of particles, number of sites</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>,:py:class:<cite>numpy.ndarray</cite>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.latticeStatsAll_h5fmt">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">latticeStatsAll_h5fmt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.latticeStatsAll_h5fmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of particles in a particular site type, and the number of those site types</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>plattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Particle lattice (H5 format: shape=(nx,ny,nz,pps), dtype=uint8)</li>
+<li><strong>slattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Site lattice (HDF5 format: shape=(nx,ny,nz), dtype=uint8)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Number of particles, number of sites</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>,:py:class:<cite>numpy.ndarray</cite>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="jLM.Lattice.populateLattice">
+<code class="descclassname">jLM.Lattice.</code><code class="descname">populateLattice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jLM.Lattice.populateLattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add particles to lattice at random locations.</p>
+<p>The <cite>particleDensity</cite> argument is a
+<span class="math notranslate nohighlight">\(N_{siteTypes}\times N_{particleTypes}\)</span> array of slot occupancy
+probabilities. It describes the probability to find a particle type
+(including empty==0) at a particular particle slot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Particle lattice (H5 format, shape=(nw,nz,ny,nx,np), dtype=uint8)
+Modified in place.</li>
+<li><strong>sLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Site lattice (H5 format, shape=(nz,ny,nx), dtype=uint8)</li>
+<li><strong>particleDenstiy</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Particle probability, (shape=(Nsites,Nsps), dtype=float64)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>particleVolFrac</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Array of particle volume fractions indexed by particle lattice species
+If None, do not consider excluded volume</li>
+<li><strong>evLattice</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Background excluded volume. If None, assumed to be zero.</li>
+<li><strong>exact</strong> (<em>bool</em>) – If <cite>True</cite>, make a second pass that corrects the particle counts
+exactly</li>
+<li><strong>mask</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Boolean mask to set region of lattice to populate, <cite>None</cite>
+(default) populates the entire lattice</li>
+<li><strong>seed</strong> (<em>int</em>) – Seed to RNG. Defaults to time().</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="jLM.Template.html" class="btn btn-neutral float-right" title="jLM.Template" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="jLM.DisplayUtils.html" class="btn btn-neutral" title="jLM.DisplayUtils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

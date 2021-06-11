@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lattice Microbes API Reference &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="jLM" href="_autosummary/jLM.html" />
+    <link rel="prev" title="Visualization using VMD" href="Visualization.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lattice Microbes API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#jlm">jLM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.html">jLM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.RDME.html">jLM.RDME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.RegionBuilder.html">jLM.RegionBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.Solvers.html">jLM.Solvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.Types.html">jLM.Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.BaseTypes.html">jLM.BaseTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.ColorGen.html">jLM.ColorGen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.DisplayUtils.html">jLM.DisplayUtils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.Lattice.html">jLM.Lattice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.Template.html">jLM.Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jLM.TexFmt.html">jLM.TexFmt</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pylm">pyLM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pyLM.html">pyLM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pyLM.CME.html">pyLM.CME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pyLM.ipyInterface.html">pyLM.ipyInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pyLM.LMLogger.html">pyLM.LMLogger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pyLM.RDME.html">pyLM.RDME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pyLM.units.html">pyLM.units</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pystdlm">pySTDLM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.html">pySTDLM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.CellArranger.html">pySTDLM.CellArranger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.Cells.html">pySTDLM.Cells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.CmdUtils.html">pySTDLM.CmdUtils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.Distributions.html">pySTDLM.Distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.NetworkVisualization.html">pySTDLM.NetworkVisualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.OnTheFly.html">pySTDLM.OnTheFly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.PostProcessing.html">pySTDLM.PostProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.SBMLReader.html">pySTDLM.SBMLReader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.StandardCells.html">pySTDLM.StandardCells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.StandardReactions.html">pySTDLM.StandardReactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/pySTDLM.StandardReactionSystems.html">pySTDLM.StandardReactionSystems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lm">LM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lm.html">lm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Lattice Microbes API Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/API.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lattice-microbes-api-reference">
+<h1>Lattice Microbes API Reference<a class="headerlink" href="#lattice-microbes-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="jlm">
+<h2>jLM<a class="headerlink" href="#jlm" title="Permalink to this headline">¶</a></h2>
+<p>jLM is an alternate interface to Lattice Microbes through the Jupyter notebook.
+For a quick introduction to jLM, please see the <a class="reference external" href="_static/notebook.html">example notebook</a>.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/jLM.html#module-jLM" title="jLM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM</span></code></a></td>
+<td>jLM top level.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/jLM.RDME.html#module-jLM.RDME" title="jLM.RDME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.RDME</span></code></a></td>
+<td>Spatial model</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/jLM.RegionBuilder.html#module-jLM.RegionBuilder" title="jLM.RegionBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.RegionBuilder</span></code></a></td>
+<td>Design lattice geometry</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/jLM.Solvers.html#module-jLM.Solvers" title="jLM.Solvers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.Solvers</span></code></a></td>
+<td>Generic RDME solvers</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/jLM.Types.html#module-jLM.Types" title="jLM.Types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.Types</span></code></a></td>
+<td>Simulation objects.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/jLM.BaseTypes.html#module-jLM.BaseTypes" title="jLM.BaseTypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.BaseTypes</span></code></a></td>
+<td>Simulation object base class and collections</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/jLM.ColorGen.html#module-jLM.ColorGen" title="jLM.ColorGen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.ColorGen</span></code></a></td>
+<td>Defines ColorSeq, the color scheme generator</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/jLM.DisplayUtils.html#module-jLM.DisplayUtils" title="jLM.DisplayUtils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.DisplayUtils</span></code></a></td>
+<td>Auxiliary helper functions for presentation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/jLM.Lattice.html#module-jLM.Lattice" title="jLM.Lattice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.Lattice</span></code></a></td>
+<td>Cythonized lattice manipulation functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/jLM.Template.html#module-jLM.Template" title="jLM.Template"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.Template</span></code></a></td>
+<td>Templating engine tools</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/jLM.TexFmt.html#module-jLM.TexFmt" title="jLM.TexFmt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jLM.TexFmt</span></code></a></td>
+<td>Dump simulation parameters as LaTeX</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pylm">
+<h2>pyLM<a class="headerlink" href="#pylm" title="Permalink to this headline">¶</a></h2>
+<p>pyLM is a Problem Solving Environment (PSE) for biological simulations
+<a class="reference internal" href="Citations.html#pete2013" id="id1">[PETE2013]</a>.  Written in Python, it wraps and extends the highly optimized
+multi-GPU <a class="reference external" href="http://www.scs.illinois.edu/schulten/lm">Lattice Microbes</a> stochastic simulation software
+<a class="reference internal" href="Citations.html#robe2009" id="id2">[ROBE2009]</a>, <a class="reference internal" href="Citations.html#robe2013" id="id3">[ROBE2013]</a>.  The PSE is comprised of a base set of functionality
+to set up, monitor and modify simulations, as well as a set of standard
+post-processing routines that interface to other Python packages, including
+NumPy, SciPy, H5py, iGraph to name a few. See <a class="reference internal" href="Citations.html#pete2013" id="id4">[PETE2013]</a> for additional
+information as well as the user guide on the main <a class="reference external" href="http://www.scs.illinois.edu/schulten/lm">Lattice Microbes</a> website.
+If you use pyLM in your simulations, please cite references <a class="reference internal" href="Citations.html#pete2013" id="id5">[PETE2013]</a> and
+<a class="reference internal" href="Citations.html#robe2013" id="id6">[ROBE2013]</a>.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pyLM.html#module-pyLM" title="pyLM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLM</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pyLM.CME.html#module-pyLM.CME" title="pyLM.CME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLM.CME</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pyLM.ipyInterface.html#module-pyLM.ipyInterface" title="pyLM.ipyInterface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLM.ipyInterface</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pyLM.LMLogger.html#module-pyLM.LMLogger" title="pyLM.LMLogger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLM.LMLogger</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pyLM.RDME.html#module-pyLM.RDME" title="pyLM.RDME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLM.RDME</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pyLM.units.html#module-pyLM.units" title="pyLM.units"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyLM.units</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pystdlm">
+<h2>pySTDLM<a class="headerlink" href="#pystdlm" title="Permalink to this headline">¶</a></h2>
+<p>pySTDLM, which builds upon pyLM,  contains tools to simplify the construction
+of whole cell models.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pySTDLM.html#module-pySTDLM" title="pySTDLM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM</span></code></a></td>
+<td>pySTDLM: A standard library of functionality that is commonly used in biological simulations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pySTDLM.CellArranger.html#module-pySTDLM.CellArranger" title="pySTDLM.CellArranger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.CellArranger</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pySTDLM.Cells.html#module-pySTDLM.Cells" title="pySTDLM.Cells"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.Cells</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pySTDLM.CmdUtils.html#module-pySTDLM.CmdUtils" title="pySTDLM.CmdUtils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.CmdUtils</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pySTDLM.Distributions.html#module-pySTDLM.Distributions" title="pySTDLM.Distributions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.Distributions</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pySTDLM.NetworkVisualization.html#module-pySTDLM.NetworkVisualization" title="pySTDLM.NetworkVisualization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.NetworkVisualization</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pySTDLM.OnTheFly.html#module-pySTDLM.OnTheFly" title="pySTDLM.OnTheFly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.OnTheFly</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pySTDLM.PostProcessing.html#module-pySTDLM.PostProcessing" title="pySTDLM.PostProcessing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.PostProcessing</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pySTDLM.SBMLReader.html#module-pySTDLM.SBMLReader" title="pySTDLM.SBMLReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.SBMLReader</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pySTDLM.StandardCells.html#module-pySTDLM.StandardCells" title="pySTDLM.StandardCells"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.StandardCells</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/pySTDLM.StandardReactions.html#module-pySTDLM.StandardReactions" title="pySTDLM.StandardReactions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.StandardReactions</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/pySTDLM.StandardReactionSystems.html#module-pySTDLM.StandardReactionSystems" title="pySTDLM.StandardReactionSystems"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pySTDLM.StandardReactionSystems</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="lm">
+<h2>LM<a class="headerlink" href="#lm" title="Permalink to this headline">¶</a></h2>
+<p>Swig interface to Lattice Microbes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/lm.html#module-lm" title="lm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lm</span></code></a></td>
+<td>Lattice Microbes Python Bindings</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/jLM.html" class="btn btn-neutral float-right" title="jLM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Visualization.html" class="btn btn-neutral" title="Visualization using VMD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

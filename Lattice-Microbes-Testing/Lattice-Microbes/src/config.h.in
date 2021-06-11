@@ -1,0 +1,98 @@
+/*
+ * University of Illinois Open Source License
+ * Copyright 2012-2018 Luthey-Schulten Group,
+ * All rights reserved.
+ * 
+ * Developed by: Luthey-Schulten Group
+ * 			     University of Illinois at Urbana-Champaign
+ * 			     http://www.scs.uiuc.edu/~schulten
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the Software), to deal with 
+ * the Software without restriction, including without limitation the rights to 
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
+ * of the Software, and to permit persons to whom the Software is furnished to 
+ * do so, subject to the following conditions:
+ * 
+ * - Redistributions of source code must retain the above copyright notice, 
+ * this list of conditions and the following disclaimers.
+ * 
+ * - Redistributions in binary form must reproduce the above copyright notice, 
+ * this list of conditions and the following disclaimers in the documentation 
+ * and/or other materials provided with the distribution.
+ * 
+ * - Neither the names of the Luthey-Schulten Group, University of Illinois at
+ * Urbana-Champaign, nor the names of its contributors may be used to endorse or
+ * promote products derived from this Software without specific prior written
+ * permission.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL 
+ * THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ * OTHER DEALINGS WITH THE SOFTWARE.
+ *
+ * Author(s): Tyler M. Earnest
+ */
+
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+#define COPYRIGHT_DATE "@COPYRIGHT_DATE@"
+#define BUILD_CONFIGURATION "@BUILD_CONFIGURATION@"
+#cmakedefine MPD_CUDA_3D_GRID_LAUNCH
+#cmakedefine RNG_CUDA_DOUBLE_PRECISION
+#cmakedefine MPD_EXTRA_SANITY_CHECKS
+#cmakedefine MPD_FREAKYFAST
+#cmakedefine MPD_GLOBAL_S_MATRIX
+#cmakedefine MPD_GLOBAL_T_MATRIX
+#cmakedefine MPD_GLOBAL_R_MATRIX
+#cmakedefine LINUX
+#cmakedefine MACOSX
+#cmakedefine ARM
+#define MPD_LATTICE_MAX_OCCUPANCY @MPD_LATTICE_MAX_OCCUPANCY@
+#define LKCUDA_MAX_PARTICLE_OVERFLOWS @TUNE_MPD_MAX_PARTICLE_OVERFLOWS@
+#define RNG_TUNE_XORWOW_BLOCK_SIZE @RNG_TUNE_XORWOW_BLOCK_SIZE@
+#define RNG_TUNE_XORWOW_GRID_SIZE @RNG_TUNE_XORWOW_GRID_SIZE@
+#define RNG_TUNE_XORWOW_THREAD_ITERATIONS @RNG_TUNE_XORWOW_THREAD_ITERATIONS@
+#define LM_VERSION_STRING "@PROJECT_VERSION@"
+#cmakedefine MPD_MAPPED_OVERFLOWS
+#cmakedefine01 MPD_BOUNDARY_PERIODIC
+#define MPD_MAX_REACTION_TABLE_ENTRIES @MPD_MAX_REACTION_TABLE_ENTRIES@
+#define MPD_MAX_RL_MATRIX_ENTRIES @MPD_MAX_RL_MATRIX_ENTRIES@
+#define MPD_MAX_S_MATRIX_ENTRIES @MPD_MAX_S_MATRIX_ENTRIES@
+#define MPD_MAX_TRANSITION_TABLE_ENTRIES @MPD_MAX_TRANSITION_TABLE_ENTRIES@
+#cmakedefine OPT_CUDA
+#cmakedefine OPT_MPI
+#cmakedefine OPT_PYTHON
+#cmakedefine01 PROF_CUDA_ENABLE
+#cmakedefine PROF_ENABLE
+#define PROF_MAX_EVENTS @PROF_MAX_EVENTS@
+#define PROF_MAX_THREADS @PROF_MAX_THREADS@
+#define PROF_OUT_FILE "@PROF_OUT_FILE@"
+#define TUNE_FIRST_PASSAGE_TIME_BUFFER_SIZE @TUNE_FIRST_PASSAGE_TIME_BUFFER_SIZE@
+#define TUNE_LATTICE_BUILDER_WRITE_BUFFER_SIZE @TUNE_LATTICE_BUILDER_WRITE_BUFFER_SIZE@
+#define TUNE_LATTICE_GZIP_CHUNK_SIZE @TUNE_LATTICE_GZIP_CHUNK_SIZE@
+#define TUNE_LATTICE_GZIP_COMPRESSION_LEVEL @TUNE_LATTICE_GZIP_COMPRESSION_LEVEL@
+#define TUNE_LOCAL_RNG_CACHE_SIZE @TUNE_LOCAL_RNG_CACHE_SIZE@
+#define TUNE_MPD_MAX_OVERFLOW_REPLACEMENT_DIST @TUNE_MPD_MAX_OVERFLOW_REPLACEMENT_DIST@
+#define TUNE_MPD_MAX_PARTICLE_OVERFLOWS @TUNE_MPD_MAX_PARTICLE_OVERFLOWS@
+#define TUNE_MPD_REACTION_BLOCK_X_SIZE @TUNE_MPD_REACTION_BLOCK_X_SIZE@
+#define TUNE_MPD_REACTION_BLOCK_Y_SIZE @TUNE_MPD_REACTION_BLOCK_Y_SIZE@
+#define TUNE_MPD_X_BLOCK_MAX_X_SIZE @TUNE_MPD_X_BLOCK_MAX_X_SIZE@
+#define TUNE_MPD_Y_BLOCK_X_SIZE @TUNE_MPD_Y_BLOCK_X_SIZE@
+#define TUNE_MPD_Y_BLOCK_Y_SIZE @TUNE_MPD_Y_BLOCK_Y_SIZE@
+#define TUNE_MPD_Z_BLOCK_X_SIZE @TUNE_MPD_Z_BLOCK_X_SIZE@
+#define TUNE_MPD_Z_BLOCK_Z_SIZE @TUNE_MPD_Z_BLOCK_Z_SIZE@
+#cmakedefine01 TUNE_NRM_REUSE_PROPENSITIES
+#define TUNE_PARAMETER_VALUES_BUFFER_SIZE @TUNE_PARAMETER_VALUES_BUFFER_SIZE@
+#define TUNE_SPATIAL_MODEL_OBJECT_READ_BUFFER_SIZE @TUNE_SPATIAL_MODEL_OBJECT_READ_BUFFER_SIZE@
+#define TUNE_SPECIES_COUNTS_BUFFER_SIZE @TUNE_SPECIES_COUNTS_BUFFER_SIZE@
+#cmakedefine PROF_USE_NVTX
+#cmakedefine PROF_USE_CUEVENT
+#define VERSION_NUM_MAJOR @PROJECT_VERSION_MAJOR@
+#define VERSION_NUM_MINOR @PROJECT_VERSION_MINOR@
+#define VERSION_NUM_MICRO @PROJECT_VERSION_PATCH@
+#cmakedefine MPD_NUMA_SUPPORT
+#endif /* _CONFIG_H_ */

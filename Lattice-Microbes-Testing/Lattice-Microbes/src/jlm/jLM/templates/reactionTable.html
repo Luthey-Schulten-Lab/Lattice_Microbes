@@ -1,0 +1,23 @@
+<table class="jLMtbl">
+    <caption>Reactions</caption>
+    <tr>
+        <th scope='col'>Index</th>
+        <th scope='col'>Reaction</th>
+        <th scope='col'>Rate</th>
+        <th scope='col'>Regions</th>
+        {% if annotationCol %}
+        <th scope='col'>Description</th>
+        {% endif %}
+    </tr>
+    {% for r in rxns %}
+    <tr class='jLMtbl'>
+        <td class="objIndex"> {{ r.idx }} </td>
+        <td class="rxnCol"> {{ r.rxn }} </td>
+        <td class='jLMnum noWrap'> {{ r.rate }} </td>
+        <td class='noWrap'> {{ r.reg }} </td>
+        {% if annotationCol %}
+        <td class='noWrap'>{{r.annotation or ''}}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>

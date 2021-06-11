@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.BaseTypes &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="jLM.ColorGen" href="jLM.ColorGen.html" />
+    <link rel="prev" title="jLM.Types" href="jLM.Types.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>jLM.BaseTypes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/jLM.BaseTypes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-jLM.BaseTypes">
+<span id="jlm-basetypes"></span><h1>jLM.BaseTypes<a class="headerlink" href="#module-jLM.BaseTypes" title="Permalink to this headline">¶</a></h1>
+<p>Simulation object base class and collections</p>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Namespace</span></code></a>(sos)</td>
+<td>Convienence class for TAB completing simulation objects</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jLM.BaseTypes.SimObj" title="jLM.BaseTypes.SimObj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimObj</span></code></a>(sim,&nbsp;idx,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Base class to simulation objects</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.BaseTypes.SimObjs" title="jLM.BaseTypes.SimObjs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimObjs</span></code></a>(sim,&nbsp;cls[,&nbsp;idbase])</td>
+<td>Container to manage simulation data types</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="jLM.BaseTypes.Namespace">
+<em class="property">class </em><code class="descclassname">jLM.BaseTypes.</code><code class="descname">Namespace</code><span class="sig-paren">(</span><em>sos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#Namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.Namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Convienence class for TAB completing simulation objects</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="jLM.BaseTypes.SimObj">
+<em class="property">class </em><code class="descclassname">jLM.BaseTypes.</code><code class="descname">SimObj</code><span class="sig-paren">(</span><em>sim</em>, <em>idx</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class to simulation objects</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="jLM.BaseTypes.SimObjs">
+<em class="property">class </em><code class="descclassname">jLM.BaseTypes.</code><code class="descname">SimObjs</code><span class="sig-paren">(</span><em>sim</em>, <em>cls</em>, <em>idbase=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObjs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObjs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Container to manage simulation data types</p>
+<dl class="method">
+<dt id="jLM.BaseTypes.SimObjs.freeze">
+<code class="descname">freeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObjs.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObjs.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not create new objects from failed lookups</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.BaseTypes.SimObjs.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObjs.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObjs.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a simulation object, create it if it does not exist</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*args</strong> – Arguments to constructor</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><strong>**kwargs</strong> – Keyword arguments to constructor</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#jLM.BaseTypes.SimObj" title="jLM.BaseTypes.SimObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimObj</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.BaseTypes.SimObjs.getAutoNamespace">
+<code class="descname">getAutoNamespace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObjs.getAutoNamespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObjs.getAutoNamespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get <a class="reference internal" href="#jLM.BaseTypes.Namespace" title="jLM.BaseTypes.Namespace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namespace</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.BaseTypes.SimObjs.is_defined">
+<code class="descname">is_defined</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObjs.is_defined"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObjs.is_defined" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if <cite>get</cite> would create a new object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*args</strong> – Arguments to constructor</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><strong>**kwargs</strong> – Keyword arguments to constructor</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if would create new object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.BaseTypes.SimObjs.matchRegex">
+<code class="descname">matchRegex</code><span class="sig-paren">(</span><em>regex</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObjs.matchRegex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObjs.matchRegex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator returning matches to regular expression</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>regex</strong> (<em>str</em>) – <dl class="docutils">
+<dt>Regular expression matching the name attribute of</dt>
+<dd>contained objects</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Generator of <code class="xref py py-class docutils literal notranslate"><span class="pre">SimObj</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">generator</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.BaseTypes.SimObjs.unfreeze">
+<code class="descname">unfreeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/BaseTypes.html#SimObjs.unfreeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.BaseTypes.SimObjs.unfreeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new objects from failed lookups</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="jLM.ColorGen.html" class="btn btn-neutral float-right" title="jLM.ColorGen" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="jLM.Types.html" class="btn btn-neutral" title="jLM.Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

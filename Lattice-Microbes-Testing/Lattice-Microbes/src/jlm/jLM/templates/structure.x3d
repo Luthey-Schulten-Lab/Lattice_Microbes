@@ -1,0 +1,41 @@
+{% if downloadX3D == true %}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.1//EN" "http://www.web3d.org/specifications/x3d-3.1.dtd">
+{% endif %}
+<X3D class="jLM" profile='Interchange' version='3.1' id='{{renderId}}X3D'>
+    <Scene>
+        <Environment SSAO="true" id='{{renderId}}env' occlusionCulling='false'></Environment>
+        <background skyColor="1.0 1.0 1.0"></background>
+        <Transform rotation='0 1 0 1.57'>
+            <Transform scale='{{scl}} {{scl}} {{scl}}'>
+                <Transform translation='{{ -centroid[0]}} {{ -centroid[1]}} {{ -centroid[2]}}'>
+                    {% for shape in sites %} 
+                    <Shape id='{{renderId}}shape{{shape.idx}}'>
+                       <Appearance>
+                           <Material id='{{renderId}}material{{shape.idx}}' transparency='0' diffuseColor='{{shape.r}} {{shape.g}} {{shape.b}}'></Material>
+                           <DepthMode id='{{renderId}}dm{{shape.idx}}' readOnly="false"></DepthMode>
+                       </Appearance>
+                       <IndexedTriangleSet solid='false' index='{{shape.faces}}' ccw='true' colorPerVertex='false' normalPerVertex='false'>
+                           <Coordinate point='{{shape.verts}}'/>
+                       </IndexedTriangleSet>
+                    </Shape>
+                    {% endfor %}
+                    {% for sptype in species %} 
+                    <Group id='{{renderId}}shape{{sptype.idx}}'>
+                       {% for loc in sptype.locs %} <Transform translation='{{loc.x}} {{loc.y}} {{loc.z}}'>
+                           <Shape id='{{renderId}}subshape{{sptype.idx}}_{{loop.index}}'>
+                               <Appearance>
+                                   <Material id='{{renderId}}material{{sptype.idx}}' transparency='0' diffuseColor='{{sptype.r}} {{sptype.g}} {{sptype.b}}'></Material>
+                                   <DepthMode id='{{renderId}}dm{{sptype.idx}}' readOnly="false"></DepthMode>
+                               </Appearance>
+                               <Sphere radius="{{sptype.radius}}"></Sphere>
+                            </Shape>
+                        </Transform>
+                       {% endfor %}
+                    </Group>
+                    {% endfor %}
+                </Transform>
+            </Transform>
+        </Transform>
+    </Scene>
+</X3D>

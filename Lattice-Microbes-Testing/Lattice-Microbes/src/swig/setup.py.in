@@ -1,0 +1,20 @@
+from setuptools.command.install import install
+from setuptools import setup
+import shutil
+import os.path
+from distutils.sysconfig import get_python_lib
+
+class CompiledLibInstall(install):
+    def run(self):
+        install_dir = get_python_lib()
+        shutil.copy("@SWIG_LM_PYTHON_WRAPPER@", install_dir)
+        shutil.copy("@SWIG_LM_MODULE_NAME@", install_dir)
+
+setup(
+    name='@PROJECT_NAME@',
+    version='@PROJECT_VERSION@',
+    packages=['@PROJECT_NAME@'],
+    author="Elijah Roberts, Mike Hallock, Tyler Earnest, Joseph R. Peterson, and Andrew Magis",
+    author_email='latticemicrobes-users@lists.illinois.edu',
+    cmdclass={'install': CompiledLibInstall}
+)

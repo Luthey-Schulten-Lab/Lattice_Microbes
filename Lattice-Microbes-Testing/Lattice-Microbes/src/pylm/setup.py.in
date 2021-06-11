@@ -1,0 +1,31 @@
+import sys
+from setuptools import setup
+
+if sys.version_info < (3, 5):
+    sys.exit("Python 3.5 or newer required")
+
+setup(
+    name="pyLM",
+    version='@PROJECT_VERSION@',
+    python_requires=">=3.5",
+    description="A problem solving environment for stochastic biological simulations.",
+    long_description=("A Python-based problem solving environment for stochastic "
+                      "biological simulations.  See the paper:\n"
+                      "J.R. Peterson, M.J. Hallock, J.A. Cole, Z. Luthey-Schulten, "
+                      "'A Problem Solving Environment for Stochastic Biological "
+                      "Problems', PyHPC 2013 at Supercomputing 2013."),
+    author="Joseph R. Peterson and Michael J. Hallock",
+    author_email="jrptrsn3@illinois.edu",
+    url="http://www.scs.illinois.edu/schulten/lm/",
+    packages=['pyLM','pySTDLM'],
+    entry_points = {
+        "console_scripts": [ 
+            'estimateGPUMemory = pySTDLM.CmdUtils:estimateGPUMemory', 
+            'peekFile = pySTDLM.CmdUtils:peekFile']},
+    extras_require={
+        'netvis': ['python-igraph', 'pygexf', 'lxml'],
+        'notebook': ['jupyter', 'ipywidgets', 'matplotlib'],
+        'sbml': ['python-libsbml'],
+        'expression_model': ['biopython']},
+    install_requires = [ "matplotlib", "h5py", "tqdm"]
+)

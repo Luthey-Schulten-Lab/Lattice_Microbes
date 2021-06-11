@@ -1,0 +1,577 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.Cells &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.Cells</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.Cells</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">lm</span>
+<span class="kn">import</span> <span class="nn">pyLM</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pyLM.LMLogger</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="CellShape"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CellShape">[docs]</a><span class="k">class</span> <span class="nc">CellShape</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Base class for a particular cell type for use in CellArranger (and later more)&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Unknown&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">=-</span><span class="mf">1.0</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="o">=</span><span class="mf">0.0</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">memtype</span><span class="o">=</span><span class="s2">&quot;membrane&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">cyttype</span><span class="o">=</span><span class="s2">&quot;cytoplasm&quot;</span>
+
+<div class="viewcode-block" id="CellShape.getVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CellShape.getVolume">[docs]</a>	<span class="k">def</span> <span class="nf">getVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Volume occupied by cell</span>
+
+<span class="sd">        When overriding this class, you must specify a &quot;computeVolume()&quot; function of no arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Volume in intrinsic units</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">computeVolume</span><span class="p">()</span>
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Volume computed was negative... call the developers.&quot;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span></div>
+
+	<span class="c1"># TODO: Make it return an orientation as well</span>
+<div class="viewcode-block" id="CellShape.boundingBox"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CellShape.boundingBox">[docs]</a>	<span class="k">def</span> <span class="nf">boundingBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Return a bounding box for the cell&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mins</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxs</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="CellShape.addToSimulation"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CellShape.addToSimulation">[docs]</a>	<span class="k">def</span> <span class="nf">addToSimulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Add the cell to the simulation</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sim:</span>
+<span class="sd">                An RDMESimulation object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">internalAddToSim</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CellShape.translateCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CellShape.translateCell">[docs]</a>	<span class="k">def</span> <span class="nf">translateCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Shift a cell in space by the specified amount</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            point [x,y,z]:</span>
+<span class="sd">                translation in space</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">internalTranslateCell</span><span class="p">(</span><span class="n">point</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CellShape.createModelCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CellShape.createModelCell">[docs]</a>	<span class="k">def</span> <span class="nf">createModelCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Create model cell</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            attrs:</span>
+<span class="sd">                A dictionary of attributes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">internalModelCell</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CellShape.setRegions"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CellShape.setRegions">[docs]</a>	<span class="k">def</span> <span class="nf">setRegions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">membrane</span><span class="p">,</span> <span class="n">cytoplasm</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Set regions</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            membrane:</span>
+<span class="sd">                The name of the region in which the membrane should be considered</span>
+<span class="sd">            cytoplasm:</span>
+<span class="sd">                The name of the region in which the cytoplasm should be considered</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">memtype</span> <span class="o">=</span> <span class="n">membrane</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">cyttype</span> <span class="o">=</span> <span class="n">cytoplasm</span></div></div>
+
+<div class="viewcode-block" id="SphereCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.SphereCell">[docs]</a><span class="k">class</span> <span class="nc">SphereCell</span><span class="p">(</span><span class="n">CellShape</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;A representation for a spherical cell. This cell requires an attribute dictionary that includes &quot;radius&quot; and &quot;membraneThickness&quot;&#39;&#39;&#39;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+		<span class="n">CellShape</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Sphere&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">=</span><span class="n">origin</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must specify an origin for the cell in form [x,y,z].&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">=</span><span class="n">radius</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Radius must be positive.&quot;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">origin</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">origin</span><span class="p">]</span>
+
+<div class="viewcode-block" id="SphereCell.internalModelCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.SphereCell.internalModelCell">[docs]</a>	<span class="k">def</span> <span class="nf">internalModelCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+		<span class="k">if</span> <span class="s2">&quot;radius&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, radius must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;membraneThickness&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, membraneThickness must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+		<span class="c1"># Return a model cell</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;membraneThickness&#39;</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">]</span>
+		<span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="SphereCell.computeVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.SphereCell.computeVolume">[docs]</a>	<span class="k">def</span> <span class="nf">computeVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span></div>
+
+<div class="viewcode-block" id="SphereCell.internalAddToSim"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.SphereCell.internalAddToSim">[docs]</a>	<span class="k">def</span> <span class="nf">internalAddToSim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
+		<span class="n">p1</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating spheroid with diameter=</span><span class="si">%g</span><span class="s2">, and thickness=</span><span class="si">%g</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">)</span>
+		
+		<span class="n">membrane</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">Sphere</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteTypes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">memtype</span><span class="p">])</span>
+		<span class="n">cytoplasm</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">Sphere</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteTypes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cyttype</span><span class="p">])</span>
+		
+		<span class="n">sim</span><span class="o">.</span><span class="n">lm_builder</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">membrane</span><span class="p">)</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">lm_builder</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">cytoplasm</span><span class="p">)</span>
+
+		<span class="c1"># Prevent GC</span>
+		<span class="n">membrane</span><span class="o">.</span><span class="n">thisown</span><span class="o">=</span><span class="mi">0</span>
+		<span class="n">cytoplasm</span><span class="o">.</span><span class="n">thisown</span><span class="o">=</span><span class="mi">0</span></div>
+
+<div class="viewcode-block" id="SphereCell.internalTranslateCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.SphereCell.internalTranslateCell">[docs]</a>	<span class="k">def</span> <span class="nf">internalTranslateCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span></div></div>
+
+<div class="viewcode-block" id="BoxCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.BoxCell">[docs]</a><span class="k">class</span> <span class="nc">BoxCell</span><span class="p">(</span><span class="n">CellShape</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;A representation for a spherical cell. This cell requires an attribute dictionary that includes &quot;width&quot;, &quot;height&quot;, &quot;depth&quot; and &quot;membraneThickness&quot;&#39;&#39;&#39;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">]):</span>
+		<span class="n">CellShape</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Box&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="o">=</span><span class="n">p1</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="o">=</span><span class="n">p2</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">p2</span><span class="p">):</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must specify an points for the cell in form [x,y,z].&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span> <span class="o">=</span> <span class="n">p1</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span> <span class="o">=</span> <span class="n">p2</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">=</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">=</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="o">=</span><span class="n">p2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<div class="viewcode-block" id="BoxCell.internalModelCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.BoxCell.internalModelCell">[docs]</a>	<span class="k">def</span> <span class="nf">internalModelCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+		<span class="k">if</span> <span class="s2">&quot;width&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model box cell, width must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;height&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model box cell, heigh must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;depth&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model box cell, depth must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;membraneThickness&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, membraneThickness must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+		<span class="c1"># Return a model cell</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;membraneThickness&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span>
+		<span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="BoxCell.computeVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.BoxCell.computeVolume">[docs]</a>	<span class="k">def</span> <span class="nf">computeVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span></div>
+
+<div class="viewcode-block" id="BoxCell.internalAddToSim"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.BoxCell.internalAddToSim">[docs]</a>	<span class="k">def</span> <span class="nf">internalAddToSim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating box with p1=</span><span class="si">%s</span><span class="s2">, p2=</span><span class="si">%s</span><span class="s2">, and thickness=</span><span class="si">%g</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">)</span>
+		
+		<span class="n">p1</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">)</span>
+		<span class="n">p2</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">)</span>
+		<span class="n">p3</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">])</span>
+		<span class="n">p4</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">])</span>
+		<span class="n">membrane</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">Cuboid</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteTypes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">memtype</span><span class="p">])</span>
+		<span class="n">cytoplasm</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">Cuboid</span><span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">p4</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteTypes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cyttype</span><span class="p">])</span>
+		
+		<span class="n">sim</span><span class="o">.</span><span class="n">lm_builder</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">membrane</span><span class="p">)</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">lm_builder</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">cytoplasm</span><span class="p">)</span>
+
+		<span class="c1"># Prevent GC</span>
+		<span class="n">membrane</span><span class="o">.</span><span class="n">thisown</span><span class="o">=</span><span class="mi">0</span>
+		<span class="n">cytoplasm</span><span class="o">.</span><span class="n">thisown</span><span class="o">=</span><span class="mi">0</span></div>
+
+<div class="viewcode-block" id="BoxCell.internalTranslateCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.BoxCell.internalTranslateCell">[docs]</a>	<span class="k">def</span> <span class="nf">internalTranslateCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span></div></div>
+
+<div class="viewcode-block" id="CapsuleCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleCell">[docs]</a><span class="k">class</span> <span class="nc">CapsuleCell</span><span class="p">(</span><span class="n">CellShape</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;A representation for a spherical cell. This cell requires an attribute dictionary that includes &quot;radius&quot;, &quot;length&quot;, and &quot;membraneThickness&quot;&#39;&#39;&#39;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+		<span class="n">CellShape</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Capsule&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="o">=</span><span class="n">p1</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="o">=</span><span class="n">p2</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must specify an points for the cell in form [x,y,z].&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">=</span><span class="n">radius</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Radius must be positive.&quot;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">=</span><span class="n">length</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Length must be positive.&quot;</span><span class="p">)</span>
+
+		<span class="n">min1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">p1</span><span class="p">]</span>
+		<span class="n">max1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">p1</span><span class="p">]</span>
+		<span class="n">min2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">p2</span><span class="p">]</span>
+		<span class="n">max2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">p2</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">min1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">min2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">max1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">max2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="CapsuleCell.internalModelCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleCell.internalModelCell">[docs]</a>	<span class="k">def</span> <span class="nf">internalModelCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+		<span class="k">if</span> <span class="s2">&quot;radius&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, radius must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;length&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, length must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;membraneThickness&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, membraneThickness must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+		<span class="c1"># Return a model cell</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)]</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;membraneThickness&#39;</span><span class="p">])</span>
+		<span class="n">min1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">]</span>
+		<span class="n">max1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">]</span>
+		<span class="n">min2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">]</span>
+		<span class="n">max2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">min1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">min2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">max1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">max2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="CapsuleCell.computeVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleCell.computeVolume">[docs]</a>	<span class="k">def</span> <span class="nf">computeVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">+</span> <span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span></div>
+
+<div class="viewcode-block" id="CapsuleCell.internalAddToSim"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleCell.internalAddToSim">[docs]</a>	<span class="k">def</span> <span class="nf">internalAddToSim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating capsule with radius=</span><span class="si">%g</span><span class="s2">, length=</span><span class="si">%g</span><span class="s2">, and thickness=</span><span class="si">%g</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">)</span>
+
+		<span class="n">p1</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">)</span>
+		<span class="n">p2</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">)</span>
+		<span class="n">membrane</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">CapsuleShell</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteTypes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">memtype</span><span class="p">])</span>
+		<span class="n">cytoplasm</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">Capsule</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteTypes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cyttype</span><span class="p">])</span>
+		
+		<span class="n">sim</span><span class="o">.</span><span class="n">lm_builder</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">membrane</span><span class="p">)</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">lm_builder</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">cytoplasm</span><span class="p">)</span>
+
+		<span class="c1"># Prevent GC</span>
+		<span class="n">membrane</span><span class="o">.</span><span class="n">thisown</span><span class="o">=</span><span class="mi">0</span>
+		<span class="n">cytoplasm</span><span class="o">.</span><span class="n">thisown</span><span class="o">=</span><span class="mi">0</span></div>
+
+<div class="viewcode-block" id="CapsuleCell.internalTranslateCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleCell.internalTranslateCell">[docs]</a>	<span class="k">def</span> <span class="nf">internalTranslateCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span></div></div>
+
+
+
+<div class="viewcode-block" id="CapsuleShellCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleShellCell">[docs]</a><span class="k">class</span> <span class="nc">CapsuleShellCell</span><span class="p">(</span><span class="n">CapsuleCell</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;A representation for a spherical cell. This cell requires an attribute dictionary that includes &quot;radius&quot;, &quot;length&quot; and &quot;membraneThickness&quot;&#39;&#39;&#39;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="mf">0.</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+		<span class="n">CapsuleCell</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;CapsuleShell&quot;</span>
+
+<div class="viewcode-block" id="CapsuleShellCell.internalModelCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleShellCell.internalModelCell">[docs]</a>	<span class="k">def</span> <span class="nf">internalModelCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+		<span class="k">if</span> <span class="s2">&quot;radius&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, radius must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;length&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, length must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="k">if</span> <span class="s2">&quot;membraneThickness&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;When creating a model sphere cell, membraneThickness must be specified.&quot;</span><span class="p">)</span>
+			<span class="k">return</span>
+
+		<span class="c1"># Return a model cell</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)]</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;membraneThickness&#39;</span><span class="p">])</span>
+		<span class="n">min1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">]</span>
+		<span class="n">max1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">]</span>
+		<span class="n">min2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">]</span>
+		<span class="n">max2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mins</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">min1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">min2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">maxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">max1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">max2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+		<span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="CapsuleShellCell.computeVolume"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleShellCell.computeVolume">[docs]</a>	<span class="k">def</span> <span class="nf">computeVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">rin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span>
+		<span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">+</span> <span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">rin</span><span class="o">*</span><span class="n">rin</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="n">rin</span><span class="p">)</span> <span class="o">+</span> <span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">rin</span><span class="o">*</span><span class="n">rin</span><span class="o">*</span><span class="n">rin</span></div>
+
+<div class="viewcode-block" id="CapsuleShellCell.internalAddToSim"><a class="viewcode-back" href="../../_autosummary/pySTDLM.Cells.html#pySTDLM.Cells.CapsuleShellCell.internalAddToSim">[docs]</a>	<span class="k">def</span> <span class="nf">internalAddToSim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating capsule with radius=</span><span class="si">%g</span><span class="s2">, length=</span><span class="si">%g</span><span class="s2">, and thickness=</span><span class="si">%g</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">)</span>
+
+		<span class="n">p1</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">)</span>
+		<span class="n">p2</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">)</span>
+		<span class="n">membrane</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">CapsuleShell</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">membraneThickness</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">siteTypes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">memtype</span><span class="p">])</span>
+		
+		<span class="n">sim</span><span class="o">.</span><span class="n">lm_builder</span><span class="o">.</span><span class="n">addRegion</span><span class="p">(</span><span class="n">membrane</span><span class="p">)</span>
+
+		<span class="c1"># Prevent GC</span>
+		<span class="n">membrane</span><span class="o">.</span><span class="n">thisown</span><span class="o">=</span><span class="mi">0</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

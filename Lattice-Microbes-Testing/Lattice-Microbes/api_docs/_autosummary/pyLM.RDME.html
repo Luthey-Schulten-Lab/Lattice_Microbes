@@ -1,0 +1,1504 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyLM.RDME &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyLM.units" href="pyLM.units.html" />
+    <link rel="prev" title="pyLM.LMLogger" href="pyLM.LMLogger.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pyLM.RDME</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pyLM.RDME.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyLM.RDME">
+<span id="pylm-rdme"></span><h1>pyLM.RDME<a class="headerlink" href="#module-pyLM.RDME" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pyLM.RDME.IntRDMESimulation" title="pyLM.RDME.IntRDMESimulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntRDMESimulation</span></code></a>(dimensions,&nbsp;spacing[,&nbsp;…])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pyLM.RDME.RDMERegion" title="pyLM.RDME.RDMERegion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RDMERegion</span></code></a>(name)</td>
+<td>A class that represents a type region of an RDME simulation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pyLM.RDME.RDMESimulation" title="pyLM.RDME.RDMESimulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RDMESimulation</span></code></a>(dimensions,&nbsp;spacing[,&nbsp;name,&nbsp;…])</td>
+<td>A class that contains all regions, reactions, diffusions and rules for a RDME simulation</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pyLM.RDME.IntRDMESimulation">
+<em class="property">class </em><code class="descclassname">pyLM.RDME.</code><code class="descname">IntRDMESimulation</code><span class="sig-paren">(</span><em>dimensions</em>, <em>spacing</em>, <em>name='unnamed'</em>, <em>defaultRegion='default'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#IntRDMESimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyLM.RDME.RDMESimulation" title="pyLM.RDME.RDMESimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyLM.RDME.RDMESimulation</span></code></a></p>
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.addCuboidRegion">
+<code class="descname">addCuboidRegion</code><span class="sig-paren">(</span><em>name</em>, <em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.addCuboidRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a cuboid to the builder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> – Name of the site type for this region</li>
+<li><strong>a</strong> – tuple for the first corner in continous space</li>
+<li><strong>b</strong> – tuple for the second corner in continous space</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.addParticleAt">
+<code class="descname">addParticleAt</code><span class="sig-paren">(</span><em>index</em>, <em>particleType</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.addParticleAt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a particle/ to a particular site</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – a list of spatial location</li>
+<li><strong>specie</strong> – The specie type to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.addParticleAtIdx">
+<code class="descname">addParticleAtIdx</code><span class="sig-paren">(</span><em>index</em>, <em>particleType</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.addParticleAtIdx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a particle/ to a particular site</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – a list of lattice site indices</li>
+<li><strong>specie</strong> – The specie type to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.addParticles">
+<code class="descname">addParticles</code><span class="sig-paren">(</span><em>species='unknown'</em>, <em>region='default'</em>, <em>count=1</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.addParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a specified number of particles of the specified type to the  specified region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>species</strong> – The species to add to the region</li>
+<li><strong>region</strong> – The region to add particles to</li>
+<li><strong>count</strong> – Number of particles to add (default: 1)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.addRegion">
+<code class="descname">addRegion</code><span class="sig-paren">(</span><em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.addRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a region to the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region</strong> – The region to add to the simulation</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">region just added</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.addShape">
+<code class="descname">addShape</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.addShape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Shape to the builder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> – The Shape to add to the builder</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.allocateLattice">
+<code class="descname">allocateLattice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#IntRDMESimulation.allocateLattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.allocateLattice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildCapsidCell">
+<code class="descname">buildCapsidCell</code><span class="sig-paren">(</span><em>length</em>, <em>diameter</em>, <em>membraneThickness</em>, <em>points=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildCapsidCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a capsule based shell in this RDMESimulation centered within the simulation domain that includes a membrane and cytoplasm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> – The length of the capsule from one sphere origin to the other
+diameter The diameter of the cell</li>
+<li><strong>membraneThickness</strong> – The thickness of the membrane</li>
+<li><strong>points</strong> – OPTIONAL: List of lists containing the coordinates of the centers
+of the sphereoids that cap the capsid cell, e.g. [[x1, y1, z1],
+[x2, y2, z2]]. If not given, cell is centered in the volume and
+aligned in the z-direction</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildDifference">
+<code class="descname">buildDifference</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildDifference" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildDiffusionModel">
+<code class="descname">buildDiffusionModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildDiffusionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Lattice Microbes DiffusionModel object for fine-tuning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Simulation diffusion model</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildEllipse">
+<code class="descname">buildEllipse</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em>, <em>arg4</em>, <em>arg5</em>, <em>arg6</em>, <em>arg7</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildEllipse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildPoint">
+<code class="descname">buildPoint</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildPoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildReactionModel">
+<code class="descname">buildReactionModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildReactionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Lattice Microbes ReactionModel object for fine-tuning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The reaction model for this simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildSpatialModel">
+<code class="descname">buildSpatialModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildSpatialModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Lattice Microbes SpatialModel object for fine-tuning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The spatial model (i.e. obstacles, sites, etc.) for this simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildSphere">
+<code class="descname">buildSphere</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildSphere" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildSphericalCell">
+<code class="descname">buildSphericalCell</code><span class="sig-paren">(</span><em>diameter</em>, <em>membraneThickness</em>, <em>point=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildSphericalCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a spherical based shell in this RDMESimulation centered within the simulation domain that includes a membrane and cytoplasm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>diameter</strong> – The diameter of the cell</li>
+<li><strong>membraneThickness</strong> – The thickness of the membrane</li>
+<li><strong>point</strong> – The center of the spherical cell</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.buildVector">
+<code class="descname">buildVector</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.buildVector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.defineSpecies">
+<code class="descname">defineSpecies</code><span class="sig-paren">(</span><em>species</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.defineSpecies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a specie/s of particles that exist in the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>species</strong> – A list of species to add to the simulation</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The simulation object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.getLattice">
+<code class="descname">getLattice</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.getLattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a discretized version of the simulation domain.  Call this after building all spherical and capsule cells</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> – Force a rediscretization of the lattice. This will throw away any additional changes made after the first call.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A lattice object.  This function should usually only be called once.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.getLatticeSite">
+<code class="descname">getLatticeSite</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.getLatticeSite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a particular lattice site</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – a list of coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The type of the lattice site (string)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.modifyRegion">
+<code class="descname">modifyRegion</code><span class="sig-paren">(</span><em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.modifyRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pointer to a region so that it may be modified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region</strong> – Get a region that is attached to the simulation for modification</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The region to modify</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.packRegion">
+<code class="descname">packRegion</code><span class="sig-paren">(</span><em>region</em>, <em>radius</em>, <em>percentage</em>, <em>obstacleID</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.packRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add nonmoving obstacles to a particular region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>region</strong> – The name of the region in which to add particles to</li>
+<li><strong>radius</strong> – The radius of the particles</li>
+<li><strong>percentage</strong> – The percentage of the total region volume that should be packed</li>
+<li><strong>obstacleID</strong> – an identifier for the obstacle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>filename</em>, <em>method</em>, <em>replicates=1</em>, <em>seed=None</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the simulation using the specified solver (e.g.  NextSubvolume, MultiParticleDiffusion, etc.) for the specified amount of time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>method</strong> – The class name for the solver to use (e.g., lm::rdme::MpdRdmeSolver”)</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+<li><strong>seed</strong> – A seed for the random number generator to use when running the simulation; None indicates default</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.runMPI">
+<code class="descname">runMPI</code><span class="sig-paren">(</span><em>filename</em>, <em>method</em>, <em>replicates=1</em>, <em>driver='mpirun'</em>, <em>ppe=1</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.runMPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the simulation using a call to mpirun with the given options</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>method</strong> – The class name for the solver to use (e.g., lm::cme::GillespieDSolver”)</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+<li><strong>driver</strong> – The program to execute the parallel run, e.g. “mpirun”, “aprun”, “ibrun”, etc.</li>
+<li><strong>ppe</strong> – The number of processing elements to use  (e.g. number of nodes)</li>
+<li><strong>seed</strong> – A seed for the random number generator to use when running the simulation; None indicates default</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.runSolver">
+<code class="descname">runSolver</code><span class="sig-paren">(</span><em>filename</em>, <em>solver</em>, <em>replicates=1</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.runSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a simulation with a given solver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>solver</strong> – An MESolver object</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an HDF5 version of the simulation amenable for later running or stand-alone running</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – A file to write the simulation to</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setHookInterval">
+<code class="descname">setHookInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setHookInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the hook interval</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The interval to call hookSimulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setLatticeSite">
+<code class="descname">setLatticeSite</code><span class="sig-paren">(</span><em>index</em>, <em>siteType</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setLatticeSite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a particular lattice site type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – A list of coordinates</li>
+<li><strong>siteType</strong> – The type to set the lattice point to. This would be the name of a region that
+has previously been performed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setLatticeWriteInterval">
+<code class="descname">setLatticeWriteInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setLatticeWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the time interval to write latticedata at during simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of time between lattice data writes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setOverflowHandler">
+<code class="descname">setOverflowHandler</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setOverflowHandler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setRandomSeed">
+<code class="descname">setRandomSeed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setRandomSeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a known random seed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> – The seed value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setSimulationTime">
+<code class="descname">setSimulationTime</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setSimulationTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation time length</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of simulation time</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setSpeciesVolume">
+<code class="descname">setSpeciesVolume</code><span class="sig-paren">(</span><em>species</em>, <em>vol</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setSpeciesVolume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setSpeciesVolumeFraction">
+<code class="descname">setSpeciesVolumeFraction</code><span class="sig-paren">(</span><em>species</em>, <em>frac</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setSpeciesVolumeFraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setTimestep">
+<code class="descname">setTimestep</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setTimestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation time step</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of simulation timestep for RDME</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setTransitionRate">
+<code class="descname">setTransitionRate</code><span class="sig-paren">(</span><em>species</em>, <em>via</em>, <em>to</em>, <em>rate</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setTransitionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the diffusion rate between species; this is a one directional rate e.g. membrane-&gt;cytosol or extracellular-&gt;membrane</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>species</strong> – The specie that can transition between regions</li>
+<li><strong>via</strong> – From this region</li>
+<li><strong>to</strong> – To this region</li>
+<li><strong>rate</strong> – Diffusion rate between regions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setTwoWayTransitionRate">
+<code class="descname">setTwoWayTransitionRate</code><span class="sig-paren">(</span><em>species</em>, <em>one</em>, <em>two</em>, <em>rate</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setTwoWayTransitionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the diffusion rate between species; this is a two directional rate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>species</strong> – The specie that can transition between regions</li>
+<li><strong>one</strong> – A region</li>
+<li><strong>two</strong> – The other region</li>
+<li><strong>rate</strong> – Diffusion rate between regions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.setWriteInterval">
+<code class="descname">setWriteInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.setWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the time interval to write data at during simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of time between data writes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.IntRDMESimulation.siteVolume">
+<code class="descname">siteVolume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLM.RDME.IntRDMESimulation.siteVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the actual volume of a specific site in L</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The volume of the site in L</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyLM.RDME.RDMERegion">
+<em class="property">class </em><code class="descclassname">pyLM.RDME.</code><code class="descname">RDMERegion</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMERegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMERegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that represents a type region of an RDME simulation.</p>
+<p>Reactions may be specified that live within a region.  In addition
+a specie’s diffusion constant is region dependent and diffusion
+between regions must be specified.
+For example: cytosol, membrane, extracellular, nucleoid, etc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – The name of the region (e.g. cytosol)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyLM.RDME.RDMERegion.addReaction">
+<code class="descname">addReaction</code><span class="sig-paren">(</span><em>reactant</em>, <em>product</em>, <em>rate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMERegion.addReaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMERegion.addReaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a 0th, 1st or 2nd order reaction that can occur in the region</p>
+<p>Reaction rates are specified as <em>stochastic</em> rates: i.e. in units of
+<span class="math notranslate nohighlight">\(1/\mathrm{s}\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reactant</strong> – A set of reactants either as a singleton or a list</li>
+<li><strong>product</strong> – A set of products either as a singeton or a list</li>
+<li><strong>rate</strong> – The <em>stochastic</em> rate of the reaction.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">RDMERegion</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMERegion.getReactionCount">
+<code class="descname">getReactionCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMERegion.getReactionCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMERegion.getReactionCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of reactions defined in this region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Get the number of reactions in the region</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMERegion.setDefaultDiffusionRate">
+<code class="descname">setDefaultDiffusionRate</code><span class="sig-paren">(</span><em>rate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMERegion.setDefaultDiffusionRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMERegion.setDefaultDiffusionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the default diffusion rate of all particles in the region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rate</strong> – The rate of diffusion in um^2/s or um/s for 3D or 2D diffusion</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">RDMERegion</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMERegion.setDiffusionRate">
+<code class="descname">setDiffusionRate</code><span class="sig-paren">(</span><em>species</em>, <em>rate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMERegion.setDiffusionRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMERegion.setDiffusionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the diffusion rate for a particular particle type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>species</strong> – The particle type</li>
+<li><strong>rate</strong> – The rate of diffusion in um^2/s or um/s for 3D or 2D diffusion</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">RDMERegion</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyLM.RDME.RDMESimulation">
+<em class="property">class </em><code class="descclassname">pyLM.RDME.</code><code class="descname">RDMESimulation</code><span class="sig-paren">(</span><em>dimensions</em>, <em>spacing</em>, <em>name='unnamed'</em>, <em>defaultRegion='default'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that contains all regions, reactions, diffusions and rules for a RDME simulation</p>
+<blockquote>
+<div>Specify a cuboid region that represents the extents to the reaction region as well as the lattice spacing</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dimensions</strong> – A list of [x,y,z]</li>
+<li><strong>spacing</strong> – Lattice spacing</li>
+<li><strong>name</strong> – The name of the RDME simulation; default: “unnamed”</li>
+<li><strong>defaultRegion</strong> – The name of the region that is associated with the lattice sites before any other regions are added; default:”default”</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.addCuboidRegion">
+<code class="descname">addCuboidRegion</code><span class="sig-paren">(</span><em>name</em>, <em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.addCuboidRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.addCuboidRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a cuboid to the builder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> – Name of the site type for this region</li>
+<li><strong>a</strong> – tuple for the first corner in continous space</li>
+<li><strong>b</strong> – tuple for the second corner in continous space</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.addParticleAt">
+<code class="descname">addParticleAt</code><span class="sig-paren">(</span><em>index</em>, <em>particleType</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.addParticleAt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.addParticleAt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a particle/ to a particular site</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – a list of spatial location</li>
+<li><strong>specie</strong> – The specie type to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.addParticleAtIdx">
+<code class="descname">addParticleAtIdx</code><span class="sig-paren">(</span><em>index</em>, <em>particleType</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.addParticleAtIdx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.addParticleAtIdx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a particle/ to a particular site</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – a list of lattice site indices</li>
+<li><strong>specie</strong> – The specie type to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.addParticles">
+<code class="descname">addParticles</code><span class="sig-paren">(</span><em>species='unknown'</em>, <em>region='default'</em>, <em>count=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.addParticles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.addParticles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a specified number of particles of the specified type to the  specified region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>species</strong> – The species to add to the region</li>
+<li><strong>region</strong> – The region to add particles to</li>
+<li><strong>count</strong> – Number of particles to add (default: 1)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.addRegion">
+<code class="descname">addRegion</code><span class="sig-paren">(</span><em>region</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.addRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.addRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a region to the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region</strong> – The region to add to the simulation</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">region just added</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.addShape">
+<code class="descname">addShape</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.addShape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.addShape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Shape to the builder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> – The Shape to add to the builder</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.allocateLattice">
+<code class="descname">allocateLattice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.allocateLattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.allocateLattice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildCapsidCell">
+<code class="descname">buildCapsidCell</code><span class="sig-paren">(</span><em>length</em>, <em>diameter</em>, <em>membraneThickness</em>, <em>points=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildCapsidCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildCapsidCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a capsule based shell in this RDMESimulation centered within the simulation domain that includes a membrane and cytoplasm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> – The length of the capsule from one sphere origin to the other
+diameter The diameter of the cell</li>
+<li><strong>membraneThickness</strong> – The thickness of the membrane</li>
+<li><strong>points</strong> – OPTIONAL: List of lists containing the coordinates of the centers
+of the sphereoids that cap the capsid cell, e.g. [[x1, y1, z1],
+[x2, y2, z2]]. If not given, cell is centered in the volume and
+aligned in the z-direction</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildDifference">
+<code class="descname">buildDifference</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildDifference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildDifference" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildDiffusionModel">
+<code class="descname">buildDiffusionModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildDiffusionModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildDiffusionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Lattice Microbes DiffusionModel object for fine-tuning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Simulation diffusion model</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildEllipse">
+<code class="descname">buildEllipse</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em>, <em>arg4</em>, <em>arg5</em>, <em>arg6</em>, <em>arg7</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildEllipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildEllipse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildPoint">
+<code class="descname">buildPoint</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildPoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildReactionModel">
+<code class="descname">buildReactionModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildReactionModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildReactionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Lattice Microbes ReactionModel object for fine-tuning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The reaction model for this simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildSpatialModel">
+<code class="descname">buildSpatialModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildSpatialModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildSpatialModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Lattice Microbes SpatialModel object for fine-tuning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The spatial model (i.e. obstacles, sites, etc.) for this simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildSphere">
+<code class="descname">buildSphere</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildSphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildSphere" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildSphericalCell">
+<code class="descname">buildSphericalCell</code><span class="sig-paren">(</span><em>diameter</em>, <em>membraneThickness</em>, <em>point=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildSphericalCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildSphericalCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a spherical based shell in this RDMESimulation centered within the simulation domain that includes a membrane and cytoplasm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>diameter</strong> – The diameter of the cell</li>
+<li><strong>membraneThickness</strong> – The thickness of the membrane</li>
+<li><strong>point</strong> – The center of the spherical cell</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.buildVector">
+<code class="descname">buildVector</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.buildVector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.buildVector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.defineSpecies">
+<code class="descname">defineSpecies</code><span class="sig-paren">(</span><em>species</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.defineSpecies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.defineSpecies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a specie/s of particles that exist in the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>species</strong> – A list of species to add to the simulation</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The simulation object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.getLattice">
+<code class="descname">getLattice</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.getLattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.getLattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a discretized version of the simulation domain.  Call this after building all spherical and capsule cells</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> – Force a rediscretization of the lattice. This will throw away any additional changes made after the first call.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A lattice object.  This function should usually only be called once.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.getLatticeSite">
+<code class="descname">getLatticeSite</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.getLatticeSite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.getLatticeSite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a particular lattice site</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – a list of coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The type of the lattice site (string)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.modifyRegion">
+<code class="descname">modifyRegion</code><span class="sig-paren">(</span><em>region</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.modifyRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.modifyRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pointer to a region so that it may be modified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region</strong> – Get a region that is attached to the simulation for modification</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The region to modify</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.packRegion">
+<code class="descname">packRegion</code><span class="sig-paren">(</span><em>region</em>, <em>radius</em>, <em>percentage</em>, <em>obstacleID</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.packRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.packRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add nonmoving obstacles to a particular region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>region</strong> – The name of the region in which to add particles to</li>
+<li><strong>radius</strong> – The radius of the particles</li>
+<li><strong>percentage</strong> – The percentage of the total region volume that should be packed</li>
+<li><strong>obstacleID</strong> – an identifier for the obstacle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>filename</em>, <em>method</em>, <em>replicates=1</em>, <em>seed=None</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the simulation using the specified solver (e.g.  NextSubvolume, MultiParticleDiffusion, etc.) for the specified amount of time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>method</strong> – The class name for the solver to use (e.g., lm::rdme::MpdRdmeSolver”)</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+<li><strong>seed</strong> – A seed for the random number generator to use when running the simulation; None indicates default</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.runMPI">
+<code class="descname">runMPI</code><span class="sig-paren">(</span><em>filename</em>, <em>method</em>, <em>replicates=1</em>, <em>driver='mpirun'</em>, <em>ppe=1</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.runMPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.runMPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the simulation using a call to mpirun with the given options</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>method</strong> – The class name for the solver to use (e.g., lm::cme::GillespieDSolver”)</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+<li><strong>driver</strong> – The program to execute the parallel run, e.g. “mpirun”, “aprun”, “ibrun”, etc.</li>
+<li><strong>ppe</strong> – The number of processing elements to use  (e.g. number of nodes)</li>
+<li><strong>seed</strong> – A seed for the random number generator to use when running the simulation; None indicates default</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.runSolver">
+<code class="descname">runSolver</code><span class="sig-paren">(</span><em>filename</em>, <em>solver</em>, <em>replicates=1</em>, <em>cudaDevices=None</em>, <em>checkpointInterval=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.runSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.runSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a simulation with a given solver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – The HDF file to write to</li>
+<li><strong>solver</strong> – An MESolver object</li>
+<li><strong>replicates</strong> – The number of replicates to serially run</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an HDF5 version of the simulation amenable for later running or stand-alone running</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – A file to write the simulation to</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setHookInterval">
+<code class="descname">setHookInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setHookInterval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setHookInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the hook interval</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The interval to call hookSimulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setLatticeSite">
+<code class="descname">setLatticeSite</code><span class="sig-paren">(</span><em>index</em>, <em>siteType</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setLatticeSite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setLatticeSite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a particular lattice site type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – A list of coordinates</li>
+<li><strong>siteType</strong> – The type to set the lattice point to. This would be the name of a region that
+has previously been performed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setLatticeWriteInterval">
+<code class="descname">setLatticeWriteInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setLatticeWriteInterval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setLatticeWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the time interval to write latticedata at during simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of time between lattice data writes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setOverflowHandler">
+<code class="descname">setOverflowHandler</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setOverflowHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setOverflowHandler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setRandomSeed">
+<code class="descname">setRandomSeed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setRandomSeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setRandomSeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a known random seed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> – The seed value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setSimulationTime">
+<code class="descname">setSimulationTime</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setSimulationTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setSimulationTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation time length</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of simulation time</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setSpeciesVolume">
+<code class="descname">setSpeciesVolume</code><span class="sig-paren">(</span><em>species</em>, <em>vol</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setSpeciesVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setSpeciesVolume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setSpeciesVolumeFraction">
+<code class="descname">setSpeciesVolumeFraction</code><span class="sig-paren">(</span><em>species</em>, <em>frac</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setSpeciesVolumeFraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setSpeciesVolumeFraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setTimestep">
+<code class="descname">setTimestep</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setTimestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setTimestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulation time step</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of simulation timestep for RDME</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setTransitionRate">
+<code class="descname">setTransitionRate</code><span class="sig-paren">(</span><em>species</em>, <em>via</em>, <em>to</em>, <em>rate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setTransitionRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setTransitionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the diffusion rate between species; this is a one directional rate e.g. membrane-&gt;cytosol or extracellular-&gt;membrane</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>species</strong> – The specie that can transition between regions</li>
+<li><strong>via</strong> – From this region</li>
+<li><strong>to</strong> – To this region</li>
+<li><strong>rate</strong> – Diffusion rate between regions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setTwoWayTransitionRate">
+<code class="descname">setTwoWayTransitionRate</code><span class="sig-paren">(</span><em>species</em>, <em>one</em>, <em>two</em>, <em>rate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setTwoWayTransitionRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setTwoWayTransitionRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the diffusion rate between species; this is a two directional rate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>species</strong> – The specie that can transition between regions</li>
+<li><strong>one</strong> – A region</li>
+<li><strong>two</strong> – The other region</li>
+<li><strong>rate</strong> – Diffusion rate between regions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.setWriteInterval">
+<code class="descname">setWriteInterval</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.setWriteInterval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.setWriteInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the time interval to write data at during simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – The length of time between data writes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyLM.RDME.RDMESimulation.siteVolume">
+<code class="descname">siteVolume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyLM/RDME.html#RDMESimulation.siteVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyLM.RDME.RDMESimulation.siteVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the actual volume of a specific site in L</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The volume of the site in L</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyLM.units.html" class="btn btn-neutral float-right" title="pyLM.units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pyLM.LMLogger.html" class="btn btn-neutral" title="pyLM.LMLogger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

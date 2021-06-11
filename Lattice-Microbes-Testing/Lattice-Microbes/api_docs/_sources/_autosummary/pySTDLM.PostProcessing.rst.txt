@@ -1,0 +1,41 @@
+pySTDLM.PostProcessing
+======================
+
+.. automodule:: pySTDLM.PostProcessing
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      closeLMFile
+      getAvgVarTrace
+      getHistogram
+      getOccupancyKymograph
+      getPhaseSpace
+      getSpecieTrace
+      getSpecies
+      getTimesteps
+      openLMFile
+      plotAvgVar
+      plotAvgVarFromFile
+      plotOccupancyKymograph
+      plotPhaseSpace
+      plotTrace
+      plotTraceFromFile
+      showAvgVar
+      showAvgVarFromFile
+      showOccupancyKymograph
+      showTrace
+      showTraceFromFile
+   
+   
+
+   
+   
+   
+
+   
+   
+   

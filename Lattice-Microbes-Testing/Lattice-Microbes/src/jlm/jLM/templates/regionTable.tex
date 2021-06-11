@@ -1,0 +1,16 @@
+{% if annotationCol %}
+\begin{tabular}{l r r r r r}
+\toprule
+Region & Subvolumes & Volume$/{{volumeUnit}}$ & Particles & Concentration$/{{concUnit}}$ & Occupancy & Description\\
+{% else %}
+\begin{tabular}{l r r r r r l}
+\toprule
+Region & Subvolumes & Volume$/{{volumeUnit}}$ & Particles & Concentration$/{{concUnit}}$ & Occupancy \\
+{% endif %}
+\midrule
+{% for r in regions %}
+{{r.label}} & ${{r.siteCount}}$ & ${{r.volume}}$ & ${{r.counts}}$ & ${{r.conc}}$ & ${{r.occ}}$ {% if annotationCol %}& {{r.annotation or ''}}{% endif %} \\
+{% endfor %}
+\bottomrule
+\end{tabular}
+

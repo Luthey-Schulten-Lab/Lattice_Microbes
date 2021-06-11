@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+    <model id="lac" substanceUnits="item" timeUnits="second" volumeUnits="litre" extentUnits="item">
+        <listOfUnitDefinitions>
+            <unitDefinition id="per_second">
+                <listOfUnits>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+            <unitDefinition id="per_item_per_second">
+                <listOfUnits>
+                    <unit kind="item"   exponent="-1" scale="0" multiplier="1"/>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+            <unitDefinition id="per_molar_per_second">
+                <listOfUnits>
+                    <unit kind="litre"  exponent="1" scale="0" multiplier="1"/>
+                    <unit kind="mole"   exponent="-1" scale="0" multiplier="1"/>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+        </listOfUnitDefinitions>
+        <listOfCompartments>
+            <compartment id="cell" size="8e-16" spatialDimensions="3" constant="true"/>
+            <compartment id="exterior" size="8e-16" spatialDimensions="3" constant="true"/>
+        </listOfCompartments>
+        <listOfSpecies>
+            <species id="O"     compartment="cell" initialAmount="1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+            <species id="OFNR"  compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+            <species id="mRNA"  compartment="cell" initialAmount="77" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+            <species id="apoFNR" compartment="cell" initialAmount="2231" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+            <species id="FNR"   compartment="cell" initialAmount="39" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfSpecies>
+        <listOfReactions>
+        
+            <reaction id="FNR_Obinding" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="O" stoichiometry="1" constant="true"/>
+                    <speciesReference species="FNR" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="OFNR" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci> k1 </ci>
+                                <ci> FNR </ci>
+                                <ci> O </ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <csymbol encoding="text" definitionURL="http://www.sbml.org/sbml/symbols/avogadro"/>
+                                <ci> cell </ci>
+                            </apply>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k1" value="1e+8" units="per_molar_per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="OFNR_unbinding" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="OFNR" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="O" stoichiometry="1" constant="true"/>
+                    <speciesReference species="FNR" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                            <apply>
+                                <times/>
+                                <ci> k2 </ci>
+                                <ci> OFNR </ci>
+                            </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k2" value="1.7322e+02" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="transcription" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="O" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="O" stoichiometry="1" constant="true"/>
+                    <speciesReference species="mRNA" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                                <times/>
+                                <ci> k3 </ci>
+                                <ci> O </ci>
+                        </apply>
+                            
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k3" value="1.084e+00" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="translation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="mRNA" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="mRNA" stoichiometry="1" constant="true"/>
+                    <speciesReference species="apoFNR" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> k4 </ci>
+                            <ci> mRNA </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k4" value="8.06667e-03" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="apoFNR_degradation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="apoFNR" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> k5 </ci>
+                            <ci> apoFNR </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k5" value="2.071e-04" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="FNR_activation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="apoFNR" stoichiometry="2" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="FNR" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                        <times/>
+                            <ci> k6 </ci>
+                            <ci> apoFNR </ci>
+                            <apply>
+                                	<minus/>
+                                		<ci> apoFNR </ci>
+                                		<cn> 1 </cn>
+                            </apply>
+                           <!-- <divide/>
+                            <apply>
+                                <times/>
+                                <ci> k6 </ci>
+                                <ci> apoFNR </ci>
+                                <apply>
+                                	<minus/>
+                                		<ci> apoFNR </ci>
+                                		<cn> 1 </cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <cn> 6.023e+23 </cn>
+                                <ci> cell </ci>
+                            </apply> -->
+                        </apply> 
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k6" value="1.9716e+04" units="per_molar_per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="FNR_degradation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="FNR" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> k8 </ci>
+                            <ci> FNR </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k8" value="2.467e-04" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            <reaction id="mRNA_degradation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="mRNA" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> k9 </ci>
+                            <ci> mRNA </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k9" value="1.021e-02" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            </listOfReactions>
+    </model>
+</sbml>

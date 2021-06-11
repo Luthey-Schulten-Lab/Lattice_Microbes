@@ -1,0 +1,14 @@
+<div class="jLMflex">
+    <div class="regLeft">
+        <h3>Key</h3>
+        <ul class="reg">
+            {% for r in reg %}
+            <li>{{ r }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="regRight">
+        <h3><i>{{ plane }}</i>-plane; <i>{{ dir }}</i>-index={{ planeIndex }}</h3>
+        <img class="smallreg" width="{{w}}" height="{{h}}" src="data:image/png;base64,{{ b64 }}" />
+    </div>
+</div>

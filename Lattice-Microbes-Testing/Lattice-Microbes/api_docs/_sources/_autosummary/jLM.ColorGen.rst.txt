@@ -1,0 +1,22 @@
+jLM.ColorGen
+============
+
+.. automodule:: jLM.ColorGen
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ColorGen
+   
+   
+
+   
+   
+   

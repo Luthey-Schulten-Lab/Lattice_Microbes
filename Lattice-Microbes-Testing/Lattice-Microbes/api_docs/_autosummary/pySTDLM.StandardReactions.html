@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.StandardReactions &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pySTDLM.StandardReactionSystems" href="pySTDLM.StandardReactionSystems.html" />
+    <link rel="prev" title="pySTDLM.StandardCells" href="pySTDLM.StandardCells.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pySTDLM.StandardReactions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pySTDLM.StandardReactions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pySTDLM.StandardReactions">
+<span id="pystdlm-standardreactions"></span><h1>pySTDLM.StandardReactions<a class="headerlink" href="#module-pySTDLM.StandardReactions" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.StandardReactions.addMembraneTransporter" title="pySTDLM.StandardReactions.addMembraneTransporter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addMembraneTransporter</span></code></a>(sim,&nbsp;transporter,&nbsp;…)</td>
+<td>Adds a membrane transport system to an RDME system</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.StandardReactions.addMichaelisMenten" title="pySTDLM.StandardReactions.addMichaelisMenten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addMichaelisMenten</span></code></a>(sim,&nbsp;reactant,&nbsp;enzyme,&nbsp;…)</td>
+<td>Adds a Michaelis Menten Reaction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.StandardReactions.addPassiveTransport" title="pySTDLM.StandardReactions.addPassiveTransport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addPassiveTransport</span></code></a>(sim,&nbsp;specie,&nbsp;dRate[,&nbsp;…])</td>
+<td>Adds a passive transport system to an RDME system</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.StandardReactions.addReversibleMichaelisMenten" title="pySTDLM.StandardReactions.addReversibleMichaelisMenten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addReversibleMichaelisMenten</span></code></a>(sim,&nbsp;reactant,&nbsp;…)</td>
+<td>Add a Reversible Michaelis Menten Reaction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.StandardReactions.createExpressionModel" title="pySTDLM.StandardReactions.createExpressionModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createExpressionModel</span></code></a>(sim,&nbsp;gb,&nbsp;kt,&nbsp;kd,&nbsp;kr[,&nbsp;…])</td>
+<td>Create a set of gene/mRNA/protein reactions based on a genebank file and a set of rates assuming constitutive expression</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pySTDLM.StandardReactions.addMembraneTransporter">
+<code class="descclassname">pySTDLM.StandardReactions.</code><code class="descname">addMembraneTransporter</code><span class="sig-paren">(</span><em>sim</em>, <em>transporter</em>, <em>number</em>, <em>name1</em>, <em>name2</em>, <em>dRate</em>, <em>kf</em>, <em>kr</em>, <em>region1='cytoplasm'</em>, <em>region2='default'</em>, <em>intoRegion='membrane'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardReactions.html#addMembraneTransporter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardReactions.addMembraneTransporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a membrane transport system to an RDME system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – An RDMESimulation to add the transporter system to</li>
+<li><strong>transporter</strong> – Name of the transporter particle</li>
+<li><strong>number</strong> – The number of transporter molecules</li>
+<li><strong>name1</strong> – Name of the transported particle in region1</li>
+<li><strong>name2</strong> – Name of the transported particle in region2</li>
+<li><strong>dRate</strong> – The rate of diffusion from region1&lt;-&gt;intoRegion and region2&lt;-&gt;intoRegion</li>
+<li><strong>kf</strong> – The forward reaction rate</li>
+<li><strong>kr</strong> – The reverse reaction rate</li>
+<li><strong>region1</strong> – The region on the first side of the membrane</li>
+<li><strong>region2</strong> – The region on the second side of the membrane</li>
+<li><strong>intoRegion</strong> – The region representing the membrane</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object so this can be a chained call</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardReactions.addMichaelisMenten">
+<code class="descclassname">pySTDLM.StandardReactions.</code><code class="descname">addMichaelisMenten</code><span class="sig-paren">(</span><em>sim</em>, <em>reactant</em>, <em>enzyme</em>, <em>product</em>, <em>k1f</em>, <em>k1b</em>, <em>k2</em>, <em>region='cytoplasm'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardReactions.html#addMichaelisMenten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardReactions.addMichaelisMenten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a Michaelis Menten Reaction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – The RDME or CME reaction</li>
+<li><strong>reactant</strong> – The reactant that reacts with the enzyme</li>
+<li><strong>enzyme</strong> – The enzyme catalyzing the reaction</li>
+<li><strong>product</strong> – The product of the reaction</li>
+<li><strong>k1f</strong> – The forward reaction rate</li>
+<li><strong>k1b</strong> – The backward reaction rate</li>
+<li><strong>k2</strong> – The second forward rate</li>
+<li><strong>region</strong> – The region in which the reaction should occur (RDME only)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object so this can be a chained call</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardReactions.addPassiveTransport">
+<code class="descclassname">pySTDLM.StandardReactions.</code><code class="descname">addPassiveTransport</code><span class="sig-paren">(</span><em>sim</em>, <em>specie</em>, <em>dRate</em>, <em>region1='cytoplasm'</em>, <em>region2='default'</em>, <em>region3='membrane'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardReactions.html#addPassiveTransport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardReactions.addPassiveTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a passive transport system to an RDME system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – An RDMESimulation to add the passive transport to</li>
+<li><strong>specie</strong> – The species that can diffuse across the membrane</li>
+<li><strong>dRate</strong> – The rate of diffusion across the membrane</li>
+<li><strong>region1</strong> – The region on the first side of the membrane</li>
+<li><strong>region2</strong> – The region on the second side of the membrane</li>
+<li><strong>region3</strong> – The region representing the membrane</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object so this can be a chained call</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardReactions.addReversibleMichaelisMenten">
+<code class="descclassname">pySTDLM.StandardReactions.</code><code class="descname">addReversibleMichaelisMenten</code><span class="sig-paren">(</span><em>sim</em>, <em>reactant</em>, <em>enzyme</em>, <em>product</em>, <em>k1f</em>, <em>k1b</em>, <em>k2f</em>, <em>k2b</em>, <em>k3f</em>, <em>k3b</em>, <em>region='cytoplasm'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardReactions.html#addReversibleMichaelisMenten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardReactions.addReversibleMichaelisMenten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Reversible Michaelis Menten Reaction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – The RDME or CME reaction</li>
+<li><strong>reactant</strong> – The reactant that reacts with the enzyme</li>
+<li><strong>enzyme</strong> – The enzyme catalyzing the reaction</li>
+<li><strong>product</strong> – The product of the reaction</li>
+<li><strong>k1f</strong> – The forward reaction rate</li>
+<li><strong>k1b</strong> – The backward reaction rate</li>
+<li><strong>k2f</strong> – The second forward rate</li>
+<li><strong>k2b</strong> – the second backward rate</li>
+<li><strong>k3f</strong> – The third forward rate</li>
+<li><strong>k3b</strong> – the third backward rate</li>
+<li><strong>region</strong> – the region in which the reaction should occur (RDME only)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The simulation object so this can be a chained call</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pySTDLM.StandardReactions.createExpressionModel">
+<code class="descclassname">pySTDLM.StandardReactions.</code><code class="descname">createExpressionModel</code><span class="sig-paren">(</span><em>sim</em>, <em>gb</em>, <em>kt</em>, <em>kd</em>, <em>kr</em>, <em>kdil=None</em>, <em>regions=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/StandardReactions.html#createExpressionModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.StandardReactions.createExpressionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a set of gene/mRNA/protein reactions based on a genebank file and a set of rates assuming constitutive expression</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sim</strong> – The RDME or CME simulation</li>
+<li><strong>gb</strong> – The genbank filename. File should be readable by BioPython.</li>
+<li><strong>kt</strong> – mRNA transcription rate dictionary { locusTag -&gt; rate }</li>
+<li><strong>kd</strong> – mRNA degradation rate dictionary { locusTag -&gt; rate }</li>
+<li><strong>kr</strong> – Protein transcription rate dictionary {locusTag -&gt; rate }</li>
+<li><strong>kdil</strong> – Protein dillution/degradation rate dictionary {locusTag -&gt; rate} (Optional; Default “None”, meaning no dillution reaction will be specified)</li>
+<li><strong>regions</strong> – Regions for the reactions to occur. Degradation is allowed in both regions. {locusTag -&gt; (transcriptionRegion, translationRegion)} (required for RDMESimulations)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">qualifiers[“dna_id”-&gt;(str,int),”rna_id”-&gt;(str,int), “protein_id”-&gt;(str,int)]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">SeqIO representation of the Genbank file with qualifiers added</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pySTDLM.StandardReactionSystems.html" class="btn btn-neutral float-right" title="pySTDLM.StandardReactionSystems" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pySTDLM.StandardCells.html" class="btn btn-neutral" title="pySTDLM.StandardCells" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

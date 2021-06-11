@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.StandardReactions &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.StandardReactions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.StandardReactions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">pyLM</span>
+<span class="kn">import</span> <span class="nn">pyLM.CME</span>
+<span class="kn">import</span> <span class="nn">pyLM.RDME</span>
+<span class="kn">from</span> <span class="nn">pyLM.LMLogger</span> <span class="k">import</span> <span class="n">LMLogger</span>
+<span class="k">try</span><span class="p">:</span>
+	<span class="kn">import</span> <span class="nn">Bio</span>
+	<span class="kn">from</span> <span class="nn">Bio</span> <span class="k">import</span> <span class="n">SeqIO</span>
+	<span class="n">hasBio</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+	<span class="n">hasBio</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="addMembraneTransporter"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactions.html#pySTDLM.StandardReactions.addMembraneTransporter">[docs]</a><span class="k">def</span> <span class="nf">addMembraneTransporter</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">transporter</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="n">name1</span><span class="p">,</span> <span class="n">name2</span><span class="p">,</span> <span class="n">dRate</span><span class="p">,</span> <span class="n">kf</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">region1</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">region2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">intoRegion</span><span class="o">=</span><span class="s1">&#39;membrane&#39;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Adds a membrane transport system to an RDME system</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation to add the transporter system to</span>
+<span class="sd">        transporter:</span>
+<span class="sd">            Name of the transporter particle</span>
+<span class="sd">        number:</span>
+<span class="sd">            The number of transporter molecules</span>
+<span class="sd">        name1:</span>
+<span class="sd">            Name of the transported particle in region1</span>
+<span class="sd">        name2:</span>
+<span class="sd">            Name of the transported particle in region2</span>
+<span class="sd">        dRate:</span>
+<span class="sd">            The rate of diffusion from region1&lt;-&gt;intoRegion and region2&lt;-&gt;intoRegion</span>
+<span class="sd">        kf:</span>
+<span class="sd">            The forward reaction rate </span>
+<span class="sd">        kr:</span>
+<span class="sd">            The reverse reaction rate</span>
+<span class="sd">        region1:</span>
+<span class="sd">            The region on the first side of the membrane</span>
+<span class="sd">        region2:</span>
+<span class="sd">            The region on the second side of the membrane</span>
+<span class="sd">        intoRegion:</span>
+<span class="sd">            The region representing the membrane</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        The simulation object so this can be a chained call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;In &#39;addMembraneTransporter&#39;, must be an RDMESimulation&quot;</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: In &#39;addMembraneTransporter&#39;, must be an RDMESimulation&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Add species to the system</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">([</span><span class="n">name1</span><span class="p">,</span><span class="n">name2</span><span class="p">,</span><span class="n">transporter</span><span class="p">])</span> <span class="c1"># This will not add multiple types</span>
+
+	<span class="c1"># Get handles to the region</span>
+	<span class="n">r1</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region1</span><span class="p">)</span>
+	<span class="n">r2</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region2</span><span class="p">)</span>
+	<span class="n">rm</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">intoRegion</span><span class="p">)</span>
+
+	<span class="c1"># Add diffusion rates</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">name1</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">region1</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">intoRegion</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">name1</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">intoRegion</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">region1</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">name2</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">region2</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">intoRegion</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">name2</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">intoRegion</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">region2</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+
+	<span class="c1"># Add reaction rates</span>
+	<span class="n">rm</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="n">transporter</span><span class="p">,</span> <span class="n">name1</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="n">transporter</span><span class="p">,</span><span class="n">name2</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="n">af</span><span class="p">)</span>
+	<span class="n">rm</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="n">transporter</span><span class="p">,</span> <span class="n">name2</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="n">transporter</span><span class="p">,</span><span class="n">name1</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="n">kr</span><span class="p">)</span>
+
+	<span class="c1"># Add membrane particles to the system</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">addParticles</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="n">transporter</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">intoRegion</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+<div class="viewcode-block" id="addPassiveTransport"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactions.html#pySTDLM.StandardReactions.addPassiveTransport">[docs]</a><span class="k">def</span> <span class="nf">addPassiveTransport</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">specie</span><span class="p">,</span> <span class="n">dRate</span><span class="p">,</span> <span class="n">region1</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">,</span> <span class="n">region2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">region3</span><span class="o">=</span><span class="s1">&#39;membrane&#39;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Adds a passive transport system to an RDME system</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation to add the passive transport to</span>
+<span class="sd">        specie:</span>
+<span class="sd">            The species that can diffuse across the membrane</span>
+<span class="sd">        dRate:</span>
+<span class="sd">            The rate of diffusion across the membrane</span>
+<span class="sd">        region1:</span>
+<span class="sd">            The region on the first side of the membrane</span>
+<span class="sd">        region2:</span>
+<span class="sd">            The region on the second side of the membrane</span>
+<span class="sd">        region3:</span>
+<span class="sd">            The region representing the membrane</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The simulation object so this can be a chained call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;In &#39;addMembraneTransporter&#39;, must be an RDMESimulation&quot;</span><span class="p">)</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: In &#39;addMembraneTransporter&#39;, must be an RDMESimulation&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Add species to the system</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">(</span><span class="n">specie</span><span class="p">)</span>
+
+	<span class="c1"># Get handles to the region</span>
+	<span class="n">r1</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region1</span><span class="p">)</span>
+	<span class="n">r2</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region2</span><span class="p">)</span>
+	<span class="n">rm</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region3</span><span class="p">)</span>
+
+	<span class="c1"># Add the diffusion rates</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">specie</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">r1</span><span class="p">,</span><span class="n">to</span><span class="o">=</span><span class="n">rm</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">specie</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">rm</span><span class="p">,</span><span class="n">to</span><span class="o">=</span><span class="n">r1</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">specie</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">r2</span><span class="p">,</span><span class="n">to</span><span class="o">=</span><span class="n">rm</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">setTransitionRate</span><span class="p">(</span><span class="n">specie</span><span class="p">,</span> <span class="n">via</span><span class="o">=</span><span class="n">rm</span><span class="p">,</span><span class="n">to</span><span class="o">=</span><span class="n">r2</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">dRate</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+<div class="viewcode-block" id="addMichaelisMenten"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactions.html#pySTDLM.StandardReactions.addMichaelisMenten">[docs]</a><span class="k">def</span> <span class="nf">addMichaelisMenten</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">reactant</span><span class="p">,</span> <span class="n">enzyme</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">k1f</span><span class="p">,</span> <span class="n">k1b</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Adds a Michaelis Menten Reaction</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            The RDME or CME reaction</span>
+<span class="sd">        reactant:</span>
+<span class="sd">            The reactant that reacts with the enzyme</span>
+<span class="sd">        enzyme:</span>
+<span class="sd">            The enzyme catalyzing the reaction</span>
+<span class="sd">        product:</span>
+<span class="sd">            The product of the reaction</span>
+<span class="sd">        k1f:</span>
+<span class="sd">            The forward reaction rate</span>
+<span class="sd">        k1b:</span>
+<span class="sd">            The backward reaction rate</span>
+<span class="sd">        k2:</span>
+<span class="sd">            The second forward rate</span>
+<span class="sd">        region:</span>
+<span class="sd">            The region in which the reaction should occur (RDME only)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The simulation object so this can be a chained call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Specify region</span>
+	<span class="n">region</span><span class="o">=</span><span class="mi">1</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">region</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">CME</span><span class="o">.</span><span class="n">CMESimulation</span><span class="p">):</span>
+		<span class="n">region</span> <span class="o">=</span> <span class="n">sim</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not add Michaelis-Menten reaction to object that is not an RDMESimualtion or CMESimulation.&#39;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">sim</span>
+
+	<span class="c1"># Add particles</span>
+	<span class="n">intermediate</span> <span class="o">=</span> <span class="s1">&#39;intermediate</span><span class="si">%s%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">([</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">,</span><span class="n">product</span><span class="p">,</span><span class="n">intermediate</span><span class="p">])</span>
+
+	<span class="c1"># Add the reactions</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">((</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">),</span> <span class="n">intermediate</span><span class="p">,</span> <span class="n">k1f</span><span class="p">)</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">intermediate</span><span class="p">,</span> <span class="p">(</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">),</span> <span class="n">k1b</span><span class="p">)</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">intermediate</span><span class="p">,</span> <span class="p">(</span><span class="n">product</span><span class="p">,</span><span class="n">enzyme</span><span class="p">),</span> <span class="n">k2</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+<div class="viewcode-block" id="addReversibleMichaelisMenten"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactions.html#pySTDLM.StandardReactions.addReversibleMichaelisMenten">[docs]</a><span class="k">def</span> <span class="nf">addReversibleMichaelisMenten</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">reactant</span><span class="p">,</span> <span class="n">enzyme</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">k1f</span><span class="p">,</span> <span class="n">k1b</span><span class="p">,</span> <span class="n">k2f</span><span class="p">,</span> <span class="n">k2b</span><span class="p">,</span> <span class="n">k3f</span><span class="p">,</span> <span class="n">k3b</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Add a Reversible Michaelis Menten Reaction</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            The RDME or CME reaction</span>
+<span class="sd">        reactant:</span>
+<span class="sd">            The reactant that reacts with the enzyme</span>
+<span class="sd">        enzyme:</span>
+<span class="sd">            The enzyme catalyzing the reaction</span>
+<span class="sd">        product:</span>
+<span class="sd">            The product of the reaction</span>
+<span class="sd">        k1f:</span>
+<span class="sd">            The forward reaction rate</span>
+<span class="sd">        k1b:</span>
+<span class="sd">            The backward reaction rate</span>
+<span class="sd">        k2f:</span>
+<span class="sd">            The second forward rate</span>
+<span class="sd">        k2b:</span>
+<span class="sd">            the second backward rate</span>
+<span class="sd">        k3f:</span>
+<span class="sd">            The third forward rate</span>
+<span class="sd">        k3b:</span>
+<span class="sd">            the third backward rate</span>
+<span class="sd">        region:</span>
+<span class="sd">            the region in which the reaction should occur (RDME only)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The simulation object so this can be a chained call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Specify region</span>
+	<span class="n">region</span><span class="o">=</span><span class="mi">1</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">region</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">CME</span><span class="o">.</span><span class="n">CMESimulation</span><span class="p">):</span>
+		<span class="n">region</span> <span class="o">=</span> <span class="n">sim</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not add reversible Michaelis-Menten reaction to object that is not an RDMESimualtion or CMESimulation.&#39;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">sim</span>
+
+	<span class="c1"># Add particles</span>
+	<span class="n">intermediate1</span> <span class="o">=</span> <span class="s1">&#39;intermediate1</span><span class="si">%s%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">)</span>
+	<span class="n">intermediate2</span> <span class="o">=</span> <span class="s1">&#39;intermediate2</span><span class="si">%s%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">([</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">,</span><span class="n">product</span><span class="p">,</span><span class="n">intermediate1</span><span class="p">,</span><span class="n">intermediate2</span><span class="p">])</span>
+
+	<span class="c1"># Add the reactions</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">),</span><span class="n">product</span><span class="o">=</span><span class="n">intermediate1</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">k1f</span><span class="p">)</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="n">intermediate1</span><span class="p">,</span><span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="n">reactant</span><span class="p">,</span><span class="n">enzyme</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="n">k1b</span><span class="p">)</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="n">intermediate1</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="n">intermediate2</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">k2f</span><span class="p">)</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="n">intermediate2</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="n">intermediate1</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">k2b</span><span class="p">)</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="n">intermediate2</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="p">(</span><span class="n">product</span><span class="p">,</span><span class="n">enzyme</span><span class="p">),</span> <span class="n">rate</span><span class="o">=</span><span class="n">k3f</span><span class="p">)</span>
+	<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">reactant</span><span class="o">=</span><span class="p">(</span><span class="n">product</span><span class="p">,</span><span class="n">enzyme</span><span class="p">),</span> <span class="n">product</span><span class="o">=</span><span class="n">intermediate2</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">k3b</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+<div class="viewcode-block" id="createExpressionModel"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardReactions.html#pySTDLM.StandardReactions.createExpressionModel">[docs]</a><span class="k">def</span> <span class="nf">createExpressionModel</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">gb</span><span class="p">,</span> <span class="n">kt</span><span class="p">,</span> <span class="n">kd</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">kdil</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">regions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Create a set of gene/mRNA/protein reactions based on a genebank file and a set of rates assuming constitutive expression</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            The RDME or CME simulation</span>
+<span class="sd">        gb:</span>
+<span class="sd">            The genbank filename. File should be readable by BioPython.</span>
+<span class="sd">        kt:</span>
+<span class="sd">            mRNA transcription rate dictionary { locusTag -&gt; rate }</span>
+<span class="sd">        kd:</span>
+<span class="sd">            mRNA degradation rate dictionary { locusTag -&gt; rate }</span>
+<span class="sd">        kr:</span>
+<span class="sd">            Protein transcription rate dictionary {locusTag -&gt; rate }</span>
+<span class="sd">        kdil:</span>
+<span class="sd">            Protein dillution/degradation rate dictionary {locusTag -&gt; rate} (Optional; Default &quot;None&quot;, meaning no dillution reaction will be specified)</span>
+<span class="sd">        regions:</span>
+<span class="sd">            Regions for the reactions to occur. Degradation is allowed in both regions. {locusTag -&gt; (transcriptionRegion, translationRegion)} (required for RDMESimulations)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        SeqIO representation of the Genbank file with qualifiers added: qualifiers[&quot;dna_id&quot;-&gt;(str,int),&quot;rna_id&quot;-&gt;(str,int), &quot;protein_id&quot;-&gt;(str,int)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Bulletproofing</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">hasBio</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cannot read genbank file: BioPython not installed.&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">CME</span><span class="o">.</span><span class="n">CMESimulation</span><span class="p">):</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;A CME or RDME simulation object must be specified&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kt</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kd</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kr</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;kt, kd, and kr values must exist for the same set of locus tags&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">kdil</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kt</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kdil</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;kt, kd, kr, and kdil values must exist for the same set of locus tags&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">regions</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kt</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">differene</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">regions</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;rates and regions of rections must exist for the same set of locus tags&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">)</span> <span class="ow">and</span> <span class="n">regions</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Regions must be specified when creating an expression model for an RDMESimulation&quot;</span><span class="p">)</span>
+
+	<span class="c1"># Read simulation file</span>
+	<span class="n">loci</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kt</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+	<span class="n">readLoci</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">genome</span> <span class="o">=</span> <span class="n">SeqIO</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span><span class="s2">&quot;genbank&quot;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">genome</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;gene&quot;</span><span class="p">,</span><span class="s2">&quot;rRNA&quot;</span><span class="p">]:</span>
+			<span class="n">locus_tag</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">qualifiers</span><span class="p">[</span><span class="s2">&quot;locus_tag&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">locus_tag</span> <span class="ow">in</span> <span class="n">loci</span> <span class="ow">and</span> <span class="n">locus_tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">readLoci</span><span class="p">:</span>
+				<span class="n">readLoci</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">locus_tag</span><span class="p">)</span>
+				<span class="c1"># Add reactants</span>
+				<span class="n">dna</span> <span class="o">=</span> <span class="s2">&quot;D_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">locus_tag</span><span class="p">)</span>
+				<span class="n">rna</span> <span class="o">=</span> <span class="s2">&quot;R_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">locus_tag</span><span class="p">)</span>
+				<span class="n">protein</span> <span class="o">=</span> <span class="s2">&quot;P_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">locus_tag</span><span class="p">)</span>
+				<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">([</span><span class="n">dna</span><span class="p">,</span><span class="n">rna</span><span class="p">,</span><span class="n">protein</span><span class="p">])</span>
+				<span class="n">feature</span><span class="o">.</span><span class="n">qualifiers</span><span class="p">[</span><span class="s2">&quot;dna_id&quot;</span><span class="p">]</span>     <span class="o">=</span> <span class="p">(</span><span class="n">dna</span><span class="p">,</span>     <span class="n">sim</span><span class="o">.</span><span class="n">particleMap</span><span class="p">[</span><span class="n">dna</span><span class="p">])</span>
+				<span class="n">feature</span><span class="o">.</span><span class="n">qualifiers</span><span class="p">[</span><span class="s2">&quot;rna_id&quot;</span><span class="p">]</span>     <span class="o">=</span> <span class="p">(</span><span class="n">rna</span><span class="p">,</span>     <span class="n">sim</span><span class="o">.</span><span class="n">particleMap</span><span class="p">[</span><span class="n">rna</span><span class="p">])</span>
+				<span class="n">feature</span><span class="o">.</span><span class="n">qualifiers</span><span class="p">[</span><span class="s2">&quot;protein_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">protein</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">particleMap</span><span class="p">[</span><span class="n">protein</span><span class="p">])</span>
+
+				<span class="c1"># Add reactions</span>
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">pyLM</span><span class="o">.</span><span class="n">RDME</span><span class="o">.</span><span class="n">RDMESimulation</span><span class="p">):</span>
+					<span class="n">transcriptionRegion</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">regions</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+					<span class="n">translationRegion</span>   <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">regions</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+					<span class="n">transcriptionRegion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">dna</span><span class="p">,</span> <span class="p">(</span><span class="n">dna</span><span class="p">,</span><span class="n">rna</span><span class="p">),</span> <span class="n">kt</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Transcription</span>
+					<span class="n">transcriptionRegion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>        <span class="n">kd</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Degradation</span>
+					<span class="n">translationRegion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span>   <span class="s1">&#39;&#39;</span><span class="p">,</span>        <span class="n">kd</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Degradation</span>
+					<span class="n">translationRegion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="p">(</span><span class="n">rna</span><span class="p">,</span><span class="n">protein</span><span class="p">),</span> <span class="n">kr</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Translation</span>
+					<span class="k">if</span> <span class="n">kdil</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+						<span class="n">transcriptionRegion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">protein</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>  <span class="n">kdil</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Dillution</span>
+						<span class="n">translationRegion</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">protein</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>    <span class="n">kdil</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Dillution				</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">sim</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">dna</span><span class="p">,</span> <span class="p">(</span><span class="n">dna</span><span class="p">,</span><span class="n">rna</span><span class="p">),</span> <span class="n">kt</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Transcription</span>
+					<span class="n">sim</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>        <span class="n">kd</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Degradation</span>
+					<span class="n">sim</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="p">(</span><span class="n">rna</span><span class="p">,</span><span class="n">protein</span><span class="p">),</span> <span class="n">kr</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Translation</span>
+					<span class="k">if</span> <span class="n">kdil</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+						<span class="n">sim</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="n">protein</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>    <span class="n">kdil</span><span class="p">[</span><span class="n">locus_tag</span><span class="p">])</span> <span class="c1"># Dillution				</span>
+
+	<span class="n">unassigned</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">loci</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">readLoci</span><span class="p">))</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unassigned</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Not all loci found when creating expression model: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">unassigned</span><span class="p">))</span>
+
+	<span class="k">return</span> <span class="n">genome</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

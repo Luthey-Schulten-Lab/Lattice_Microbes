@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.CellArranger &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pySTDLM.Cells" href="pySTDLM.Cells.html" />
+    <link rel="prev" title="pySTDLM" href="pySTDLM.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>pySTDLM.CellArranger</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/pySTDLM.CellArranger.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pySTDLM.CellArranger">
+<span id="pystdlm-cellarranger"></span><h1>pySTDLM.CellArranger<a class="headerlink" href="#module-pySTDLM.CellArranger" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.CellArranger.CellArranger" title="pySTDLM.CellArranger.CellArranger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CellArranger</span></code></a>([cellType,&nbsp;cellAttributes,&nbsp;…])</td>
+<td>A base class for laying out cells in a 3D space.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.CellArranger.LooseGridArranger" title="pySTDLM.CellArranger.LooseGridArranger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LooseGridArranger</span></code></a>(cellType,&nbsp;cellAttributes,&nbsp;…)</td>
+<td>An arranger that orients cells in square grid with padding in between.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.CellArranger.RandomArranger" title="pySTDLM.CellArranger.RandomArranger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomArranger</span></code></a>(cellType,&nbsp;cellAttributes,&nbsp;…)</td>
+<td>An arranger that randomly orients a number of cells in a regin until either a count or a volume fraction target is met.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pySTDLM.CellArranger.RandomSphericalArranger" title="pySTDLM.CellArranger.RandomSphericalArranger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomSphericalArranger</span></code></a>(cellType,&nbsp;…)</td>
+<td>An arranger that randomly orients a number of cells in a sphere inside a regin until either a count or a volume fraction target is met.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pySTDLM.CellArranger.TightGridArranger" title="pySTDLM.CellArranger.TightGridArranger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TightGridArranger</span></code></a>(cellType,&nbsp;cellAttributes,&nbsp;…)</td>
+<td>An arranger that orients cells in square grid.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pySTDLM.CellArranger.CellArranger">
+<em class="property">class </em><code class="descclassname">pySTDLM.CellArranger.</code><code class="descname">CellArranger</code><span class="sig-paren">(</span><em>cellType=None</em>, <em>cellAttributes=None</em>, <em>arrangerAttributes=None</em>, <em>name='Unknown'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#CellArranger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.CellArranger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for laying out cells in a 3D space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cellType</strong> – The type of cell this packer represents, can be one of: [“Sphere”, “Capsule”, “Box”, “CapsuleShell”]</li>
+<li><strong>cellAttributes</strong> – A dictionary with the required attributes specified for the cell and the form</li>
+<li><strong>arrangerAttributes</strong> – A dictionary with the required/optional requirements for the individiual arranger</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pySTDLM.CellArranger.CellArranger.addToSimulation">
+<code class="descname">addToSimulation</code><span class="sig-paren">(</span><em>sim</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#CellArranger.addToSimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.CellArranger.addToSimulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.CellArranger.cellFactory">
+<code class="descname">cellFactory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#CellArranger.cellFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.CellArranger.cellFactory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.CellArranger.packVolume">
+<code class="descname">packVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#CellArranger.packVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.CellArranger.packVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack a specified volume with cells</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>volume</strong> – A volume specified as [[xmin,ymin,zmin],[xmax,ymax,zmax]] (TODO: Add angles)</li>
+<li><strong>form</strong> – The form of the packing, which can one of: [“Random”, “RandomSpherical”, “TightGrid”, “LooseGrid”, “SkewedGrid”]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of the form [volumePacked, volumePercent, numberCells]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pySTDLM.CellArranger.LooseGridArranger">
+<em class="property">class </em><code class="descclassname">pySTDLM.CellArranger.</code><code class="descname">LooseGridArranger</code><span class="sig-paren">(</span><em>cellType</em>, <em>cellAttributes</em>, <em>arrangerAttributes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#LooseGridArranger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.LooseGridArranger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pySTDLM.CellArranger.CellArranger" title="pySTDLM.CellArranger.CellArranger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pySTDLM.CellArranger.CellArranger</span></code></a></p>
+<p>An arranger that orients cells in square grid with padding in between.</p>
+<p>The attribute dictionary requires “offset” which is a list of the form [dx, dy, dz].</p>
+<dl class="method">
+<dt id="pySTDLM.CellArranger.LooseGridArranger.addToSimulation">
+<code class="descname">addToSimulation</code><span class="sig-paren">(</span><em>sim</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.LooseGridArranger.addToSimulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.LooseGridArranger.cellFactory">
+<code class="descname">cellFactory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.LooseGridArranger.cellFactory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.LooseGridArranger.intPackVolume">
+<code class="descname">intPackVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>mins</em>, <em>maxs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#LooseGridArranger.intPackVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.LooseGridArranger.intPackVolume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.LooseGridArranger.packVolume">
+<code class="descname">packVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.LooseGridArranger.packVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack a specified volume with cells</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>volume</strong> – A volume specified as [[xmin,ymin,zmin],[xmax,ymax,zmax]] (TODO: Add angles)</li>
+<li><strong>form</strong> – The form of the packing, which can one of: [“Random”, “RandomSpherical”, “TightGrid”, “LooseGrid”, “SkewedGrid”]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of the form [volumePacked, volumePercent, numberCells]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pySTDLM.CellArranger.RandomArranger">
+<em class="property">class </em><code class="descclassname">pySTDLM.CellArranger.</code><code class="descname">RandomArranger</code><span class="sig-paren">(</span><em>cellType</em>, <em>cellAttributes</em>, <em>arrangerAttributes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#RandomArranger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pySTDLM.CellArranger.CellArranger" title="pySTDLM.CellArranger.CellArranger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pySTDLM.CellArranger.CellArranger</span></code></a></p>
+<p>An arranger that randomly orients a number of cells in a regin until either a count or a volume fraction target is met.</p>
+<p>This class requires either “fraction” or “number” attributes specified in the arrangerAttributes.  It also has an optional
+parameter “padding” which maintains that much padding between the cells and their neighbors.</p>
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomArranger.addToSimulation">
+<code class="descname">addToSimulation</code><span class="sig-paren">(</span><em>sim</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger.addToSimulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomArranger.cellFactory">
+<code class="descname">cellFactory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger.cellFactory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomArranger.doesIntersect">
+<code class="descname">doesIntersect</code><span class="sig-paren">(</span><em>b1</em>, <em>b2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#RandomArranger.doesIntersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger.doesIntersect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomArranger.intPackVolume">
+<code class="descname">intPackVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>mins</em>, <em>maxs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#RandomArranger.intPackVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger.intPackVolume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomArranger.newBBox">
+<code class="descname">newBBox</code><span class="sig-paren">(</span><em>bbox</em>, <em>padding</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#RandomArranger.newBBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger.newBBox" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomArranger.outsideDomain">
+<code class="descname">outsideDomain</code><span class="sig-paren">(</span><em>b1</em>, <em>mins</em>, <em>maxs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#RandomArranger.outsideDomain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger.outsideDomain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomArranger.packVolume">
+<code class="descname">packVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.RandomArranger.packVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack a specified volume with cells</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>volume</strong> – A volume specified as [[xmin,ymin,zmin],[xmax,ymax,zmax]] (TODO: Add angles)</li>
+<li><strong>form</strong> – The form of the packing, which can one of: [“Random”, “RandomSpherical”, “TightGrid”, “LooseGrid”, “SkewedGrid”]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of the form [volumePacked, volumePercent, numberCells]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pySTDLM.CellArranger.RandomSphericalArranger">
+<em class="property">class </em><code class="descclassname">pySTDLM.CellArranger.</code><code class="descname">RandomSphericalArranger</code><span class="sig-paren">(</span><em>cellType</em>, <em>cellAttributes</em>, <em>arrangerAttributes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#RandomSphericalArranger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.RandomSphericalArranger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pySTDLM.CellArranger.CellArranger" title="pySTDLM.CellArranger.CellArranger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pySTDLM.CellArranger.CellArranger</span></code></a></p>
+<p>An arranger that randomly orients a number of cells in a sphere inside a regin until either a count or a volume fraction target is met.</p>
+<p>This class requires either “fraction” or “number” attributes specified in the arrangerAttributes.  It also has an optional
+parameter “padding” which maintains that much padding between the cells and their neighbors.</p>
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomSphericalArranger.addToSimulation">
+<code class="descname">addToSimulation</code><span class="sig-paren">(</span><em>sim</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.RandomSphericalArranger.addToSimulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomSphericalArranger.cellFactory">
+<code class="descname">cellFactory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.RandomSphericalArranger.cellFactory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomSphericalArranger.intPackVolume">
+<code class="descname">intPackVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>mins</em>, <em>maxs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#RandomSphericalArranger.intPackVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.RandomSphericalArranger.intPackVolume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.RandomSphericalArranger.packVolume">
+<code class="descname">packVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.RandomSphericalArranger.packVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack a specified volume with cells</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>volume</strong> – A volume specified as [[xmin,ymin,zmin],[xmax,ymax,zmax]] (TODO: Add angles)</li>
+<li><strong>form</strong> – The form of the packing, which can one of: [“Random”, “RandomSpherical”, “TightGrid”, “LooseGrid”, “SkewedGrid”]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of the form [volumePacked, volumePercent, numberCells]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pySTDLM.CellArranger.TightGridArranger">
+<em class="property">class </em><code class="descclassname">pySTDLM.CellArranger.</code><code class="descname">TightGridArranger</code><span class="sig-paren">(</span><em>cellType</em>, <em>cellAttributes</em>, <em>arrangerAttributes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#TightGridArranger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.TightGridArranger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pySTDLM.CellArranger.CellArranger" title="pySTDLM.CellArranger.CellArranger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pySTDLM.CellArranger.CellArranger</span></code></a></p>
+<p>An arranger that orients cells in square grid.</p>
+<dl class="method">
+<dt id="pySTDLM.CellArranger.TightGridArranger.addToSimulation">
+<code class="descname">addToSimulation</code><span class="sig-paren">(</span><em>sim</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.TightGridArranger.addToSimulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.TightGridArranger.cellFactory">
+<code class="descname">cellFactory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.TightGridArranger.cellFactory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.TightGridArranger.intPackVolume">
+<code class="descname">intPackVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>mins</em>, <em>maxs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pySTDLM/CellArranger.html#TightGridArranger.intPackVolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pySTDLM.CellArranger.TightGridArranger.intPackVolume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pySTDLM.CellArranger.TightGridArranger.packVolume">
+<code class="descname">packVolume</code><span class="sig-paren">(</span><em>sim</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pySTDLM.CellArranger.TightGridArranger.packVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack a specified volume with cells</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>volume</strong> – A volume specified as [[xmin,ymin,zmin],[xmax,ymax,zmax]] (TODO: Add angles)</li>
+<li><strong>form</strong> – The form of the packing, which can one of: [“Random”, “RandomSpherical”, “TightGrid”, “LooseGrid”, “SkewedGrid”]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of the form [volumePacked, volumePercent, numberCells]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pySTDLM.Cells.html" class="btn btn-neutral float-right" title="pySTDLM.Cells" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pySTDLM.html" class="btn btn-neutral" title="pySTDLM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

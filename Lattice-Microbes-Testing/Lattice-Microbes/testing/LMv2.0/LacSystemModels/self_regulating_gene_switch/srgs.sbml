@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+    <model id="lac_npf" substanceUnits="item" timeUnits="second" 
+           volumeUnits="litre" extentUnits="item">
+        <listOfUnitDefinitions>
+            <unitDefinition id="per_second">
+                <listOfUnits>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+            <unitDefinition id="per_item_per_second">
+                <listOfUnits>
+                    <unit kind="item"   exponent="-1" scale="0" multiplier="1"/>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+        </listOfUnitDefinitions>
+        <listOfCompartments>
+            <compartment id="Cell" size="1e-15" spatialDimensions="3"
+                         constant="true"/>
+        </listOfCompartments>
+        <listOfSpecies>
+            <species id="i"  compartment="Cell" initialAmount="1"
+                             hasOnlySubstanceUnits="true" boundaryCondition="false"
+                             constant="false"/>
+            <species id="a" compartment="Cell" initialAmount="0"   
+                             hasOnlySubstanceUnits="true" boundaryCondition="false"
+                             constant="false"/>
+            <species id="m" compartment="Cell" initialAmount="0"   
+                             hasOnlySubstanceUnits="true" boundaryCondition="false"
+                             constant="false"/>
+            <species id="y" compartment="Cell" initialAmount="0"   
+                             hasOnlySubstanceUnits="true" boundaryCondition="false"
+                             constant="false"/>
+        </listOfSpecies>
+        <listOfReactions>
+        
+            <reaction id="activation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="i" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="a" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> ka </ci>
+                            <ci> i </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="ka" value="6.3e-4" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="inactivation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="a" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="i" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> ki </ci>
+                            <ci> a </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="ki" value="5.05e-2" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+
+            <reaction id="transcription" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="a" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="a" stoichiometry="1" constant="true"/>
+                    <speciesReference species="m" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> ktr </ci>
+                            <ci> a </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="ktr" value="1.26e-1" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="translation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="m" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="m" stoichiometry="1" constant="true"/>
+                    <speciesReference species="y" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> ktn </ci>
+                            <ci> m </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="ktn" value="4.44e-2" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="mrna_degradation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="m" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> kdegm </ci>
+                            <ci> m </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="kdegm" value="1.11e-2" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="protein_degradation" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="y" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> kdegp </ci>
+                            <ci> y </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="kdegp" value="2.10e-04" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+        </listOfReactions>
+    </model>
+</sbml>

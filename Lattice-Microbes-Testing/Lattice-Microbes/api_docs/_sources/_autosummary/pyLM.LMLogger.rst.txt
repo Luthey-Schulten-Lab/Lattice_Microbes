@@ -1,0 +1,24 @@
+pyLM.LMLogger
+=============
+
+.. automodule:: pyLM.LMLogger
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      setLMLogConsole
+      setLMLogFile
+      setLMLoggerLevel
+   
+   
+
+   
+   
+   
+
+   
+   
+   

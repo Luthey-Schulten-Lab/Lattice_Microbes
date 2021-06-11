@@ -1,0 +1,11 @@
+<table class='jLMtbl'>
+    <caption>{{title}}</caption>
+    {% for p in params %}
+    <tr>
+        <td> {{p.id}} </td>
+        <td> {{p.symbol}} </td>
+        <td class='jLMnum'> {{p.value}} </td>
+        <td class='jLMnum'> {{p.count}} </td>
+    </tr>
+    {% endfor %}
+</table>

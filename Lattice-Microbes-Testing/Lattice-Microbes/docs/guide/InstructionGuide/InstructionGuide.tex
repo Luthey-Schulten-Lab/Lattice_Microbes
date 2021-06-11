@@ -1,0 +1,125 @@
+
+\documentclass[12pt]{report}
+\usepackage{Style/er-ug}
+\usepackage{Style/er-abbrev}
+\usepackage{Style/er-math}
+\usepackage{Style/er-outline}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[version=3]{mhchem}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+
+
+% Provisional
+%\usepackage{draftwatermark}
+%\SetWatermarkText{DRAFT}
+%\SetWatermarkScale{1}
+
+
+\definecolor{mygray}{rgb}{0.95,0.95,0.95}
+\definecolor{purple}{rgb}{0.5,0.0,0.5}
+
+
+
+
+\lstdefinestyle{customPy}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  xleftmargin=\parindent,
+  language=Python,
+  numbers=left,
+  frame=single,
+  morekeywords={as,super,in,not},
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{purple},
+  commentstyle=\itshape\color{blue},
+  identifierstyle=\color{black},
+  stringstyle=\color{red},
+}
+
+
+
+% Setup the outline package.
+\setboolean{showOutline}{false}
+\input{Text/abbreviations}
+
+%%% BEGIN DOCUMENT
+\begin{document}
+
+%%%%%%%%
+% Title Page %
+%%%%%%%%
+\newpage
+\singlespacing
+\normalsize
+\setcounter{page}{1}
+\renewcommand{\thepage}{\roman{page}}
+
+\thispagestyle{empty}
+\begin{center}{
+\vspace*{0.6in}
+{\huge Lattice Microbes Problem Solving Environment Instruction Guide}\\
+\vspace*{0.2in}
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.4\textwidth]{Figures/lm.pdf}
+\end{figure}
+\vspace*{0.15in}
+{\large LM Version 2.3, pyLM Version 1.1}\\
+%\vspace*{0.2in}
+{\large \today}\\
+\vspace*{0.5in}
+{\large Joseph R. Peterson, Mike J. Hallock, Elijah Roberts, John A. Cole, Piyush Labhsetwar, John E. Stone, and Zaida Luthey-Schulten}\\
+~\\
+%{\large Luthey-Schulten Group}\\
+{\large University of Illinois at Urbana-Champaign}\\
+{\large http://www.scs.illinois.edu/schulten/lm}\\
+\vspace*{0.4in}
+{\Large Description}\\
+}\end{center}
+
+The Lattice Microbes Instruction Guide describes how to use the software to perform and analyze stochastic simulations of spatially modeled microbial cells. Lattice Microbes development is supported in part by the DOE (Office of Science BER) under grant DE-FG02-10ER6510, the NIH (Center for Macromolecular Modeling and Bioinformatics) under grant NIH 9 P41 GM104601-23, and the NSF under grants MCB-08226143 and MCB 12-44570.
+
+%%%%%%%%%%%
+% Table of contents %
+%%%%%%%%%%%
+\newpage
+\tableofcontents
+% List of figures
+\newpage
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+
+
+%%%%%%%%
+% Body Text %
+%%%%%%%%
+% Set the page numbering to be arabic numerals for the text.
+\newpage
+\setcounter{page}{1}
+\renewcommand{\thepage}{\arabic{page}}
+
+\input{Text/Introduction}
+\input{Text/Tutorials}
+\chapter{Examples}
+\input{Text/Examples}
+\input{Text/License}
+
+
+%%%%%%%%%
+% References %
+%%%%%%%%%
+\newpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{Bibliography/inorder}
+\bibliography{Bibliography/references,Bibliography/zlsgroup-2013}
+
+
+\end{document}

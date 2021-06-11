@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.SBMLReader &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.SBMLReader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.SBMLReader</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Joseph R. Peterson</span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">pyLM</span>
+<span class="kn">import</span> <span class="nn">pyLM.CME</span>
+<span class="kn">import</span> <span class="nn">pyLM.RDME</span>
+<span class="kn">from</span> <span class="nn">pyLM.LMLogger</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">libsbml</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">except</span> <span class="n">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="k">if</span> <span class="s1">&#39;sphinx&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="k">raise</span>
+
+
+<span class="c1">## Helper Functions ##</span>
+<div class="viewcode-block" id="importSBMLModel"><a class="viewcode-back" href="../../_autosummary/pySTDLM.SBMLReader.html#pySTDLM.SBMLReader.importSBMLModel">[docs]</a><span class="k">def</span> <span class="nf">importSBMLModel</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+	<span class="n">reader</span> <span class="o">=</span> <span class="n">SBMLReader</span><span class="p">()</span>
+	<span class="n">doc</span>    <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">readSBMLFromFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+	<span class="c1"># Check errors</span>
+	<span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">getNumErrors</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;There were errors reading the SBML file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+		<span class="n">doc</span><span class="o">.</span><span class="n">printErrors</span><span class="p">()</span>
+		<span class="k">return</span> <span class="kc">None</span>
+
+	<span class="c1"># Make sure it is correct version</span>
+	<span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">getLevel</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">doc</span><span class="o">.</span><span class="n">getVersion</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Document was incorrect version; must have Level 3, Version 1 document. Given: L</span><span class="si">%d</span><span class="s2">, V</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">getLevel</span><span class="p">(),</span><span class="n">doc</span><span class="o">.</span><span class="n">getVersion</span><span class="p">()))</span>
+		
+	<span class="c1"># Returns a pointer to the model</span>
+	<span class="n">model</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">getModel</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">model</span></div>
+
+<div class="viewcode-block" id="importSBMLModelL3V1"><a class="viewcode-back" href="../../_autosummary/pySTDLM.SBMLReader.html#pySTDLM.SBMLReader.importSBMLModelL3V1">[docs]</a><span class="k">def</span> <span class="nf">importSBMLModelL3V1</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="c1"># Get the units for the model</span>
+	<span class="n">modelSubstanceUnits</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getSubstanceUnits</span><span class="p">()</span>
+
+	<span class="n">globalParameters</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">globalParameterValues</span> <span class="o">=</span> <span class="p">{}</span>
+
+	<span class="c1"># Get all parameter values</span>
+	<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">getNumParameters</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">pID</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getParameter</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span>
+		<span class="n">globalParameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pID</span><span class="p">)</span>
+		<span class="n">globalParameterValues</span><span class="p">[</span><span class="n">pID</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getParemeter</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span>
+	
+	<span class="c1"># Get all compartment sizes</span>
+	<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">getNumCompartments</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">cID</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getCompartment</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">getID</span><span class="p">()</span>
+		<span class="n">globalParameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cID</span><span class="p">)</span>
+		<span class="n">globalParameterValues</span><span class="p">[</span><span class="n">cID</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getCompartment</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">getSize</span><span class="p">()</span>
+
+	<span class="c1"># Not in the C implementation:</span>
+	<span class="n">speciesCounts</span> <span class="o">=</span> <span class="p">{}</span>
+
+	<span class="c1"># Back to C implementation</span>
+
+	<span class="n">speciesIndices</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">numSpecies</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getNumSpecies</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSpecies</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">specie</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getSpecies</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+		<span class="n">speciesIndices</span><span class="p">[</span><span class="n">specie</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span> <span class="o">=</span> <span class="n">s</span>
+
+		<span class="c1"># Get units for amount</span>
+		<span class="n">substanceUnits</span> <span class="o">=</span> <span class="n">modelSubstanceUnits</span><span class="p">;</span>
+		<span class="k">if</span> <span class="n">specie</span><span class="o">.</span><span class="n">isSetSubstanceUnits</span><span class="p">():</span>
+			<span class="n">substanceUnits</span> <span class="o">=</span> <span class="n">specie</span><span class="o">.</span><span class="n">getSubstanceUnits</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">substanceUnits</span> <span class="o">!=</span> <span class="s1">&#39;item&#39;</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported species substance units: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">substanceUnits</span><span class="p">))</span>
+
+		<span class="c1"># Make sure we can process the specie</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">specie</span><span class="o">.</span><span class="n">getHasOnlySubstranceUnits</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported species property: &quot;hasOnlySubstranceUnits&quot; must be true&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">specie</span><span class="o">.</span><span class="n">getBoundaryCondition</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported species property: &quot;boundaryCondition&quot; must be false&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">specie</span><span class="o">.</span><span class="n">getConstant</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported species property: &quot;constant&quot; must be false&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">specie</span><span class="o">.</span><span class="n">isSetConveersionFactor</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported species property: &quot;conversionFactor&quot; must not be set&#39;</span><span class="p">)</span>
+
+		<span class="c1"># Get initial count for the species</span>
+		<span class="k">if</span> <span class="n">specie</span><span class="o">.</span><span class="n">isSetInitialAmount</span><span class="p">():</span>
+			<span class="n">speciesCounts</span><span class="p">[</span><span class="n">specie</span><span class="o">.</span><span class="n">getID</span><span class="p">()]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">specie</span><span class="o">.</span><span class="n">getInitialAmount</span><span class="p">())</span>
+		<span class="k">elif</span> <span class="n">specie</span><span class="o">.</span><span class="n">isSetInitialConcentration</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported species property: &quot;initialConcentration&quot; must not be set&#39;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported species property: &quot;initialAmount&quot; or &quot;initialConcentration&quot; must be set&#39;</span><span class="p">)</span>
+
+		<span class="c1"># Add the specie to the list of defined species</span>
+		<span class="n">sim</span><span class="o">.</span><span class="n">defineSpecies</span><span class="p">([</span><span class="n">specie</span><span class="o">.</span><span class="n">getName</span><span class="p">()])</span>
+
+	<span class="c1"># Process reactions</span>
+	<span class="n">numReactions</span> <span class="o">=</span>  <span class="n">model</span><span class="o">.</span><span class="n">getNumReactions</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numReactions</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">rxn</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getReaction</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+		<span class="c1"># Check that the reaction is supported</span>
+		<span class="k">if</span> <span class="n">rxn</span><span class="o">.</span><span class="n">getReversible</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported reaction property: &quot;reversible&quot; must be false&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">reaction</span><span class="o">.</span><span class="n">isSetKineticLaw</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported reaction property: must have a kinetic law&#39;</span><span class="p">)</span>
+
+		<span class="c1"># Get reactant list</span>
+		<span class="n">rcts</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">rct</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rxn</span><span class="o">.</span><span class="n">getNumReactants</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+			<span class="n">lrct</span> <span class="o">=</span> <span class="n">rxn</span><span class="o">.</span><span class="n">getReactant</span><span class="p">(</span><span class="n">rct</span><span class="p">)</span>
+			
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">lrct</span><span class="o">.</span><span class="n">isSetStoichiometry</span><span class="p">():</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported reaction property: &quot;stoichiometry&quot; for reactant must be set&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">lrct</span><span class="o">.</span><span class="n">getConstant</span><span class="p">():</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported reaction property: &quot;stoichiometry&quot; for reactant must be constant&#39;</span><span class="p">)</span>
+
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lrct</span><span class="o">.</span><span class="n">getStoichiometry</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+				<span class="n">rcts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lrct</span><span class="p">)</span>
+
+
+		<span class="c1"># Get product list</span>
+		<span class="n">prds</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">prd</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rxn</span><span class="o">.</span><span class="n">getNumProducts</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+			<span class="n">lprd</span> <span class="o">=</span> <span class="n">rxn</span><span class="o">.</span><span class="n">getProduct</span><span class="p">(</span><span class="n">prd</span><span class="p">)</span>
+			
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">lprd</span><span class="o">.</span><span class="n">isSetStoichiometry</span><span class="p">():</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported reaction property: &quot;stoichiometry&quot; for product must be set&#39;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">lprd</span><span class="o">.</span><span class="n">getConstant</span><span class="p">():</span>
+				<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported reaction property: &quot;stoichiometry&quot; for product must be constant&#39;</span><span class="p">)</span>
+
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lprd</span><span class="o">.</span><span class="n">getStoichiometry</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+				<span class="n">prds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lrct</span><span class="p">)</span>
+
+		<span class="n">rate</span> <span class="o">=</span> <span class="n">getRate</span><span class="p">(</span><span class="n">rxn</span><span class="p">,</span> <span class="n">rcst</span><span class="p">,</span> <span class="n">prds</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">globalParameters</span><span class="p">,</span> <span class="n">globalParameterValues</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">region</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">region</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">rcts</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">prds</span><span class="p">),</span> <span class="n">rate</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">CMESimulation</span><span class="p">):</span>
+			<span class="n">sim</span><span class="o">.</span><span class="n">addReaction</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">rcts</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">prds</span><span class="p">),</span> <span class="n">rate</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+			<span class="k">pass</span>
+			<span class="c1"># Determine compartment</span>
+			
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unknown simulation type.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getRate"><a class="viewcode-back" href="../../_autosummary/pySTDLM.SBMLReader.html#pySTDLM.SBMLReader.getRate">[docs]</a><span class="k">def</span> <span class="nf">getRate</span><span class="p">(</span><span class="n">rxn</span><span class="p">,</span> <span class="n">rcts</span><span class="p">,</span> <span class="n">prds</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">globalP</span><span class="p">,</span> <span class="n">globalPV</span><span class="p">):</span>
+	<span class="n">kinetics</span> <span class="o">=</span> <span class="n">rxn</span><span class="o">.</span><span class="n">getKineticLaw</span><span class="p">()</span>
+
+	<span class="n">localParameters</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">localParameterValues</span> <span class="o">=</span> <span class="p">{}</span>
+
+	<span class="c1"># Copy global parameters to local parameters</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">globalParameters</span><span class="p">:</span>
+		<span class="n">localParameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">localParameterValues</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">globalPV</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+	<span class="c1"># Get local parameters</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">kinetics</span><span class="o">.</span><span class="n">getNumLocalParameters</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">lp</span> <span class="o">=</span> <span class="n">kinetics</span><span class="o">.</span><span class="n">getLocalParameter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">lp</span><span class="o">.</span><span class="n">isSetValue</span><span class="p">():</span>
+			<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unsupported reaction property: &quot;value&quot; for local parameter must be set&#39;</span><span class="p">)</span>
+		
+		<span class="n">localParameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lp</span><span class="o">.</span><span class="n">getId</span><span class="p">())</span>
+		<span class="n">localParameterValues</span><span class="p">[</span><span class="n">lp</span><span class="o">.</span><span class="n">getId</span><span class="p">()]</span> <span class="o">=</span> <span class="n">lp</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span>
+
+	<span class="c1"># Determine reaction type</span>
+	<span class="n">m</span> <span class="o">=</span> <span class="n">kinetics</span><span class="o">.</span><span class="n">getMath</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">isFirstOrder</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">localParameters</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">importFirstOrder</span><span class="p">()</span>
+	<span class="k">elif</span> <span class="n">isSecondOrder</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">localParameterS</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">importSecondOrder</span><span class="p">()</span>
+	<span class="k">elif</span> <span class="n">isSecondSelfOrder</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">localParameterS</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">importSecondSelfOrder</span><span class="p">()</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unsupported kinetic law: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">kinetics</span><span class="o">.</span><span class="n">getFormula</span><span class="p">()))</span></div>
+
+	
+
+
+<div class="viewcode-block" id="readSBMLtoCME"><a class="viewcode-back" href="../../_autosummary/pySTDLM.SBMLReader.html#pySTDLM.SBMLReader.readSBMLtoCME">[docs]</a><span class="k">def</span> <span class="nf">readSBMLtoCME</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Read an SBML file for the reaction model for a CME simulation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A CMESimulation object</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A SBML filename/filepath</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The simulation object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Bulletproofing</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">CMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must give a CMESimulation to &#39;readSBMLtoCME&#39;.&quot;</span><span class="p">)</span>
+
+	<span class="n">model</span> <span class="o">=</span> <span class="n">getSBMLDoc</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+	<span class="n">importSBMLModelL3V1</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">sim</span><span class="p">)</span>
+	
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+<div class="viewcode-block" id="readSBMLtoRDME"><a class="viewcode-back" href="../../_autosummary/pySTDLM.SBMLReader.html#pySTDLM.SBMLReader.readSBMLtoRDME">[docs]</a><span class="k">def</span> <span class="nf">readSBMLtoRDME</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Read an SBML file for the reaction model for a RDME simulation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A RDMESimulation object</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A SBML filename/filepath</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The simulation object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Bulletproofing</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must give a RDMESimulation to &#39;readSBMLtoRDME&#39;.&quot;</span><span class="p">)</span>
+	
+	<span class="n">model</span> <span class="o">=</span> <span class="n">getSBMLDoc</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+	<span class="n">importSBMLModelL3V1</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">sim</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+<div class="viewcode-block" id="readSBMLtoRegion"><a class="viewcode-back" href="../../_autosummary/pySTDLM.SBMLReader.html#pySTDLM.SBMLReader.readSBMLtoRegion">[docs]</a><span class="k">def</span> <span class="nf">readSBMLtoRegion</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Read an SBML file for the reaction model into a specific region of the RDME simulation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A RDMESimulation object</span>
+<span class="sd">        region:</span>
+<span class="sd">            A region name that already exists in the RDMESimulation</span>
+<span class="sd">        filename:</span>
+<span class="sd">            A SBML filename/filepath</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The simulation object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Bulletproofing</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must give a RDMESimulation to &#39;readSBMLtoRegion&#39;.&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">regions</span><span class="p">:</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No region &#39;</span><span class="si">%s</span><span class="s2">&#39; in RDMESimulation.&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">region</span><span class="p">))</span>
+
+	<span class="n">reg</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">modifyRegion</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+	<span class="n">model</span> <span class="o">=</span> <span class="n">getSBMLDoc</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+	<span class="n">importSBMLModelL3V1</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+	
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

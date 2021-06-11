@@ -1,0 +1,437 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pySTDLM.StandardCells &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pySTDLM.StandardCells</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pySTDLM.StandardCells</h1><div class="highlight"><pre>
+<span></span><span class="c1"># </span>
+<span class="c1"># University of Illinois Open Source License</span>
+<span class="c1"># Copyright 2008-2018 Luthey-Schulten Group,</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># </span>
+<span class="c1"># Developed by: Luthey-Schulten Group</span>
+<span class="c1">#                           University of Illinois at Urbana-Champaign</span>
+<span class="c1">#                           http://www.scs.uiuc.edu/~schulten</span>
+<span class="c1"># </span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy of</span>
+<span class="c1"># this software and associated documentation files (the Software), to deal with </span>
+<span class="c1"># the Software without restriction, including without limitation the rights to </span>
+<span class="c1"># use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies </span>
+<span class="c1"># of the Software, and to permit persons to whom the Software is furnished to </span>
+<span class="c1"># do so, subject to the following conditions:</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions of source code must retain the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers.</span>
+<span class="c1"># </span>
+<span class="c1"># - Redistributions in binary form must reproduce the above copyright notice, </span>
+<span class="c1"># this list of conditions and the following disclaimers in the documentation </span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1"># </span>
+<span class="c1"># - Neither the names of the Luthey-Schulten Group, University of Illinois at</span>
+<span class="c1"># Urbana-Champaign, nor the names of its contributors may be used to endorse or</span>
+<span class="c1"># promote products derived from this Software without specific prior written</span>
+<span class="c1"># permission.</span>
+<span class="c1"># </span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR </span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, </span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL </span>
+<span class="c1"># THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR </span>
+<span class="c1"># OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, </span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR </span>
+<span class="c1"># OTHER DEALINGS WITH THE SOFTWARE.</span>
+<span class="c1"># </span>
+<span class="c1"># Author(s): Michael J. Hallock and Joseph R. Peterson</span>
+<span class="c1"># </span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">pyLM</span>
+<span class="kn">from</span> <span class="nn">pyLM.RDME</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pyLM.units</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="c1"># #########</span>
+<span class="c1"># E. coli #</span>
+<span class="c1"># #########</span>
+<div class="viewcode-block" id="buildEColiCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardCells.html#pySTDLM.StandardCells.buildEColiCell">[docs]</a><span class="k">def</span> <span class="nf">buildEColiCell</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">crowded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">crowdedMembrane</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Build a standard E coli cell 0.5 microns across and 2 microns long.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation object</span>
+<span class="sd">        crowded:</span>
+<span class="sd">            Should the cytosol be crowded (default: false)</span>
+<span class="sd">        crowdedMembrane:</span>
+<span class="sd">            Should the membrane be crowded (default: false)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Sanity check</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not build an E. coli cell in the sim which is not of type </span><span class="se">\&#39;</span><span class="s1">RDMESimulation</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+
+	<span class="c1"># Create the cell</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">buildCapsidCell</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="n">micron</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">diameter</span><span class="o">=</span><span class="n">micron</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">membraneThickness</span><span class="o">=</span><span class="n">nm</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+
+	<span class="c1"># Pack the cell</span>
+	<span class="k">if</span> <span class="n">crowded</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="n">packFastGrowingEcoli</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+	<span class="c1"># Pack the membrane</span>
+	<span class="k">if</span> <span class="n">crowdedMembrane</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="k">pass</span>
+	
+	<span class="c1"># Give the simulation back</span>
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+<div class="viewcode-block" id="buildDividingEColiCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardCells.html#pySTDLM.StandardCells.buildDividingEColiCell">[docs]</a><span class="k">def</span> <span class="nf">buildDividingEColiCell</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">crowded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">crowdedMembrane</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Build a standard E coli cell 0.5 microns across and 4 microns long.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation object</span>
+<span class="sd">        crowded:</span>
+<span class="sd">            Should the cytosol be crowded (default: false)</span>
+<span class="sd">        crowdedMembrane:</span>
+<span class="sd">            Should the membrane be crowded (default: false)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Sanity check</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not build an E. coli cell in the sim which is not of type </span><span class="se">\&#39;</span><span class="s1">RDMESimulation</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+
+	<span class="c1"># Create the cell</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">buildCapsidCell</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="n">micron</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">diameter</span><span class="o">=</span><span class="n">micron</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">membraneThickness</span><span class="o">=</span><span class="n">nm</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+
+	<span class="c1"># Pack the cell</span>
+	<span class="k">if</span> <span class="n">crowded</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="n">packFastGrowingEcoli</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+	<span class="c1"># Pack the membrane</span>
+	<span class="k">if</span> <span class="n">crowdedMembrane</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="k">pass</span>
+	
+	<span class="c1"># Give the simulation back</span>
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+<div class="viewcode-block" id="buildSphericalEColiCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardCells.html#pySTDLM.StandardCells.buildSphericalEColiCell">[docs]</a><span class="k">def</span> <span class="nf">buildSphericalEColiCell</span><span class="p">(</span><span class="n">crowded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">latticeSpacing</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">crowdedMembrane</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Build a Spherical E coli cell, one that lacks the gene for elongation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation object</span>
+<span class="sd">        crowded:</span>
+<span class="sd">            Should the cytosol be crowded (default: false)</span>
+<span class="sd">        crowdedMembrane:</span>
+<span class="sd">            Should the membrane be crowded (default: false)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Sanity check</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not build an E. coli cell in the sim which is not of type </span><span class="se">\&#39;</span><span class="s1">RDMESimulation</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+
+	<span class="c1"># Create the cell</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">buildSphericalCell</span><span class="p">(</span><span class="n">diameter</span><span class="o">=</span><span class="n">micron</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">membraneThickness</span><span class="o">=</span><span class="n">nm</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+
+	<span class="c1"># Pack the cell</span>
+	<span class="k">if</span> <span class="n">crowded</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="n">packFastGrowingEcoli</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+	<span class="c1"># Pack the membrane</span>
+	<span class="k">if</span> <span class="n">crowdedMembrane</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="k">pass</span>
+	
+	<span class="c1"># Give the simulation back</span>
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+
+<div class="viewcode-block" id="buildFilamentousEColiCell"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardCells.html#pySTDLM.StandardCells.buildFilamentousEColiCell">[docs]</a><span class="k">def</span> <span class="nf">buildFilamentousEColiCell</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">8.0</span><span class="p">,</span> <span class="n">crowded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">crowdedMembrane</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Build a long filamentous E coli cell where the user can specify the length.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            An RDMESimulation object</span>
+<span class="sd">        length:</span>
+<span class="sd">            The length of the cell in microns (default: 8)</span>
+<span class="sd">        crowded:</span>
+<span class="sd">            Should the cytosol be crowded (default: false)</span>
+<span class="sd">        crowdedMembrane:</span>
+<span class="sd">            Should the membrane be crowded (default: false)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="c1"># Sanity check</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="n">LMLogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not build an E. coli cell in the sim which is not of type </span><span class="se">\&#39;</span><span class="s1">RDMESimulation</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+
+	<span class="c1"># Create the cell</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">buildCapsidCell</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="n">micron</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">diameter</span><span class="o">=</span><span class="n">micron</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">membraneThickness</span><span class="o">=</span><span class="n">nm</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+
+	<span class="c1"># Pack the cell</span>
+	<span class="k">if</span> <span class="n">crowded</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="n">packFastGrowingEcoli</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+	<span class="c1"># Pack the membrane</span>
+	<span class="k">if</span> <span class="n">crowdedMembrane</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="k">pass</span>
+	
+	<span class="c1"># Give the simulation back</span>
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+<div class="viewcode-block" id="packFastGrowingEcoli"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardCells.html#pySTDLM.StandardCells.packFastGrowingEcoli">[docs]</a><span class="k">def</span> <span class="nf">packFastGrowingEcoli</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Pack a cell with the protein distribution for fast growing E coli.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A RDMESimulation object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="k">return</span>
+
+	<span class="c1"># get cytosol region</span>
+	<span class="n">region</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span>
+
+	<span class="c1"># pack the cell</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">10.4</span><span class="p">),</span> <span class="mf">17.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">5.2</span><span class="p">),</span>  <span class="mf">18.6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">4.3</span><span class="p">),</span>  <span class="mf">0.7</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">4.1</span><span class="p">),</span>  <span class="mf">0.3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">4.0</span><span class="p">),</span>  <span class="mf">1.7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.8</span><span class="p">),</span>  <span class="mf">1.2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.5</span><span class="p">),</span>  <span class="mf">0.9</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.4</span><span class="p">),</span>  <span class="mf">2.5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.0</span><span class="p">),</span>  <span class="mf">2.0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">2.7</span><span class="p">),</span>  <span class="mf">2.0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">2.3</span><span class="p">),</span>  <span class="mf">1.8</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">1.7</span><span class="p">),</span>  <span class="mf">0.4</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+<div class="viewcode-block" id="packSlowGrowingEcoli"><a class="viewcode-back" href="../../_autosummary/pySTDLM.StandardCells.html#pySTDLM.StandardCells.packSlowGrowingEcoli">[docs]</a><span class="k">def</span> <span class="nf">packSlowGrowingEcoli</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Pack a cell with the protein distribution for fast growing E coli.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sim:</span>
+<span class="sd">            A RDMESimulation object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">RDMESimulation</span><span class="p">):</span>
+		<span class="k">return</span>
+
+	<span class="c1"># get cytosol region</span>
+	<span class="n">region</span><span class="o">=</span><span class="s1">&#39;cytoplasm&#39;</span>
+	
+	<span class="c1"># pack the cell</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">10.4</span><span class="p">),</span> <span class="mf">5.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">5.2</span><span class="p">),</span>  <span class="mf">25.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">4.3</span><span class="p">),</span>  <span class="mf">1.2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">4.1</span><span class="p">),</span>  <span class="mf">0.4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">4.0</span><span class="p">),</span>  <span class="mf">2.4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.8</span><span class="p">),</span>  <span class="mf">1.8</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.5</span><span class="p">),</span>  <span class="mf">1.3</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.4</span><span class="p">),</span>  <span class="mf">3.6</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">3.0</span><span class="p">),</span>  <span class="mf">2.8</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">2.7</span><span class="p">),</span>  <span class="mf">2.7</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">2.3</span><span class="p">),</span>  <span class="mf">2.3</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+	<span class="n">sim</span><span class="o">.</span><span class="n">packRegion</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">nm</span><span class="p">(</span><span class="mf">1.7</span><span class="p">),</span>  <span class="mf">0.6</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">sim</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

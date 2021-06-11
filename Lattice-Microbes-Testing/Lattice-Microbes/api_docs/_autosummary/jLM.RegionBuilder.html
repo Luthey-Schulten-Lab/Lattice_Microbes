@@ -1,0 +1,632 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jLM.RegionBuilder &mdash; Lattice Microbes 2.4.0/&lt;&lt;not /2018-12-04 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="jLM.Solvers" href="jLM.Solvers.html" />
+    <link rel="prev" title="jLM.RDME" href="jLM.RDME.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Lattice Microbes
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html#advanced-build-configuration">Advanced Build Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization using VMD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Lattice Microbes API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Citations.html">Citations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lattice Microbes</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API.html">Lattice Microbes API Reference</a> &raquo;</li>
+        
+      <li>jLM.RegionBuilder</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/jLM.RegionBuilder.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-jLM.RegionBuilder">
+<span id="jlm-regionbuilder"></span><h1>jLM.RegionBuilder<a class="headerlink" href="#module-jLM.RegionBuilder" title="Permalink to this headline">¶</a></h1>
+<p>Design lattice geometry</p>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jLM.RegionBuilder.RegionBuilder" title="jLM.RegionBuilder.RegionBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegionBuilder</span></code></a>([net,&nbsp;dims])</td>
+<td>Helper object to design site lattice geometry</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="jLM.RegionBuilder.RegionBuilder">
+<em class="property">class </em><code class="descclassname">jLM.RegionBuilder.</code><code class="descname">RegionBuilder</code><span class="sig-paren">(</span><em>net=None</em>, <em>dims=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Helper object to design site lattice geometry</p>
+<dl class="method">
+<dt id="jLM.RegionBuilder.RegionBuilder.box">
+<code class="descname">box</code><span class="sig-paren">(</span><em>lx</em>, <em>ly</em>, <em>lz</em>, <em>xs=None</em>, <em>angles=None</em>, <em>center=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a rectangular cuboid mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lx</strong> (<em>float</em>) – Length in x-direction</li>
+<li><strong>ly</strong> (<em>float</em>) – Length in y-direction</li>
+<li><strong>lz</strong> (<em>float</em>) – Length in z-direction</li>
+<li><strong>center</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – Centroid</li>
+<li><strong>angles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – [alpha, beta, gamma] ZXZ Euler angles</li>
+<li><strong>xs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,nx,ny,nz),</span> <span class="pre">dtype=int)</span></code>) – Index grid of dimensions [3, nx, ny, nz]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Lattice mask</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RegionBuilder.RegionBuilder.capsule">
+<code class="descname">capsule</code><span class="sig-paren">(</span><em>length</em>, <em>width</em>, <em>xs=None</em>, <em>angles=None</em>, <em>center=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.capsule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.capsule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct spherocylinder mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> (<em>float</em>) – Length including endcaps</li>
+<li><strong>width</strong> (<em>float</em>) – Diameter of cylindrical region</li>
+<li><strong>center</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – Centroid</li>
+<li><strong>angles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – [alpha, beta, gamma] ZXZ’ Euler angles</li>
+<li><strong>xs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,nx,ny,nz),</span> <span class="pre">dtype=int)</span></code>) – Index grid of dimensions [3, nx, ny, nz]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Lattice mask</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.closing">
+<em class="property">classmethod </em><code class="descname">closing</code><span class="sig-paren">(</span><em>binaryMask</em>, <em>radius=None</em>, <em>se=None</em>, <em>radius1=None</em>, <em>se1=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.closing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.closing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Morphological closing of a binary mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>binaryMask</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Binary mask</li>
+<li><strong>radius</strong> (<em>int</em>) – If provided use a 6-connected structuring element iterated
+<cite>radius</cite> times.</li>
+<li><strong>radius1</strong> (<em>int</em>) – If provided use the iterated SE for the erosion (optional)</li>
+<li><strong>se</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Structuring element</li>
+<li><strong>se1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Structuring element for erosion (optional)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Closed lattice</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RegionBuilder.RegionBuilder.compose">
+<code class="descname">compose</code><span class="sig-paren">(</span><em>*siteSpec</em>, <em>net=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.compose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.compose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compose a series of binary masks into a site lattice</p>
+<p>This function takes an indefinite number of (region, mask) tuples. The
+lattice is created by setting the lattice to the index of region over
+all masked subvolumes in the order given.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>*siteSpec</strong> ((<a class="reference internal" href="jLM.Types.html#jLM.Types.Region" title="jLM.Types.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">Region</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>)) – Region, mask tuple</li>
+<li><strong>net</strong> (<a class="reference internal" href="jLM.RDME.html#jLM.RDME.SpatialModel" title="jLM.RDME.SpatialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpatialModel</span></code></a>) – If given, modify this model’s site lattice</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.convexHull">
+<em class="property">classmethod </em><code class="descname">convexHull</code><span class="sig-paren">(</span><em>binaryMask</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.convexHull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.convexHull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convex hull of lattice</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>binaryMask</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Binary mask</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Convex hull of lattice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RegionBuilder.RegionBuilder.cylinder">
+<code class="descname">cylinder</code><span class="sig-paren">(</span><em>radius</em>, <em>length</em>, <em>xs=None</em>, <em>angles=None</em>, <em>center=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.cylinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct cylinder mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>radius</strong> (<em>float</em>) – Radius</li>
+<li><strong>length</strong> (<em>float</em>) – Length</li>
+<li><strong>center</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – Centroid</li>
+<li><strong>angles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – [alpha, beta, gamma] ZXZ’ Euler angles</li>
+<li><strong>xs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,nx,ny,nz),</span> <span class="pre">dtype=int)</span></code>) – Index grid of dimensions [3, nx, ny, nz]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Lattice mask</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.dilate">
+<em class="property">classmethod </em><code class="descname">dilate</code><span class="sig-paren">(</span><em>binaryMask</em>, <em>radius=None</em>, <em>se=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.dilate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.dilate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Morphological dialation of a binary mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>binaryMask</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Binary mask</li>
+<li><strong>radius</strong> (<em>int</em>) – If provided use a 6-connected structuring element iterated <cite>radius</cite> times.</li>
+<li><strong>se</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Structuring element</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Dilated lattice</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RegionBuilder.RegionBuilder.ellipsoid">
+<code class="descname">ellipsoid</code><span class="sig-paren">(</span><em>xs=None</em>, <em>radius=None</em>, <em>angles=None</em>, <em>center=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.ellipsoid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.ellipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct ellipsoid mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>radius</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – Semiaxes of ellipse</li>
+<li><strong>center</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – Centroid</li>
+<li><strong>angles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – [alpha, beta, gamma] ZXZ’ Euler angles</li>
+<li><strong>xs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,nx,ny,nz),</span> <span class="pre">dtype=int)</span></code>) – Index grid of dimensions [3, nx, ny, nz]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Lattice mask</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RegionBuilder.RegionBuilder.emptyLatticeMask">
+<code class="descname">emptyLatticeMask</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.emptyLatticeMask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.emptyLatticeMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an empty lattice mask</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.erode">
+<em class="property">classmethod </em><code class="descname">erode</code><span class="sig-paren">(</span><em>binaryMask</em>, <em>radius=None</em>, <em>se=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.erode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.erode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Morphological erosion of a binary mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>binaryMask</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Binary mask</li>
+<li><strong>radius</strong> (<em>int</em>) – If provided use a 6-connected structuring element iterated
+<cite>radius</cite> times.</li>
+<li><strong>se</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Structuring element</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Eroded lattice</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.octoStructElem">
+<em class="property">static </em><code class="descname">octoStructElem</code><span class="sig-paren">(</span><em>r</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.octoStructElem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.octoStructElem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterated 6-connected structuring element</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>r</strong> (<em>int</em>) – Number of iterations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Structuring element</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.opening">
+<em class="property">classmethod </em><code class="descname">opening</code><span class="sig-paren">(</span><em>binaryMask</em>, <em>radius=None</em>, <em>se=None</em>, <em>radius1=None</em>, <em>se1=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.opening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.opening" title="Permalink to this definition">¶</a></dt>
+<dd><p>Morphological opening of a binary mask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>binaryMask</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Binary mask</li>
+<li><strong>radius</strong> (<em>int</em>) – If provided use a 6-connected structuring element iterated
+<cite>radius</cite> times.</li>
+<li><strong>radius1</strong> (<em>int</em>) – If provided use the iterated SE for the dilation (optional)</li>
+<li><strong>se</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Structuring element</li>
+<li><strong>se1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code>) – Structuring element for dilation (optional)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Opened lattice</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RegionBuilder.RegionBuilder.se26">
+<code class="descname">se26</code><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.se26" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structuring element connecting all 26 neighbors</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RegionBuilder.RegionBuilder.se6">
+<code class="descname">se6</code><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.se6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structuring element connecting all 6 nearest neighbors</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.showBinaryLattices">
+<em class="property">static </em><code class="descname">showBinaryLattices</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.showBinaryLattices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.showStack">
+<em class="property">static </em><code class="descname">showStack</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.showStack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.sphereStructElem">
+<em class="property">static </em><code class="descname">sphereStructElem</code><span class="sig-paren">(</span><em>r</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.sphereStructElem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.sphereStructElem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spherical structuring element</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>r</strong> (<em>int</em>) – radius</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Structuring element</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jLM.RegionBuilder.RegionBuilder.spoke">
+<code class="descname">spoke</code><span class="sig-paren">(</span><em>x0</em>, <em>length</em>, <em>spoke_radius</em>, <em>r</em>, <em>phi</em>, <em>theta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.spoke"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.spoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct spoke</p>
+<p>For a sphere of radius, <span class="math notranslate nohighlight">\(r\)</span>, centered on <span class="math notranslate nohighlight">\(x_0\)</span>, a spoke is
+a cylinder centered on the surface of the sphere at the polar
+coordinates <span class="math notranslate nohighlight">\((r,\phi,\theta)\)</span>, rotated to be normal to the sphere
+surface.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x0</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – Center of sphere</li>
+<li><strong>length</strong> (<em>float</em>) – Length of spoke. Spoke will protrude 0.5*length from the inside and outside of the sphere</li>
+<li><strong>spoke_radius</strong> (<em>float</em>) – Radius (thickness) of the spoke</li>
+<li><strong>r</strong> (<em>float</em>) – Radius of sphere</li>
+<li><strong>phi</strong> (<em>float</em>) – Azimuthal position of spoke with respect to the sphere center</li>
+<li><strong>theta</strong> (<em>float</em>) – Polar position of spoke with respect to the sphere center</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Lattice mask</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(nx,ny,nz),</span> <span class="pre">dtype=bool)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="jLM.RegionBuilder.RegionBuilder.transformGrid">
+<em class="property">static </em><code class="descname">transformGrid</code><span class="sig-paren">(</span><em>xs</em>, <em>x0</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jLM/RegionBuilder.html#RegionBuilder.transformGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.transformGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the translation/rotation of an index grid</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,nx,ny,nz),</span> <span class="pre">dtype=int)</span></code>) – Index grid of dimensions [3, nx, ny, nz]</li>
+<li><strong>x0</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,),</span> <span class="pre">dtype=float)</span></code>) – Center of rotation</li>
+<li><strong>alpha</strong> (<em>float</em>) – Euler Z-rotation (radians)</li>
+<li><strong>beta</strong> (<em>float</em>) – Euler X-rotation (radians)</li>
+<li><strong>gamma</strong> (<em>float</em>) – Euler Z’-rotation (radians)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Transformed grid</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray(shape=(3,nx,ny,nz),</span> <span class="pre">dtype=int)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jLM.RegionBuilder.RegionBuilder.xs">
+<code class="descname">xs</code><em class="property"> = None</em><a class="headerlink" href="#jLM.RegionBuilder.RegionBuilder.xs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index grid of dimensions [3, nx, ny, nz]</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="jLM.Solvers.html" class="btn btn-neutral float-right" title="jLM.Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="jLM.RDME.html" class="btn btn-neutral" title="jLM.RDME" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Luthey-Schulten Lab.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.4.0/&lt;&lt;not /2018-12-04',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+KNOWN ISSUES
+------------
+
+- The Python shared object (_lm.so) required for pyLM will not be built when
+profiling is enabled.  The LPTF PROF_ALLOC macro that defines the extern
+symbols is included in the Main cpp files, and thus is not an object that is
+included when building the so.
+

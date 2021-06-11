@@ -1,0 +1,29 @@
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{chemarr}
+
+% 2009-07-07; Elijah Roberts: created
+% 2010-05-03; Elijah Roberts: added \mathpl
+
+\newcommand{\ddt}[1]{\frac{d#1}{dt}} 
+\newcommand{\pd}[1]{\frac{\partial}{\partial #1}} 
+\newcommand{\pdd}[1]{\frac{\partial^2}{\partial #1^2}} 
+\newcommand{\pdda}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+
+% Ensemble average.
+\newcommand{\ens}[1]{\langle #1 \rangle}
+
+% Big O notation.
+\newcommand{\bigO}{{\mathcal O}}
+
+% Unit vectors.
+\newcommand{\iv}{\hat{i}}
+\newcommand{\jv}{\hat{j}}
+\newcommand{\kv}{\hat{k}}
+
+% Scientific notation.
+\newcommand{\sci}[2]{$\mathrm{\mathsf{#1{\cdot}10^{#2}}}$}
+\newcommand{\scimath}[2]{#1{\times}10^{#2}}
+
+% Math without font formatting.
+\newcommand{\mathpl}[1]{$\mathrm{\mathsf{#1}}$}
+

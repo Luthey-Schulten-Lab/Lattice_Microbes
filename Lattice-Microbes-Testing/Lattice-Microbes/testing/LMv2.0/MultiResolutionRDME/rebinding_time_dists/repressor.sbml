@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+    <model id="repressorRebinding" substanceUnits="item" timeUnits="second" volumeUnits="litre" extentUnits="item">
+        <listOfUnitDefinitions>
+            <unitDefinition id="per_second">
+                <listOfUnits>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+            <unitDefinition id="per_item_per_second">
+                <listOfUnits>
+                    <unit kind="item"   exponent="-1" scale="0" multiplier="1"/>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+            <unitDefinition id="per_molar_per_second">
+                <listOfUnits>
+                    <unit kind="litre"  exponent="1" scale="0" multiplier="1"/>
+                    <unit kind="mole"   exponent="-1" scale="0" multiplier="1"/>
+                    <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+                </listOfUnits>
+            </unitDefinition>
+        </listOfUnitDefinitions>
+        <listOfCompartments>
+            <compartment id="reactionVolume" size="2.68e-16" spatialDimensions="3" constant="true"/>
+        </listOfCompartments>
+        <listOfSpecies>
+            <species id="O"     compartment="cell" initialAmount="1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+            <species id="R2"    compartment="cell" initialAmount="1" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+            <species id="R2O"   compartment="cell" initialAmount="0" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+        </listOfSpecies>
+        <listOfReactions>
+        
+            <reaction id="R2_binding" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="R2" stoichiometry="1" constant="true"/>
+                    <speciesReference species="O" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="R2O" stoichiometry="1" constant="true"/>
+                </listOfProducts>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci> kron </ci>
+                                <ci> R2 </ci>
+                                <ci> O </ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <csymbol encoding="text" definitionURL="http://www.sbml.org/sbml/symbols/avogadro"/>
+                                <ci> reactionVolume </ci>
+                            </apply>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="kron" value="2.43e+06" units="per_molar_per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+            
+            <reaction id="R2_decay" reversible="false" fast="false">
+                <listOfReactants>
+                    <speciesReference species="R2" stoichiometry="1" constant="true"/>
+                </listOfReactants>
+                <kineticLaw>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <apply>
+                            <times/>
+                            <ci> k </ci>
+                            <ci> R2 </ci>
+                        </apply>
+                    </math>
+                    <listOfLocalParameters>
+                        <localParameter id="k" value="1e+08" units="per_second"/>
+                    </listOfLocalParameters>
+                </kineticLaw>
+            </reaction>
+
+            </listOfReactions>
+    </model>
+</sbml>

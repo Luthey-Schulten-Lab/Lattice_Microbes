@@ -1,0 +1,23 @@
+target_sources(lmcore
+    PRIVATE
+        "${CMAKE_CURRENT_LIST_DIR}/CMESolver.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/FluctuatingNRSolver.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/GillespieDSolver.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/HillSwitch.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/LacHillSwitch.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/NextReactionSolver.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/SelfRegulatingGeneSwitch.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/TwoStateExpression.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/TwoStateHillLoopSwitch.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/TwoStateHillSwitch.cpp"
+    PUBLIC
+        "${CMAKE_CURRENT_LIST_DIR}/HillSwitch.h"
+        "${CMAKE_CURRENT_LIST_DIR}/GillespieDSolver.h"
+        "${CMAKE_CURRENT_LIST_DIR}/FluctuatingNRSolver.h"
+        "${CMAKE_CURRENT_LIST_DIR}/CMESolver.h"
+        "${CMAKE_CURRENT_LIST_DIR}/LacHillSwitch.h"
+        "${CMAKE_CURRENT_LIST_DIR}/NextReactionSolver.h"
+        "${CMAKE_CURRENT_LIST_DIR}/SelfRegulatingGeneSwitch.h"
+        "${CMAKE_CURRENT_LIST_DIR}/TwoStateExpression.h"
+        "${CMAKE_CURRENT_LIST_DIR}/TwoStateHillLoopSwitch.h"
+        "${CMAKE_CURRENT_LIST_DIR}/TwoStateHillSwitch.h")
