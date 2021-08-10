@@ -3,7 +3,7 @@
 Install Anaconda 3 if not already installed on your computer
 https://www.anaconda.com/
 
-If you want GPU acceleration, install cuda and export your cuda path in your .bashrc profile:
+If you want to do spatial RDME simulations which require GPUs, install cuda and export your cuda path in your .bashrc profile:
 https://developer.nvidia.com/cuda-downloads
 
 Line to add to .bashrc:
