@@ -23,7 +23,7 @@ then go to a directory where you want to build Lattice Microbes and do the build
     make
     make install
 
-To run the sample simulation file, run the following line:
+To run the example rdme simulation files, run the following line:
 
 lm -g 0 -r 1 -sl lm::rdme::IntMpdRdmeSolver -f MinCell_5s_testing.lm
 
