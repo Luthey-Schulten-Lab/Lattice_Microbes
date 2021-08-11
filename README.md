@@ -20,6 +20,6 @@
 
 ## Resources
 
-- [Installation guide](http://faculty.scs.illinois.edu/schulten/software_manuals/LM_2.3_INSTALL_annotations.pdf): Instructions for installing **Lattice Microbes**.
+- [Installation guide](README_install.conda): Instructions for installing **Lattice Microbes**.
 - [User Guide](http://faculty.scs.illinois.edu/schulten/software_manuals/UsersGuide.pdf): Tutorial, full Python API description, and usage information.
 - [Citing Lattice Microbes](http://faculty.scs.illinois.edu/schulten/Software2.0.html): How to cite the code.
