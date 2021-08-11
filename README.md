@@ -4,19 +4,19 @@
 
 ## Modules
 
-**jLM** is a module used for constructing cell geomtries and defining reaction and diffusion rules for a RDME simualtion with a python/jupyter notebook interface.  Experimental data, such as cell organization from cryo-electron tomograms, can be incorporated into simulation cell geometry also using region builder functions.
+**jLM** is a python/jupyter notebook interface used for constructing cell geomtries and defining reaction and diffusion rules for a RDME simualtion.  Experimental data, such as cell organization from cryo-electron tomograms, can be incorporated into simulation cell geometry also using region builder functions.
 
-**pyLM** can define well-stirred reaction systems without diffusion to be simulated using the CME with a python interface.
+**pyLM** is a python interface used to define well-stirred reaction systems without diffusion to be simulated using the CME.
 
 ## Solvers
 
-*GillespieDSolver*
+**GillespieDSolver** is the Gillespie direct chemical master equation solver for well-stirred simulations
 
-*MpdRdmeSolver*
+**MpdRdmeSolver** is the base version of the multi-particle diffusion reaction-diffusion master equation solver for spatial simulations
 
-*IntMpdRdmeSolver*
+**IntMpdRdmeSolver** is the MpdRdmeSolver, but particle indexes are stored as 32-bit numbers rather than 8-bit.  This is used for systems with many types of molecules and intermediates.
 
-*MGPUMpdRdmeSolver*
+**MGPUMpdRdmeSolver** is the multi-GPU MpdRdmeSolver which is used to divide the simulation space for one spatial simulation across multiple GPUs.
 
 ## Resources
 
