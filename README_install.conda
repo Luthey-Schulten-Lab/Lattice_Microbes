@@ -13,10 +13,10 @@ Make your Anaconda environment with your choice of name "envname" using Python 3
     conda create -n envname -c conda-forge python=3.7.3
     conda activate envname
     conda install -c conda-forge -y git gcc_linux-64==7.3.0 gxx_linux-64==7.3.0 binutils_linux-64==2.31.1
-    conda install -y protobuf==3.12.4 hdf5 numpy cython cmake==3.14.0 xlrd swig==4.0.2 jupyter matplotlib ipywidgets h5py tqdm pillow jinja2 scipy pybind11 pandas pytables biopython
+    conda install -c conda-forge -y protobuf==3.12.4 hdf5==1.10.6 numpy==1.19.2 cython==0.29.4 cmake==3.14.0 xlrd swig==4.0.2 jupyter matplotlib ipywidgets h5py tqdm pillow jinja2 scipy pybind11 pandas pytables biopython
     
 Then go to a directory where you want to build Lattice Microbes and do the build running the following commands:
-(You do not need to run simulations where the build is located, lm will be installed in your environemnt to be used like any other command)
+(You do not need to run simulations where the build is located, lm will be installed in your environment as an executable)
     mkdir build
     cd build
     cmake path/Lattice-Microbes/src/
