@@ -31,15 +31,4 @@ Check to make sure the installation worked, run:
     lm --help
     # Should return help commands for lm
 
-
-To run the example rdme simulation files, run the following line:
-
-lm -g 0 -r 1 -sl lm::rdme::IntMpdRdmeSolver -f MinCell_5s_testing.lm
-
--g the index of the GPU to use
--r the index of the replicate to run
--sl the Reaction-Diffusion Master equation Solver to use
--f the simulation filename
-
-LM_tutorial.lm can be simulated using only MpdRdmeSolver
-MinCell_5s_testing.lm will only run correctly using IntMpdRdmeSolver
+There are example executable simulation files in example_rdme_files.
