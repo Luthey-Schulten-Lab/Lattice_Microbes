@@ -87,7 +87,7 @@ class RegionBuilder:
 
     @staticmethod
     @JD._maybeJupyter
-    def showBinaryLattices(binLattices, filterFunctions=None, mode="widget"):
+    def showBinaryLattices(binLattices,manualColor=None, filterFunctions=None, mode="widget"):
         """3-D lattice mask viewer
 
         Lattices can be given as a single binary mask, a list of masks, or a 
@@ -121,7 +121,7 @@ class RegionBuilder:
             mode (str):
                 View mode
         """
-        return JD._showBinaryLattices(binLattices, filterFunctions, mode)
+        return JD._showBinaryLattices(binLattices, manualColor, filterFunctions, mode)
 
     @staticmethod
     @JD._maybeJupyter
@@ -562,4 +562,3 @@ class RegionBuilder:
         evalCoords = np.array(np.unravel_index(np.arange(binaryMask.size), binaryMask.shape)).T
         newMaskRavel[...] = triangulation.find_simplex(evalCoords) >= 0
         return newMask
-

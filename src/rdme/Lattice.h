@@ -8,7 +8,6 @@
  * 			     University of Illinois at Urbana-Champaign
  * 			     http://www.scs.uiuc.edu/~schulten
  * 
- * Overflow algorithm in RDME solvers and CPU assignment (2012)
  * Developed by: Roberts Group
  * 			     Johns Hopkins University
  * 			     http://biophysics.jhu.edu/roberts/
@@ -47,7 +46,6 @@
 #define LM_RDME_LATTICE_H_
 
 //using namespace std; //TODO: workaround for cuda compiler bug, remove this line when fixed.
-#include <iostream>
 #include <vector>
 #include <map>
 #include "core/Types.h"

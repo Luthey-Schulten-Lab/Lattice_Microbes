@@ -179,7 +179,16 @@ def plotTrace(f, species=None, replicate=1, filename=None, **kwargs):
 	traces=np.zeros( (len(times), len(species)) )
 
 	# Which species we are looking at
-	names=f['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
+	par = f['Parameters']
+	if 'SpeciesNames' in par:
+		namesDS = par['SpeciesNames'][:]
+		names = namesDS.tolist()
+		names = [spec[0] for spec in names]
+	else:
+		# Compatible with LM trajectory generated < 2.5
+		names = par.attrs['speciesNames'].decode().split(',')
+
+# 	names=f['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
 	LMLogger.info("names: %s", names)
 
 	if species is None:
@@ -303,7 +312,15 @@ def plotAvgVar(f, species=None, filename=None, **kwargs):
 	variances=np.zeros( (len(times), len(species)) )
 
 	# Which species we are looking at
-	names=f['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
+	par=f['Parameters']
+	if 'SpeciesNames' in par:
+		namesDS = par['SpeciesNames'][:]
+		names = namesDS.tolist()
+		names = [spec[0] for spec in names]
+	else:
+		# Compatible with LM trajectory generated < 2.5
+		names = par.attrs['speciesNames'].decode().split(',')
+# 	names=f['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
 	LMLogger.info("names: %s", names)
 
 	if species is None:
@@ -365,7 +382,15 @@ def getOccupancyKymograph(f, species=None, replicate=1):
     """
 	# Get particle type
 	h5=openLMFile(f)
-	names=h5['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
+	par=h5['Parameters']
+	if 'SpeciesNames' in par:
+		namesDS = par['SpeciesNames'][:]
+		names = namesDS.tolist()
+		names = [spec[0] for spec in names]
+	else:
+		# Compatible with LM trajectory generated < 2.5
+		names = par.attrs['speciesNames'].decode().split(',')
+# 	names=h5['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
 	partType=0
 	if species not in names:
 		LMLogger.error("Specie: %s was not in file: %s", species, f)
@@ -548,9 +573,19 @@ def getSpecies(f):
     if isinstance(f, str):
         f = openLMFile(f)
         wasString = True
+        
+    par=f['Parameters']
     
     # Get a handle a copy of the species names
-    species = f['Parameters'].attrs['speciesNames'].decode('utf8').split(",")
+    #species = f['Parameters'].attrs['speciesNames'].decode('utf8').split(",")
+   
+    if 'SpeciesNames' in par:
+        # New version (>= 2.5)
+        speciesDS = par['SpeciesNames'][:]
+        species = [spec[0] for spec in speciesDS.tolist()]
+    else:
+        # Compatible with LM trajectory generated < 2.5
+        species = par.attrs['speciesNames'].decode('utf8').split(",")
     
     # close file if need be
     if wasString:
@@ -619,6 +654,7 @@ def getSpecieTrace(f, specie, replicate = 1, doublingTime = None):
 
 	# Get a handle to the Simulations group, where results are stored
 	sim=f['Simulations']
+	par=f['Parameters']
 	
 	# Count the number of replicates that were run
 	replicates=len(sim)
@@ -629,7 +665,16 @@ def getSpecieTrace(f, specie, replicate = 1, doublingTime = None):
 		raise Exception("Could not return timesteps, no simulations have been performed.")
 	
 	# Which species we are looking at
-	names=f['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
+# 	names=f['Parameters'].attrs['speciesNames'].decode('utf8').split(',')
+	# par = f['Parameters']
+	if 'SpeciesNames' in par:
+		# New version (>= 2.5)
+		namesDS = par['SpeciesNames'][:]
+		names = namesDS.tolist()
+		names = [spec[0] for spec in names]
+	else:
+		# Compatible with LM trajectory generated < 2.5
+		names = par.attrs['speciesNames'].decode('utf8').split(',')
 	# bulletproofing
 	if specie not in names:
 		LMLogger.error("Species: %s was not found in list: %s", specie, names)

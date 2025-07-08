@@ -55,6 +55,7 @@ class IntLattice : public Lattice
 	// Should modify CudaByteLattice to do what I need.
 	friend class MGPUMpdRdmeSolver;
 	friend class MPIMpdRdmeSolver;
+        friend class MGPUIntMpdRdmeSolver;
 
 public:
     static void nativeSerialize(void * destBuffer, void * lattice, size_t latticeSize);

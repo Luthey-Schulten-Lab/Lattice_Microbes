@@ -33,6 +33,7 @@ if (OPT_VMD)
         add_library(lmplugin SHARED "${CMAKE_CURRENT_LIST_DIR}/lmplugin.cpp")
         target_include_directories(lmplugin PUBLIC "${HDF5_INCLUDE_DIRS}" "${VMD_PLUGIN_INCLUDE_DIR}")
         target_link_libraries(lmplugin PUBLIC "${HDF5_HL_LIBRARIES}" "${HDF5_LIBRARIES}")
+        target_compile_features(lmplugin PRIVATE cxx_std_17)
         set_target_properties(lmplugin
             PROPERTIES 
                 PREFIX ""

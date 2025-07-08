@@ -38,9 +38,12 @@
 # 
 #
 
-import lm
-import math
-import os
+# import lm
+# import math
+# import os
+# import h5py
+
+import lm, math, os, h5py
 
 from  .LMLogger import *
 from  .ipyInterface import *
@@ -908,12 +911,24 @@ class RDMESimulation:
 			LMLogger.debug("Setting parameter %s = %s",key, self.parameters[key])
 			f.setParameter(key, self.parameters[key])
 		LMLogger.debug("speciesNames: %s", ",".join(self.species_id))
-		f.setParameter("speciesNames", ",".join(self.species_id))
+# 		f.setParameter("speciesNames", ",".join(self.species_id))
+
 		typenames=",".join(sorted(self.siteTypes, key=self.siteTypes.get))
 		LMLogger.debug("siteTypeNames: %s", typenames)
 		f.setParameter("siteTypeNames", typenames)
 
 		f.close()
+        
+		import h5py
+        
+		simFile = h5py.File(filename,'r+')
+    
+		dt = h5py.special_dtype(vlen=str)
+		specNamesListAscii = [n.encode("ascii", "ignore") for n in self.species_id]
+		simFile.create_dataset('Parameters/SpeciesNames', (len(specNamesListAscii),1), dt, specNamesListAscii)
+        
+		simFile.flush() 
+		simFile.close() 
 
 		# Custom
 		# This section performs any cleanup for custom setup the user has specified
@@ -923,7 +938,7 @@ class RDMESimulation:
 		if len(self.customAddedParticleList) > 0:
 			try:
 				import h5py
-				lmFile = h5py.File(filename)
+				lmFile = h5py.File(filename, 'r+')
 				for i in self.customAddedParticleList:
 					particleNumber = self.particleMap[i[0]] - 1
 					lmFile['Model']['Reaction']['InitialSpeciesCounts'][particleNumber] += i[1]

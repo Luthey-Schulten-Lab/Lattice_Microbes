@@ -8,7 +8,6 @@
  * 			     University of Illinois at Urbana-Champaign
  * 			     http://www.scs.uiuc.edu/~schulten
  * 
- * Overflow algorithm in RDME solvers and CPU assignment (2012)
  * Developed by: Roberts Group
  * 			     Johns Hopkins University
  * 			     http://biophysics.jhu.edu/roberts/
@@ -63,9 +62,9 @@ namespace rdme {
 
 class IntMpdRdmeSolver : public RDMESolver
 {
-private:
     using CMESolver::hookSimulation;
     using RDMESolver::buildDiffusionModel;
+
 public:
     IntMpdRdmeSolver();
     virtual ~IntMpdRdmeSolver();
@@ -75,6 +74,7 @@ public:
     virtual void buildModel(const uint numberSpeciesA, const uint numberReactionsA, const uint * initialSpeciesCountsA, const uint * reactionTypeA, const double * kA, const int * SA, const uint * DA, const uint kCols=1);
     virtual void buildDiffusionModel(const uint numberSiteTypesA, const double * DFA, const uint * RLA, lattice_size_t latticeXSize, lattice_size_t latticeYSize, lattice_size_t latticeZSize, site_size_t particlesPerSite, const unsigned int bytes_per_particle, si_dist_t latticeSpacing, const uint8_t * latticeData, const uint8_t * latticeSitesData, bool rowMajorData=true);
     virtual void generateTrajectory();
+    virtual void setReactionRate(unsigned int rxid, float rate);
 
 protected:
 	virtual int hookSimulation(double time, CudaIntLattice *lattice);
@@ -83,45 +83,58 @@ protected:
 	virtual void writeLatticeSites(double time, CudaIntLattice * lattice);
     virtual void recordSpeciesCounts(double time, CudaIntLattice * lattice, lm::io::SpeciesCounts * speciesCountsDataSet);
     virtual void writeSpeciesCounts(lm::io::SpeciesCounts * speciesCountsDataSet);
+    virtual void hookCheckSimulation(double time, CudaIntLattice * lattice);
     virtual void runTimestep(CudaIntLattice * lattice, uint32_t timestep);
     virtual uint64_t getTimestepSeed(uint32_t timestep, uint32_t substep);
     virtual void setLatticeData(const uint8_t* latticeData);
+    virtual void computePropensities();
+    virtual void copyModelsToDevice();
 
-    #ifdef MPD_CUDA_3D_GRID_LAUNCH
+#ifdef MPD_CUDA_3D_GRID_LAUNCH
     virtual void calculateXLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int maxXBlockSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
     virtual void calculateYLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockYSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
     virtual void calculateZLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockZSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
     virtual void calculateReactionLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockYSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
-    #else
+#else
     virtual void calculateXLaunchParameters(unsigned int * gridXSize, dim3 * gridSize, dim3 * threadBlockSize, const unsigned int maxXBlockSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
     virtual void calculateYLaunchParameters(unsigned int * gridXSize, dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockYSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
     virtual void calculateZLaunchParameters(unsigned int * gridXSize, dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockZSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
     virtual void calculateReactionLaunchParameters(unsigned int * gridXSize, dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockYSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize);
-    #endif
+#endif
 
 protected:
     uint32_t seed;
-    void * cudaOverflowList;
-    cudaStream_t cudaStream;
     double tau;
+    bool reactionModelModified;
+
+    void *       cudaOverflowList;
+    cudaStream_t cudaStream;
+
     uint32_t overflowTimesteps;
     uint32_t overflowListUses;
 
+    // Stored model parameters for const memroy
+    float* model_reactionRates;
+    size_t zeroOrderSize, firstOrderSize, secondOrderSize;
+    float *zeroOrder, *firstOrder, *secondOrder;
+
 #ifdef MPD_GLOBAL_S_MATRIX
 	uint8_t *RLG;	// Device global memory pointer for RL matrix
-	int8_t *SG;		// Device global memory pointer for S matrix
+	int8_t  *SG;	// Device global memory pointer for S matrix
 #endif
+
 #ifdef MPD_GLOBAL_T_MATRIX
 	float *TG;
 #endif
 
 #ifdef MPD_GLOBAL_R_MATRIX
-    float *reactionRatesG;
+    float        *reactionRatesG;
     unsigned int *reactionOrdersG;
     unsigned int *reactionSitesG;
     unsigned int *D1G;
     unsigned int *D2G;
 #endif
+
 	float *propZeroOrder;
 	float *propFirstOrder;
 	float *propSecondOrder;
@@ -129,40 +142,136 @@ protected:
 
 
 namespace intmpdrdme_dev {
+
 #ifdef MPD_FREAKYFAST
 #ifdef MPD_GLOBAL_R_MATRIX
-__global__ void precomp_reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList, const __restrict__ int8_t *SG, const __restrict__ uint8_t *RLG, const unsigned int* __restrict__ reactionOrdersG, const unsigned int* __restrict__ reactionSitesG, const unsigned int* __restrict__ D1G, const unsigned int* __restrict__ D2G, const float* reactionRatesG, const float* __restrict__ qp0, const float* __restrict__ qp1, const float* __restrict__ qp2);
+    __global__ void precomp_reaction_kernel(const unsigned int* inLattice,
+                                            const uint8_t * inSites,
+                                            unsigned int* outLattice,
+                                            const unsigned long long timestepHash,
+                                            unsigned int* siteOverflowList,
+                                            const __restrict__ int8_t *SG,
+                                            const __restrict__ uint8_t *RLG,
+                                            const unsigned int* __restrict__ reactionOrdersG,
+                                            const unsigned int* __restrict__ reactionSitesG,
+                                            const unsigned int* __restrict__ D1G,
+                                            const unsigned int* __restrict__ D2G,
+                                            const float* reactionRatesG,
+                                            const float* __restrict__ qp0,
+                                            const float* __restrict__ qp1,
+                                            const float* __restrict__ qp2);
 #else
-__global__ void precomp_reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList, const __restrict__ int8_t *SG, const __restrict__ uint8_t *RLG, const float* __restrict__ qp0, const float* __restrict__ qp1, const float* __restrict__ qp2);
+    __global__ void precomp_reaction_kernel(const unsigned int* inLattice,
+                                            const uint8_t * inSites,
+                                            unsigned int* outLattice,
+                                            const unsigned long long timestepHash,
+                                            unsigned int* siteOverflowList,
+                                            const __restrict__ int8_t *SG,
+                                            const __restrict__ uint8_t *RLG,
+                                            const float* __restrict__ qp0,
+                                            const float* __restrict__ qp1,
+                                            const float* __restrict__ qp2);
 #endif
 #endif
 
 #ifdef MPD_CUDA_3D_GRID_LAUNCH
-__global__ void mpd_x_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList);
-__global__ void mpd_y_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList);
-__global__ void mpd_z_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList);
+    __global__ void mpd_x_kernel(const unsigned int* inLattice,
+                                 const uint8_t * inSites,
+                                 unsigned int* outLattice,
+                                 const unsigned long long timestepHash,
+                                 unsigned int* siteOverflowList);
+    __global__ void mpd_y_kernel(const unsigned int* inLattice,
+                                 const uint8_t * inSites,
+                                 unsigned int* outLattice,
+                                 const unsigned long long timestepHash,
+                                 unsigned int* siteOverflowList);
+    __global__ void mpd_z_kernel(const unsigned int* inLattice,
+                                 const uint8_t * inSites,
+                                 unsigned int* outLattice,
+                                 const unsigned long long timestepHash,
+                                 unsigned int* siteOverflowList);
 #ifdef MPD_GLOBAL_S_MATRIX
 #ifdef MPD_GLOBAL_R_MATRIX
-__global__ void reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList,  const int8_t* __restrict__ SG, const uint8_t* __restrict__ RLG, const unsigned int* __restrict__ reactionOrdersG, const unsigned int* __restrict__ reactionSitesG, const unsigned int* __restrict__ D1G, const unsigned int* __restrict__ D2G, const float* __restrict__ reactionRatesG);
+    __global__ void reaction_kernel(const unsigned int* inLattice,
+                                    const uint8_t * inSites,
+                                    unsigned int* outLattice,
+                                    const unsigned long long timestepHash,
+                                    unsigned int* siteOverflowList,
+                                    const int8_t* __restrict__ SG,
+                                    const uint8_t* __restrict__ RLG,
+                                    const unsigned int* __restrict__ reactionOrdersG,
+                                    const unsigned int* __restrict__ reactionSitesG,
+                                    const unsigned int* __restrict__ D1G,
+                                    const unsigned int* __restrict__ D2G,
+                                    const float* __restrict__ reactionRatesG);
 #else
-__global__ void reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList,  const int8_t* __restrict__ SG, const uint8_t* __restrict__ RLG);
+    __global__ void reaction_kernel(const unsigned int* inLattice,
+                                    const uint8_t * inSites,
+                                    unsigned int* outLattice,
+                                    const unsigned long long timestepHash,
+                                    unsigned int* siteOverflowList,
+                                    const int8_t* __restrict__ SG,
+                                    const uint8_t* __restrict__ RLG);
 #endif
 #else
-__global__ void reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned long long timestepHash, unsigned int* siteOverflowList);
+    __global__ void reaction_kernel(const unsigned int* inLattice,
+                                    const uint8_t * inSites,
+                                    unsigned int* outLattice,
+                                    const unsigned long long timestepHash,
+                                    unsigned int* siteOverflowList);
 #endif
 
 #else
-__global__ void mpd_x_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned int gridXSize, const unsigned long long timestepHash, unsigned int* siteOverflowList);
-__global__ void mpd_y_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned int gridXSize, const unsigned long long timestepHash, unsigned int* siteOverflowList);
-__global__ void mpd_z_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned int gridXSize, const unsigned long long timestepHash, unsigned int* siteOverflowList);
+    __global__ void mpd_x_kernel(const unsigned int* inLattice,
+                                 const uint8_t * inSites,
+                                 unsigned int* outLattice,
+                                 const unsigned int gridXSize,
+                                 const unsigned long long timestepHash,
+                                 unsigned int* siteOverflowList);
+    __global__ void mpd_y_kernel(const unsigned int* inLattice,
+                                 const uint8_t * inSites,
+                                 unsigned int* outLattice,
+                                 const unsigned int gridXSize,
+                                 const unsigned long long timestepHash,
+                                 unsigned int* siteOverflowList);
+    __global__ void mpd_z_kernel(const unsigned int* inLattice,
+                                 const uint8_t * inSites,
+                                 unsigned int* outLattice,
+                                 const unsigned int gridXSize,
+                                 const unsigned long long timestepHash,
+                                 unsigned int* siteOverflowList);
 #ifdef MPD_GLOBAL_S_MATRIX
 #ifdef MPD_GLOBAL_R_MATRIX
-__global__ void reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned int gridXSize, const unsigned long long timestepHash, unsigned int* siteOverflowList,  const int8_t* __restrict__ SG, const uint8_t* __restrict__ RLG, const unsigned int* __restrict__ reactionOrdersG, const unsigned int* __restrict__ reactionSitesG, const unsigned int* __restrict__ D1G, const unsigned int* __restrict__ D2G, const float* __restrict__ reactionRatesG);
+    __global__ void reaction_kernel(const unsigned int* inLattice,
+                                    const uint8_t * inSites,
+                                    unsigned int* outLattice,
+                                    const unsigned int gridXSize,
+                                    const unsigned long long timestepHash,
+                                    unsigned int* siteOverflowList,
+                                    const int8_t* __restrict__ SG,
+                                    const uint8_t* __restrict__ RLG,
+                                    const unsigned int* __restrict__ reactionOrdersG,
+                                    const unsigned int* __restrict__ reactionSitesG,
+                                    const unsigned int* __restrict__ D1G,
+                                    const unsigned int* __restrict__ D2G,
+                                    const float* __restrict__ reactionRatesG);
 #else
-__global__ void reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned int gridXSize, const unsigned long long timestepHash, unsigned int* siteOverflowList, const int8_t* __restrict__ SG, const uint8_t* __restrict__  RLG);
+    __global__ void reaction_kernel(const unsigned int* inLattice,
+                                    const uint8_t * inSites,
+                                    unsigned int* outLattice,
+                                    const unsigned int gridXSize,
+                                    const unsigned long long timestepHash,
+                                    unsigned int* siteOverflowList,
+                                    const int8_t* __restrict__ SG,
+                                    const uint8_t* __restrict__  RLG);
 #endif
 #else
-__global__ void reaction_kernel(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned int gridXSize, const unsigned long long timestepHash, unsigned int* siteOverflowList);
+    __global__ void reaction_kernel(const unsigned int* inLattice,
+                                    const uint8_t * inSites,
+                                    unsigned int* outLattice,
+                                    const unsigned int gridXSize,
+                                    const unsigned long long timestepHash,
+                                    unsigned int* siteOverflowList);
 #endif
 #endif
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
-project(lm VERSION 2.4.0 LANGUAGES C CXX DESCRIPTION "Lattice Microbes")
+project(lm VERSION 2.5.0 LANGUAGES C CXX DESCRIPTION "Lattice Microbes")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -82,7 +82,12 @@ endif()
 
 
 if (OPT_CUDA)
+    set(CUDA_ARCHITECTURES "70;75;80;86" CACHE STRING "CUDA architectures to compile for")
     include(cmake/cuda.cmake)
+    
+    message(STATUS "Final CUDA_ARCHITECTURES: ${CMAKE_CUDA_ARCHITECTURES}")
+    
+    # include(cmake/cuda.cmake)
     if (PROF_USE_NVTX)
         target_include_directories(lmcore PUBLIC ${NVTX_INCLUDE_DIR})
         target_link_libraries(lmcore PUBLIC ${NVTX_LIBRARY})

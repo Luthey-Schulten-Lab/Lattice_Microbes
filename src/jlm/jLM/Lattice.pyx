@@ -11,6 +11,9 @@ from posix.stdlib cimport *
 from libc.time cimport *
 from libc.stdint cimport *
 
+ctypedef fused plattice_type:
+    uint8_t
+    uint32_t
 
 cdef void latticeHistogram3(int[:,:,:] target, unsigned char[:,:,:,:] src, int[:] idxs) nogil:
     cdef int nx,ny,nz,np,ni,x,y,z,p,i
@@ -132,7 +135,7 @@ def latticeHistogram(unsigned char[:,:,:,:] src, int[:] idxs, axes=None, target=
 
 
 
-def countParticlesInLattice(uint32_t[:,:,:,:,] pLattice, unsigned char[:,:,:] sLattice, int[:] spIdList, int[:] regIdList):
+def countParticlesInLattice(plattice_type[:,:,:,:,] pLattice, unsigned char[:,:,:] sLattice, int[:] spIdList, int[:] regIdList):
     """Count particles.
 
     Given a list of region ids and species ids, count all particles of those 
@@ -175,14 +178,14 @@ def countParticlesInLattice(uint32_t[:,:,:,:,] pLattice, unsigned char[:,:,:] sL
                                     ct += 1
     return ct
 
-def hdf2lmRep(uint32_t[:,:,:,:,:] plattice1, uint32_t[:,:,:,:] plattice0, txTable=None):
+def hdf2lmRep(plattice_type[:,:,:,:,:] plattice1, plattice_type[:,:,:,:] plattice0, txTable=None):
     """Convert an HDF5 particle lattice representation to LM native format
 
     Args:
         plattice1 (:py:class:`numpy.ndarray`):
-            Output LM format (dtype=uint8, shape=(nw,nz,ny,nx,np))
+            Output LM format (dtype=uint8/uint32, shape=(nw,nz,ny,nx,np))
         plattice0 (:py:class:`numpy.ndarray`):
-            Input HDF5 format (dtype=uint8, shape=(nx,ny,nz,nw*np))
+            Input HDF5 format (dtype=uint8/uint32, shape=(nx,ny,nz,nw*np))
     Keyword Args:
         txTable (:py:class:`numpy.ndarray`):
             Optional particle id translation table: lmNative = txTable[h5Native]
@@ -218,12 +221,12 @@ def hdf2lmRep(uint32_t[:,:,:,:,:] plattice1, uint32_t[:,:,:,:] plattice0, txTabl
                             plattice1[w,z,y,x,p] = table[plattice0[x,y,z,p+np*w]]
 
 
-def latticeStatsAll_h5fmt(uint32_t[:,:,:,:] plattice, unsigned char[:,:,:] slattice):
+def latticeStatsAll_h5fmt(plattice_type[:,:,:,:] plattice, unsigned char[:,:,:] slattice):
     """Compute number of particles in a particular site type, and the number of those site types
 
     Args:
         plattice (:py:class:`numpy.ndarray`):
-            Particle lattice (H5 format: shape=(nx,ny,nz,pps), dtype=uint8)
+            Particle lattice (H5 format: shape=(nx,ny,nz,pps), dtype=uint8/uint32)
         slattice (:py:class:`numpy.ndarray`):
             Site lattice (HDF5 format: shape=(nx,ny,nz), dtype=uint8)
 
@@ -259,12 +262,12 @@ def latticeStatsAll_h5fmt(uint32_t[:,:,:,:] plattice, unsigned char[:,:,:] slatt
 
     return np_pCount, np_sCount
 
-def latticeStatsAll(uint32_t[:,:,:,:,:] plattice, unsigned char[:,:,:] slattice):
+def latticeStatsAll(plattice_type[:,:,:,:,:] plattice, unsigned char[:,:,:] slattice):
     """ Compute number of particles in a particular site type, and the number of those site types
 
     Args:
         plattice (:py:class:`numpy.ndarray`):
-            Particle lattice (shape=(nw,nz,ny,nx,np), dtype=uint8)
+            Particle lattice (shape=(nw,nz,ny,nx,np), dtype=uint8/uint32)
         slattice (:py:class:`numpy.ndarray`):
             Site lattice (HDF5 format: shape=(nz,ny,nx), dtype=uint8)
 
@@ -328,12 +331,12 @@ def countSites(unsigned char[:,:,:] slattice):
     return np_count
 
 
-def appendParticle(uint32_t[:,:,:,:,:] pLattice, uint64_t x, uint64_t y, uint64_t z, uint64_t sp):
+def appendParticle(plattice_type[:,:,:,:,:] pLattice, uint64_t x, uint64_t y, uint64_t z, uint64_t sp):
     """Add a particle to a lattice site
 
     Args:
         plattice (:py:class:`numpy.ndarray`):
-            Particle lattice (H5 format: shape=(nw,nz,ny,nz,np), dtype=uint8)
+            Particle lattice (H5 format: shape=(nw,nz,ny,nz,np), dtype=uint8/uint32)
         x (int):
             x coordinate
         y (int):
@@ -385,10 +388,10 @@ def populateLattice(pLattice, sLattice, particleDensity, exact=True, mask=None):
 
     Args:
         pLattice (:py:class:`numpy.ndarray`):
-            Particle lattice (H5 format, shape=(nw,nz,ny,nx,np), dtype=uint32)
+            Particle lattice (H5 format, shape=(nw,nz,ny,nx,np), dtype=uint8/uint32)
         sLattice (:py:class:`numpy.ndarray`):
             Site lattice (H5 format, shape=(nz,ny,nx), dtype=uint8)
-        particleDenstiy (:py:class:`numpy.ndarray`):
+        particleDensity (:py:class:`numpy.ndarray`):
             Particle probability, (shape=(Nsites,Nsps), dtype=float64)
     Keyword Args:
         exact (bool):
@@ -413,11 +416,14 @@ def populateLattice(pLattice, sLattice, particleDensity, exact=True, mask=None):
     else:
         ex = 0
 
-    populateLattice_(pLattice, sLattice, mk, particleDensity, ex)
+    if npy.issubdtype(pLattice.dtype, npy.uint32):
+        populateLattice_[uint32_t](pLattice, sLattice, mk, particleDensity, ex)
+    else:
+        populateLattice_[uint8_t](pLattice, sLattice, mk, particleDensity, ex)
 
 
-cdef void populateLattice_(uint32_t[:,:,:,:,:] pLattice, uint8_t[:,:,:] sLattice, 
-                           uint8_t[:,:,:] mask, double[:,:] particleDensityView, int exact):
+cdef void populateLattice_(plattice_type[:,:,:,:,:] pLattice, uint8_t[:,:,:] sLattice, uint8_t[:,:,:] mask,
+                           double[:,:] particleDensityView, int exact):
     cdef int64_t sp,st
     cdef int64_t w,x,y,z,p
     cdef int64_t spIdx,taIdx,laIdx,ltIdx
@@ -434,7 +440,7 @@ cdef void populateLattice_(uint32_t[:,:,:,:,:] pLattice, uint8_t[:,:,:] sLattice
     cdef int64_t Np = pLattice.shape[4]
     cdef int64_t siteSize = Nw*Np
 
-    cdef uint32_t* pLatticeFlat = <uint32_t*> &(pLattice[0,0,0,0,0])
+    cdef plattice_type* pLatticeFlat = <plattice_type*> &(pLattice[0,0,0,0,0])
     cdef double* particleDensity= <double*> &(particleDensityView[0,0])
 
     cdef uint32_t* siteTmp = <uint32_t*> calloc(siteSize,sizeof(uint32_t))
@@ -810,14 +816,14 @@ def checkSite(unsigned char[:,:,:] sites,
 
 
 
-def checkParticle(uint32_t[:,:,:,:] lattice,
-                  uint32_t[:] targets,
+def checkParticle(plattice_type[:,:,:,:] lattice,
+                  plattice_type[:] targets,
                   long int[:,:,:] mask):
     """
     Generate a lattice set to 1 where if a particle in `targets` is present in at the lattice site, 0 otherwise.
 
     :param lattice:   Particle lattice.
-    :type  lattice:   unsigned char[:,:,:,:]
+    :type  lattice:   uint8/uint32[:,:,:,:]
     :param targets:   List of particle types to flag.
     :type  targets:   unsigned char[:]
     :param mask:      Output lattice (preallocated)

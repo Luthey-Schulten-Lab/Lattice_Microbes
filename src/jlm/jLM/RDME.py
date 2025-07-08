@@ -107,10 +107,12 @@ class SpatialModel(AN.LatticeAnalysisMixin, JD.JupyterDisplayMixin):
     def hookInterval(self, val):
         setattr(self, "_hookInterval", val)
 
-    def __init__(self, name, filename, dimensions, latticeSpacing ):
+    def __init__(self, name, filename, dimensions, latticeSpacing, latticeType=None ):
         self.name = name                                   #: str: Simulation name
 
         self.filename = filename                           #: str: LM data filename
+
+        self.latticeType = latticeType                     #: str: Lattice type (Int or Byte)
 
         self.NA = 6.02214085774e23                         #: float: Avogadro's number
 
@@ -118,11 +120,11 @@ class SpatialModel(AN.LatticeAnalysisMixin, JD.JupyterDisplayMixin):
         self._particleDistCount = [] # [ (regid,spid, count), ... ]
         self._particleDistConc = [] # [ (regid,spid, conc), ... ]
         self._transitionRates = [] # [ (sp, from, to, rateId), ...] where {sp,from,to} = None|id, None means all
-        self._reactionLocations = [] # [ (rxid, regid), ...] 
+        self._reactionLocations = [] # [ (rxid, regid), ...]
 
-        self.resizeLattice(dimensions, latticeSpacing)
+        self.resizeLattice(dimensions, latticeSpacing, latticeType=latticeType)
 
-    def resizeLattice(self, dimensions, latticeSpacing):
+    def resizeLattice(self, dimensions, latticeSpacing, latticeType=None):
         import lm
         """Resize lattice
 
@@ -131,6 +133,8 @@ class SpatialModel(AN.LatticeAnalysisMixin, JD.JupyterDisplayMixin):
                 New lattice dimensions
             latticeSpacing (float):
                 Lattice spacing in meters
+            latticeType (str):
+                "Byte" / "Int"
         """
         nx,ny,nz = dimensions
         self.siteV = 1000 * latticeSpacing**3                             #: float: Subvolume size in liters
@@ -140,7 +144,11 @@ class SpatialModel(AN.LatticeAnalysisMixin, JD.JupyterDisplayMixin):
         self.latticeSpacing = latticeSpacing                              #: float: Lattice spacing in meters
         self.pps = lm.getCompiledLatticeMaxOccupancy()                    #: int: Particles per site
 
-        self.lattice = lm.IntLattice(nz,ny,nx, latticeSpacing, self.pps)  #: :py:class:`lm.ByteLattice`: LM lattice object
+        if latticeType == 'Int':
+            self.lattice = lm.IntLattice(nz,ny,nx, latticeSpacing, self.pps)  #: :py:class:`lm.IntLattice`: LM lattice object
+        else:
+            self.lattice = lm.ByteLattice(nz,ny,nx, latticeSpacing, self.pps) #: :py:class:`lm.ByteLattice`: LM lattice object
+
         self.siteLattice = self.lattice.getSiteLatticeView()              #: :py:class:`~numpy.ndarray`: NumPy view of site lattice
         self.particleLattice = self.lattice.getParticleLatticeView()      #: :py:class:`~numpy.ndarray`: NumPy view of particle lattice
         self.maxConcentration = self.pps/self.siteNAV                     #: float: Concentration of a fully packed lattice
@@ -444,7 +452,7 @@ class SpatialModel(AN.LatticeAnalysisMixin, JD.JupyterDisplayMixin):
             f.setParameter("seed", str(seed))
             f.close()
         lm.runSolver(self.filename, replicate, solver, cudaDevices, int(checkpointInterval))
-        return File(self.filename)
+        return File(self.filename, latticeType=self.latticeType)
 
 
 class Sim(LM.LmWriteMixin, SpatialModel):
@@ -454,7 +462,7 @@ class Sim(LM.LmWriteMixin, SpatialModel):
         self._placeAllParticles()
         return super().particleStatistics(particleLattice,siteLattice)
 
-    def __init__(self, name, filename, dimensions, latticeSpacing, regionName, dt=None):
+    def __init__(self, name, filename, dimensions, latticeSpacing, regionName, latticeType=None, dt=None):
         """Create new RDME object
 
         Args:
@@ -468,24 +476,29 @@ class Sim(LM.LmWriteMixin, SpatialModel):
                 Lattice spacing in meters
             regionName (str):
                 Name of the default region
+            latticeType (str):
+                "Byte" / "Int"
             dt (float):
                 Timestep
         """
-        super().__init__(name, filename, dimensions, latticeSpacing)
+        super().__init__(name, filename, dimensions, latticeSpacing, latticeType=latticeType)
 
-        self.speciesList = BT.SimObjs(self, T.BuilderSpecies,idbase=1) #: :py:class:`~jLM.BaseTypes.SimObjs`: List of species types
-        self.regionList = BT.SimObjs(self, T.BuilderRegion)            #: :py:class:`~jLM.BaseTypes.SimObjs`: List of regions
-        self.reactionList = BT.SimObjs(self, T.BuilderReaction)        #: :py:class:`~jLM.BaseTypes.SimObjs`: List of reactions
-        self.rxnRateList = BT.SimObjs(self, T.RateConst)               #: :py:class:`~jLM.BaseTypes.SimObjs`: List of reaction rates
-        self.diffRateList = BT.SimObjs(self, T.DiffusionConst)         #: :py:class:`~jLM.BaseTypes.SimObjs`: List of diffusion constants
-        self.sp = self.speciesList.getAutoNamespace()             #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient species access
-        self.reg = self.regionList.getAutoNamespace()             #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient region access
-        self.rc = self.rxnRateList.getAutoNamespace()             #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient reaction rate access
-        self.dc = self.diffRateList.getAutoNamespace()            #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient diffusion constant access
+        self.speciesList  = BT.SimObjs(self, T.BuilderSpecies, idbase=1) #: :py:class:`~jLM.BaseTypes.SimObjs`: List of species types
+        self.regionList   = BT.SimObjs(self, T.BuilderRegion)            #: :py:class:`~jLM.BaseTypes.SimObjs`: List of regions
+        self.reactionList = BT.SimObjs(self, T.BuilderReaction)          #: :py:class:`~jLM.BaseTypes.SimObjs`: List of reactions
+        self.rxnRateList  = BT.SimObjs(self, T.RateConst)                #: :py:class:`~jLM.BaseTypes.SimObjs`: List of reaction rates
+        self.diffRateList = BT.SimObjs(self, T.DiffusionConst)           #: :py:class:`~jLM.BaseTypes.SimObjs`: List of diffusion constants
+        self.sp  = self.speciesList.getAutoNamespace()  #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient species access
+        self.reg = self.regionList.getAutoNamespace()   #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient region access
+        self.rc  = self.rxnRateList.getAutoNamespace()  #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient reaction rate access
+        self.dc  = self.diffRateList.getAutoNamespace() #: :py:class:`~jLM.BaseTypes.Namespace`: Convienient diffusion constant access
 
         self._particlesPlaced = False
         self.filename = filename
-        self.bytesPerParticle = 4
+        if latticeType == 'Int':
+            self.bytesPerParticle = 4
+        else:
+            self.bytesPerParticle = 1
         self.region(regionName)
         if dt is not None:
             self.timestep = dt
@@ -493,7 +506,7 @@ class Sim(LM.LmWriteMixin, SpatialModel):
 
 class File(AN.TrajAnalysisMixin, JD.FileJupyterMixin, LM.LmReadMixin, SpatialModel):
     """Load a previously defined simulation"""
-    def __init__(self, fname, replicate=1):
+    def __init__(self, fname, replicate=1, latticeType=None):
         """Load a RDME simulation file
 
         Args:
@@ -501,6 +514,8 @@ class File(AN.TrajAnalysisMixin, JD.FileJupyterMixin, LM.LmReadMixin, SpatialMod
                 LM data filename
             replicate (int):
                 Replicate to load initially
+            latticeType (str):
+                "Byte" / "Int"
 
         Note:
             jLM includes some metadata in the Lattice Microbes HDF5 file which 
@@ -514,11 +529,7 @@ class File(AN.TrajAnalysisMixin, JD.FileJupyterMixin, LM.LmReadMixin, SpatialMod
                        int(self.h5['Model/Diffusion'].attrs['latticeXSize']))
         latticeSpacing = float(self.h5['Model/Diffusion'].attrs['latticeSpacing'])
 
-        super().__init__(name, fname, naturalDims, latticeSpacing)
-        self.speciesList = BT.SimObjs(self, T.TrajSpecies,idbase=1) 
-        self.regionList = BT.SimObjs(self, T.TrajRegion)
-        self.sp = self.speciesList.getAutoNamespace()
-        self.reg = self.regionList.getAutoNamespace()
+        super().__init__(name, fname, naturalDims, latticeSpacing, latticeType=latticeType)
 
         self.speciesList = BT.SimObjs(self, T.TrajSpecies,idbase=1) #: :py:class:`~jLM.BaseTypes.SimObjs`: List of species types
         self.regionList = BT.SimObjs(self, T.TrajRegion)            #: :py:class:`~jLM.BaseTypes.SimObjs`: List of regions

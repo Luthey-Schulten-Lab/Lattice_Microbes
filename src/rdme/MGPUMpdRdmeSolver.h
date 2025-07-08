@@ -8,7 +8,6 @@
  * 			     University of Illinois at Urbana-Champaign
  * 			     http://www.scs.uiuc.edu/~schulten
  * 
- * Overflow algorithm in RDME solvers and CPU assignment (2012)
  * Developed by: Roberts Group
  * 			     Johns Hopkins University
  * 			     http://biophysics.jhu.edu/roberts/
@@ -47,7 +46,6 @@
 #define LM_RDME_MGPUMPDRDMESOLVER_H_
 
 #include "cuda/lm_cuda.h"
-
 #include "core/ResourceAllocator.h"
 #include "rdme/RDMESolver.h"
 #include "rdme/ByteLattice.h"
@@ -79,6 +77,7 @@ class MGPUMpdRdmeSolver : public RDMESolver
 {
     using CMESolver::hookSimulation;
     using RDMESolver::buildDiffusionModel;
+
 public:
     MGPUMpdRdmeSolver();
     virtual ~MGPUMpdRdmeSolver();
@@ -88,17 +87,18 @@ public:
     virtual void buildModel(const uint numberSpeciesA, const uint numberReactionsA, const uint * initialSpeciesCountsA, const uint * reactionTypeA, const double * kA, const int * SA, const uint * DA, const uint kCols=1);
     virtual void buildDiffusionModel(const uint numberSiteTypesA, const double * DFA, const uint * RLA, lattice_size_t latticeXSize, lattice_size_t latticeYSize, lattice_size_t latticeZSize, site_size_t particlesPerSite, const unsigned int bytes_per_particle, si_dist_t latticeSpacing, const uint8_t * latticeData, const uint8_t * latticeSitesData, bool rowMajorData=true);
     virtual void generateTrajectory();
-
-	int reactionModelModified;
 	virtual void setReactionRate(unsigned int rxid, float rate);
 
 protected:
     virtual void allocateLattice(lattice_size_t latticeXSize, lattice_size_t latticeYSize, lattice_size_t latticeZSize, site_size_t particlesPerSite, const unsigned int bytes_per_particle, si_dist_t latticeSpacing);
     virtual void writeLatticeData(double time, ByteLattice * lattice, lm::io::Lattice * latticeDataSet);
+	virtual void writeLatticeSites(double time, ByteLattice * lattice);
     virtual void recordSpeciesCounts(double time, ByteLattice * lattice, lm::io::SpeciesCounts * speciesCountsDataSet);
     virtual void writeSpeciesCounts(lm::io::SpeciesCounts * speciesCountsDataSet);
+	virtual void hookCheckSimulation(double time, ByteLattice * lattice);
     virtual int run_next_timestep(int gpu, uint32_t timestep);
     virtual uint64_t getTimestepSeed(uint32_t timestep, uint32_t substep);
+	
 	virtual void copyModelsToDevice(int gpu);
 	virtual void initialize_decomposition();
 	virtual void start_threads();
@@ -120,33 +120,35 @@ protected:
 
 protected:
     uint32_t seed;
-    void * cudaOverflowList;
     double tau;
+
     uint32_t overflowTimesteps;
     uint32_t overflowListUses;
-    int overflow_handling;
+    int      overflow_handling;
 
 	// Stored model parameters for const memory
 	unsigned int* model_reactionOrders;
 	unsigned int* model_reactionSites;
+	float*        model_reactionRates;
+
 	unsigned int* model_D1;
 	unsigned int* model_D2;
-	int8_t* model_S;
-	float* model_T;
+
+	int8_t*  model_S;
+	float*   model_T;
 	uint8_t* model_RL;
-	float* model_reactionRates;
-	size_t zeroOrderSize,firstOrderSize,secondOrderSize;
-	float *zeroOrder,*firstOrder,*secondOrder;
+
+	size_t zeroOrderSize, firstOrderSize, secondOrderSize;
+	float *zeroOrder, *firstOrder, *secondOrder;
 
 	pthread_barrier_t start_barrier, stop_barrier, simulation_barrier;
-	pthread_barrier_t overflow_barrier1, overflow_barrier2;
 	MultiGPUMapper *mapper;
 	ResourceAllocator::ComputeResources *resources;
 	gpu_worker_thread_params *threads;
 
 	int timesteps_to_run;
-	uint32_t absolute_timestep;
-	
+	uint32_t current_timestep;
+	bool reactionModelModified;
 	double printPerfInterval;
 	
 	bool aggcopy_x_unpack;
@@ -157,13 +159,10 @@ protected:
 struct gpu_worker_thread_params
 {
     pthread_t thread;
-    //MultiCUDALattice *lattice;
     MGPUMpdRdmeSolver *runner;
     MultiGPUMapper *mapper;
     int gpu;
     int ngpus;
-    pthread_barrier_t *runner_sync;
-    pthread_barrier_t *worker_sync;
     int timesteps_to_run;
     bool lattice_synched;
     int load_balance_counter;
@@ -172,7 +171,6 @@ struct gpu_worker_thread_params
 	unsigned int *dLattice, *dLatticeTmp;
 	uint8_t *dSites;
 	cudaStream_t stream1, stream2;
-	cudaEvent_t x_finish, diffusion_finished, rx_finish;
 	unsigned int *h_overflows, *d_overflows;
 
 	// kernel launch params

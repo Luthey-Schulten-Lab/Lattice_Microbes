@@ -225,14 +225,6 @@ site_size_t ByteLattice::getOccupancy(lattice_size_t index) const
 	return occupancy;
 }
 
-/**
- * Gets the current state of a give site in the lattice.
- * 
- * @param x	The zero based x index of the site to retrieve.
- * @param y	The zero based y index of the site to retrieve.
- * @param z	The zero based z index of the site to retrieve.
- * @return	The value in the lattice at the specified site.
- */
 particle_t ByteLattice::getParticle(lattice_size_t x, lattice_size_t y, lattice_size_t z, site_size_t particleIndex) const
 {
 	// Make sure the arguments are valid.
@@ -270,14 +262,6 @@ particle_t ByteLattice::getParticle(lattice_size_t index, site_size_t particleIn
     return ((uint8_t *)(&particles[index]))[byteIndex];
 }
 
-/**
- * Sets the current state of a give site in the lattice.
- * 
- * @param x	The zero based x index of the site to set.
- * @param y	The zero based y index of the site to set.
- * @param z	The zero based z index of the site to set.
- * @param 
- */
 void ByteLattice::addParticle(lattice_size_t x, lattice_size_t y, lattice_size_t z, particle_t particle)
 {
 	// Make sure the arguments are valid.

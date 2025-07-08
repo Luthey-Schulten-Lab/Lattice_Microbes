@@ -100,6 +100,7 @@
 #include "rdme/RDMESolver.h"
 #ifdef OPT_CUDA
 #include "rdme/MGPUMpdRdmeSolver.h"
+#include "rdme/MGPUIntMpdRdmeSolver.h"
 #include "rdme/MpdRdmeSolver.h"
 #include "rdme/IntMpdRdmeSolver.h"
 #endif
@@ -955,6 +956,7 @@ public:
         virtual void initialize(unsigned int replicate, map<string,string> * parameters, ResourceAllocator::ComputeResources * resources);
         virtual bool needsReactionModel();
         virtual bool needsDiffusionModel();
+        virtual void setReactionRate(unsigned int rxid, float rate);
         //virtual void generateTrajectory();
 protected:
     virtual int hookSimulation(double time, CudaByteLattice *lattice);
@@ -980,6 +982,22 @@ protected:
     virtual int hookSimulation(double time, ByteLattice *lattice);
 };
 
+%feature("director") MGPUIntMpdRdmeSolver;
+%feature("notabstract")  MGPUIntMpdRdmeSolver;
+class MGPUIntMpdRdmeSolver : public lm::me::MESolver
+{
+public:
+    MGPUIntMpdRdmeSolver();
+    ~MGPUIntMpdRdmeSolver();
+        virtual void initialize(unsigned int replicate, map<string,string> * parameters, ResourceAllocator::ComputeResources * resources);
+        virtual bool needsReactionModel();
+        virtual bool needsDiffusionModel();
+        virtual void setReactionRate(unsigned int rxid, float rate);
+protected:
+    virtual int hookSimulation(double time, CudaIntLattice *lattice);
+};
+
+
 %feature("director") IntMpdRdmeSolver;
 %feature("notabstract")  IntMpdRdmeSolver;
 class IntMpdRdmeSolver : public lm::me::MESolver
@@ -990,6 +1008,7 @@ public:
         virtual void initialize(unsigned int replicate, map<string,string> * parameters, ResourceAllocator::ComputeResources * resources);
         virtual bool needsReactionModel();
         virtual bool needsDiffusionModel();
+        virtual void setReactionRate(unsigned int rxid, float rate);
 protected:
     virtual int hookSimulation(double time, CudaIntLattice *lattice);
 };
@@ -1022,5 +1041,3 @@ void runSimulation(char *simulationFilename, int replicate, char *solverClass,
 
 void runSolver(char *simulationFilename, int replicate, lm::me::MESolver *solver,
                std::vector<int> cudaDevices, time_t checkpointInterval);
-
-

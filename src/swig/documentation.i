@@ -2279,6 +2279,9 @@ Tells whether the solver needs a reaction model.
 
 Actually run the simulation.  
 ";
+%feature("docstring") lm::rdme::IntMpdRdmeSolver::setReactionRate "
+`setReactionRate(rxid, rate)`  
+";
 
 // File: classlm_1_1InvalidArgException.xml
 
@@ -3330,6 +3333,9 @@ Tells whether the solver needs a reaction model.
 
 Actually run the simulation.  
 ";
+%feature("docstring") lm::rdme::MpdRdmeSolver::setReactionRate "
+`setReactionRate(rxid, rate)`  
+";
 
 // File: classlm_1_1rdme_1_1MpdTestHarness.xml
 
@@ -3622,7 +3628,7 @@ C++ includes: MultiGPUMapper.h
 ";
 
 %feature("docstring") MultiGPUMapper::publish_state "
-`publish_state(gpu, dptr, timestamp)`  
+`publish_state(gpu, timestamp, dptr)`  
 ";
 
 %feature("docstring") MultiGPUMapper::refresh "
@@ -6199,7 +6205,7 @@ C++ includes: ZDivMultiGPUMapper.h
 ";
 
 %feature("docstring") ZDivMultiGPUMapper::publish_state "
-`publish_state(gpu, dptr, key)`  
+`publish_state(gpu, key, dptr)`  
 ";
 
 %feature("docstring") ZDivMultiGPUMapper::refresh "
@@ -6228,10 +6234,6 @@ C++ includes: ZDivMultiGPUMapper.h
 
 %feature("docstring") ZDivMultiGPUMapper::getrbuf "
 `getrbuf(gpu, key, neighbor) -> unsigned int *`  
-";
-
-%feature("docstring") ZDivMultiGPUMapper::send_tbuf "
-`send_tbuf(gpu, key, neighbor, s)`  
 ";
 
 // File: structlm_1_1cme_1_1CMESolver_1_1ZerothOrderHeavisidePropensityArgs.xml
@@ -7237,4 +7239,3 @@ This function prints the copyright notice.
 // File: dir_a2f2002add987e269fffac77984b5ad9.xml
 
 // File: dir_01284e59d658032137ac90170bc51d5c.xml
-

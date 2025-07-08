@@ -55,6 +55,7 @@
 #include "rdme/MpdRdmeSolver.h"
 #include "rdme/MGPUMpdRdmeSolver.h"
 #include "rdme/IntMpdRdmeSolver.h"
+#include "rdme/MGPUIntMpdRdmeSolver.h"
 #ifdef OPT_MPI
 #include "rdme/MPIMpdRdmeSolver.h"
 #endif
@@ -84,6 +85,7 @@ void MESolverFactory::setSolver(string solver)
         solver == "lm::cme::TwoStateHillLoopSwitch" || \
         solver == "lm::rdme::MpdRdmeSolver" || \
         solver == "lm::rdme::MGPUMpdRdmeSolver" || \
+	    solver == "lm::rdme::MGPUIntMpdRdmeSolver"|| \
         solver == "lm::rdme::MPIMpdRdmeSolver" || \
         solver == "lm::rdme::IntMpdRdmeSolver" || \
         solver == "lm::rdme::NextSubvolumeSolver")
@@ -157,6 +159,10 @@ MESolver * MESolverFactory::instantiate()
 	else if (solver == "lm::rdme::MGPUMpdRdmeSolver")
 	{
 		return new lm::rdme::MGPUMpdRdmeSolver;
+	}
+        else if (solver == "lm::rdme::MGPUIntMpdRdmeSolver")
+	{
+		return new lm::rdme::MGPUIntMpdRdmeSolver;
 	}
 	else if (solver == "lm::rdme::IntMpdRdmeSolver")
 	{

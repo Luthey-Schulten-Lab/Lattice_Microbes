@@ -181,42 +181,42 @@ void MultiGPUMapper::build_descriptor(int gpu, dim3 ldim, int3 goffset, dim3 act
 
 bool MultiGPUMapper::enable_peer_access(int src, int dst)
 {
-	if(dst < 0 || dst >= num_gpus)
+	if (dst < 0 || dst >= num_gpus)
 		return false;
 
-	if(mgpu_disablePeering)
+	if (mgpu_disablePeering)
 		return false;
 
-	bool is_peered=false;
-	int local=device_id[src];
-	int peer=device_id[dst];
-	if(use(src))
+	bool is_peered = false;
+	int local = device_id[src];
+	int peer  = device_id[dst];
+
+	if (use(src))
 	{
 		std::string msg;
-		int can_access=0;
+		int can_access = 0;
 		cudaDeviceCanAccessPeer(&can_access, local, peer);
-		if(can_access)
+
+		if (can_access)
 		{
-			switch(cudaDeviceEnablePeerAccess(peer,0))
+			switch (cudaDeviceEnablePeerAccess(peer, 0))
 			{
 				case cudaSuccess:
+
 				case cudaErrorPeerAccessAlreadyEnabled:
-				
-					msg="Peer access enabled";
+					msg = "Peer access enabled";
 					cudaGetLastError(); // clear out potential already-enabled error
-					is_peered=true;
+					is_peered = true;
 					break;
 
 				default:
-					msg="Peer access setup FAILED";
+					msg = "Peer access setup FAILED";
 			}
 		}
 		else
 		{
-			msg="NOTICE: peer access not available";
+			msg = "NOTICE: peer access not available";
 		}
-
-		Print::printf(Print::DEBUG, "%s from device %d to %d (logical %d->%d)", msg.c_str(), local, peer, src, dst);
 	}
 
 	return is_peered;

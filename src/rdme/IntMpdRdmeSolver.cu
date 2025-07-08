@@ -7,8 +7,7 @@
  * Developed by: Luthey-Schulten Group
  *               University of Illinois at Urbana-Champaign
  *               http://www.scs.uiuc.edu/~schulten
- *
- * Overflow algorithm in RDME solvers and CPU assignment (2012) 
+ * 
  * Developed by: Roberts Group
  *               Johns Hopkins University
  *               http://biophysics.jhu.edu/roberts/
@@ -69,8 +68,8 @@
 #include "lptf/Profile.h"
 #include "core/Timer.h"
 
-#define MPD_WORDS_PER_SITE              (MPD_LATTICE_MAX_OCCUPANCY)// 4 
-#define MPD_APRON_SIZE                  1
+#define MPD_WORDS_PER_SITE    MPD_LATTICE_MAX_OCCUPANCY // 16 
+#define MPD_APRON_SIZE        1
 
 #include "cuda/constant.cuh"
 
@@ -94,7 +93,12 @@ namespace lm {
 namespace rdme {
 
 IntMpdRdmeSolver::IntMpdRdmeSolver()
-:RDMESolver(lm::rng::RandomGenerator::NONE),seed(0),cudaOverflowList(NULL),cudaStream(0),tau(0.0),overflowTimesteps(0),overflowListUses(0)
+:RDMESolver(lm::rng::RandomGenerator::NONE),
+ seed(0), tau(0.0),
+ cudaOverflowList(NULL), cudaStream(0),
+ overflowTimesteps(0), overflowListUses(0),
+ model_reactionRates(NULL),
+ zeroOrder(NULL), firstOrder(NULL), secondOrder(NULL)
 {
 }
 
@@ -124,7 +128,6 @@ void IntMpdRdmeSolver::initialize(unsigned int replicate, map<string,string> * p
     CUDA_EXCEPTION_CHECK(cudaStreamCreate(&cudaStream));
 }
 
-
 IntMpdRdmeSolver::~IntMpdRdmeSolver()
 {
     // Free any device memory.
@@ -140,6 +143,13 @@ IntMpdRdmeSolver::~IntMpdRdmeSolver()
         CUDA_EXCEPTION_CHECK_NOTHROW(cudaStreamDestroy(cudaStream));
         cudaStream = NULL;
     }
+
+    // Free allocated memory in IntMpdRdmeSolver
+    if (model_reactionRates)  {delete [] model_reactionRates;}
+
+    if (zeroOrder)   {delete [] zeroOrder;}
+	if (firstOrder)  {delete [] firstOrder;}
+	if (secondOrder) {delete [] secondOrder;}
 }
 
 void IntMpdRdmeSolver::allocateLattice(lattice_size_t latticeXSize, lattice_size_t latticeYSize, lattice_size_t latticeZSize, site_size_t particlesPerSite, const unsigned int bytes_per_particle, si_dist_t latticeSpacing)
@@ -159,7 +169,14 @@ void IntMpdRdmeSolver::allocateLattice(lattice_size_t latticeXSize, lattice_size
     lattice = (Lattice *)new CudaIntLattice(latticeXSize, latticeYSize, latticeZSize, latticeSpacing, particlesPerSite);
 }
 
-void IntMpdRdmeSolver::buildModel(const uint numberSpeciesA, const uint numberReactionsA, const uint * initialSpeciesCountsA, const uint * reactionTypesA, const double * KA, const int * SA, const uint * DA, const uint kCols)
+void IntMpdRdmeSolver::buildModel(const uint numberSpeciesA,
+                                  const uint numberReactionsA,
+                                  const uint * initialSpeciesCountsA,
+                                  const uint * reactionTypesA,
+                                  const double * KA,
+                                  const int * SA,
+                                  const uint * DA,
+                                  const uint kCols)
 {
     CMESolver::buildModel(numberSpeciesA, numberReactionsA, initialSpeciesCountsA, reactionTypesA, KA, SA, DA, kCols);
 
@@ -178,14 +195,16 @@ void IntMpdRdmeSolver::buildModel(const uint numberSpeciesA, const uint numberRe
     unsigned int * reactionSites = new unsigned int[numberReactions];
     unsigned int * D1 = new unsigned int[numberReactions];
     unsigned int * D2 = new unsigned int[numberReactions];
+
     for (uint i=0; i<numberReactions; i++)
     {
-	if(reactionTypes[i] == ZerothOrderPropensityArgs::REACTION_TYPE) {
-    		reactionOrders[i] = MPD_ZERO_ORDER_REACTION;
+	    if(reactionTypes[i] == ZerothOrderPropensityArgs::REACTION_TYPE)
+        {
+    	    reactionOrders[i] = MPD_ZERO_ORDER_REACTION;
     		reactionSites[i] = 0;
     		D1[i] = 0; 
     		D2[i] = 0;
-	}
+	    }
     	else if (reactionTypes[i] == FirstOrderPropensityArgs::REACTION_TYPE)
     	{
     		reactionOrders[i] = MPD_FIRST_ORDER_REACTION;
@@ -248,7 +267,6 @@ void IntMpdRdmeSolver::buildModel(const uint numberSpeciesA, const uint numberRe
     cudaMemcpy(D1G, D1, numberReactions*sizeof(unsigned int), cudaMemcpyHostToDevice);
     cudaMalloc(&D2G, numberReactions*sizeof(unsigned int));
     cudaMemcpy(D2G, D2, numberReactions*sizeof(unsigned int), cudaMemcpyHostToDevice);
-
 #else
     // R matrix stored in constant memory
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(numberReactionsC, &numberReactions, sizeof(unsigned int)));
@@ -275,9 +293,23 @@ void IntMpdRdmeSolver::buildModel(const uint numberSpeciesA, const uint numberRe
     delete [] tmpS;
 }
 
-void IntMpdRdmeSolver::buildDiffusionModel(const uint numberSiteTypesA, const double * DFA, const uint * RLA, lattice_size_t latticeXSize, lattice_size_t latticeYSize, lattice_size_t latticeZSize, site_size_t particlesPerSite, const unsigned int bytes_per_particle, si_dist_t latticeSpacing, const uint8_t * latticeData, const uint8_t * latticeSitesData, bool rowMajorData)
+void IntMpdRdmeSolver::buildDiffusionModel(const uint numberSiteTypesA,
+                                           const double * DFA,
+                                           const uint * RLA,
+                                           lattice_size_t latticeXSize,
+                                           lattice_size_t latticeYSize,
+                                           lattice_size_t latticeZSize,
+                                           site_size_t particlesPerSite,
+                                           const unsigned int bytes_per_particle,
+                                           si_dist_t latticeSpacing,
+                                           const uint8_t * latticeData,
+                                           const uint8_t * latticeSitesData,
+                                           bool rowMajorData)
 {
-    RDMESolver::buildDiffusionModel(numberSiteTypesA, DFA, RLA, latticeXSize, latticeYSize, latticeZSize, particlesPerSite, bytes_per_particle, latticeSpacing, latticeData, latticeSitesData, rowMajorData);
+    RDMESolver::buildDiffusionModel(numberSiteTypesA, DFA, RLA,
+                                    latticeXSize, latticeYSize, latticeZSize,
+                                    particlesPerSite, bytes_per_particle,
+                                    latticeSpacing, latticeData, latticeSitesData, rowMajorData);
 
     // Get the time step.
     tau=atof((*parameters)["timestep"].c_str());
@@ -286,13 +318,13 @@ void IntMpdRdmeSolver::buildDiffusionModel(const uint numberSiteTypesA, const do
     // Setup the cuda transition matrix.
     const size_t DFmatrixSize = numberSpecies*numberSiteTypes*numberSiteTypes;
     if (DFmatrixSize > MPD_MAX_TRANSITION_TABLE_ENTRIES) throw Exception("The number of transition table entries exceeds the maximum supported by the solver.");
-#ifndef MPD_GLOBAL_S_MATRIX
+    #ifndef MPD_GLOBAL_S_MATRIX
     if (numberReactions*numberSiteTypes > MPD_MAX_RL_MATRIX_ENTRIES) throw Exception("The number of RL matrix entries exceeds the maximum supported by the solver.");
-#endif
+    #endif
 
-#ifndef MPD_GLOBAL_T_MATRIX
+    #ifndef MPD_GLOBAL_T_MATRIX
     if (DFmatrixSize > MPD_MAX_TRANSITION_TABLE_ENTRIES) throw Exception("The number of transition table entries exceeds the maximum supported by the solver.");
-#endif
+    #endif
 
     // Calculate the probability from the diffusion coefficient and the lattice properties.
     /*
@@ -318,15 +350,13 @@ void IntMpdRdmeSolver::buildDiffusionModel(const uint numberSiteTypesA, const do
     	tmpRL[i] = RL[i];
     }
 
-    // Copy the diffusion model to constant memory on the GPU.
-
-#ifdef MPD_GLOBAL_T_MATRIX
+    #ifdef MPD_GLOBAL_T_MATRIX
 	CUDA_EXCEPTION_CHECK(cudaMalloc(&TG, DFmatrixSize*sizeof(float)));
 	CUDA_EXCEPTION_CHECK(cudaMemcpy(TG, T, DFmatrixSize*sizeof(float), cudaMemcpyHostToDevice));
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(TC, &TG, sizeof(float*)));
-#else
+    #else
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(TC, T, DFmatrixSize*sizeof(float)));
-#endif
+    #endif
 
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(numberSpeciesC, &numberSpecies, sizeof(numberSpeciesC)));
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(numberSiteTypesC, &numberSiteTypes, sizeof(numberSiteTypesC)));
@@ -339,119 +369,39 @@ void IntMpdRdmeSolver::buildDiffusionModel(const uint numberSiteTypesA, const do
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(latticeXYSizeC, &latticeXYSize, sizeof(latticeXYSizeC)));
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(latticeXYZSizeC, &latticeXYZSize, sizeof(latticeXYZSizeC)));
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(global_latticeXYZSizeC, &latticeXYZSize, sizeof(latticeXYZSizeC)));
-#ifdef MPD_GLOBAL_S_MATRIX
+    #ifdef MPD_GLOBAL_S_MATRIX
 	// Store RL in global memory too, since I'm going to assume if S is too big, then RL is too.
 	cudaMalloc(&RLG, numberReactions*numberSiteTypes * sizeof(uint8_t));
 	cudaMemcpy(RLG, tmpRL, numberReactions*numberSiteTypes * sizeof(uint8_t), cudaMemcpyHostToDevice);
-#else
+    #else
 	// RL is stored in constant memory
     CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(RLC, tmpRL, numberReactions*numberSiteTypes*sizeof(uint8_t)));
-#endif
+    #endif
     delete [] tmpRL;
     delete [] T;
 
     // Set the cuda reaction model rates now that we have the subvolume size.
-    float * reactionRates = new float[numberReactions];
-    for (uint i=0; i<numberReactions; i++)
-    {
-    	if (reactionTypes[i] == ZerothOrderPropensityArgs::REACTION_TYPE)
-    	{
-    		reactionRates[i] = ((ZerothOrderPropensityArgs *)propensityFunctionArgs[i])->k*tau/(latticeXSize*latticeYSize*latticeZSize);
-    	}
-    	else if (reactionTypes[i] == FirstOrderPropensityArgs::REACTION_TYPE)
-    	{
-    		reactionRates[i] = ((FirstOrderPropensityArgs *)propensityFunctionArgs[i])->k*tau;
-    	}
-    	else if (reactionTypes[i] == SecondOrderPropensityArgs::REACTION_TYPE)
-    	{
-    		reactionRates[i] = ((SecondOrderPropensityArgs *)propensityFunctionArgs[i])->k*tau*latticeXSize*latticeYSize*latticeZSize;
-    	}
-    	else if (reactionTypes[i] == SecondOrderSelfPropensityArgs::REACTION_TYPE)
-    	{
-    		reactionRates[i] = ((SecondOrderSelfPropensityArgs *)propensityFunctionArgs[i])->k*tau*latticeXSize*latticeYSize*latticeZSize;
-    	}
-    	else
-    	{
-    		throw InvalidArgException("reactionTypeA", "the reaction type was not supported by the solver", reactionTypes[i]);
-    	}
-    }
+    model_reactionRates = new float[numberReactions];
 
-#ifdef MPD_GLOBAL_R_MATRIX
+    // Set up pre-configured propensity matrices
+	zeroOrderSize=numberSiteTypes;
+	firstOrderSize=numberSpecies*numberSiteTypes;
+	secondOrderSize=numberSpecies*numberSpecies*numberSiteTypes;
+	zeroOrder=new float[zeroOrderSize];
+	firstOrder=new float[firstOrderSize];
+	secondOrder=new float[secondOrderSize];
+
+    #ifdef MPD_GLOBAL_R_MATRIX
     cudaMalloc(&reactionRatesG, numberReactions*sizeof(float));
-    cudaMemcpy(reactionRatesG, reactionRates, numberReactions*sizeof(float), cudaMemcpyHostToDevice);
-#else
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(reactionRatesC, reactionRates, numberReactions*sizeof(float)));
-#endif
-
-    delete [] reactionRates;
-
-	// set up pre-configured propensity matricies
-	size_t zeroOrderSize=numberSiteTypes;
-	size_t firstOrderSize=numberSpecies*numberSiteTypes;
-	size_t secondOrderSize=numberSpecies*numberSpecies*numberSiteTypes;
-	float *zeroOrder=new float[zeroOrderSize];
-	float *firstOrder=new float[firstOrderSize];
-	float *secondOrder=new float[secondOrderSize];
-	float scale=latticeXSize*latticeYSize*latticeZSize;
-	for(uint site=0; site<numberSiteTypes; site++)
-	{
-		uint o1=site*numberSpecies;
-		uint o2=site*numberSpecies*numberSpecies;
-
-		zeroOrder[site]=0.0f;
-		for (uint i=0; i<numberSpecies; i++)
-		{
-			firstOrder[o1 + i]=0.0f;
-			for (uint j=0; j<numberSpecies; j++)
-				secondOrder[o2 + i*numberSpecies + j]=0.0f;	
-		}
-
-		for (uint i=0; i<numberReactions; i++)
-		{
-			if(! RL[i*numberSiteTypes + site])
-				continue;
-
-			switch(reactionTypes[i])
-			{
-				case ZerothOrderPropensityArgs::REACTION_TYPE:
-				{
-					ZerothOrderPropensityArgs *rx=(ZerothOrderPropensityArgs *)propensityFunctionArgs[i];
-					zeroOrder[site]+=rx->k*tau/scale;
-				} break;
-				case FirstOrderPropensityArgs::REACTION_TYPE:
-				{
-				FirstOrderPropensityArgs *rx=(FirstOrderPropensityArgs *)propensityFunctionArgs[i];
-				firstOrder[o1 + rx->si]+=rx->k*tau;
-				}
-				break;
-				
-				case SecondOrderPropensityArgs::REACTION_TYPE:
-				{
-				SecondOrderPropensityArgs *rx=(SecondOrderPropensityArgs *)propensityFunctionArgs[i];
-				secondOrder[o2 + (rx->s1i) * numberSpecies + (rx->s2i)]=rx->k*tau*scale;
-				secondOrder[o2 + (rx->s2i) * numberSpecies + (rx->s1i)]=rx->k*tau*scale;
-				}
-				break; 
-
-				case SecondOrderSelfPropensityArgs::REACTION_TYPE:
-				{
-				SecondOrderSelfPropensityArgs *rx=(SecondOrderSelfPropensityArgs *)propensityFunctionArgs[i];
-				secondOrder[o2 + (rx->si) * numberSpecies + (rx->si)]+=rx->k*tau*scale*2;
-				}
-			}
-		}
-	}
+    #endif
 		
 	cudaMalloc(&propZeroOrder, zeroOrderSize*sizeof(float));
-	cudaMemcpy(propZeroOrder, zeroOrder, zeroOrderSize*sizeof(float), cudaMemcpyHostToDevice);
 	cudaMalloc(&propFirstOrder, firstOrderSize*sizeof(float));
-	cudaMemcpy(propFirstOrder, firstOrder, firstOrderSize*sizeof(float), cudaMemcpyHostToDevice);
 	cudaMalloc(&propSecondOrder, secondOrderSize*sizeof(float));
-	cudaMemcpy(propSecondOrder, secondOrder, secondOrderSize*sizeof(float), cudaMemcpyHostToDevice);
 
-	delete[] zeroOrder;
-	delete[] firstOrder;
-	delete[] secondOrder;
+    computePropensities();
+    copyModelsToDevice();
+	reactionModelModified = false;
 }
 
 void IntMpdRdmeSolver::setLatticeData(const uint8_t* latticeData)
@@ -482,35 +432,180 @@ void IntMpdRdmeSolver::setLatticeData(const uint8_t* latticeData)
 	}
 }
 
+void IntMpdRdmeSolver::setReactionRate(unsigned int rxid, float rate)
+{
+    if (reactionTypes[rxid] ==  ZerothOrderPropensityArgs::REACTION_TYPE)
+	{
+		((ZerothOrderPropensityArgs *)propensityFunctionArgs[rxid])->k = rate;
+	}
+	else if (reactionTypes[rxid] == FirstOrderPropensityArgs::REACTION_TYPE)
+	{
+		((FirstOrderPropensityArgs *)propensityFunctionArgs[rxid])->k = rate;
+	}
+	else if (reactionTypes[rxid] == SecondOrderPropensityArgs::REACTION_TYPE)
+	{
+		((SecondOrderPropensityArgs *)propensityFunctionArgs[rxid])->k = rate;
+	}
+	else if (reactionTypes[rxid] == SecondOrderSelfPropensityArgs::REACTION_TYPE)
+	{
+		((SecondOrderSelfPropensityArgs *)propensityFunctionArgs[rxid])->k = rate;
+	}
+    else
+    {
+    	throw InvalidArgException("reactionTypeA", "the reaction type was not supported by the solver", reactionTypes[rxid]);
+    }
+
+	// Flag to trigger re-computation of rdme propensities
+	reactionModelModified = true;
+}
+
+void IntMpdRdmeSolver::computePropensities()
+{
+	unsigned int latticeXSize = lattice->getXSize();
+	unsigned int latticeYSize = lattice->getYSize();
+	unsigned int latticeZSize = lattice->getZSize();
+    for (uint i=0; i<numberReactions; i++)
+    {
+    	if (reactionTypes[i] == ZerothOrderPropensityArgs::REACTION_TYPE)
+    	{
+    		model_reactionRates[i] = ((ZerothOrderPropensityArgs *)propensityFunctionArgs[i])->k*tau/(latticeXSize*latticeYSize*latticeZSize);
+    	}
+    	else if (reactionTypes[i] == FirstOrderPropensityArgs::REACTION_TYPE)
+    	{
+    		model_reactionRates[i] = ((FirstOrderPropensityArgs *)propensityFunctionArgs[i])->k*tau;
+    	}
+    	else if (reactionTypes[i] == SecondOrderPropensityArgs::REACTION_TYPE)
+    	{
+    		model_reactionRates[i] = ((SecondOrderPropensityArgs *)propensityFunctionArgs[i])->k*tau*latticeXSize*latticeYSize*latticeZSize;
+    	}
+    	else if (reactionTypes[i] == SecondOrderSelfPropensityArgs::REACTION_TYPE)
+    	{
+    		model_reactionRates[i] = ((SecondOrderSelfPropensityArgs *)propensityFunctionArgs[i])->k*tau*latticeXSize*latticeYSize*latticeZSize;
+    	}
+    	else
+    	{
+    		throw InvalidArgException("reactionTypeA", "the reaction type was not supported by the solver", reactionTypes[i]);
+    	}
+    }
+
+    float scale=latticeXSize*latticeYSize*latticeZSize;
+	for(uint site=0; site<numberSiteTypes; site++)
+	{
+		uint o1=site*numberSpecies;
+		uint o2=site*numberSpecies*numberSpecies;
+
+		zeroOrder[site]=0.0f;
+		for (uint i=0; i<numberSpecies; i++)
+		{
+			firstOrder[o1 + i]=0.0f;
+			for (uint j=0; j<numberSpecies; j++)
+				secondOrder[o2 + i*numberSpecies + j]=0.0f;	
+		}
+
+		for (uint i=0; i<numberReactions; i++)
+		{
+			if(! RL[i*numberSiteTypes + site])
+				continue;
+
+			switch(reactionTypes[i])
+			{
+				case ZerothOrderPropensityArgs::REACTION_TYPE:
+				{
+					ZerothOrderPropensityArgs *rx=(ZerothOrderPropensityArgs *)propensityFunctionArgs[i];
+					zeroOrder[site]+=rx->k*tau/scale;
+				}   break;
+
+				case FirstOrderPropensityArgs::REACTION_TYPE:
+				{
+				    FirstOrderPropensityArgs *rx=(FirstOrderPropensityArgs *)propensityFunctionArgs[i];
+				    firstOrder[o1 + rx->si]+=rx->k*tau;
+				}   break;
+				
+				case SecondOrderPropensityArgs::REACTION_TYPE:
+				{
+				    SecondOrderPropensityArgs *rx=(SecondOrderPropensityArgs *)propensityFunctionArgs[i];
+				    secondOrder[o2 + (rx->s1i) * numberSpecies + (rx->s2i)]=rx->k*tau*scale;
+				    secondOrder[o2 + (rx->s2i) * numberSpecies + (rx->s1i)]=rx->k*tau*scale;
+				}   break; 
+
+				case SecondOrderSelfPropensityArgs::REACTION_TYPE:
+				{
+				    SecondOrderSelfPropensityArgs *rx=(SecondOrderSelfPropensityArgs *)propensityFunctionArgs[i];
+				    secondOrder[o2 + (rx->si) * numberSpecies + (rx->si)]+=rx->k*tau*scale*2;
+				}
+			}
+		}
+	}
+}
+
+void IntMpdRdmeSolver::copyModelsToDevice()
+{
+#ifdef MPD_GLOBAL_R_MATRIX
+    cudaMemcpy(reactionRatesG, model_reactionRates, numberReactions*sizeof(float), cudaMemcpyHostToDevice);
+#else
+    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(reactionRatesC, model_reactionRates, numberReactions*sizeof(float)));
+#endif
+
+	cudaMemcpy(propZeroOrder, zeroOrder, zeroOrderSize*sizeof(float), cudaMemcpyHostToDevice);
+	cudaMemcpy(propFirstOrder, firstOrder, firstOrderSize*sizeof(float), cudaMemcpyHostToDevice);
+	cudaMemcpy(propSecondOrder, secondOrder, secondOrderSize*sizeof(float), cudaMemcpyHostToDevice);
+}
+
 void IntMpdRdmeSolver::generateTrajectory()
 {
     // Shadow the lattice member as a cuda lattice.
     CudaIntLattice * lattice = (CudaIntLattice *)this->lattice;
 
-    // Synchronize the cuda memory.
-    lattice->copyToGPU();
-
     // Get the interval for writing species counts and lattices.
-    double speciesCountsWriteInterval=atof((*parameters)["writeInterval"].c_str());
-    double nextSpeciesCountsWriteTime = speciesCountsWriteInterval;
+    uint32_t speciesCountsWriteInterval=atol((*parameters)["writeInterval"].c_str());
+    uint32_t nextSpeciesCountsWriteTime = speciesCountsWriteInterval;
     lm::io::SpeciesCounts speciesCountsDataSet;
     speciesCountsDataSet.set_number_species(numberSpeciesToTrack);
     speciesCountsDataSet.set_number_entries(0);
-    double latticeWriteInterval=atof((*parameters)["latticeWriteInterval"].c_str());
-    double nextLatticeWriteTime = latticeWriteInterval;
+    uint32_t latticeWriteInterval=atol((*parameters)["latticeWriteInterval"].c_str());
+    uint32_t nextLatticeWriteTime = latticeWriteInterval;
     lm::io::Lattice latticeDataSet;
 
     // Get the simulation time limit.
     double maxTime=atof((*parameters)["maxTime"].c_str());
 
-    Print::printf(Print::DEBUG, "Running mpd rdme simulation with %d species, %d reactions, %d site types for %e s with tau %e. Writing species at %e and lattice at %e intervals", numberSpecies, numberReactions, numberSiteTypes, maxTime, tau, speciesCountsWriteInterval, latticeWriteInterval);
-    Print::printf(Print::DEBUG, "Particles per site = %d, words per site = %d", MPD_LATTICE_MAX_OCCUPANCY, MPD_WORDS_PER_SITE);
+    Print::printf(Print::INFO,
+                  "Running mpd rdme simulation with %d species, %d reactions, %d site types for %e s with tau %e. Writing species at %e and lattice at %e intervals",
+                  numberSpecies, numberReactions, numberSiteTypes,
+                  maxTime, tau,
+                  speciesCountsWriteInterval, latticeWriteInterval);
 
     // Set the initial time.
 	double time = 0.0;
-	double base_time = 0.0;
-	uint32_t timestep=1;
-	uint32_t complete_steps=0;
+	uint32_t current_timestep=0;
+
+    bool hookEnabled=false;
+    uint32_t nextHookTime=0;
+    uint32_t hookInterval=0;
+
+    // Find out at what interval to hook simulations
+    if((*parameters)["hookInterval"] != "")
+    {
+        hookInterval=atol((*parameters)["hookInterval"].c_str());
+        hookEnabled=true;
+        nextHookTime=hookInterval;
+    }
+
+    // Find out at what interval to write status messages
+    double printPerfInterval = 60;  
+    if((*parameters)["perfPrintInterval"] != "")
+    {
+        printPerfInterval=atof((*parameters)["perfPrintInterval"].c_str());
+    }
+         
+
+    // Call beginning hook. Any modifications to the lattice will be
+    // accounted for because we have not yet copied to device memory
+    // thus we do not need to check return value
+    // onBeginTrajectory(lattice);
+
+    // Synchronize the cuda memory.
+    lattice->copyToGPU();
 
     // Record the initial species counts.
     recordSpeciesCounts(time, lattice, &speciesCountsDataSet);
@@ -518,30 +613,18 @@ void IntMpdRdmeSolver::generateTrajectory()
     // Write the initial lattice.
     writeLatticeData(time, lattice, &latticeDataSet);
 
+    // initialize max counts from initial particle/site lattice
+    // initMaxCounts(lattice);
+
     Timer timer;
     timer.tick();
-    double lastT=0;
-    int lastSteps=0;
+    double lastT     = 0;
+    int    lastSteps = 0;
 
-    // Loop until we have finished the simulation.
-	switch(hookSimulation(time, lattice))
-	{
-		case 0:
-			break; 
+    // Perform an initial hook check
+    hookCheckSimulation(time, lattice);
 
-		case 1:
-			lattice->copyToGPU();
-			break;
-
-		case 2:
-			lattice->copyToGPU();
-			writeLatticeSites(time, lattice);
-			break;
-		
-		default:
-			throw("Unknown hook return value");
-	}
-
+    // Loop until we have finished the simulation
     while (time < maxTime)
     {
 
@@ -551,10 +634,10 @@ void IntMpdRdmeSolver::generateTrajectory()
 			break;
 		}
 
-        lastT += timer.tock();
+        lastT     += timer.tock();
         lastSteps += 1;
 
-        if ( lastT >= 60)
+        if (lastT >= printPerfInterval)
         {
             double stepTime = lastT/lastSteps;
             double completionTime = stepTime*(maxTime-time)/tau;
@@ -584,57 +667,52 @@ void IntMpdRdmeSolver::generateTrajectory()
             Print::printf(Print::INFO, "Average walltime per timestep: %.2f ms. Progress: %.4fs/%.4fs (% .3g%% done / %.2g %s walltime remaining)",
                                        1000.0*stepTime, time, maxTime, 100.0*time/maxTime, completionTime, units.c_str());
 
-            lastT = 0;
+            lastT     = 0;
             lastSteps = 0;
         }
 
         timer.tick();
 
         // Run the next timestep.
-        runTimestep(lattice, timestep++);
-		complete_steps++;
+        runTimestep(lattice, current_timestep++);
 
         // Update the time.
-		time = base_time + complete_steps*tau;
+	    time = current_timestep*tau;
 
         // See if we need to write out the any data.
-        if (time >= nextLatticeWriteTime-EPS || time >= nextSpeciesCountsWriteTime-EPS)
+        if (current_timestep >= nextLatticeWriteTime
+            || current_timestep >= nextSpeciesCountsWriteTime
+            || (hookEnabled && current_timestep >= nextHookTime))
         {
-			base_time = base_time + complete_steps*tau;
-			complete_steps=0;
+            reactionModelModified = false;
 
             // Synchronize the lattice.
             lattice->copyFromGPU();
 
+	        Print::printf(Print::INFO, "Time is %.14f", time);
+
+	        // Check if we need to execute the hook
+            if (hookEnabled && current_timestep >= nextHookTime)
+            {
+		        Print::printf(Print::INFO, "Hook time is %.14f, in steps is %d", time, nextHookTime);
+   	            hookCheckSimulation(time, lattice);
+                nextHookTime += hookInterval;
+		        Print::printf(Print::INFO, "Next hook time is %d", nextHookTime);
+            }
+
             // See if we need to write the lattice.
-            if (time >= nextLatticeWriteTime-EPS)
+	        if (current_timestep >= nextLatticeWriteTime)
             {
                 PROF_BEGIN(PROF_SERIALIZE_LATTICE);
+		        Print::printf(Print::INFO, "Lattice write time is %.14f, in steps is %.d", time, nextLatticeWriteTime);
                 writeLatticeData(time, lattice, &latticeDataSet);
                 nextLatticeWriteTime += latticeWriteInterval;
+		        Print::printf(Print::INFO, "Next lattice write time is %.d", nextLatticeWriteTime);
                 PROF_END(PROF_SERIALIZE_LATTICE);
-
-				switch(hookSimulation(time, lattice))
-				{
-					case 0:
-						break; 
-
-					case 1:
-						lattice->copyToGPU();
-						break;
-
-					case 2:
-						lattice->copyToGPU();
-						writeLatticeSites(time, lattice);
-						break;
-					
-					default:
-						throw("Unknown hook return value");
-				}
             }
 
             // See if we need to write the species counts.
-            if (time >= nextSpeciesCountsWriteTime-EPS)
+            if (current_timestep >= nextSpeciesCountsWriteTime)
             {
                 PROF_BEGIN(PROF_DETERMINE_COUNTS);
                 recordSpeciesCounts(time, lattice, &speciesCountsDataSet);
@@ -652,23 +730,23 @@ void IntMpdRdmeSolver::generateTrajectory()
         }
     }
 
+    lattice->copyFromGPU();
+
     // Write any remaining species counts.
     writeSpeciesCounts(&speciesCountsDataSet);
 }
 
 int IntMpdRdmeSolver::hookSimulation(double time, CudaIntLattice *lattice)
-{                                                             
-        // Overload this function in derivative classes       
-        // Return 0 if the lattice state is unchanged         
-        // Return 1 if the lattice state has been modified,   
-    //          and it needs to be copied back to the GPU.    
-        // Return 2 if lattice sites have changed, and should 
-        //                      be copied back to the GPU *and*
-        //                      in the output file            
-        return 0;                                             
-}                                                             
-                                                              
-
+{                                                       
+    // Overload this function in derivative classes
+	// Return 0 if the lattice state is unchanged
+	// Return 1 if the lattice state has been modified, 
+    //          and it needs to be copied back to the GPU
+	// Return 2 if lattice sites have changed, and should
+	//			be copied back to the GPU *and* be recorded
+	//			in the output file           
+    return 0;                                             
+}
 
 void IntMpdRdmeSolver::writeLatticeData(double time, CudaIntLattice * lattice, lm::io::Lattice * latticeDataSet)
 {
@@ -730,6 +808,35 @@ void IntMpdRdmeSolver::writeSpeciesCounts(lm::io::SpeciesCounts * speciesCountsD
     }
 }
 
+void IntMpdRdmeSolver::hookCheckSimulation(double time, CudaIntLattice * lattice)
+{
+    switch(hookSimulation(time, lattice))
+    {
+        case 0:
+            break; 
+
+        case 1:
+            lattice->copyToGPU();
+            break;
+
+        case 2:
+            lattice->copyToGPU();
+            writeLatticeSites(time, lattice);
+            break;
+
+        case 3:
+            printf("hook return value is 3, force to stop.\n");
+            writeLatticeSites(time, lattice);
+            return;
+
+        default:
+            throw("Unknown hook return value");
+    }
+
+    if(reactionModelModified)
+		computePropensities();
+}
+
 uint64_t IntMpdRdmeSolver::getTimestepSeed(uint32_t timestep, uint32_t substep)
 {
     uint64_t timestepHash = (((((uint64_t)seed)<<30)+timestep)<<2)+substep;
@@ -742,6 +849,9 @@ uint64_t IntMpdRdmeSolver::getTimestepSeed(uint32_t timestep, uint32_t substep)
 void IntMpdRdmeSolver::runTimestep(CudaIntLattice * lattice, uint32_t timestep)
 {
     PROF_BEGIN(PROF_MPD_TIMESTEP);
+
+    if(reactionModelModified)
+        copyModelsToDevice();
 
     // Calculate some properties of the lattice.
     lattice_coord_t size = lattice->getSize();
@@ -796,30 +906,30 @@ void IntMpdRdmeSolver::runTimestep(CudaIntLattice * lattice, uint32_t timestep)
         PROF_CUDA_BEGIN(PROF_MPD_REACTION,cudaStream);
         #ifdef MPD_CUDA_3D_GRID_LAUNCH
         calculateReactionLaunchParameters(&gridSize, &threadBlockSize, TUNE_MPD_REACTION_BLOCK_X_SIZE, TUNE_MPD_REACTION_BLOCK_Y_SIZE, latticeXSize, latticeYSize, latticeZSize);
-#ifdef MPD_GLOBAL_S_MATRIX
-#ifdef MPD_GLOBAL_R_MATRIX
-        #ifdef MPD_FREAKYFAST
-        CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::precomp_reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG, reactionOrdersG, reactionSitesG, D1G, D2G, reactionRatesG, propZeroOrder, propFirstOrder, propSecondOrder)));
+            #ifdef MPD_GLOBAL_S_MATRIX
+            #ifdef MPD_GLOBAL_R_MATRIX
+                    #ifdef MPD_FREAKYFAST
+                    CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::precomp_reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG, reactionOrdersG, reactionSitesG, D1G, D2G, reactionRatesG, propZeroOrder, propFirstOrder, propSecondOrder)));
+                    #else
+                    CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG, reactionOrdersG, reactionSitesG, D1G, D2G, reactionRatesG)));
+                    #endif
+            #else
+                #ifdef MPD_FREAKYFAST
+                CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::precomp_reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG, propZeroOrder, propFirstOrder, propSecondOrder)));
+                #else
+                    CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG)));
+                #endif
+            #endif
+            #else
+                    CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList)));
+            #endif
+                    #else
+                    calculateReactionLaunchParameters(&gridXSize, &gridSize, &threadBlockSize, TUNE_MPD_REACTION_BLOCK_X_SIZE, TUNE_MPD_REACTION_BLOCK_Y_SIZE, latticeXSize, latticeYSize, latticeZSize);
+        #ifdef MPD_GLOBAL_S_MATRIX
+                CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), gridXSize, getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG)));
         #else
-        CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG, reactionOrdersG, reactionSitesG, D1G, D2G, reactionRatesG)));
+                CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), gridXSize, getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList)));
         #endif
-#else
-	#ifdef MPD_FREAKYFAST
-	CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::precomp_reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG, propZeroOrder, propFirstOrder, propSecondOrder)));
-	#else
-        CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG)));
-	#endif
-#endif
-#else
-        CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList)));
-#endif
-        #else
-        calculateReactionLaunchParameters(&gridXSize, &gridSize, &threadBlockSize, TUNE_MPD_REACTION_BLOCK_X_SIZE, TUNE_MPD_REACTION_BLOCK_Y_SIZE, latticeXSize, latticeYSize, latticeZSize);
-#ifdef MPD_GLOBAL_S_MATRIX
-        CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), gridXSize, getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList, SG, RLG)));
-#else
-        CUDA_EXCEPTION_EXECUTE((intmpdrdme_dev::reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>((unsigned int *)lattice->getGPUMemorySrc(), (uint8_t *)lattice->getGPUMemorySiteTypes(), (unsigned int *)lattice->getGPUMemorySrc(), gridXSize, getTimestepSeed(timestep,3), (unsigned int*)cudaOverflowList)));
-#endif
         #endif
         PROF_CUDA_END(PROF_MPD_REACTION,cudaStream);
     }

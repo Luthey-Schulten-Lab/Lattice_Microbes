@@ -143,46 +143,49 @@ void RDMESolver::buildDiffusionModel(const uint numberSiteTypesA, const double *
 
 void RDMESolver::setLatticeData(const uint8_t* latticeData)
 {
-        lattice_coord_t s = lattice->getSize();
-        site_size_t p = lattice->getMaxOccupancy();
+    lattice_coord_t s = lattice->getSize();
+    site_size_t p = lattice->getMaxOccupancy();
 
-        // Set the lattice data.
-        for (uint i=0, index=0; i<s.x; i++)
+    // Set the lattice data.
+    for (uint i=0, index=0; i<s.x; i++)
+    {
+        for (uint j=0; j<s.y; j++)
         {
-            for (uint j=0; j<s.y; j++)
+            for (uint k=0; k<s.z; k++)
             {
-                for (uint k=0; k<s.z; k++)
+                for (uint l=0; l<p; l++, index++)
                 {
-                    for (uint l=0; l<p; l++, index++)
+                    if (latticeData[index] != 0)
                     {
-                        if (latticeData[index] != 0)
-                        {
-                            if (latticeData[index] > numberSpecies) throw InvalidArgException("latticeData", "an invalid species was found",latticeData[index]);
-                            lattice->addParticle(i,j,k,latticeData[index]);
-                        }
+                        if (latticeData[index] > numberSpecies) throw InvalidArgException("latticeData", "an invalid species was found",latticeData[index]);
+                        lattice->addParticle(i,j,k,latticeData[index]);
                     }
                 }
             }
         }
+    }
 }
 
 void RDMESolver::setLatticeSitesData(const uint8_t* latticeSitesData)
 {
-        lattice_coord_t s = lattice->getSize();
-        for (uint i=0, index=0; i<s.x; i++)
+    lattice_coord_t s = lattice->getSize();
+    for (uint i=0, index=0; i<s.x; i++)
+    {
+        for (uint j=0; j<s.y; j++)
         {
-            for (uint j=0; j<s.y; j++)
+            for (uint k=0; k<s.z; k++, index++)
             {
-                for (uint k=0; k<s.z; k++, index++)
+                if (latticeSitesData[index] != 0)
                 {
-                    if (latticeSitesData[index] != 0)
+                    if (latticeSitesData[index] >= numberSiteTypes)
                     {
-                        if (latticeSitesData[index] >= numberSiteTypes) throw InvalidArgException("latticeSitesData", "an invalid species was found",latticeSitesData[index]);
-                        lattice->setSiteType(i,j,k,latticeSitesData[index]);
+                        throw InvalidArgException("latticeSitesData", "an invalid species was found",latticeSitesData[index]);
                     }
+                    lattice->setSiteType(i,j,k,latticeSitesData[index]);
                 }
             }
         }
+    }
 }
 
 }

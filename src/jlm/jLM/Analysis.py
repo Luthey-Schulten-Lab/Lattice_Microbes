@@ -133,6 +133,33 @@ class LatticeAnalysisMixin:
 
 class TrajAnalysisMixin:
     def _speciesIdParse(self, regex, species, startIndex=0):
+        """
+        Parse and convert species identifiers to a list of integer indices.
+
+            This function handles different ways of specifying species:
+            1. Using a regex pattern to match species names
+            2. A single Species object
+            3. A single species name as a string
+            4. A list of Species objects
+            5. A list of species names as strings
+            6. A list of integer indices
+
+            The function returns a list of integer indices representing the species,
+            adjusted by the startIndex.
+
+            Args:
+                regex (str): A regular expression to match species names
+                species (Species, str, list): Species specification
+                startIndex (int): An offset to add to the returned indices
+
+            Returns:
+                list: A list of integer indices representing the specified species
+
+            Raises:
+                RuntimeError: If both or neither regex and species are provided,
+                            or if the species specification is unrecognized
+        """
+        
         if (regex is None) == (species is None):
             raise RuntimeError("`regex` and `species` are mutually exclusive")
         elif regex is not None:
@@ -278,7 +305,7 @@ class TrajAnalysisMixin:
         return ts, traj
 
     def getNumberTrajectoryFromRegion(self, spRegex=None, species=None, regRegex=None, region=None, replicate=None, 
-                                            frameStart=None, frameEnd=None, timeStart=None, timeEnd=None):
+                                            frameStart=None, frameEnd=None, frameDownScale= None, timeStart=None, timeEnd=None, timeDownScale=None):
         """Calculate particle number trajectories for specific regions
 
         The time course of the particle numbers in the simulation 
@@ -292,8 +319,8 @@ class TrajAnalysisMixin:
         `species` options are mutually exclusive.  Instead of 
         returning the entire trajectory, a segment can be selected 
         either through the frame numbers (`frameStart`, `frameEnd`) or 
-        through the simulation time (`timeStart`, `timeEnd`). The 
-        regions to compute particle numbers over are selected similar 
+        through the simulation time (`timeStart`, `timeEnd`).If both given, the frame numbers will be used. 
+        The regions to compute particle numbers over are selected similar 
         to the species through the options `regRegex` and `region`.
 
         Args:
@@ -331,22 +358,60 @@ class TrajAnalysisMixin:
         replicate = self._replicateParse(replicate)
         if len(replicate) > 1:
             raise ValueError("only one replicate may be specified")
-
+        
         replicate = "{:07d}".format(replicate[0])
-        ts = self.h5['Simulations'][replicate]['LatticeTimes'][frameStart:frameEnd]
+        # if input is time, convert to frame
+        if frameStart is None and timeStart is not None and timeEnd is not None:
+            dt = float(self.h5['Parameters'].attrs['timestep'])
+            frameStart = int(timeStart / dt)
+            frameEnd = int(timeEnd / dt)
+            # here we support downscale for time
+            if timeDownScale is not None:
+                frameDownScale = int(timeDownScale / dt)
+        elif frameStart is None and timeStart is None:
+            raise ValueError("Either frameStart, frameEnd or timeStart, timeEnd must be specified")    
+        
+        # Here we need to choose between frame or time steps
+        if frameStart is not None and frameEnd is not None:
+            # Check if the frameStart and frameEnd are within the bounds of the lattice times
+            lattice_times_length = len(self.h5['Simulations'][replicate]['LatticeTimes'])
+            if frameStart < 0:
+                raise ValueError(f"frameStart ({frameStart}) is less than 0, which exceeds the lower boundary of the lattice times.")
+            if frameEnd > lattice_times_length:
+                raise ValueError(f"frameEnd ({frameEnd}) exceeds the upper boundary ({lattice_times_length}) of the lattice times.")
+            
+            # not exceed the bounds of the lattice times
+            ts = self.h5['Simulations'][replicate]['LatticeTimes'][frameStart:frameEnd]
+            if frameDownScale is not None and frameDownScale > 1 and frameDownScale < lattice_times_length:
+                ts = ts[::frameDownScale]
+            
+        else:
+            raise ValueError("Either you must give frameStart and frameEnd or timeStart and timeEnd")    
+    
+        # get the region types in the lattice, and species types in the lattice 
+        max_regions = int(self.h5['Model/Diffusion'].attrs['numberSiteTypes'])
+        max_species = int(self.h5['Model/Diffusion'].attrs['numberSpecies'])
+        actual_regions = len(regIdList)
+        actual_species = len(spIdList)
 
         cacheKey = "SiteParticleCount", replicate
         spc = self._cachedResult(cacheKey)
+        
         if spc is None:
-            sCount, spc = self._postprocess_siteparticlecounts(replicate)
+            sCount, spc = self._postprocess_siteparticlecounts(rep=replicate,
+                                                               reg_num=actual_regions,
+                                                               spe_num=actual_species,
+                                                               max_regions=max_regions,
+                                                               max_species=max_species)
             self._cachedResult(cacheKey, spc)
             self._cachedResult(("SiteCount", replicate), sCount)
-
+        
         # cartesian product over sites and particles
         rs = np.tile(regIdList, len(spIdList))
         ss = np.repeat(spIdList, len(regIdList))
         if len(rs) == 1:
             traj = spc[:,rs[0],ss[0]]
+            
         else:
             traj = np.sum(spc[:,np.tile(regIdList, len(spIdList)), np.repeat(spIdList, len(regIdList))], axis=-1)
 
@@ -542,7 +607,15 @@ class TrajAnalysisMixin:
 
         return hist.T/(len(replicateList)*(frameEnd-frameStart))
 
-    def _postprocess_siteparticlecounts(self, rep):
+    def _postprocess_siteparticlecounts(self, rep, reg_num = 16384, spe_num = 16384, max_regions=16384, max_species=16384):
+        '''
+        This function is used to generate the site-particle counts for a given replicate.
+        It is used to cache the results of the site-particle counts so that they can be used
+        to generate the site-particle counts for a given replicate.
+        return: 
+            sCount: The site counts
+            pCounts: The particle counts
+        '''
         traj = self.h5
         siteLattice = traj['/Model/Diffusion/LatticeSites'][...]
 
@@ -553,7 +626,7 @@ class TrajAnalysisMixin:
         frames = sorted(traj['Simulations/'+rep+"/Lattice"])
         nframes = len(frames)
 
-        pCounts = np.zeros((nframes, 16384, 16384), dtype='i32')
+        pCounts = np.zeros((nframes, reg_num, spe_num), dtype=np.int32)
 
         for i,frame in enumerate(frames):
             if particleLattice is not None:
@@ -562,7 +635,8 @@ class TrajAnalysisMixin:
                 particleLattice = traj['Simulations/'+rep+"/Lattice/"+frame][...]
 
             pCount, sCount = Lattice.latticeStatsAll_h5fmt(particleLattice, siteLattice)
-            pCounts[i,:,:] = pCount
+            
+            pCounts[i,:,:] = pCount[:reg_num,:spe_num]
 
         return sCount, pCounts
 

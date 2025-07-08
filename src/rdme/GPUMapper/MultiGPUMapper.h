@@ -49,70 +49,71 @@
 class MultiGPUMapper
 {
 	protected:
-	int num_gpus;
-	int *device_id;
-	dim3 lattice_dim;
-	int overlap;
-	size_t cellsize;
-	pthread_key_t affinity;
-	int apron;
-	SegmentDescriptor_s **descriptor;
-	float *lb_weights;
-	int *lb_cost;
-	size_t *device_memory;
-	int pagecount;
+		int num_gpus;
+		int *device_id;
+		dim3 lattice_dim;
+		int overlap;
+		size_t cellsize;
+		pthread_key_t affinity;
+		int apron;
+		SegmentDescriptor_s **descriptor;
+		float *lb_weights;
+		int *lb_cost;
+		size_t *device_memory;
+		int pagecount;
 
-	virtual void initialize()=0;
-	bool enable_peer_access(int src, int dst);
-	void build_descriptor(int gpu, dim3 ldim, int3 goffset, dim3 active, dim3 loffset);
-	void compute_balances();
+		virtual void initialize()=0;
+		bool enable_peer_access(int src, int dst);
+		void build_descriptor(int gpu, dim3 ldim, int3 goffset, dim3 active, dim3 loffset);
+		void compute_balances();
 
 	public:
+		MultiGPUMapper(dim3 ldim, size_t cellsize, int apron, int overlap, int num_gpus, int* devices, int pages);
+		virtual ~MultiGPUMapper();
 
-	MultiGPUMapper(dim3 ldim, size_t cellsize, int apron, int overlap, int num_gpus, int* devices, int pages);
-	virtual ~MultiGPUMapper();
+		int get_num_gpus();
+		bool use(int gpu);
 
-	int get_num_gpus();
-	bool use(int gpu);
+		int get_overlap();
 
-	int get_overlap();
+		int get_apron();
 
-	int get_apron();
+		void set_affinity(int);
+		int get_affinity();
 
-	void set_affinity(int);
-	int get_affinity();
+		dim3 get_lattice_dim();
+		SegmentDescriptor_s* getSegmentDescriptor(int gpu);
+		size_t get_global_size();
 
-	dim3 get_lattice_dim();
-	SegmentDescriptor_s* getSegmentDescriptor(int gpu);
-	size_t get_global_size();
+		void record_execution_cost(int, int);
+		bool rebalance();
+		bool numa_bind_thread(int);
 
-	void record_execution_cost(int, int);
-	bool rebalance();
-	bool numa_bind_thread(int);
+		// virtual interface
+		virtual dim3 get_global_dim(int gpu)=0;
+		virtual dim3 get_local_dim(int gpu)=0;
+		virtual int3 get_global_offset(int gpu)=0;
+		virtual size_t get_local_size(int gpu)=0;
+		virtual size_t get_authority_size(int gpu)=0;
+		virtual ssize_t get_global_input_offset(int gpu)=0;
+		virtual size_t get_global_output_offset(int gpu)=0;
+		virtual size_t get_authority_offset(int gpu)=0;
+		virtual void stage_in(int gpu, void *dptr, void *hptr)=0;
+		virtual void stage_in_sites(int gpu, void *dptr, void *hptr)=0;
+		virtual void stage_out(int gpu, void *hptr, void *dptr)=0;
+		virtual void publish_state(int gpu, int timestamp,
+		                           cudaStream_t top, cudaStream_t bot,
+								   void *dptr = NULL)=0;
+		virtual void refresh(int gpu, void *dptr, int timestamp)=0;
 
-	// virtual interface
-	virtual dim3 get_global_dim(int gpu)=0;
-	virtual dim3 get_local_dim(int gpu)=0;
-	virtual int3 get_global_offset(int gpu)=0;
-	virtual size_t get_local_size(int gpu)=0;
-	virtual size_t get_authority_size(int gpu)=0;
-	virtual ssize_t get_global_input_offset(int gpu)=0;
-	virtual size_t get_global_output_offset(int gpu)=0;
-	virtual size_t get_authority_offset(int gpu)=0;
-	virtual void stage_in(int gpu, void *dptr, void *hptr)=0;
-	virtual void stage_in_sites(int gpu, void *dptr, void *hptr)=0;
-	virtual void stage_out(int gpu, void *hptr, void *dptr)=0;
-	virtual void publish_state(int gpu, void *dptr, int timestamp)=0;
-	virtual void refresh(int gpu, void *dptr, int timestamp)=0;
+		virtual void schedule_send(int gpu, void *dptr, int timestamp, int neighbor, cudaStream_t stream)=0;
+		virtual void schedule_recv(int gpu, void *dptr, int timestamp, int neighbor, cudaStream_t stream)=0;
 
-	virtual void schedule_send(int gpu, void *dptr, int timestamp, int neighbor, cudaStream_t stream)=0;
-	virtual void schedule_recv(int gpu, void *dptr, int timestamp, int neighbor, cudaStream_t stream)=0;
-
-	virtual int map_index_to_gpu(size_t index)=0;
+		virtual int map_index_to_gpu(size_t index)=0;
 	
-	virtual void initialize_gpu(int gpu);
+		virtual void initialize_gpu(int gpu);
 
-	virtual bool determine_load_balance()=0;
+		virtual bool determine_load_balance()=0;
 
 };
 

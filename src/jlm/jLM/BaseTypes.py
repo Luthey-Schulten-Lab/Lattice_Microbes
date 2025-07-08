@@ -45,9 +45,9 @@ from . import Template
 from abc import ABCMeta, abstractmethod
 
 def _goodName(s):
-    return (len(s) == len(s.encode()) and        # ensure no weird unicode stuff
-            not any(x.isspace() for x in s)  and # no whitespace
-            ',' not in s)                        # comma used as a delimiter in HDF5
+    return (len(s) == len(s.encode()) and       # ensure no weird unicode stuff
+            not any(x.isspace() for x in s) and # no whitespace
+            ',' not in s)                       # comma used as a delimiter in HDF5
 
 class Namespace:
     """Convienence class for TAB completing simulation objects"""
@@ -114,10 +114,10 @@ class SimObjs:
     def __iter__(self):
         return (self[i+self._idbase] for i in range(len(self._obj)))
 
-    def __init__(self, sim, cls,idbase=0):
+    def __init__(self, sim, cls, idbase=0):
         self._cls = cls
         self._sim = sim
-        self._idbase=idbase
+        self._idbase = idbase
         self._obj = dict()
         self._id2name = dict()
         self._id2obj = dict()

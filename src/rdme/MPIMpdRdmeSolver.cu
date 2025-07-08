@@ -7,7 +7,6 @@
  *               University of Illinois at Urbana-Champaign
  *               http://www.scs.uiuc.edu/~schulten
  * 
- * Overflow algorithm in RDME solvers and CPU assignment (2012)
  * Developed by: Roberts Group
  *               Johns Hopkins University
  *               http://biophysics.jhu.edu/roberts/

@@ -32,7 +32,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * WITH THE SOFTWARE.
  *
- * Author(s): Mike Hallock, Tyler Earnest, Zane Thornburg
+ * Author(s): Mike Hallock, Tyler Earnest
  *
  ***************************************************************************
  *
@@ -50,7 +50,7 @@
 #include <sys/sysinfo.h>
 #endif
 
-#include <iostream>
+
 #include <string>
 #include <map>
 #include <cstdio>
@@ -72,6 +72,7 @@
 #ifdef OPT_CUDA
 #include "cuda/lm_cuda.h"
 #include "rdme/MGPUMpdRdmeSolver.h"
+#include "rdme/MGPUIntMpdRdmeSolver.h"
 #include <cuda.h>
 #endif
 #include "io/lm_hdf5.h"
@@ -136,7 +137,7 @@ void runSolver(char *simulationFilename, int replicate, lm::me::MESolver *solver
     Print::printf(Print::DEBUG, "interactive process started.");
 
 #ifdef OPT_CUDA
-    if (dynamic_cast<lm::rdme::MGPUMpdRdmeSolver*> (solver) == NULL && cudaDevices.size() > 1) {
+    if (dynamic_cast<lm::rdme::MGPUMpdRdmeSolver*> (solver) == NULL && dynamic_cast<lm::rdme::MGPUIntMpdRdmeSolver*> (solver) == NULL && cudaDevices.size() > 1) {
         throw lm::Exception("Multiple CUDA devices specified for single GPU solver");
     }
 #endif

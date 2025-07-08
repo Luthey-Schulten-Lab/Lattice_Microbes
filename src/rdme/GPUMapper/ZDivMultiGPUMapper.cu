@@ -43,7 +43,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
-
 #include "config.h"
 #include "lptf/Profile.h"
 
@@ -72,12 +71,6 @@ ZDivMultiGPUMapper::ZDivMultiGPUMapper(dim3 l, size_t m, int a, int c, int n, in
 		info[i].lb_imbalance=0;
 	}
 
-/*
-	printf("Required Memory: %llu, available aggregte: %llu\n", 
-		l.x*l.y*l.z*sizeof(float)*2,
-		total_mem);
-*/
-
 	if(total_mem < l.x*l.y*l.z*sizeof(float)*2)
 	{
 		throw("Insufficient aggregate memory");
@@ -102,12 +95,6 @@ ZDivMultiGPUMapper::ZDivMultiGPUMapper(int x, int y, int z, size_t cellsize, int
 		info[i].lb_chunks=(info[i].lb_max_chunks < fair_chunks ? info[i].lb_max_chunks : fair_chunks);
 		info[i].lb_imbalance=0;
 	}
-
-/*
-	printf("Required Memory: %llu, available aggregte: %llu\n", 
-		x*y*z*sizeof(float)*2*pages,
-		total_mem);
-*/
 
 	if(total_mem < x*y*z*sizeof(float)*2*pages)
 	{
@@ -166,7 +153,7 @@ void ZDivMultiGPUMapper::initialize()
 		// Where my neighbor reads from me
 		g.overlap_send[Z_SHADOW_TOP]=dim3(0,0,overlap+apron);
 		g.overlap_send[Z_SHADOW_BOTTOM]=dim3(0,0, zdim-(overlap+apron) + top_shadow);
-
+		
 		// Where I receive
 		g.overlap_recv[Z_SHADOW_TOP]=dim3(0,0,0);
 		g.overlap_recv[Z_SHADOW_BOTTOM]=dim3(0,0, zdim + top_shadow);
@@ -210,7 +197,7 @@ void ZDivMultiGPUMapper::initialize_gpu(int gpu)
 
 	// Peer with top neighbor
 	int neighbor = info[gpu].neighbor[Z_SHADOW_TOP];
-	//printf("top neighbor of %d is %d\n", gpu, neighbor);
+	
 	if(neighbor >= 0 && neighbor < num_gpus)	
 	{
 		neighbor_buffer *nb=new neighbor_buffer;
@@ -238,7 +225,7 @@ void ZDivMultiGPUMapper::initialize_gpu(int gpu)
 
 	// Peer with bottom neighbor
 	neighbor = info[gpu].neighbor[Z_SHADOW_BOTTOM];
-	//printf("bottom neighbor of %d is %d\n", gpu, neighbor);
+	
 	if(neighbor >= 0 && neighbor < num_gpus)	
 	{
 		neighbor_buffer *nb=new neighbor_buffer;
@@ -312,7 +299,7 @@ size_t ZDivMultiGPUMapper::get_authority_offset(int gpu)
 
 void ZDivMultiGPUMapper::stage_in(int gpu, void *dptr, void *hptr)
 {
-	for(int p=0; p<pagecount; p++)
+	for (int p = 0; p < pagecount; p++)
 	{
 		char *dpage = (char*)dptr + p*get_local_size(gpu);
 		char *hpage = (char*)hptr + p*get_global_size();
@@ -328,31 +315,31 @@ void ZDivMultiGPUMapper::stage_in_sites(int gpu, void *dptr, void *hptr)
 void ZDivMultiGPUMapper::stage_in_real(int gpu, void *dptr, void *hptr, unsigned int element_size) 
 {
 	PROF_BEGIN(PROF_H2D);
-	char *src=(char*)hptr;
-	char *dst=(char*)dptr;
-	ssize_t offset=get_global_input_offset(gpu)*element_size;
-	size_t localsize=DIMSIZE(info[gpu].local_dim)*element_size;
+	char *src = (char*)hptr;
+	char *dst = (char*)dptr;
 
-	size_t latsize=DIMSIZE(lattice_dim)*element_size;
+	ssize_t offset = get_global_input_offset(gpu) * element_size;
+	size_t localsize = DIMSIZE(info[gpu].local_dim) * element_size;
+	size_t latsize = DIMSIZE(lattice_dim) * element_size;
 
-	if(offset < 0)
+	if (offset < 0)
 	{
 		// Read adj bytes from the end of the lattice
-		size_t adj=abs(offset);
-		cudaMemcpyAsync(dst, src+latsize-adj, adj, cudaMemcpyDefault);
+		size_t adj = abs(offset);
+		cudaMemcpy(dst, src + latsize - adj, adj, cudaMemcpyDefault);
 		check_error();
 	
-		dst+=adj;
-		offset=0;
-		localsize-=adj;
+		dst += adj;
+		offset = 0;
+		localsize -= adj;
 	}
-	else if((offset+localsize) >=latsize)
+	else if ((offset + localsize) >= latsize)
 	{
 		// read adj bytes from the beginning of the lattice
-		size_t adj=(offset+localsize)-latsize;
-		cudaMemcpyAsync(dst+localsize-adj, src, adj, cudaMemcpyDefault);
+		size_t adj = (offset + localsize) - latsize;
+		cudaMemcpy(dst + localsize - adj, src, adj, cudaMemcpyDefault);
 		check_error();
-		localsize-=adj;
+		localsize -= adj;
 	}
 		
 	src += offset;
@@ -363,7 +350,7 @@ void ZDivMultiGPUMapper::stage_in_real(int gpu, void *dptr, void *hptr, unsigned
 
 void ZDivMultiGPUMapper::stage_out(int gpu, void *hptr, void *dptr) 
 {
-	for(int p=0; p<pagecount; p++)
+	for (int p = 0; p < pagecount; p++)
 	{
 		char *dpage = (char*)dptr + p*get_local_size(gpu);
 		char *hpage = (char*)hptr + p*get_global_size();
@@ -374,10 +361,10 @@ void ZDivMultiGPUMapper::stage_out(int gpu, void *hptr, void *dptr)
 void ZDivMultiGPUMapper::stage_out_real(int gpu, void *hptr, void *dptr) 
 {
 	PROF_BEGIN(PROF_D2H);
-	char *src=(char*)dptr;
+	char *src = (char*)dptr;
 	src += get_authority_offset(gpu) * cellsize;
 
-	char *dst=(char*)hptr;
+	char *dst = (char*)hptr;
 	dst += get_global_output_offset(gpu) * cellsize;
 
 	cudaMemcpy(dst, src, get_authority_size(gpu), cudaMemcpyDefault);
@@ -385,65 +372,62 @@ void ZDivMultiGPUMapper::stage_out_real(int gpu, void *hptr, void *dptr)
 	PROF_END(PROF_D2H);
 }
 
-void ZDivMultiGPUMapper::publish_state(int gpu, void *dptr, int timestep)
+void ZDivMultiGPUMapper::publish_state(int gpu, int timestep,
+                                       cudaStream_t top, cudaStream_t bot,
+									   void *dptr)
 {
-	schedule_send(gpu, dptr, timestep, Z_SHADOW_TOP, 0);
-	schedule_send(gpu, dptr, timestep, Z_SHADOW_BOTTOM, 0);
-	if(cudaDeviceSynchronize() != cudaSuccess)
-		throw("cuda error");
+	schedule_send(gpu, dptr, timestep, Z_SHADOW_TOP,    top);
+	schedule_send(gpu, dptr, timestep, Z_SHADOW_BOTTOM, bot);
+	cudaDeviceSynchronize();
 }
 
 void ZDivMultiGPUMapper::schedule_recv(int gpu, void *dptr, int key, int neighbor, cudaStream_t s)
 {
-	int other=info[gpu].neighbor[neighbor];
-	if(other < 0 || other >= num_gpus)
+	int other = info[gpu].neighbor[neighbor];
+	if (other < 0 || other >= num_gpus)
 		return;	
 
-	key=key&1;
+	key = key & 1;
 
 	neighbor_buffer *nb=info[gpu].read_buffer[neighbor];
 	
-	char *lbuf=(char*)dptr;
-	size_t lofs=POSDIM(info[gpu].overlap_recv[neighbor], info[gpu].local_dim);
-	lbuf+=lofs*cellsize;
+	char *lbuf = (char*)dptr;
+	size_t lofs = POSDIM(info[gpu].overlap_recv[neighbor], info[gpu].local_dim);
+	lbuf += lofs*cellsize;
 
-	PROF_CUDA_BEGIN(PROF_MRBASE+neighbor, s);
-	char *nbuf=nb->buffer[key];
-	for(int p=0; p<pagecount; p++)
-		cudaMemcpyAsync(lbuf+p*get_local_size(gpu),
-			nbuf+p*(nb->size),
-			nb->size, cudaMemcpyDefault,s);
-	PROF_CUDA_END(PROF_MRBASE+neighbor, s);
+	PROF_CUDA_BEGIN(PROF_MRBASE + neighbor, s);
+	char *nbuf = nb->buffer[key];
+	for (int p = 0; p < pagecount; p++)
+		cudaMemcpyAsync(lbuf + p*get_local_size(gpu),
+	                    nbuf + p*(nb->size),
+						nb->size, cudaMemcpyDefault, s);
+	PROF_CUDA_END(PROF_MRBASE + neighbor, s);
 }
 
 void ZDivMultiGPUMapper::schedule_send(int gpu, void *dptr, int key, int neighbor, cudaStream_t s)
 {
-	int other=info[gpu].neighbor[neighbor];
-	if(other < 0 || other >= num_gpus)
-		return;	
+	int other           = info[gpu].neighbor[neighbor];
+	char *tbuf          = info[gpu].tmp_buffer[neighbor];
+	neighbor_buffer *nb = info[gpu].write_buffer[neighbor];
 
-	size_t ofs;
-	char *buf;
+	key = (key & 1) ^ 1;
+	char *nbuf = nb->buffer[key];
 
-	key=(key&1)^1;
-	
-	neighbor_buffer *nb=info[gpu].write_buffer[neighbor];
+	if (dptr)
+	{
+		size_t ofs;
+		char *buf;
 
-	ofs=POSDIM(info[gpu].overlap_send[neighbor], info[gpu].local_dim);
-	buf=(char*)dptr+ofs*cellsize;
+		ofs = POSDIM(info[gpu].overlap_send[neighbor], info[gpu].local_dim);
+		buf = (char*)dptr + ofs*cellsize;
 
-	PROF_CUDA_BEGIN(PROF_MSBASE+neighbor, s);
-	char *tbuf=info[gpu].tmp_buffer[neighbor];
-	for(int p=0; p<pagecount; p++)
-		cudaMemcpyAsync(tbuf+p*(nb->size),
-			buf+p*get_local_size(gpu),
-			nb->size, cudaMemcpyDefault,s);
-	PROF_CUDA_END(PROF_MSBASE+neighbor, s);
+		for (int p = 0; p < pagecount; p++)
+			cudaMemcpy(tbuf + p*(nb->size),
+		               buf + p*get_local_size(gpu),
+					   nb->size, cudaMemcpyDefault);
+	}
 
-	char *nbuf=nb->buffer[key];
-	cudaMemcpyAsync(nbuf,
-		tbuf,
-		nb->size*pagecount, cudaMemcpyDefault,s);
+	cudaMemcpyPeerAsync(nbuf, other, tbuf, gpu, nb->size * pagecount, s);
 }
 
 gpu_info* ZDivMultiGPUMapper::getinfo(int gpu)
@@ -458,26 +442,11 @@ unsigned int* ZDivMultiGPUMapper::gettbuf(int gpu, int key, int neighbor)
 
 unsigned int* ZDivMultiGPUMapper::getrbuf(int gpu, int key, int neighbor)
 {
-	key=key&1;
+	key = key & 1;
 
-	neighbor_buffer *nb=info[gpu].read_buffer[neighbor];
+	neighbor_buffer *nb = info[gpu].read_buffer[neighbor];
 	return (unsigned int*)nb->buffer[key];
 }
-
-void ZDivMultiGPUMapper::send_tbuf(int gpu, int key, int neighbor, cudaStream_t s)
-{
-	key=(key&1)^1;
-	
-	neighbor_buffer *nb=info[gpu].write_buffer[neighbor];
-
-	char *tbuf=info[gpu].tmp_buffer[neighbor];
-	char *nbuf=nb->buffer[key];
-
-	cudaMemcpyAsync(nbuf,
-		tbuf,
-		nb->size*pagecount, cudaMemcpyDefault,s);
-}
-
 
 /*
 void ZDivMultiGPUMapper::copy_to_neighbor(int gpu, int neighbor, int key)

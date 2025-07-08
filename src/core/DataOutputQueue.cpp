@@ -92,7 +92,7 @@ void DataOutputQueue::pushDataSet(uint type, uint replicate, ::google::protobuf:
 {
     // Get the size of the message.
     size_t messageSize = 0;
-    if (message != NULL) messageSize = message->ByteSize();
+    if (message != NULL) messageSize = message->ByteSizeLong();
 
     // Allocate a new data set buffer for the data.
     DataSet * dataSet = new DataSet(sizeof(uint)+sizeof(uint)+sizeof(size_t)+messageSize+sizeof(size_t)+payloadSize);

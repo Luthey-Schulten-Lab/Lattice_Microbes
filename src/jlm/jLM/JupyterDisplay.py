@@ -75,7 +75,7 @@ def _maxEntropySlice(siteLattice, axis):
     for i in range(siteLattice.shape[axis]):
         s = [slice(None), slice(None), slice(None)]
         s[axis] = i
-        im = siteLattice[s]
+        im = siteLattice[tuple(s)]
         nbins = siteLattice.max()+1
         e = sum(-x*np.log(x) for x in np.histogram(im,bins=nbins)[0]/im.size if x>0)
 
@@ -745,7 +745,7 @@ def _showRegionStack(lattice, htmlNames, siteColors, plane='xz', scl=None, maxWi
     return Tmp.displayj2html("sitestack.html", ctx)
 
 
-def _showBinaryLattices(binLattices, filterFunctions=None, mode="widget"):
+def _showBinaryLattices(binLattices,manualColor=None, filterFunctions=None, mode="widget"):
     assert mode in ['widget', 'download_x3d', 'download_html']
 
     if isinstance(binLattices, np.ndarray):
@@ -768,7 +768,12 @@ def _showBinaryLattices(binLattices, filterFunctions=None, mode="widget"):
     filterFunctions = filterFunctions or dict()
 
     for i,(name, binLattice) in enumerate(lattices):
-        r,g,b = Dsp.colorWheel(i/len(binLattices))
+        if manualColor is not None:
+            r,g,b = manualColor[name]
+            
+        else:
+            r,g,b = Dsp.colorWheel(i/len(binLattices))
+        print(name, r,g,b)
         if binLattice.any():
             if name in filterFunctions:
                 posMatch = filterFunctions[name](*np.mgrid[0:nx, 0:ny, 0:nz])

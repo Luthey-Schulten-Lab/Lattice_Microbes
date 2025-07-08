@@ -19,6 +19,7 @@ if (OPT_CUDA)
             "${CMAKE_CURRENT_LIST_DIR}/CudaIntLattice.cu"
             "${CMAKE_CURRENT_LIST_DIR}/IntMpdRdmeSolver.cu"
             "${CMAKE_CURRENT_LIST_DIR}/MGPUMpdRdmeSolver.cu"
+	    "${CMAKE_CURRENT_LIST_DIR}/MGPUIntMpdRdmeSolver.cu"
             "${CMAKE_CURRENT_LIST_DIR}/MpdRdmeSolver.cu"
             "${CMAKE_CURRENT_LIST_DIR}/GPUMapper/MultiGPUMapper.cu"
             "${CMAKE_CURRENT_LIST_DIR}/GPUMapper/ZDivMultiGPUMapper.cu"
@@ -28,6 +29,7 @@ if (OPT_CUDA)
             "${CMAKE_CURRENT_LIST_DIR}/CudaIntLattice.h"
             "${CMAKE_CURRENT_LIST_DIR}/IntMpdRdmeSolver.h"
             "${CMAKE_CURRENT_LIST_DIR}/MGPUMpdRdmeSolver.h"
+	    "${CMAKE_CURRENT_LIST_DIR}/MGPUIntMpdRdmeSolver.h"
             "${CMAKE_CURRENT_LIST_DIR}/MpdRdmeSolver.h")
 
     if (OPT_MPI)

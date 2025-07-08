@@ -1,0 +1,113 @@
+# This is an Apptainer definition file based on your Dockerfile
+
+Bootstrap: docker
+
+From: nvidia/cuda:12.6.1-devel-ubuntu20.04
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    
+  
+    ldconfig
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        apt-transport-https \
+        ca-certificates \
+        dbus \
+        fontconfig \
+        gnupg \
+        libasound2 \
+        libfreetype6 \
+        libglib2.0-0 \
+        libnss3 \
+        libsqlite3-0 \
+        libx11-xcb1 \
+        libxcb-glx0 \
+        libxcb-xkb1 \
+        libxcomposite1 \
+        libxcursor1 \
+        libxdamage1 \
+        libxi6 \
+        libxml2 \
+        libxrandr2 \
+        libxrender1 \
+        libxtst6 \
+        libgl1-mesa-glx \
+        libxkbfile-dev \
+        openssh-client \
+        wget \
+        xcb \
+        xkb-data && \
+    apt-get clean
+
+    # Install Nsight Systems
+    #cd /tmp && \
+    #wget https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2024_5/nsight-systems-2024.5.1_2024.5.1.113-1_amd64.deb && \
+    #apt-get install -y ./nsight-systems-2024.5.1_2024.5.1.113-1_amd64.deb && \
+    #rm -rf /tmp/*
+
+    # Install additional required packages
+    apt-get update \
+        && apt-get install -y \
+        make \
+        wget \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Install Miniconda
+    #wget https://repo.anaconda.com/miniconda/Miniconda3-py38_22.11.1-1-Linux-x86_64.sh \
+    #    && mkdir /root/.conda \
+    #    && bash Miniconda3-py38_22.11.1-1-Linux-x86_64.sh -b -p /root/miniconda3 \
+    #    && rm -f Miniconda3-py38_22.11.1-1-Linux-x86_64.sh
+    #export PATH="/root/miniconda3/bin:$PATH"
+    
+    #Install Miniforge for aarch64 archi like delta AI
+    wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh \
+    && mkdir -p /root/.conda \
+    && bash Miniforge3-Linux-aarch64.sh -b -p /root/miniforge3 \
+    && rm -f Miniforge3-Linux-aarch64.sh
+
+    # Export PATH for conda environment
+    export PATH="/root/miniforge3/bin:$PATH"
+    # Copy and install Lattice Microbes
+
+%files
+    #/data2/LM_kallithea/Lattice-Microbes /Lattice-Microbes
+    # This is for delta cluster
+    #/u/twu4/LM_build/Lattice-Microbes  /Lattice-Microbes
+    # This is for delta AI
+    /projects/bbsv/twu4/LM_build/Lattice-Microbes  /Lattice-Microbes
+%post
+    
+    mkdir /Software/
+    
+    cp -r /Lattice-Microbes /Software/Lattice_Microbes_v2.5/
+    #cp /Lattice-Microbes/lm_precomp_aarch64.yml /Software/Lattice_Microbes_v2.5/lm_precomp_aarch64.yml
+    #conda env create -n lm_2.5_dev -f /Software/Lattice_Microbes_v2.5/lm_precomp_arch64_modified.yml -c conda-forge
+    # you cant use conda init in non interactive bash 
+    
+   
+    
+
+    
+    # Build Lattice Microbes
+    bash -c "
+    #source /root/miniconda3/etc/profile.d/conda.sh
+    #This is for aarch64 like delta AI
+    source /root/miniforge3/etc/profile.d/conda.sh
+    conda init bash
+    
+    conda env create -n lm_2.5_dev -f /Software/Lattice_Microbes_v2.5/lm_precomp_aarch64.yml
+    conda activate lm_2.5_dev
+    #conda install -c conda-forge hdf5=1.10.6 hdf5-cpp
+    #conda install -c conda-forge libgcc-ng=12.1.0
+    #conda install -c conda-forge libxcrypt
+    cd /Software/Lattice_Microbes_v2.5 \
+        && mkdir build \
+        && cd build \
+        && cmake ../src -D MPD_GLOBAL_T_MATRIX=True -D MPD_GLOBAL_R_MATRIX=True \
+        && make \
+        && make install
+    "
+%runscript
+  
+    echo "Container for Lattice Microbes with Miniconda is ready."

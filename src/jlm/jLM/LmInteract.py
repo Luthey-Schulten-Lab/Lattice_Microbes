@@ -76,18 +76,28 @@ class LmWriteMixin:
         lmFile.setDiffusionModel(dm)
         lmFile.setSpatialModel(sm)
         lmFile.setDiffusionModelLattice(dm, self.lattice)
-        lmFile.setParameter("writeInterval", "{:.10e}".format(self.speciesWriteInterval))
-        lmFile.setParameter("latticeWriteInterval", "{:.10e}".format(self.latticeWriteInterval))
+        lmFile.setParameter("writeInterval", "{:d}".format(self.speciesWriteInterval))
+        lmFile.setParameter("latticeWriteInterval", "{:d}".format(self.latticeWriteInterval))
         lmFile.setParameter("perfPrintInterval", str(self.perfPrintInterval))
         if self.hookInterval is not None:
-            lmFile.setParameter("hookInterval", "{:.10e}".format(self.hookInterval))
+            lmFile.setParameter("hookInterval", "{:d}".format(self.hookInterval))
         else:
             lmFile.setParameter("hookInterval", "")
         lmFile.setParameter("maxTime", "{:.10e}".format(self.simulationTime))
         lmFile.setParameter("timestep", "{:.10e}".format(self.timestep))
-        lmFile.setParameter("speciesNames", ",".join(s.name for s in sorted(self.speciesList,key=lambda x:x.idx)))
+        lmFile.setParameter("bytesPerParticle", "{:d}".format(self.bytesPerParticle))
         lmFile.setParameter("siteTypeNames", ",".join(s.name for s in sorted(self.regionList,key=lambda x:x.idx)))
         lmFile.close()
+        
+        simFile = h5py.File(self.filename,'r+')
+    
+        dt = h5py.special_dtype(vlen=str)
+        specNamesListAscii = [s.name.encode("ascii", "ignore") for s in sorted(self.speciesList,key=lambda x:x.idx)]
+        simFile.create_dataset('Parameters/SpeciesNames', (len(specNamesListAscii),1), dt, specNamesListAscii)
+        
+        simFile.flush() 
+        simFile.close() 
+
 
         self._storeParamData()
 
@@ -114,7 +124,14 @@ class LmWriteMixin:
                 ts = h5['/Simulations/{:07d}/LatticeTimes'.format(replicate)][...]
                 frame = (ts.size + frame)%ts.size
                 plattice = h5['/Simulations/{:07d}/Lattice/{:010d}'.format(replicate, frame)][...]
-            inSps = h5['Parameters'].attrs['speciesNames'].decode().split(',')
+            par=h5['Parameters']
+            if 'SpeciesNames' in par:
+                namesDS = par['SpeciesNames'][:]
+                names = namesDS.tolist()
+                inSps = [spec[0] for spec in names]
+            else:
+                # compatibility with JLM versions < 2.5
+                inSps = par.attrs['speciesNames'].decode().split(',')
 
         spsTranslationMap = {inSps.index(sp.name)+1: sp.idx for sp in self.speciesList}
         txMap = np.zeros(16384, dtype=np.uint32)
@@ -319,7 +336,7 @@ class LmWriteMixin:
     def _storeParamData(self):
         # need to store mapping between parameter objects and ids
 
-        with h5py.File(self.filename) as h5:
+        with h5py.File(self.filename, 'r+') as h5:
             diffConstNames = ",".join(x.name for x in self.diffRateList)
             h5['Parameters'].attrs['diffConstNames'] = np.string_(diffConstNames)
             h5.create_dataset("Parameters/DiffusionParameterMatrix", data=self._diffParamMatrix)
@@ -374,7 +391,7 @@ class LmReadMixin:
 
     def _initLattice(self):
         self.siteLattice[...] = self.h5['/Model/Diffusion/LatticeSites'][...].transpose(2,1,0)
-        inputPl= np.array(self.h5['/Model/Diffusion/Lattice'], dtype=np.uint32)
+        inputPl= np.array(self.h5['/Model/Diffusion/Lattice'], dtype=self.particleLattice.dtype)
         Lattice.hdf2lmRep(self.particleLattice, inputPl)
 
     def _loadReplicate(self):
@@ -390,13 +407,23 @@ class LmReadMixin:
 
          last = self.latticeTimes.size-1
 
-         inputPl= np.array(self.trajData['Lattice']['{:010d}'.format(last)], dtype=np.uint32)
+         inputPl= np.array(self.trajData['Lattice']['{:010d}'.format(last)], dtype=self.particleLattice.dtype)
          Lattice.hdf2lmRep(self.particleLattice, inputPl)
 
 
     def _initSpecies(self):
-        speciesNames = self.h5['Parameters'].attrs['speciesNames'].decode().split(',')
+        par = self.h5['Parameters']
+        if 'SpeciesNames' in par:
+            namesDS = par['SpeciesNames'][:]
+            names = namesDS.tolist()
+            speciesNames = [spec[0] for spec in names]
+        else:
+            # Fall back to old version, compatible with JLM versions < 2.5
+            speciesNames = par.attrs['speciesNames'].decode().split(',')
+        
         for s in speciesNames:
+            if isinstance(s, bytes):
+                s = s.decode()
             self.speciesList.get(s)
         self.speciesList.freeze()
         assert self.Nsps == len(speciesNames)

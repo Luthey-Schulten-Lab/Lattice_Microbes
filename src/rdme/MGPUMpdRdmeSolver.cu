@@ -8,7 +8,6 @@
  *               University of Illinois at Urbana-Champaign
  *               http://www.scs.uiuc.edu/~schulten
  * 
- * Overflow algorithm in RDME solvers and CPU assignment (2012)
  * Developed by: Roberts Group
  *               Johns Hopkins University
  *               http://biophysics.jhu.edu/roberts/
@@ -47,6 +46,7 @@
 #include <string>
 #include <cstdlib>
 #include "config.h"
+#include <chrono>
 #if defined(MACOSX)
 #include <mach/mach_time.h>
 #elif defined(LINUX)
@@ -125,31 +125,25 @@ inline void mclkr_barrier_spin(int overflows)
 	PROF_BEGIN(MPD_MCLKR_BARRIER);
 
 	int gen = mclkr_generation;
-	//printf("enter gen %d\n", gen);
 	pthread_spin_lock(&mclkr_spin);
 
-        // Update shared counters
-        mclkr_overflow_reporters++;
-        mclkr_overflow_counter+=overflows;
+    // Update shared counters
+    mclkr_overflow_reporters++;
+    mclkr_overflow_counter+=overflows;
 
-	//printf("exit gen %d, %d\n", gen, mclkr_overflow_reporters);
 	pthread_spin_unlock(&mclkr_spin);
 
-        // simulate barrier
-        if(mclkr_overflow_reporters == mclkr_worker_count)
-        {
-//			printf("wake gen %d, %d\n", gen, mclkr_overflow_reporters);
-            mclkr_total_overflows=mclkr_overflow_counter;
-            mclkr_overflow_reporters=0;
-			mclkr_generation++;
-        }
-        else
-        {
-//			printf("sleep gen %d, %d\n", gen, mclkr_overflow_reporters);
-			while(mclkr_generation == gen) {} 
-        }
-
-	//printf("Done!\n");
+    // simulate barrier
+    if(mclkr_overflow_reporters == mclkr_worker_count)
+    {
+        mclkr_total_overflows=mclkr_overflow_counter;
+        mclkr_overflow_reporters=0;
+		mclkr_generation++;
+    }
+    else
+    {
+		while(mclkr_generation == gen) {} 
+    }
 
 	PROF_END(MPD_MCLKR_BARRIER);
 }
@@ -160,23 +154,23 @@ inline void mclkr_barrier_cond(int overflows)
 
 	pthread_mutex_lock(&mclkr_overflow_mutex);
 
-        // Update shared counters
-        mclkr_overflow_reporters++;
-        mclkr_overflow_counter+=overflows;
+    // Update shared counters
+    mclkr_overflow_reporters++;
+    mclkr_overflow_counter+=overflows;
 
-        // simulate barrier
-        if(mclkr_overflow_reporters == mclkr_worker_count)
-        {
-            mclkr_total_overflows=mclkr_overflow_counter;
-            mclkr_overflow_reporters=0;
-			pthread_cond_broadcast(&mclkr_overflow_cond);
-        }
-        else
-        {
-			pthread_cond_wait(&mclkr_overflow_cond, &mclkr_overflow_mutex);
-        }
+    // simulate barrier
+    if(mclkr_overflow_reporters == mclkr_worker_count)
+    {
+        mclkr_total_overflows=mclkr_overflow_counter;
+        mclkr_overflow_reporters=0;
+		pthread_cond_broadcast(&mclkr_overflow_cond);
+    }
+    else
+    {
+		pthread_cond_wait(&mclkr_overflow_cond, &mclkr_overflow_mutex);
+    }
 
-		pthread_mutex_unlock(&mclkr_overflow_mutex);
+	pthread_mutex_unlock(&mclkr_overflow_mutex);
 
 	PROF_END(MPD_MCLKR_BARRIER);
 }
@@ -184,7 +178,13 @@ inline void mclkr_barrier_cond(int overflows)
 	
 
 MGPUMpdRdmeSolver::MGPUMpdRdmeSolver()
-:RDMESolver(lm::rng::RandomGenerator::NONE),seed(0),cudaOverflowList(NULL),tau(0.0),overflowTimesteps(0),overflowListUses(0)
+:RDMESolver(lm::rng::RandomGenerator::NONE),
+ seed(0), tau(0.0), threads(NULL),
+ overflowTimesteps(0), overflowListUses(0),
+ model_reactionOrders(NULL), model_reactionSites(NULL), model_reactionRates(NULL),
+ model_D1(NULL), model_D2(NULL),
+ model_S(NULL), model_T(NULL), model_RL(NULL),
+ zeroOrder(NULL), firstOrder(NULL), secondOrder(NULL)
 {
 	// set defaults features
 	aggcopy_x_unpack = true;
@@ -261,38 +261,35 @@ void MGPUMpdRdmeSolver::initialize(unsigned int replicate, map<string,string> * 
 void MGPUMpdRdmeSolver::initialize_decomposition()
 {
 	// Create mapper
-	int latx,laty,latz;
-	int apron,overlap;
-	char *ids=NULL;
-	int gpus=resources->cudaDevices.size();
-#if defined MPD_BOUNDARY_PERIODIC
-	bool pz=true;
-#else
-	bool pz=false;
-#endif
-	apron=2;
-	overlap=0;
+	int latx, laty, latz;
+	int apron, overlap;
+	int gpus = resources->cudaDevices.size();
 
-	latx=lattice->getXSize();
-	laty=lattice->getYSize();
-	latz=lattice->getZSize();
+#if defined MPD_BOUNDARY_PERIODIC
+	bool pz = true;
+#else
+	bool pz = false;
+#endif
+
+	apron = 2;
+	overlap = 0;
+
+	latx = lattice->getXSize();
+	laty = lattice->getYSize();
+	latz = lattice->getZSize();
 
 	int site_size = sizeof(int);
 	int pagecount = MPD_WORDS_PER_SITE;
 
-	Print::printf(Print::DEBUG, "Create mapper: X=%d Y=%d Z=%d, sitesize=%d, apron=%d, overlap=%d, gpus=%d, gpu_ids=%s, periodic_z=%d, pagecount=%d",
-			latx, laty, latz,
-			site_size, apron, overlap,
-			gpus, ids, pz, pagecount);
-	mapper=new ZDivMultiGPUMapper(latx, laty, latz, site_size, apron, overlap, gpus, resources->cudaDevices.data(), pz, pagecount);
+	mapper = new ZDivMultiGPUMapper(latx, laty, latz,
+	                                site_size, apron, overlap,
+								    gpus, resources->cudaDevices.data(), pz, pagecount);
 
-    pthread_barrier_init(&start_barrier, NULL, gpus+1);
-    pthread_barrier_init(&stop_barrier, NULL, gpus+1);
+    pthread_barrier_init(&start_barrier,      NULL, gpus+1);
+    pthread_barrier_init(&stop_barrier,       NULL, gpus+1);
     pthread_barrier_init(&simulation_barrier, NULL, gpus);
-    pthread_barrier_init(&overflow_barrier1, NULL, gpus);
-    pthread_barrier_init(&overflow_barrier2, NULL, gpus);
 
-	mclkr_worker_count=gpus;
+	mclkr_worker_count = gpus;
 }
 
 void MGPUMpdRdmeSolver::start_threads()
@@ -306,31 +303,27 @@ void MGPUMpdRdmeSolver::start_threads()
 	cpu_set_t cpuset;
 	CPU_ZERO(&cpuset);
 
-	for(int c=0; c<resources->cpuCores.size(); c++)
+	for (int c = 0; c < resources->cpuCores.size(); c++)
 	{
-		Print::printf(Print::DEBUG,"Adding CPU %d to our cpuset", resources->cpuCores[c]);
 		CPU_SET(resources->cpuCores[c], &cpuset);
 	}
 	pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
 #endif
 
-	int gpus=resources->cudaDevices.size();
-	threads=new gpu_worker_thread_params[gpus];
-	for(int i=0; i<gpus; i++)
+	int gpus = resources->cudaDevices.size();
+	threads = new gpu_worker_thread_params[gpus];
+
+	for (int i = 0; i < gpus; i++)
 	{
-        threads[i].runner=this;
-        //threads[i].lattice=lattice;
-        threads[i].mapper=mapper;
-        threads[i].gpu=i;
-        threads[i].ngpus=gpus;
-        threads[i].runner_sync=NULL;
-        threads[i].worker_sync=NULL;
-        threads[i].timesteps_to_run=0;
-		threads[i].segment=mapper->getSegmentDescriptor(i);
+        threads[i].runner           = this;
+        threads[i].mapper           = mapper;
+        threads[i].gpu              = i;
+        threads[i].ngpus            = gpus;
+        threads[i].timesteps_to_run = 0;
+		threads[i].segment          = mapper->getSegmentDescriptor(i);
 		
-		Print::printf(Print::DEBUG,"Creating GPU thread %d",i);
-        pthread_create(&(threads[i].thread), NULL, &gpu_worker_thread,
-            (void*)&(threads[i]));
+        pthread_create(&(threads[i].thread), NULL,
+		               &gpu_worker_thread, (void*)&(threads[i]));
 	}
 }
 
@@ -344,9 +337,25 @@ void MGPUMpdRdmeSolver::stop_threads()
 	}
 }
 
-
 MGPUMpdRdmeSolver::~MGPUMpdRdmeSolver()
 {
+	// Free allocated memory in MGPUMpdRdmeSolver
+	if (model_reactionOrders) {delete [] model_reactionOrders;}
+	if (model_reactionSites)  {delete [] model_reactionSites;}
+	if (model_reactionRates)  {delete [] model_reactionRates;}
+
+	if (model_D1) {delete [] model_D1;}
+	if (model_D2) {delete [] model_D2;}
+
+	if (model_S)  {delete [] model_S;}
+	if (model_T)  {delete [] model_T;}
+	if (model_RL) {delete [] model_RL;}
+
+	if (zeroOrder)   {delete [] zeroOrder;}
+	if (firstOrder)  {delete [] firstOrder;}
+	if (secondOrder) {delete [] secondOrder;}
+
+	if (threads) {delete [] threads;}
 }
 
 void MGPUMpdRdmeSolver::allocateLattice(lattice_size_t latticeXSize, lattice_size_t latticeYSize, lattice_size_t latticeZSize, site_size_t particlesPerSite, const unsigned int bytes_per_particle, si_dist_t latticeSpacing)
@@ -411,12 +420,7 @@ void MGPUMpdRdmeSolver::buildModel(const uint numberSpeciesA, const uint numberR
 
     // Setup the cuda S matrix.
     model_S = new int8_t[numberSpecies*numberReactions];
-/*
-    for (uint i=0; i<numberSpecies*numberReactions; i++)
-    {
-    	model_S[i] = S[i];
-    }
-*/
+
 	for(uint rx = 0; rx < numberReactions; rx++)
 	{
 		for (uint p=0; p<numberSpecies; p++)
@@ -473,8 +477,7 @@ void MGPUMpdRdmeSolver::buildDiffusionModel(const uint numberSiteTypesA, const d
     // Set the cuda reaction model rates now that we have the subvolume size.
     model_reactionRates = new float[numberReactions];
 
-	// set up pre-configured propensity matricies
-	// Will be filled in by precomputePropensities()
+	// Set up pre-configured propensity matrices
 	zeroOrderSize=numberSiteTypes;
 	firstOrderSize=numberSpecies*numberSiteTypes;
 	secondOrderSize=numberSpecies*numberSpecies*numberSiteTypes;
@@ -483,7 +486,7 @@ void MGPUMpdRdmeSolver::buildDiffusionModel(const uint numberSiteTypesA, const d
 	secondOrder=new float[secondOrderSize];
 
 	computePropensities();
-	reactionModelModified=0;
+	reactionModelModified = false;
 }
 
 void MGPUMpdRdmeSolver::computePropensities()
@@ -540,26 +543,25 @@ void MGPUMpdRdmeSolver::computePropensities()
 				{
 					ZerothOrderPropensityArgs *rx=(ZerothOrderPropensityArgs *)propensityFunctionArgs[i];
 					zeroOrder[site]+=rx->k*tau/scale;
-				} break;
+				}   break;
+
 				case FirstOrderPropensityArgs::REACTION_TYPE:
 				{
-				FirstOrderPropensityArgs *rx=(FirstOrderPropensityArgs *)propensityFunctionArgs[i];
-				firstOrder[o1 + rx->si]+=rx->k*tau;
-				}
-				break;
+					FirstOrderPropensityArgs *rx=(FirstOrderPropensityArgs *)propensityFunctionArgs[i];
+					firstOrder[o1 + rx->si]+=rx->k*tau;
+				}   break;
 				
 				case SecondOrderPropensityArgs::REACTION_TYPE:
 				{
-				SecondOrderPropensityArgs *rx=(SecondOrderPropensityArgs *)propensityFunctionArgs[i];
-				secondOrder[o2 + (rx->s1i) * numberSpecies + (rx->s2i)]=rx->k*tau*scale;
-				secondOrder[o2 + (rx->s2i) * numberSpecies + (rx->s1i)]=rx->k*tau*scale;
-				}
-				break; 
+					SecondOrderPropensityArgs *rx=(SecondOrderPropensityArgs *)propensityFunctionArgs[i];
+					secondOrder[o2 + (rx->s1i) * numberSpecies + (rx->s2i)]=rx->k*tau*scale;
+					secondOrder[o2 + (rx->s2i) * numberSpecies + (rx->s1i)]=rx->k*tau*scale;
+				}   break; 
 
 				case SecondOrderSelfPropensityArgs::REACTION_TYPE:
 				{
-				SecondOrderSelfPropensityArgs *rx=(SecondOrderSelfPropensityArgs *)propensityFunctionArgs[i];
-				secondOrder[o2 + (rx->si) * numberSpecies + (rx->si)]+=rx->k*tau*scale*2;
+					SecondOrderSelfPropensityArgs *rx=(SecondOrderSelfPropensityArgs *)propensityFunctionArgs[i];
+					secondOrder[o2 + (rx->si) * numberSpecies + (rx->si)]+=rx->k*tau*scale*2;
 				}
 			}
 		}
@@ -587,7 +589,7 @@ void MGPUMpdRdmeSolver::copyModelsToDevice(int gpu)
     // R matrix put in global memory
     //cudaMalloc(&numberReactionsG, sizeof(unsigned int));
     //cudaMemcpy(numberReactionsG, &numberReactions, sizeof(unsigned int), cudaMemcpyHostToDevice);
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(numberReactionsC, &numberReactions, sizeof(unsigned int)));
+    cudaMemcpyToSymbol(numberReactionsC, &numberReactions, sizeof(unsigned int));
     cudaMalloc(&(threads[gpu].reactionOrdersG), numberReactions*sizeof(unsigned int));
     cudaMemcpy(threads[gpu].reactionOrdersG, model_reactionOrders, numberReactions*sizeof(unsigned int), cudaMemcpyHostToDevice);
     cudaMalloc(&(threads[gpu].reactionSitesG), numberReactions*sizeof(unsigned int));
@@ -597,11 +599,11 @@ void MGPUMpdRdmeSolver::copyModelsToDevice(int gpu)
     cudaMalloc(&(threads[gpu].D2G), numberReactions*sizeof(unsigned int));
     cudaMemcpy(threads[gpu].D2G, model_D2, numberReactions*sizeof(unsigned int), cudaMemcpyHostToDevice);
 #else
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(numberReactionsC, &numberReactions, sizeof(unsigned int)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(reactionOrdersC, model_reactionOrders, numberReactions*sizeof(unsigned int)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(reactionSitesC, model_reactionSites, numberReactions*sizeof(unsigned int)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(D1C, model_D1, numberReactions*sizeof(unsigned int)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(D2C, model_D2, numberReactions*sizeof(unsigned int)));
+    cudaMemcpyToSymbol(numberReactionsC, &numberReactions, sizeof(unsigned int));
+    cudaMemcpyToSymbol(reactionOrdersC, model_reactionOrders, numberReactions*sizeof(unsigned int));
+    cudaMemcpyToSymbol(reactionSitesC, model_reactionSites, numberReactions*sizeof(unsigned int));
+    cudaMemcpyToSymbol(D1C, model_D1, numberReactions*sizeof(unsigned int));
+    cudaMemcpyToSymbol(D2C, model_D2, numberReactions*sizeof(unsigned int));
 #endif
 
 #ifdef MPD_GLOBAL_S_MATRIX
@@ -610,51 +612,51 @@ void MGPUMpdRdmeSolver::copyModelsToDevice(int gpu)
 	cudaMemcpy(threads[gpu].SG, model_S, numberSpecies*numberReactions * sizeof(int8_t), cudaMemcpyHostToDevice);
 #else
 	// S matrix is in constant memory
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(SC, model_S, numberSpecies*numberReactions*sizeof(int8_t)));
+    cudaMemcpyToSymbol(SC, model_S, numberSpecies*numberReactions*sizeof(int8_t));
 #endif
 
 #ifdef MPD_GLOBAL_T_MATRIX
-	CUDA_EXCEPTION_CHECK(cudaMalloc(&(threads[gpu].TG), DFmatrixSize*sizeof(float)));
-	CUDA_EXCEPTION_CHECK(cudaMemcpy(threads[gpu].TG, model_T, DFmatrixSize*sizeof(float), cudaMemcpyHostToDevice));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(TC, &(threads[gpu].TG), sizeof(float*)));
+	cudaMalloc(&(threads[gpu].TG), DFmatrixSize*sizeof(float));
+	cudaMemcpy(threads[gpu].TG, model_T, DFmatrixSize*sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpyToSymbol(TC, &(threads[gpu].TG), sizeof(float*));
 #else
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(TC, model_T, DFmatrixSize*sizeof(float)));
+    cudaMemcpyToSymbol(TC, model_T, DFmatrixSize*sizeof(float));
 #endif
 
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(numberSpeciesC, &numberSpecies, sizeof(numberSpeciesC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(numberSiteTypesC, &numberSiteTypes, sizeof(numberSiteTypesC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(latticeXSizeC, &latticeXSize, sizeof(latticeYSizeC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(latticeYSizeC, &latticeYSize, sizeof(latticeYSizeC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(latticeZSizeC, &latticeZSize, sizeof(latticeZSizeC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(latticeXYSizeC, &latticeXYSize, sizeof(latticeXYSizeC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(latticeXYZSizeC, &latticeXYZSize, sizeof(latticeXYZSizeC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(global_latticeZSizeC, &global_latticeZSize, sizeof(global_latticeZSizeC)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(global_latticeXYZSizeC, &global_latticeXYZSize, sizeof(global_latticeXYZSizeC)));
+    cudaMemcpyToSymbol(numberSpeciesC, &numberSpecies, sizeof(numberSpeciesC));
+    cudaMemcpyToSymbol(numberSiteTypesC, &numberSiteTypes, sizeof(numberSiteTypesC));
+    cudaMemcpyToSymbol(latticeXSizeC, &latticeXSize, sizeof(latticeYSizeC));
+    cudaMemcpyToSymbol(latticeYSizeC, &latticeYSize, sizeof(latticeYSizeC));
+    cudaMemcpyToSymbol(latticeZSizeC, &latticeZSize, sizeof(latticeZSizeC));
+    cudaMemcpyToSymbol(latticeXYSizeC, &latticeXYSize, sizeof(latticeXYSizeC));
+    cudaMemcpyToSymbol(latticeXYZSizeC, &latticeXYZSize, sizeof(latticeXYZSizeC));
+    cudaMemcpyToSymbol(global_latticeZSizeC, &global_latticeZSize, sizeof(global_latticeZSizeC));
+    cudaMemcpyToSymbol(global_latticeXYZSizeC, &global_latticeXYZSize, sizeof(global_latticeXYZSizeC));
 #ifdef MPD_GLOBAL_S_MATRIX
 	// Store RL in global memory too, since I'm going to assume if S is too big, then RL is too.
 	cudaMalloc(&(threads[gpu].RLG), numberReactions*numberSiteTypes * sizeof(uint8_t));
 	cudaMemcpy(threads[gpu].RLG, model_RL, numberReactions*numberSiteTypes * sizeof(uint8_t), cudaMemcpyHostToDevice);
 #else
 	// RL is stored in constant memory
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(RLC, model_RL, numberReactions*numberSiteTypes*sizeof(uint8_t)));
+    cudaMemcpyToSymbol(RLC, model_RL, numberReactions*numberSiteTypes*sizeof(uint8_t));
 #endif
 
 #ifdef MPD_GLOBAL_R_MATRIX
     cudaMalloc(&(threads[gpu].reactionRatesG), numberReactions*sizeof(float));
     cudaMemcpy(threads[gpu].reactionRatesG, model_reactionRates, numberReactions*sizeof(float), cudaMemcpyHostToDevice);
 #else
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(reactionRatesC, model_reactionRates, numberReactions*sizeof(float)));
+    cudaMemcpyToSymbol(reactionRatesC, model_reactionRates, numberReactions*sizeof(float));
 #endif
 
 	// Copy per-GPU global offsets
     //CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(lsizeXC, &(threads[gpu].local_dimensions.x), sizeof(unsigned int)));
     //CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(lsizeYC, &(threads[gpu].local_dimensions.y), sizeof(unsigned int)));
     //CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(lsizeZC, &(threads[gpu].local_dimensions.z), sizeof(unsigned int)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(goffsetXC, &(threads[gpu].segment->global_offset.x), sizeof(int)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(goffsetYC, &(threads[gpu].segment->global_offset.y), sizeof(int)));
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(goffsetZC, &(threads[gpu].segment->global_offset.z), sizeof(int)));
+    cudaMemcpyToSymbol(goffsetXC, &(threads[gpu].segment->global_offset.x), sizeof(int));
+    cudaMemcpyToSymbol(goffsetYC, &(threads[gpu].segment->global_offset.y), sizeof(int));
+    cudaMemcpyToSymbol(goffsetZC, &(threads[gpu].segment->global_offset.z), sizeof(int));
 
-    CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(gpuidC, &gpu, sizeof(unsigned int)));
+    cudaMemcpyToSymbol(gpuidC, &gpu, sizeof(unsigned int));
 
 	cudaMalloc(&(threads[gpu].propZeroOrder), zeroOrderSize*sizeof(float));
 	cudaMemcpy(threads[gpu].propZeroOrder, zeroOrder, zeroOrderSize*sizeof(float), cudaMemcpyHostToDevice);
@@ -666,24 +668,24 @@ void MGPUMpdRdmeSolver::copyModelsToDevice(int gpu)
 	ZDivMultiGPUMapper *zmap = (ZDivMultiGPUMapper*)mapper;
 	gpu_info *g = zmap->getinfo(gpu);
 	unsigned int tmp = g->overlap_send[0].z;
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(top_send_z, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(top_send_z, &tmp, sizeof(int));
 	tmp = g->overlap_dim.z;
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(top_dim_z, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(top_dim_z, &tmp, sizeof(int));
 	tmp = DIMSIZE(g->overlap_dim);
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(top_dim_size, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(top_dim_size, &tmp, sizeof(int));
 
 	tmp = g->overlap_send[1].z;
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(bot_send_z, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(bot_send_z, &tmp, sizeof(int));
 	tmp = g->overlap_dim.z;
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(bot_dim_z, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(bot_dim_z, &tmp, sizeof(int));
 	tmp = DIMSIZE(g->overlap_dim);
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(bot_dim_size, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(bot_dim_size, &tmp, sizeof(int));
 
 	tmp = g->overlap_recv[0].z;
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(top_recv_z, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(top_recv_z, &tmp, sizeof(int));
 
 	tmp = g->overlap_recv[1].z;
-	CUDA_EXCEPTION_CHECK(cudaMemcpyToSymbol(bot_recv_z, &tmp, sizeof(int)));
+	cudaMemcpyToSymbol(bot_recv_z, &tmp, sizeof(int));
 }
 
 void MGPUMpdRdmeSolver::setReactionRate(unsigned int rxid, float rate)
@@ -704,9 +706,13 @@ void MGPUMpdRdmeSolver::setReactionRate(unsigned int rxid, float rate)
 	{
 		((SecondOrderSelfPropensityArgs *)propensityFunctionArgs[rxid])->k = rate;
 	}
+	else
+    {
+    	throw InvalidArgException("reactionTypeA", "the reaction type was not supported by the solver", reactionTypes[rxid]);
+    }
 
 	// Flag to trigger re-computation of rdme propensities
-	reactionModelModified=1;
+	reactionModelModified = true;
 }
 
 void MGPUMpdRdmeSolver::generateTrajectory()
@@ -721,31 +727,46 @@ void MGPUMpdRdmeSolver::generateTrajectory()
     ByteLattice * lattice = (ByteLattice *)this->lattice;
 
     // Get the interval for writing species counts and lattices.
-    double speciesCountsWriteInterval=atof((*parameters)["writeInterval"].c_str());
-    double nextSpeciesCountsWriteTime = speciesCountsWriteInterval;
+    uint32_t speciesCountsWriteInterval=atol((*parameters)["writeInterval"].c_str());
+    uint32_t nextSpeciesCountsWriteTime = speciesCountsWriteInterval;
     lm::io::SpeciesCounts speciesCountsDataSet;
     speciesCountsDataSet.set_number_species(numberSpeciesToTrack);
     speciesCountsDataSet.set_number_entries(0);
-    double latticeWriteInterval=atof((*parameters)["latticeWriteInterval"].c_str());
-    double nextLatticeWriteTime = latticeWriteInterval;
+    uint32_t latticeWriteInterval=atol((*parameters)["latticeWriteInterval"].c_str());
+    uint32_t nextLatticeWriteTime = latticeWriteInterval;
     lm::io::Lattice latticeDataSet;
 
-    // Get the simulation time limit.
+    // Get the simulation time limit. 
     double maxTime=atof((*parameters)["maxTime"].c_str());
 
-    Print::printf(Print::INFO, "Running mpd rdme simulation with %d species, %d reactions, %d site types for %e s with tau %e. Writing species at %e and lattice at %e intervals", numberSpecies, numberReactions, numberSiteTypes, maxTime, tau, speciesCountsWriteInterval, latticeWriteInterval);
-
-    Print::printf(Print::DEBUG, "aggcopy_x_unpack = %d, aggcopy_r_pack = %d, use_spin_barrier = %d", aggcopy_x_unpack, aggcopy_r_pack, use_spin_barrier);
-	// Find out at what interval to write status messages
-	printPerfInterval = 60;  
-	if((*parameters)["perfPrintInterval"] != "")
-	{
-		printPerfInterval=atof((*parameters)["perfPrintInterval"].c_str());
-	}
-
+    Print::printf(Print::INFO,
+	              "Running mpd rdme simulation with %d species, %d reactions, %d site types for %e s with tau %e. Writing species at %d and lattice at %d intervals",
+				  numberSpecies, numberReactions, numberSiteTypes,
+				  maxTime, tau,
+				  speciesCountsWriteInterval, latticeWriteInterval);
+    
     // Set the initial time.
     double time = 0.0;
-	absolute_timestep=1;
+	current_timestep = 0;
+
+	bool hookEnabled=false;
+    uint32_t nextHookTime=0;
+    uint32_t hookInterval=0;
+
+    // Find out at what interval to hook simulations
+	if((*parameters)["hookInterval"] != "")
+    {
+        hookInterval=atol((*parameters)["hookInterval"].c_str());
+        hookEnabled=true;
+        nextHookTime=hookInterval;
+    }
+
+	// Find out at what interval to write status messages
+    printPerfInterval = 60;
+    if((*parameters)["perfPrintInterval"] != "")
+    {
+        printPerfInterval=atof((*parameters)["perfPrintInterval"].c_str());
+    }
 
     // Record the initial species counts.
     recordSpeciesCounts(time, lattice, &speciesCountsDataSet);
@@ -753,31 +774,26 @@ void MGPUMpdRdmeSolver::generateTrajectory()
     // Write the initial lattice.
     writeLatticeData(time, lattice, &latticeDataSet);
 
+	// Perform an initial hook check
+    hookCheckSimulation(time, lattice);
+
     // Loop until we have finished the simulation.
     while (time < maxTime)
     {
 		// compute number of steps to batch
-		int nSteps = min(
-			ceil((nextLatticeWriteTime-EPS-time)/tau),
-			min(
-				ceil((nextSpeciesCountsWriteTime-EPS-time)/tau),
-				ceil((maxTime-time)/tau)));
-/*
-		printf("nlwt %g nscwt %g end %g\n", 
-			ceil((nextLatticeWriteTime-EPS-time)/tau),
-			ceil((nextSpeciesCountsWriteTime-EPS-time)/tau),
-			ceil((maxTime-time)/tau));
-*/
+		int nSteps = min(nextLatticeWriteTime-current_timestep,
+			         min(nextSpeciesCountsWriteTime-current_timestep,
+			         min(nextHookTime-current_timestep,
+					 ((uint32_t) (ceil(maxTime/tau)-current_timestep)))));
 
 		if(nSteps == 0) nSteps=1;
 		assert(nSteps > 0);
 		
-		timesteps_to_run=nSteps;
-
-		//printf("Time: %g.  Running %d steps\n", time, timesteps_to_run);
+		timesteps_to_run = nSteps;
+	
 		// wake up threads
 		pthread_barrier_wait(&start_barrier);
-
+		
 		// ... and wait.
 		pthread_barrier_wait(&stop_barrier);
 		
@@ -786,53 +802,53 @@ void MGPUMpdRdmeSolver::generateTrajectory()
 			printf("Global abort: terminating solver");
 			break;
 		}
+	
+        // Advance the timestep counter
+		current_timestep += nSteps;
 
-        // Update the time.
-		absolute_timestep += nSteps;
-        time += tau * nSteps;
+		// Update the time
+        time = current_timestep*tau;
 
-        // See if we need to write out the any data.
-        if (time >= nextLatticeWriteTime-EPS || time >= nextSpeciesCountsWriteTime-EPS)
+		// No need to sync from gpus first; each gpu thread does a stage_out
+		// prior to entering the stop barrier
+		// clear the flag for if reaction model has changed
+		reactionModelModified = false;
+		// Also no need to check the return value of the hook as a stage in is always done
+		// at the beginning of the timestep batch
+
+		// Check if we need to execute the hook
+		if (hookEnabled && current_timestep >= nextHookTime)
         {
-			// No need to sync from gpus first; each gpu thread does a stage_out
-			// prior to entering the stop barrier
-
-			// clear the flag for if reaction model has changed
-			reactionModelModified=0;
-			// Also no need to check the return value of the hook as a stage in is always done
-			// at the beginning of the timestep batch
-			// TODO: remember this assumption
-			hookSimulation(time, lattice);
-
-			// Regenerate precomputed Propensities.
-			// Each GPU thread will re-copy to device before next step
-			if(reactionModelModified)
-				computePropensities();
+            // lattice->copyFromGPU();
+            Print::printf(Print::INFO, "Hook time is %.14f, in steps is %d", time, nextHookTime);
+            hookCheckSimulation(time, lattice);
+            nextHookTime += hookInterval;
+            Print::printf(Print::INFO, "Next hook time is %d", nextHookTime);
+        }
 			
-            // See if we need to write the lattice.
-            if (time >= nextLatticeWriteTime-EPS)
-            {
-                PROF_BEGIN(PROF_SERIALIZE_LATTICE);
-                writeLatticeData(time, lattice, &latticeDataSet);
-                nextLatticeWriteTime += latticeWriteInterval;
-                PROF_END(PROF_SERIALIZE_LATTICE);
-            }
+        // See if we need to write the lattice.
+        if (current_timestep >= nextLatticeWriteTime)
+        {
+            PROF_BEGIN(PROF_SERIALIZE_LATTICE);
+            writeLatticeData(time, lattice, &latticeDataSet);
+            nextLatticeWriteTime += latticeWriteInterval;
+            PROF_END(PROF_SERIALIZE_LATTICE);
+        }
 
-            // See if we need to write the species counts.
-            if (time >= nextSpeciesCountsWriteTime-EPS)
-            {
-                PROF_BEGIN(PROF_DETERMINE_COUNTS);
-                recordSpeciesCounts(time, lattice, &speciesCountsDataSet);
-                nextSpeciesCountsWriteTime += speciesCountsWriteInterval;
-                PROF_END(PROF_DETERMINE_COUNTS);
+        // See if we need to write the species counts.
+        if (current_timestep >= nextSpeciesCountsWriteTime)
+        {
+            PROF_BEGIN(PROF_DETERMINE_COUNTS);
+            recordSpeciesCounts(time, lattice, &speciesCountsDataSet);
+            nextSpeciesCountsWriteTime += speciesCountsWriteInterval;
+            PROF_END(PROF_DETERMINE_COUNTS);
 
-                // See if we have accumulated enough species counts to send.
-                if (speciesCountsDataSet.number_entries() >= TUNE_SPECIES_COUNTS_BUFFER_SIZE)
-                {
-                    PROF_BEGIN(PROF_SERIALIZE_COUNTS);
-                    writeSpeciesCounts(&speciesCountsDataSet);
-                    PROF_END(PROF_SERIALIZE_COUNTS);
-                }
+            // See if we have accumulated enough species counts to send.
+            if (speciesCountsDataSet.number_entries() >= TUNE_SPECIES_COUNTS_BUFFER_SIZE)
+            {
+                PROF_BEGIN(PROF_SERIALIZE_COUNTS);
+                writeSpeciesCounts(&speciesCountsDataSet);
+                PROF_END(PROF_SERIALIZE_COUNTS);
             }
         }
     }
@@ -845,7 +861,7 @@ void MGPUMpdRdmeSolver::generateTrajectory()
 	Print::printf(Print::DEBUG, "all done, tear down");
 	pthread_barrier_wait(&start_barrier);
 	Print::printf(Print::DEBUG, "stop all threads");
-	
+
 	stop_threads();
 }
 
@@ -866,11 +882,36 @@ void MGPUMpdRdmeSolver::writeLatticeData(double time, ByteLattice * lattice, lm:
     lm::main::DataOutputQueue::getInstance()->pushDataSet(lm::main::DataOutputQueue::BYTE_LATTICE, replicate, latticeDataSet, lattice, payloadSize, &lm::rdme::ByteLattice::nativeSerialize);
 }
 
+void MGPUMpdRdmeSolver::writeLatticeSites(double time, ByteLattice * lattice)
+{
+    Print::printf(Print::DEBUG, "Writing lattice sites at %e s", time);
+
+    lm::io::Lattice latticeDataSet;
+    // Record the lattice data.
+    latticeDataSet.Clear();
+    latticeDataSet.set_lattice_x_size(lattice->getSize().x);
+    latticeDataSet.set_lattice_y_size(lattice->getSize().y);
+    latticeDataSet.set_lattice_z_size(lattice->getSize().z);
+    latticeDataSet.set_particles_per_site(lattice->getMaxOccupancy());
+    latticeDataSet.set_time(time);
+
+    // Push it to the output queue.
+    size_t payloadSize = lattice->getSize().x*lattice->getSize().y*lattice->getSize().z*sizeof(uint8_t);
+    lm::main::DataOutputQueue::getInstance()->pushDataSet(lm::main::DataOutputQueue::SITE_LATTICE,
+	                                                      replicate,
+														  &latticeDataSet,
+														  lattice,
+														  payloadSize,
+														  &lm::rdme::ByteLattice::nativeSerializeSites);
+}
+
 void MGPUMpdRdmeSolver::recordSpeciesCounts(double time, ByteLattice * lattice, lm::io::SpeciesCounts * speciesCountsDataSet)
 {
     std::map<particle_t,uint> particleCounts = lattice->getParticleCounts();
+
     speciesCountsDataSet->set_number_entries(speciesCountsDataSet->number_entries()+1);
     speciesCountsDataSet->add_time(time);
+
     for (particle_t p=0; p<numberSpeciesToTrack; p++)
     {
         speciesCountsDataSet->add_species_count((particleCounts.count(p+1)>0)?particleCounts[p+1]:0);
@@ -891,6 +932,35 @@ void MGPUMpdRdmeSolver::writeSpeciesCounts(lm::io::SpeciesCounts * speciesCounts
     }
 }
 
+void MGPUMpdRdmeSolver::hookCheckSimulation(double time, ByteLattice * lattice)
+{
+	switch(hookSimulation(time, lattice))
+    {
+        case 0:
+            break;
+
+        case 1:
+            // lattice->copyToGPU();
+            break;
+
+        case 2:
+            // lattice->copyToGPU();
+            writeLatticeSites(time, lattice);
+            break;
+
+        case 3:
+            printf("hook return value is 3, force to stop.\n");
+			writeLatticeSites(time, lattice);
+            return;
+
+        default:
+            throw("Unknown hook return value");
+    }
+
+	if(reactionModelModified)
+		computePropensities();
+}
+
 uint64_t MGPUMpdRdmeSolver::getTimestepSeed(uint32_t timestep, uint32_t substep)
 {
     uint64_t timestepHash = (((((uint64_t)seed)<<30)+timestep)<<2)+substep;
@@ -902,159 +972,160 @@ uint64_t MGPUMpdRdmeSolver::getTimestepSeed(uint32_t timestep, uint32_t substep)
 
 int MGPUMpdRdmeSolver::run_next_timestep(int gpu, uint32_t timestep)
 {
-    PROF_BEGIN(PROF_MPD_TIMESTEP);
+	int z_start = 0;
 
-	unsigned int *dlat=threads[gpu].dLattice;
-	unsigned int *dtmp=threads[gpu].dLatticeTmp;
-	uint8_t *sites=threads[gpu].dSites;
-	cudaStream_t cudaStream=threads[gpu].stream1;
-	unsigned int *d_overflows=threads[gpu].d_overflows;	
-	int z_start=0;
+	unsigned int *dlat        = threads[gpu].dLattice;
+	unsigned int *dtmp        = threads[gpu].dLatticeTmp;
+	uint8_t      *sites       = threads[gpu].dSites;
+	unsigned int *d_overflows = threads[gpu].d_overflows;
+
+	cudaStream_t cudaStream = threads[gpu].stream1;
+	cudaStream_t copyStream = threads[gpu].stream2;
 	
-    dim3 gridSize=threads[gpu].grid_x;
-	dim3 threadBlockSize=threads[gpu].threads_x;
+    dim3 gridSize        = threads[gpu].grid_x;
+	dim3 threadBlockSize = threads[gpu].threads_x;
 
-	ZDivMultiGPUMapper* zmap = (ZDivMultiGPUMapper*)mapper;
+	ZDivMultiGPUMapper* zmap = (ZDivMultiGPUMapper*) mapper;
 
-    // Execute the kernel for the x direction.
-    PROF_CUDA_START(cudaStream);
-
-	if(aggcopy_x_unpack)
+	// Execute the diffusion kernel for the x direction.
+	if (aggcopy_x_unpack)
 	{
-		unsigned int* rbuf_top=zmap->getrbuf(gpu, timestep, 0);
-		unsigned int* rbuf_bot=zmap->getrbuf(gpu, timestep, 1);
+		unsigned int* rbuf_top = zmap->getrbuf(gpu, timestep, 0);
+		unsigned int* rbuf_bot = zmap->getrbuf(gpu, timestep, 1);
 
-		PROF_CUDA_BEGIN(PROF_MPD_X_DIFFUSION,cudaStream);
-		CUDA_EXCEPTION_EXECUTE((
-			mgpumpdrdme_dev::MGPU_x_kernel_unpack<<<gridSize,threadBlockSize,0,cudaStream>>>(dlat, sites, dtmp, z_start,
-				getTimestepSeed(timestep,0), d_overflows,
-				rbuf_top, rbuf_bot)
-		));
-		PROF_CUDA_END(PROF_MPD_X_DIFFUSION,cudaStream);
+		mgpumpdrdme_dev::MGPU_x_kernel_unpack<<<gridSize, threadBlockSize>>>
+		(dlat, sites, dtmp, z_start,
+		 getTimestepSeed(timestep, 0),
+		 d_overflows,
+		 rbuf_top, rbuf_bot);
 	}
 	else
 	{
 		mapper->schedule_recv(gpu, dlat, timestep, 0, cudaStream);
 		mapper->schedule_recv(gpu, dlat, timestep, 1, cudaStream);
 
-		PROF_CUDA_BEGIN(PROF_MPD_X_DIFFUSION,cudaStream);
 		CUDA_EXCEPTION_EXECUTE((
-			mgpumpdrdme_dev::MGPU_x_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>(dlat, sites, dtmp, z_start,
-				getTimestepSeed(timestep,0), d_overflows)
+			mgpumpdrdme_dev::MGPU_x_kernel<<<gridSize, threadBlockSize, 0, cudaStream>>>
+			(dlat, sites, dtmp, z_start,
+			 getTimestepSeed(timestep, 0),
+			 d_overflows)
 		));
-		PROF_CUDA_END(PROF_MPD_X_DIFFUSION,cudaStream);
 	}
 
-    gridSize=threads[gpu].grid_y;
-	threadBlockSize=threads[gpu].threads_y;
+    gridSize        = threads[gpu].grid_y;
+	threadBlockSize = threads[gpu].threads_y;
 
-    // Execute the kernel for the y direction.
-    PROF_CUDA_BEGIN(PROF_MPD_Y_DIFFUSION,cudaStream);
-    CUDA_EXCEPTION_EXECUTE((mgpumpdrdme_dev::MGPU_y_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>(
-		dtmp, sites, dlat,
-		getTimestepSeed(timestep,1),
-		d_overflows)));
-    PROF_CUDA_END(PROF_MPD_Y_DIFFUSION,cudaStream);
+    // Execute the diffusion kernel for the y direction.
+    mgpumpdrdme_dev::MGPU_y_kernel<<<gridSize, threadBlockSize>>>
+	(dtmp, sites, dlat,
+	 getTimestepSeed(timestep, 1),
+	 d_overflows);
 
-    gridSize=threads[gpu].grid_z;
-	threadBlockSize=threads[gpu].threads_z;
+    gridSize        = threads[gpu].grid_z;
+	threadBlockSize = threads[gpu].threads_z;
 
-    // Execute the kernel for the z direction.
-    PROF_CUDA_BEGIN(PROF_MPD_Z_DIFFUSION,cudaStream);
-    CUDA_EXCEPTION_EXECUTE((
-	mgpumpdrdme_dev::MGPU_z_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>
-	(
-		dlat, sites, dtmp,
-		getTimestepSeed(timestep,2),
-		d_overflows,
-		threads[gpu].segment->active_offset.z
-	)));
-    PROF_CUDA_END(PROF_MPD_Z_DIFFUSION,cudaStream);
+    // Execute the diffusion kernel for the z direction.
+    mgpumpdrdme_dev::MGPU_z_kernel<<<gridSize, threadBlockSize>>>
+	(dlat, sites, dtmp,
+	 getTimestepSeed(timestep, 2),
+	 d_overflows,
+	 threads[gpu].segment->active_offset.z);
 
     if (numberReactions > 0)
     {
-		gridSize=threads[gpu].grid_r;
-		threadBlockSize=threads[gpu].threads_r;
-        // Execute the kernel for the reaction, this kernel updates the lattice in-place, so only the src pointer is passed.
-        PROF_CUDA_BEGIN(PROF_MPD_REACTION,cudaStream);
+		// Execute the kernel for the reaction.
+		// This kernel updates the lattice in-place, so only the src pointer is passed.
+		gridSize        = threads[gpu].grid_r;
+		threadBlockSize = threads[gpu].threads_r;
 
-		unsigned int* buf_top=zmap->gettbuf(gpu, timestep, 0);
-		unsigned int* buf_bot=zmap->gettbuf(gpu, timestep, 1);
-		
+		unsigned int* buf_top = zmap->gettbuf(gpu, timestep, 0);
+		unsigned int* buf_bot = zmap->gettbuf(gpu, timestep, 1);
 
-#ifdef MPD_FREAKYFAST
-	if(aggcopy_r_pack)
-	{
-		CUDA_EXCEPTION_EXECUTE((mgpumpdrdme_dev::MGPU_precomp_reaction_kernel_packing<<<gridSize,threadBlockSize,0,cudaStream>>>(
-			dtmp, sites, dtmp,
-			getTimestepSeed(timestep,3),
-			d_overflows,
-			threads[gpu].segment->active_offset.z,
-	#ifdef MPD_GLOBAL_S_MATRIX
-			threads[gpu].SG, threads[gpu].RLG,
-	#endif
-        #ifdef MPD_GLOBAL_R_MATRIX
-                        threads[gpu].reactionOrdersG, threads[gpu].reactionSitesG, threads[gpu].D1G, threads[gpu].D2G, threads[gpu].reactionRatesG,
+	#ifdef MPD_FREAKYFAST
+		if (aggcopy_r_pack)
+		{
+			mgpumpdrdme_dev::MGPU_precomp_reaction_kernel_packing<<<gridSize, threadBlockSize>>>
+			(dtmp, sites, dtmp,
+			 getTimestepSeed(timestep, 3),
+			 d_overflows,
+			 threads[gpu].segment->active_offset.z,
+	        #ifdef MPD_GLOBAL_S_MATRIX
+			 threads[gpu].SG,
+			 threads[gpu].RLG,
+			#endif
+			#ifdef MPD_GLOBAL_R_MATRIX
+			 threads[gpu].reactionOrdersG,
+			 threads[gpu].reactionSitesG,
+			 threads[gpu].D1G,
+			 threads[gpu].D2G,
+			 threads[gpu].reactionRatesG,
+			#endif
+			 threads[gpu].propZeroOrder,
+			 threads[gpu].propFirstOrder,
+			 threads[gpu].propSecondOrder,
+			 buf_top, buf_bot);
+		}
+		else
+		{
+			mgpumpdrdme_dev::MGPU_precomp_reaction_kernel<<<gridSize, threadBlockSize>>>
+			(dtmp, sites, dtmp,
+			 getTimestepSeed(timestep, 3),
+			 d_overflows,
+			 threads[gpu].segment->active_offset.z,
+			#ifdef MPD_GLOBAL_S_MATRIX
+			 threads[gpu].SG,
+			 threads[gpu].RLG,
+			#endif
+			#ifdef MPD_GLOBAL_R_MATRIX
+			 threads[gpu].reactionOrdersG,
+			 threads[gpu].reactionSitesG,
+			 threads[gpu].D1G,
+			 threads[gpu].D2G,
+			 threads[gpu].reactionRatesG,
+			#endif
+			 threads[gpu].propZeroOrder,
+			 threads[gpu].propFirstOrder,
+			 threads[gpu].propSecondOrder);
+		}
+	#else
+    	mgpumpdrdme_dev::MGPU_reaction_kernel<<<gridSize, threadBlockSize>>>
+		(dtmp, sites, dtmp,
+		 getTimestepSeed(timestep, 3),
+		 d_overflows,
+		 threads[gpu].segment->active_offset.z,
+		#ifdef MPD_GLOBAL_S_MATRIX
+		 threads[gpu].SG,
+		 threads[gpu].RLG,
+		#endif
+		#ifdef MPD_GLOBAL_R_MATRIX
+         threads[gpu].reactionOrdersG,
+		 threads[gpu].reactionSitesG,
+		 threads[gpu].D1G,
+		 threads[gpu].D2G,
+		 threads[gpu].reactionRatesG
         #endif
-			threads[gpu].propZeroOrder, threads[gpu].propFirstOrder, threads[gpu].propSecondOrder,
-			buf_top, buf_bot
-		)));
-	}
-	else
-	{
-		CUDA_EXCEPTION_EXECUTE((mgpumpdrdme_dev::MGPU_precomp_reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>(
-			dtmp, sites, dtmp,
-			getTimestepSeed(timestep,3),
-			d_overflows,
-			threads[gpu].segment->active_offset.z,
-	#ifdef MPD_GLOBAL_S_MATRIX
-			threads[gpu].SG, threads[gpu].RLG,
+		);
 	#endif
-        #ifdef MPD_GLOBAL_R_MATRIX
-                        threads[gpu].reactionOrdersG, threads[gpu].reactionSitesG, threads[gpu].D1G, threads[gpu].D2G, threads[gpu].reactionRatesG,
-        #endif
-			threads[gpu].propZeroOrder, threads[gpu].propFirstOrder, threads[gpu].propSecondOrder
-		)));
-	}
-#else
-        CUDA_EXCEPTION_EXECUTE((
-		mgpumpdrdme_dev::MGPU_reaction_kernel<<<gridSize,threadBlockSize,0,cudaStream>>>(
-			dtmp, sites, dtmp,
-			getTimestepSeed(timestep,3),
-			d_overflows,
-			threads[gpu].segment->active_offset.z
-	#ifdef MPD_GLOBAL_S_MATRIX
-			, threads[gpu].SG, threads[gpu].RLG
-	#endif
-        #ifdef MPD_GLOBAL_R_MATRIX
-                        , threads[gpu].reactionOrdersG, threads[gpu].reactionSitesG, threads[gpu].D1G, threads[gpu].D2G, threads[gpu].reactionRatesG
-        #endif
-		)));
-#endif
-        PROF_CUDA_END(PROF_MPD_REACTION,cudaStream);
     }
 
-    if(overflow_handling == OVERFLOW_MODE_RELAXED)
-		mgpumpdrdme_dev::correct_overflows_mgpu<<<dim3(1,1,1), dim3(TUNE_MPD_MAX_PARTICLE_OVERFLOWS,1,1),0,cudaStream>>>(dtmp, d_overflows);
+    if (overflow_handling == OVERFLOW_MODE_RELAXED)
+		mgpumpdrdme_dev::correct_overflows_mgpu<<<dim3(1,1,1),
+	                                              dim3(TUNE_MPD_MAX_PARTICLE_OVERFLOWS,1,1),
+												  0, cudaStream>>>(dtmp, d_overflows);
+
+	pthread_barrier_wait(&simulation_barrier);
 
 	// send data
-	if(aggcopy_r_pack)
+	if (aggcopy_r_pack && numberReactions > 0)
 	{
-		zmap->send_tbuf(gpu, timestep, 0, cudaStream);
-		zmap->send_tbuf(gpu, timestep, 1, cudaStream);
+		zmap->publish_state(gpu, timestep, cudaStream, copyStream);
 	}
 	else
 	{
-		mapper->schedule_send(gpu, dtmp, timestep, 0, cudaStream);
-		mapper->schedule_send(gpu, dtmp, timestep, 1, cudaStream);
+		zmap->publish_state(gpu, timestep, cudaStream, copyStream, dtmp);
 	}
-	
-    // Wait for the kernels to complete.
-    PROF_BEGIN(PROF_MPD_SYNCHRONIZE);
-    CUDA_EXCEPTION_CHECK(cudaStreamSynchronize(cudaStream));
-    PROF_END(PROF_MPD_SYNCHRONIZE);
 
-    if(overflow_handling == OVERFLOW_MODE_RELAXED)
+    if (overflow_handling == OVERFLOW_MODE_RELAXED)
 	{
 		uint unresolved = ((unsigned int*)d_overflows)[0];
 		if (unresolved > 0)
@@ -1064,23 +1135,20 @@ int MGPUMpdRdmeSolver::run_next_timestep(int gpu, uint32_t timestep)
 	}
 
 	// Save correct pointers for current data
-	threads[gpu].dLattice=dtmp;
-	threads[gpu].dLatticeTmp=dlat;
+	threads[gpu].dLattice    = dtmp;
+	threads[gpu].dLatticeTmp = dlat;
 
-	if(overflow_handling == OVERFLOW_MODE_CLASSIC)
+	if (overflow_handling == OVERFLOW_MODE_CLASSIC)
 	{
-#ifndef MPD_MAPPED_OVERFLOWS
-	cudaMemcpy(threads[gpu].h_overflows, d_overflows,
-			MPD_OVERFLOW_LIST_SIZE,
-			cudaMemcpyDeviceToHost);
-#endif
+	#ifndef MPD_MAPPED_OVERFLOWS
+		cudaMemcpy(threads[gpu].h_overflows, d_overflows, MPD_OVERFLOW_LIST_SIZE, cudaMemcpyDeviceToHost);
+	#endif
 
-    PROF_END(PROF_MPD_TIMESTEP);
-
-	return threads[gpu].h_overflows[0];
+		return threads[gpu].h_overflows[0];
 	}
-	else // relaxed overflow mode
-		return 0;
+	
+	// relaxed overflow mode
+	return 0;
 }
 
 
@@ -1088,26 +1156,28 @@ int MGPUMpdRdmeSolver::handle_overflows(int gpu, void *hptr, void *dptr, int ts)
 {
 	// Copy data back from GPUs
 	mapper->stage_out(gpu, hptr, dptr);
-	//	Print::printf(Print::DEBUG,"[GPU Thread %d] entering ob1.",gpu);
-	pthread_barrier_wait(&overflow_barrier1);
+
+	pthread_barrier_wait(&simulation_barrier);
 
 	// Resolve overflows
-	if(gpu == 0)
+	if (gpu == 0)
 	{
 		handle_all_overflows();
-		mclkr_total_overflows = 0;
+		mclkr_total_overflows  = 0;
 		mclkr_overflow_counter = 0;
 	}
-	//	Print::printf(Print::DEBUG,"[GPU Thread %d] entering ob2.",gpu);
-	pthread_barrier_wait(&overflow_barrier2);
+
+	pthread_barrier_wait(&simulation_barrier);
+
+	cudaStream_t cudaStream = threads[gpu].stream1;
+	cudaStream_t copyStream = threads[gpu].stream2;
 
 	// Return to GPU
 	mapper->stage_in(gpu, dptr, hptr);
-	mapper->publish_state(gpu, dptr, ts);
-	cudaMemsetAsync(threads[gpu].d_overflows, 0, sizeof(unsigned int));
-	//	Print::printf(Print::DEBUG,"[GPU Thread %d] entering ob3.",gpu);
-	pthread_barrier_wait(&overflow_barrier1);
+	mapper->publish_state(gpu, ts, cudaStream, copyStream, dptr);
+	cudaMemset(threads[gpu].d_overflows, 0, sizeof(unsigned int));
 
+	pthread_barrier_wait(&simulation_barrier);
 
 	return 0;
 }
@@ -1215,188 +1285,181 @@ int MGPUMpdRdmeSolver::handle_all_overflows()
 
 void* MGPUMpdRdmeSolver::run_thread(int gpu)
 {
+	cudaSetDevice(gpu);
+
 	mapper->numa_bind_thread(gpu);
 	mapper->initialize_gpu(gpu);
+	pthread_barrier_wait(&simulation_barrier);
 	mapper->set_affinity(gpu);
 	
-	gpu_worker_thread_params *p=&threads[gpu];
+	gpu_worker_thread_params *p = &threads[gpu];
 
 	// allocate device memory for lattice stuctures
-	cudaMalloc(&p->dLattice, mapper->get_local_size(gpu)*MPD_WORDS_PER_SITE);
-	cudaMalloc(&p->dLatticeTmp, mapper->get_local_size(gpu)*MPD_WORDS_PER_SITE);
-	cudaMalloc(&p->dSites, DIMSIZE(mapper->get_local_dim(gpu)));
+	cudaMalloc(&p->dLattice,    mapper->get_local_size(gpu) * MPD_WORDS_PER_SITE);
+	cudaMalloc(&p->dLatticeTmp, mapper->get_local_size(gpu) * MPD_WORDS_PER_SITE);
+	cudaMalloc(&p->dSites,      DIMSIZE(mapper->get_local_dim(gpu)));
 
 	// allocate device and host space for overflow lists
-	if(overflow_handling == OVERFLOW_MODE_CLASSIC)
+	if (overflow_handling == OVERFLOW_MODE_CLASSIC)
 	{
 	#ifdef MPD_MAPPED_OVERFLOWS
-	    CUDA_EXCEPTION_CHECK(cudaHostAlloc(&p->h_overflows, 
-		MPD_OVERFLOW_LIST_SIZE,
-		cudaHostAllocPortable|cudaHostAllocMapped));
-		p->d_overflows=p->h_overflows;
+	    cudaHostAlloc(&p->h_overflows, MPD_OVERFLOW_LIST_SIZE,
+					  cudaHostAllocPortable|cudaHostAllocMapped);
+		p->d_overflows = p->h_overflows;
 	#else
-	    CUDA_EXCEPTION_CHECK(cudaHostAlloc(&p->h_overflows,
-			MPD_OVERFLOW_LIST_SIZE, 
-		cudaHostAllocPortable));
-	    CUDA_EXCEPTION_CHECK(cudaMalloc(&p->d_overflows,
-		MPD_OVERFLOW_LIST_SIZE));
+	    cudaHostAlloc(&p->h_overflows, MPD_OVERFLOW_LIST_SIZE, cudaHostAllocPortable);
+	    cudaMalloc(&p->d_overflows, MPD_OVERFLOW_LIST_SIZE);
 		cudaMemsetAsync(p->d_overflows, 0, MPD_OVERFLOW_LIST_SIZE);
-		
 	#endif
-	memset(p->h_overflows, 0, MPD_OVERFLOW_LIST_SIZE);
+
+		memset(p->h_overflows, 0, MPD_OVERFLOW_LIST_SIZE);
 	}
 	else
 	{
-		p->h_overflows=NULL;
-	    CUDA_EXCEPTION_CHECK(cudaMalloc(&p->d_overflows,
-		MPD_OVERFLOW_LIST_SIZE));
+		p->h_overflows = NULL;
+	    cudaMalloc(&p->d_overflows, MPD_OVERFLOW_LIST_SIZE);
 		cudaMemsetAsync(p->d_overflows, 0, MPD_OVERFLOW_LIST_SIZE);
 	}
 
     // Create data exchange streams and events
-    CUDA_EXCEPTION_CHECK(cudaStreamCreate(&p->stream1));
-    CUDA_EXCEPTION_CHECK(cudaStreamCreate(&p->stream2));
-#ifdef PROF_USE_CUEVENT
-    CUDA_EXCEPTION_CHECK(cudaEventCreate(&p->x_finish));
-    CUDA_EXCEPTION_CHECK(cudaEventCreate(&p->diffusion_finished));
-    CUDA_EXCEPTION_CHECK(cudaEventCreate(&p->rx_finish));
-#else
-    CUDA_EXCEPTION_CHECK(cudaEventCreateWithFlags(&p->x_finish,
-		cudaEventDisableTiming));
-    CUDA_EXCEPTION_CHECK(cudaEventCreateWithFlags(&p->diffusion_finished,
-		cudaEventDisableTiming));
-    CUDA_EXCEPTION_CHECK(cudaEventCreateWithFlags(&p->rx_finish,
-		cudaEventDisableTiming));
-#endif
+    cudaStreamCreate(&p->stream1);
+	cudaStreamCreate(&p->stream2);
 
-	dim3 ldim=mapper->get_local_dim(gpu);
-	dim3 gdim=mapper->get_global_dim(gpu);
-	
+	dim3 ldim = mapper->get_local_dim(gpu);
+	dim3 gdim = mapper->get_global_dim(gpu);
+
 	// calculate launch params
     calculateXLaunchParameters(&(p->grid_x), &p->threads_x,
-		TUNE_MPD_X_BLOCK_MAX_X_SIZE,
-		ldim.x, ldim.y, ldim.z);
+	                           TUNE_MPD_X_BLOCK_MAX_X_SIZE,
+							   ldim.x, ldim.y, ldim.z);
     calculateYLaunchParameters(&p->grid_y, &p->threads_y,
-		TUNE_MPD_Y_BLOCK_X_SIZE, TUNE_MPD_Y_BLOCK_Y_SIZE, 
-		ldim.x, ldim.y, ldim.z);
+	                           TUNE_MPD_Y_BLOCK_X_SIZE, TUNE_MPD_Y_BLOCK_Y_SIZE,
+							   ldim.x, ldim.y, ldim.z);
     calculateZLaunchParameters(&p->grid_z, &p->threads_z,
-		TUNE_MPD_Z_BLOCK_X_SIZE, TUNE_MPD_Z_BLOCK_Z_SIZE, 
-		ldim.x, ldim.y, gdim.z);
+	                           TUNE_MPD_Z_BLOCK_X_SIZE, TUNE_MPD_Z_BLOCK_Z_SIZE,
+							   ldim.x, ldim.y, gdim.z);
 	calculateReactionLaunchParameters(&p->grid_r, &p->threads_r,
-		TUNE_MPD_REACTION_BLOCK_X_SIZE, TUNE_MPD_REACTION_BLOCK_Y_SIZE,
-		ldim.x, ldim.y, gdim.z);
-
-	Print::printf(Print::VERBOSE_DEBUG, "X kernel threadblock (%d,%d,%d); grid (%d,%d,%d)",
-		p->threads_x.x, p->threads_x.y, p->threads_x.z,
-		p->grid_x.x, p->grid_x.y, p->grid_x.z);
+	                                  TUNE_MPD_REACTION_BLOCK_X_SIZE, TUNE_MPD_REACTION_BLOCK_Y_SIZE,
+									  ldim.x, ldim.y, gdim.z);
 
 	// Now here, do not copy model every time
 	copyModelsToDevice(gpu);
+
+	// Copy the initialized data into GPU memory
+	mapper->stage_in(gpu, p->dLattice, ((ByteLattice*) lattice)->getParticlesMemory());
+	mapper->stage_in_sites(gpu, p->dSites, ((ByteLattice*) lattice)->getSitesMemory());
+	mapper->publish_state(gpu, current_timestep + 1, p->stream1, p->stream2, p->dLattice);
 	
 	Timer timer;
-    double lastT=0;
-    int lastSteps=0;
-	size_t maxTS=atof((*parameters)["maxTime"].c_str()) / tau;
-	if(gpu == 0)
+    double lastT = 0;
+    int lastSteps = 0;
+	size_t maxTS = atof((*parameters)["maxTime"].c_str()) / tau;
+	if (gpu == 0)
 		timer.tick();
+
 	do
 	{
 		// wait for master wakeup
-		//Print::printf(Print::DEBUG,"[GPU Thread %d] entering start barrier.",gpu);
 		pthread_barrier_wait(&start_barrier);
-		int steps=timesteps_to_run;
-		if(steps < 0)
+
+		int steps = timesteps_to_run;
+		if (steps < 0)
 			break;
-		//Print::printf(Print::DEBUG,"[GPU Thread %d] running %d steps.",gpu, steps);
 
 		// Don't copy models in on every step set
 		// This was to accomodate changing lattice dims from lb changes
 		// Unless the reaction model has changed
-		if(reactionModelModified)
-			copyModelsToDevice(gpu);
-
-		// TODO: conditionally stage in only when necessary
-		// TODO: remember to fix hook simulation if conditionally staging
-		mapper->stage_in(gpu, p->dLattice, ((ByteLattice*) lattice)->getParticlesMemory());
-		mapper->stage_in_sites(gpu, p->dSites, ((ByteLattice*) lattice)->getSitesMemory());
-
-		mapper->publish_state(gpu, p->dLattice, absolute_timestep+1);
-		pthread_barrier_wait(&simulation_barrier);
-
-		for(int ts=0; ts<steps; ts++)
+		if (reactionModelModified) 
 		{
-			if(gpu == 0)
+			copyModelsToDevice(gpu);
+		}
+
+		for (int ts = 0; ts < steps; ts++)
+		{
+			if (gpu == 0)
 			{
-				lastT += timer.tock();
+				lastT     += timer.tock();
 				lastSteps += 1;
 
-				if ( lastT >= printPerfInterval)
+				if (lastT >= printPerfInterval)
 				{
-					double stepTime = lastT/lastSteps;
-					double completionTime = stepTime*(maxTS-absolute_timestep-ts);
+					double stepTime = lastT / lastSteps;
+					double completionTime = stepTime * (maxTS - current_timestep - ts);
 					std::string units;
-					if (completionTime > 60*60*24*365) {
+					if (completionTime > 60*60*24*365)
+					{
 						units = "weeks";
 						completionTime /= 60*60*24*365;
-					} else if (completionTime > 60*60*24*30) {
+					}
+					else if (completionTime > 60*60*24*30)
+					{
 						units = "months";
 						completionTime /= 60*60*24*30;
-					} else if (completionTime > 60*60*24*7) {
+					}
+					else if (completionTime > 60*60*24*7)
+					{
 						units = "weeks";
 						completionTime /= 60*60*24*7;
-					} else if (completionTime > 60*60*24) {
+					}
+					else if (completionTime > 60*60*24)
+					{
 						units = "days";
 						completionTime /= 60*60*24;
-					} else if (completionTime > 60*60) {
+					}
+					else if (completionTime > 60*60)
+					{
 						units = "hours";
 						completionTime /= 60*60;
-					} else if (completionTime > 60) {
+					}
+					else if (completionTime > 60)
+					{
 						units = "minutes";
 						completionTime /= 60;
-					} else {
+					}
+					else
+					{
 						units = "seconds";
 					}
 
 					Print::printf(Print::INFO, "Average walltime per timestep: %.2f ms. Progress: %.4fs/%.4fs (% .3g%% done / %.2g %s walltime remaining)",
-											   1000.0*stepTime, (ts+absolute_timestep)*tau, maxTS*tau, 100.0*(ts+absolute_timestep)/maxTS, completionTime, units.c_str());
+								  1000.0*stepTime, (ts+current_timestep)*tau, maxTS*tau, 100.0*(ts+current_timestep)/maxTS, completionTime, units.c_str());
 
-					lastT = 0;
+					lastT     = 0;
 					lastSteps = 0;
 				}
 
 				timer.tick();
 			}
 
-			int overflows=run_next_timestep(gpu, ts+absolute_timestep);
-			switch(overflow_handling)
+			int overflows = run_next_timestep(gpu, ts + current_timestep);
+
+			switch (overflow_handling)
 			{
 				case OVERFLOW_MODE_CLASSIC:
-					if(use_spin_barrier)
+					if (use_spin_barrier)
 						mclkr_barrier_spin(overflows);
 					else
 						mclkr_barrier_cond(overflows);
-					
 
-					if(mclkr_total_overflows > 0)
+					if (mclkr_total_overflows > 0)
 					{
-						Print::printf(Print::DEBUG,"[GPU Thread %d] encountered %d overflows",gpu, overflows);
-						handle_overflows(gpu, ((ByteLattice*) lattice)->getParticlesMemory(), p->dLattice, ts+absolute_timestep);
+						Print::printf(Print::DEBUG, "[GPU Thread %d] encountered %d overflows", gpu, overflows);
+						handle_overflows(gpu, ((ByteLattice*) lattice)->getParticlesMemory(),
+						                 p->dLattice, ts + current_timestep);
 					}
 					break;
 
 				case OVERFLOW_MODE_RELAXED:
-					// All overflows are handled by the gpu.  No need to communicate.
+					// All overflows are handled by the gpu. No need to communicate.
 					pthread_barrier_wait(&simulation_barrier);
 					break;
 
 				default:
 					throw("Unimplemented overflow handler");
 			}
-
 		}
 
 		mapper->stage_out(gpu, ((ByteLattice*) lattice)->getParticlesMemory(), p->dLattice);
-		//Print::printf(Print::DEBUG,"[GPU Thread %d] entering stop barrier.",gpu);
 		pthread_barrier_wait(&stop_barrier);
 
 	} while(true);
@@ -1411,25 +1474,27 @@ int MGPUMpdRdmeSolver::hookSimulation(double time, ByteLattice *lattice)
 	return 0;
 }
 
-
-/**
- * Gets the launch parameters for launching an x diffusion kernel.
-*/
-void MGPUMpdRdmeSolver::calculateXLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int maxXBlockSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize)
+void MGPUMpdRdmeSolver::calculateXLaunchParameters(dim3 * gridSize,
+                                                   dim3 * threadBlockSize,
+												   const unsigned int maxXBlockSize,
+												   const unsigned int latticeXSize,
+												   const unsigned int latticeYSize,
+												   const unsigned int latticeZSize)
 {
-    unsigned int xBlockXSize = min(maxXBlockSize,latticeXSize);
-    unsigned int gridXSize = latticeXSize/xBlockXSize;
+    unsigned int xBlockXSize = min(maxXBlockSize, latticeXSize);
+    unsigned int gridXSize   = latticeXSize / xBlockXSize;
+	
     if (gridXSize*xBlockXSize != latticeXSize)
 	{
 		// Find the largest number of warps that is divisible
 		unsigned int tryx=32;
-		while(tryx < maxXBlockSize)
+		while (tryx < maxXBlockSize)
 		{
 			if (latticeXSize % tryx == 0)
 				xBlockXSize = tryx;
-			tryx +=32;
+			tryx += 32;
 		}
-		gridXSize = latticeXSize/xBlockXSize;
+		gridXSize = latticeXSize / xBlockXSize;
 	}
 			
     (*gridSize).x = gridXSize;
@@ -1440,10 +1505,13 @@ void MGPUMpdRdmeSolver::calculateXLaunchParameters(dim3 * gridSize, dim3 * threa
     (*threadBlockSize).z = 1;
 }
 
-/**
- * Gets the launch parameters for launching a y diffusion kernel.
- */
-void MGPUMpdRdmeSolver::calculateYLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockYSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize)
+void MGPUMpdRdmeSolver::calculateYLaunchParameters(dim3 * gridSize,
+                                                   dim3 * threadBlockSize,
+												   const unsigned int blockXSize,
+												   const unsigned int blockYSize,
+												   const unsigned int latticeXSize,
+												   const unsigned int latticeYSize,
+												   const unsigned int latticeZSize)
 {
     (*gridSize).x = latticeXSize/blockXSize;
     (*gridSize).y = latticeYSize/blockYSize;
@@ -1453,10 +1521,13 @@ void MGPUMpdRdmeSolver::calculateYLaunchParameters(dim3 * gridSize, dim3 * threa
     (*threadBlockSize).z = 1;
 }
 
-/**
- * Gets the launch parameters for launching a z diffusion kernel.
- */
-void MGPUMpdRdmeSolver::calculateZLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockZSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize)
+void MGPUMpdRdmeSolver::calculateZLaunchParameters(dim3 * gridSize,
+                                                   dim3 * threadBlockSize,
+												   const unsigned int blockXSize,
+												   const unsigned int blockZSize,
+												   const unsigned int latticeXSize,
+												   const unsigned int latticeYSize,
+												   const unsigned int latticeZSize)
 {
     (*gridSize).x = latticeXSize/blockXSize;
     (*gridSize).y = latticeYSize;
@@ -1466,10 +1537,13 @@ void MGPUMpdRdmeSolver::calculateZLaunchParameters(dim3 * gridSize, dim3 * threa
     (*threadBlockSize).z = blockZSize;
 }
 
-/**
- * Gets the launch parameters for launching a y diffusion kernel.
- */
-void MGPUMpdRdmeSolver::calculateReactionLaunchParameters(dim3 * gridSize, dim3 * threadBlockSize, const unsigned int blockXSize, const unsigned int blockYSize, const unsigned int latticeXSize, const unsigned int latticeYSize, const unsigned int latticeZSize)
+void MGPUMpdRdmeSolver::calculateReactionLaunchParameters(dim3 * gridSize,
+                                                          dim3 * threadBlockSize,
+														  const unsigned int blockXSize,
+														  const unsigned int blockYSize,
+														  const unsigned int latticeXSize,
+														  const unsigned int latticeYSize,
+														  const unsigned int latticeZSize)
 {
     (*gridSize).x = latticeXSize/blockXSize;
     (*gridSize).y = latticeYSize/blockYSize;
@@ -2001,7 +2075,14 @@ letspackitup:
 	}
 }
 
-__global__ void MGPU_x_kernel_unpack(const unsigned int* inLattice, const uint8_t * inSites, unsigned int* outLattice, const unsigned int z_start, const unsigned long long timestepHash, unsigned int* siteOverflowList, unsigned int* buf_top, unsigned int *buf_bot)
+__global__ void MGPU_x_kernel_unpack(const unsigned int* inLattice,
+                                     const uint8_t * inSites,
+									 unsigned int* outLattice,
+									 const unsigned int z_start,
+									 const unsigned long long timestepHash,
+									 unsigned int* siteOverflowList,
+									 unsigned int* buf_top,
+									 unsigned int *buf_bot)
 {
 	const unsigned int x = (blockDim.x * blockIdx.x) + threadIdx.x;
 	const unsigned int y = (blockDim.y * blockIdx.y) + threadIdx.y;

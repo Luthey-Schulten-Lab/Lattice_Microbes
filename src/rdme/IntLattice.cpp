@@ -47,6 +47,7 @@
 #include "rdme/Lattice.h"
 #include "rdme/IntLattice.h"
 
+
 namespace lm {
 namespace rdme {
 
@@ -206,14 +207,6 @@ site_size_t IntLattice::getOccupancy(lattice_size_t index) const
 	return occupancy;
 }
 
-/**
- * Gets the current state of a give site in the lattice.
- * 
- * @param x	The zero based x index of the site to retrieve.
- * @param y	The zero based y index of the site to retrieve.
- * @param z	The zero based z index of the site to retrieve.
- * @return	The value in the lattice at the specified site.
- */
 particle_t IntLattice::getParticle(lattice_size_t x, lattice_size_t y, lattice_size_t z, site_size_t particleIndex) const
 {
 	// Make sure the arguments are valid.
@@ -241,14 +234,6 @@ particle_t IntLattice::getParticle(lattice_size_t index, site_size_t particleInd
     return particles[index];
 }
 
-/**
- * Sets the current state of a give site in the lattice.
- * 
- * @param x	The zero based x index of the site to set.
- * @param y	The zero based y index of the site to set.
- * @param z	The zero based z index of the site to set.
- * @param 
- */
 void IntLattice::addParticle(lattice_size_t x, lattice_size_t y, lattice_size_t z, particle_t particle)
 {
 	// Make sure the arguments are valid.
@@ -434,6 +419,7 @@ void IntLattice::setSitesFromRowMajorByteData(void * buffer, size_t bufferSize)
 std::map<particle_t,uint> IntLattice::getParticleCounts()
 {
     std::map<particle_t,uint> particleCountMap;
+    
     for (lattice_size_t index=0; index<numberSites*wordsPerSite; index++)
     {
 		unsigned int particle = particles[index];

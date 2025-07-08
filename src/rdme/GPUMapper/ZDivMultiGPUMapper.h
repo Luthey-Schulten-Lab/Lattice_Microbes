@@ -72,8 +72,6 @@ struct gpu_info
 	neighbor_buffer *read_buffer[NUM_SHADOWS];
 	neighbor_buffer *write_buffer[NUM_SHADOWS];
 
-//	void *current_state;
-
 	int lb_chunks;			// Number of lattice chunks assigned for load balancing
 	int lb_max_chunks;
 	float lb_imbalance;
@@ -117,7 +115,7 @@ class ZDivMultiGPUMapper : public MultiGPUMapper
 		void stage_in_sites(int gpu, void *dptr, void *hptr);
 		void stage_out(int gpu, void *hptr, void *dptr);
 
-		void publish_state(int gpu, void *dptr, int key);
+		void publish_state(int gpu, int key, cudaStream_t top, cudaStream_t bot, void *dptr = NULL);
 		void refresh(int gpu, void *dptr, int key);
 		virtual void schedule_send(int gpu, void *dptr, int timestamp, int neighbor, cudaStream_t stream);
 		virtual void schedule_recv(int gpu, void *dptr, int timestamp, int neighbor, cudaStream_t stream);
@@ -127,7 +125,6 @@ class ZDivMultiGPUMapper : public MultiGPUMapper
 		gpu_info* getinfo(int gpu);
 		unsigned int* gettbuf(int gpu, int key, int neighbor);
 		unsigned int* getrbuf(int gpu, int key, int neighbor);
-		void send_tbuf(int gpu, int key, int neighbor, cudaStream_t s);
 };
 
 #endif

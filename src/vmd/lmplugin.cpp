@@ -49,6 +49,7 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <variant>
 #include <vector>
 
 #include <hdf5.h>
@@ -64,8 +65,10 @@ namespace {
 #define TO_ANGSTROM 1e10
 #define MAX_LMPEXC_MSG 256
 
-typedef uint32_t particle_int_t;
+typedef std::variant<uint32_t, uint8_t> particle_int_t;
 typedef unsigned char site_int_t;
+
+#define partial_val(x) (std::holds_alternative<uint32_t>(x) ? std::get<uint32_t>(x) : std::get<uint8_t>(x))
 
 class LMPException : public std::exception {
 protected:
@@ -188,6 +191,105 @@ get_attr<std::string>(hid_t loc_id,
 
     H5_CALL(H5Tclose(type));
     H5_CALL(H5Aclose(attr));
+}
+
+template <typename T>
+void
+get_dataset(hid_t loc_id,
+            std::string path,
+            std::vector<T> &data,
+            std::vector<hsize_t> &shape,
+            hsize_t* nelemptr)
+{
+    hid_t datasetHandle, dataspaceHandle, typeHandle, h5type;
+    hsize_t dims[H5S_MAX_RANK];
+    hsize_t ndims;
+
+    H5_CALL_ASSIGN(datasetHandle, H5Dopen2(loc_id, path.c_str(), H5P_DEFAULT));
+    H5_CALL_ASSIGN(dataspaceHandle, H5Dget_space(datasetHandle));
+    H5_CALL(H5Sget_simple_extent_dims(dataspaceHandle, dims, NULL));
+    H5_CALL_ASSIGN(ndims, H5Sget_simple_extent_ndims(dataspaceHandle));
+    H5_CALL_ASSIGN(typeHandle, H5Dget_type(datasetHandle));
+    H5_CALL_ASSIGN(h5type, H5Tget_native_type(typeHandle, H5T_DIR_ASCEND));
+
+    if (H5Tequal(H5File_specialized::get_type_id<T>(), h5type) <= 0) {
+        throw Exception("Wrong HDF5 data type for ``%s''", path.c_str());
+    }
+
+    shape.resize(ndims);
+    std::copy(dims, dims + ndims, shape.begin());
+
+    hsize_t nelem = std::accumulate(shape.begin(), shape.end(), 1, std::multiplies<hsize_t>());
+
+    if (nelemptr) {
+        *nelemptr = nelem;
+    }
+
+    if (nelem != data.size()) {
+        data.resize(nelem);
+    }
+
+    H5_CALL(H5Dread(datasetHandle, h5type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &(data[0])));
+
+    H5_CALL(H5Tclose(typeHandle));
+    H5_CALL(H5Sclose(dataspaceHandle));
+    H5_CALL(H5Dclose(datasetHandle));
+}
+
+template <>
+void
+get_dataset<std::string>(hid_t loc_id,
+                         std::string path,
+                         std::vector<std::string> &data,
+                         std::vector<hsize_t> &shape,
+                         hsize_t* nelemptr)
+{
+    hid_t datasetHandle, dataspaceHandle, typeHandle, h5type;
+    hsize_t dims[H5S_MAX_RANK];
+    hsize_t ndims;
+
+    H5_CALL_ASSIGN(datasetHandle, H5Dopen(loc_id, path.c_str(), H5P_DEFAULT));
+    H5_CALL_ASSIGN(typeHandle, H5Dget_type(datasetHandle));
+
+    if (H5Tget_class(typeHandle) != H5T_STRING) {
+        throw Exception("Wrong HDF5 data type for ``%s''", path.c_str());
+    }
+
+    H5_CALL_ASSIGN(dataspaceHandle, H5Dget_space(datasetHandle));
+    H5_CALL(H5Sget_simple_extent_dims(dataspaceHandle, dims, NULL));
+    H5_CALL_ASSIGN(ndims, H5Sget_simple_extent_ndims(dataspaceHandle));
+
+    shape.resize(ndims);
+    std::copy(dims, dims + ndims, shape.begin());
+
+    hsize_t nelem = std::accumulate(shape.begin(), shape.end(), 1, std::multiplies<hsize_t>());
+    char *s[nelem];
+
+    if (nelemptr) {
+        *nelemptr = nelem;
+    }
+
+    if (nelem != data.size()) {
+        data.resize(nelem);
+    }
+
+    H5_CALL_ASSIGN(h5type, H5Tcopy(H5T_C_S1));
+    H5_CALL(H5Tset_size(h5type, H5T_VARIABLE));
+    H5_CALL(H5Tset_strpad(h5type, H5T_STR_NULLTERM));
+    H5_CALL(H5Tset_cset(h5type, H5T_CSET_UTF8));
+
+    H5_CALL(H5Dread(datasetHandle, h5type, H5S_ALL, H5S_ALL, H5P_DEFAULT, s));
+
+    for (unsigned int i = 0; i < nelem; i++) {
+        data[i] = std::string(s[i]);
+    }
+
+    H5_CALL(H5Dvlen_reclaim(h5type, dataspaceHandle, H5P_DEFAULT, s));
+
+    H5_CALL(H5Tclose(h5type));
+    H5_CALL(H5Tclose(typeHandle));
+    H5_CALL(H5Sclose(dataspaceHandle));
+    H5_CALL(H5Dclose(datasetHandle));
 }
 
 template <typename T>
@@ -337,39 +439,7 @@ public:
                 std::vector<hsize_t> &shape,
                 hsize_t* nelemptr=NULL)
     {
-        hid_t datasetHandle, dataspaceHandle, typeHandle, h5type;
-        hsize_t dims[H5S_MAX_RANK];
-        hsize_t ndims;
-
-        H5_CALL_ASSIGN(datasetHandle, H5Dopen2(h5file, path.c_str(), H5P_DEFAULT));
-        H5_CALL_ASSIGN(dataspaceHandle, H5Dget_space(datasetHandle));
-        H5_CALL(H5Sget_simple_extent_dims(dataspaceHandle, dims, NULL));
-        H5_CALL_ASSIGN(ndims, H5Sget_simple_extent_ndims(dataspaceHandle));
-        H5_CALL_ASSIGN(typeHandle, H5Dget_type(datasetHandle));
-        H5_CALL_ASSIGN(h5type, H5Tget_native_type(typeHandle, H5T_DIR_ASCEND));
-
-        if (H5Tequal(H5File_specialized::get_type_id<T>(), h5type) <= 0) {
-            throw Exception("Wrong HDF5 data type for ``%s''", path.c_str());
-        }
-
-        shape.resize(ndims);
-        std::copy(dims, dims + ndims, shape.begin());
-
-        hsize_t nelem = std::accumulate(shape.begin(), shape.end(), 1, std::multiplies<hsize_t>());
-
-        if (nelemptr) {
-            *nelemptr = nelem;
-        }
-
-        if (nelem != data.size()) {
-            data.resize(nelem);
-        }
-
-        H5_CALL(H5Dread(datasetHandle, h5type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &(data[0])));
-
-        H5_CALL(H5Tclose(typeHandle));
-        H5_CALL(H5Sclose(dataspaceHandle));
-        H5_CALL(H5Dclose(datasetHandle));
+        H5File_specialized::get_dataset(h5file, path, data, shape, nelemptr);
     }
 
     bool
@@ -476,7 +546,8 @@ class LMPlugin {
     std::vector<unsigned int> trajIndices;
 
     unsigned int nSpecies, nSiteType;
-    unsigned int nLatticeX, nLatticeY, nLatticeZ, nLatticeP;
+    unsigned int nLatticeX, nLatticeY, nLatticeZ;
+    unsigned int bParticleP, nLatticeP;
     float latticeSpacing;
     float rdmeRadius;
     unsigned int frameIx, nFrame;
@@ -561,6 +632,7 @@ class LMPlugin {
         h5file.get_attr("/Model/Diffusion", "latticeXSize", nLatticeX);
         h5file.get_attr("/Model/Diffusion", "latticeYSize", nLatticeY);
         h5file.get_attr("/Model/Diffusion", "latticeZSize", nLatticeZ);
+        h5file.get_attr("/Model/Diffusion", "bytes_per_particle", bParticleP);
         h5file.get_attr("/Model/Diffusion", "particlesPerSite", nLatticeP);
 
         hasVariableSites = h5file.dataset_exists(sim_path("Sites/0000000001"));
@@ -571,7 +643,7 @@ class LMPlugin {
     }
 
     template <typename T>
-    void
+    hsize_t
     count_lattice_objects(std::string path,
                           std::vector<unsigned int>& count,
                           std::vector<T>& data,
@@ -593,6 +665,45 @@ class LMPlugin {
 
         for (unsigned int i = 0; i < tmp.size(); i++) {
             count[i] = std::max(tmp[i], count[i]);
+        }
+
+        return nData;
+    }
+
+    void
+    count_particles(std::string path,
+                    std::vector<unsigned int>& count,
+                    std::vector<particle_int_t>& data,
+                    std::vector<unsigned int>& tmp)
+    {
+        if (bParticleP == 4) {
+            std::vector<uint32_t> buf;
+            hsize_t nData = count_lattice_objects(path, count, buf, tmp);
+            copy_particles(data, buf, nData);
+        }
+        else {
+            std::vector<uint8_t> buf;
+            hsize_t nData = count_lattice_objects(path, count, buf, tmp);
+            copy_particles(data, buf, nData);
+        }
+    }
+
+    void
+    read_particles(std::string path,
+                   std::vector<particle_int_t> &data,
+                   std::vector<hsize_t> &shape)
+    {
+        hsize_t nData;
+
+        if (bParticleP == 4) {
+            std::vector<uint32_t> buf;
+            h5file.get_dataset(path, buf, shape, &nData);
+            copy_particles(data, buf, nData);
+        }
+        else {
+            std::vector<uint8_t> buf;
+            h5file.get_dataset(path, buf, shape, &nData);
+            copy_particles(data, buf, nData);
         }
     }
 
@@ -651,11 +762,11 @@ class LMPlugin {
                     timer.reset();
                 }
 
-                count_lattice_objects(sim_path("Lattice/" + dsNames[fIx]), nRdmeAtoms, pLattice, tmp);
+                count_particles(sim_path("Lattice/" + dsNames[fIx]), nRdmeAtoms, pLattice, tmp);
             }
         }
         else {
-            count_lattice_objects("Model/Diffusion/Lattice", nRdmeAtoms, pLattice, tmp);
+            count_particles("Model/Diffusion/Lattice", nRdmeAtoms, pLattice, tmp);
         }
 
         vmdcon_printf(VMDCON_INFO, "LMPlugin) RDME particles counted.\n");
@@ -766,7 +877,9 @@ class LMPlugin {
     read_names()
     {
         std::vector<std::string> nameTmp;
-        h5file.get_csv_attr("/Parameters", "speciesNames", nameTmp);
+        std::vector<hsize_t> shape;
+
+        h5file.get_dataset("/Parameters/SpeciesNames", nameTmp, shape);
         speciesNames.push_back(""); // blank for id=0
 
         // ensure all names are unique after truncation to MAX_VMD_NAME characters
@@ -898,6 +1011,18 @@ class LMPlugin {
     unsigned int get_nframe() const { return nFrame; }
     unsigned int get_natoms() const { return nAtom; }
 
+    template <typename T>
+    void
+    copy_particles(std::vector<particle_int_t> &data,
+                   std::vector<T> &buf,
+                   hsize_t nData)
+    {
+        data.resize(nData);
+        for (unsigned int i = 0; i < nData; i++) {
+            data[i] = buf[i];
+        }
+    }
+
     int
     read_structure(int *optflags,
                    molfile_atom_t *atoms)
@@ -954,10 +1079,10 @@ class LMPlugin {
 
             // RDME particles
             if (hasTrajData) {
-                h5file.get_dataset(sim_path("Lattice/" + dsNames[frameIx]), pLattice, shape);
+                read_particles(sim_path("Lattice/" + dsNames[frameIx]), pLattice, shape);
             }
             else {
-                h5file.get_dataset("/Model/Diffusion/Lattice", pLattice, shape);
+                read_particles("/Model/Diffusion/Lattice", pLattice, shape);
             }
 
             // Keep track of the offset of to the next empty slot for each particle type
@@ -969,7 +1094,7 @@ class LMPlugin {
                 for (unsigned int j = 0; j < shape[1]; j++) {
                     for (unsigned int k = 0; k < shape[2]; k++) {
                         for (unsigned int p = 0; p < shape[3]; p++, ix++) {
-                            particle_int_t type = pLattice[ix];
+                            unsigned int type = partial_val(pLattice[ix]);
                             if (type != 0) {
                                 unsigned int offset = 3 * (rdmeAtomOffsets[type] + trajIndices[type]);
                                 float *coord = ts->coords + offset;

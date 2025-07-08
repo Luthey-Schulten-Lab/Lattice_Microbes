@@ -304,7 +304,14 @@ void CMESolver::setReactionModel(lm::io::ReactionModel * rm)
     if (K !=  NULL) {delete [] K; K = NULL;}
 }
 
-void CMESolver::buildModel(const uint numberSpeciesA, const uint numberReactionsA, const uint * initialSpeciesCountsA, const uint * reactionTypesA, const double * K, const int * SA, const uint * DA, const uint kCols)
+void CMESolver::buildModel(const uint numberSpeciesA,
+                           const uint numberReactionsA,
+                           const uint * initialSpeciesCountsA,
+                           const uint * reactionTypesA,
+                           const double * K,
+                           const int * SA,
+                           const uint * DA,
+                           const uint kCols)
 {
     if (numberReactionsA > 0 && kCols == 0) throw InvalidArgException("K", "must have at least 1 column");
 

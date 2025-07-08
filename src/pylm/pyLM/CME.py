@@ -38,7 +38,7 @@
 #
 # 
 
-import lm, math, os
+import lm, math, os, h5py
 from .LMLogger import *
 from .ipyInterface import *
 try:
@@ -313,9 +313,18 @@ class CMESimulation:
 			LMLogger.debug("Setting parameter %s = %s", key, self.parameters[key])
 			f.setParameter(key, self.parameters[key])
 		LMLogger.debug("SpeciesNames: %s", ",".join(self.species_id))
-		f.setParameter("speciesNames", ",".join(self.species_id))
+# 		f.setParameter("speciesNames", ",".join(self.species_id))
 
 		f.close()
+    
+		simFile = h5py.File(filename,'r+')
+    
+		dt = h5py.special_dtype(vlen=str)
+		specNamesListAscii = [n.encode("ascii", "ignore") for n in self.species_id]
+		simFile.create_dataset('Parameters/SpeciesNames', (len(specNamesListAscii),1), dt, specNamesListAscii)
+        
+		simFile.flush() 
+		simFile.close() 
 
 	def run(self, filename, method, replicates=1, seed=None, cudaDevices=None, checkpointInterval=0):
 		"""Run the simulation using the specified solver the specified amount of time
