@@ -69,8 +69,8 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py38_22.11.1-1-Linux-x86
     && rm -f Miniconda3-py38_22.11.1-1-Linux-x86_64.sh
 
 #Build LM
-ADD Lattice-Microbes /Software/Lattice_Microbes_v2.5/
-ADD Lattice-Microbes/lm_precomp.yml /Software/Lattice_Microbes_v2.5/lm_precomp.yml
+ADD Lattice_Microbes /Software/Lattice_Microbes_v2.5/
+ADD Lattice_Microbes/lm_precomp.yml /Software/Lattice_Microbes_v2.5/lm_precomp.yml
 
 RUN conda env update --file /Software/Lattice_Microbes_v2.5/lm_precomp.yml --prune
 ###pre-reqs
@@ -85,11 +85,13 @@ RUN conda env update --file /Software/Lattice_Microbes_v2.5/lm_precomp.yml --pru
 ###copy files and build
 #ADD Lattice_Microbes_v2.5_7.19.2023 /Software/Lattice_Microbes_v2.5/
 
-RUN cd /Software/Lattice_Microbes_v2.5 \
+RUN /bin/bash -c "cd /Software/Lattice_Microbes_v2.5 \
     && mkdir build \
     && cd build \
+    && . /root/miniconda3/etc/profile.d/conda.sh \
+    && conda activate lm_2.5_dev \
     && cmake ../src -D MPD_GLOBAL_T_MATRIX=True -D MPD_GLOBAL_R_MATRIX=True \
     && make \
-    && make install
+    && make install"
 
 
