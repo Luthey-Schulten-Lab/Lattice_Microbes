@@ -34,7 +34,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Elijah Roberts
+ * Author(s): Elijah Roberts, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  */
 
 #include <map>
@@ -171,6 +172,7 @@ void IntLattice::setSiteType(lattice_size_t index, site_t siteType)
 
 site_size_t IntLattice::getOccupancy(lattice_size_t x, lattice_size_t y, lattice_size_t z) const
 {
+    wcm_sync_host_particles();
     // Make sure the arguments are valid.
     if (x >= size.x || y >= size.y || z >= size.z)
         throw InvalidSiteException(x,y,z);
@@ -191,6 +193,7 @@ site_size_t IntLattice::getOccupancy(lattice_size_t x, lattice_size_t y, lattice
 
 site_size_t IntLattice::getOccupancy(lattice_size_t index) const
 {
+    wcm_sync_host_particles();
     // Make sure the arguments are valid.
 	if (index >= numberSites)
 		throw InvalidSiteException(index);
@@ -209,6 +212,7 @@ site_size_t IntLattice::getOccupancy(lattice_size_t index) const
 
 particle_t IntLattice::getParticle(lattice_size_t x, lattice_size_t y, lattice_size_t z, site_size_t particleIndex) const
 {
+    wcm_sync_host_particles();
 	// Make sure the arguments are valid.
     if (x >= size.x || y >= size.y || z >= size.z) {
         throw InvalidSiteException(x,y,z);
@@ -224,6 +228,7 @@ particle_t IntLattice::getParticle(lattice_size_t x, lattice_size_t y, lattice_s
 
 particle_t IntLattice::getParticle(lattice_size_t index, site_size_t particleIndex) const
 {
+    wcm_sync_host_particles();
 	// Make sure the arguments are valid.
 	if (index >= numberSites)
 		throw InvalidSiteException(index);
@@ -236,6 +241,7 @@ particle_t IntLattice::getParticle(lattice_size_t index, site_size_t particleInd
 
 void IntLattice::addParticle(lattice_size_t x, lattice_size_t y, lattice_size_t z, particle_t particle)
 {
+    wcm_sync_host_particles();
 	// Make sure the arguments are valid.
     if (x >= size.x || y >= size.y || z >= size.z)
         throw InvalidSiteException(x,y,z);
@@ -257,6 +263,7 @@ void IntLattice::addParticle(lattice_size_t x, lattice_size_t y, lattice_size_t 
 
 void IntLattice::addParticle(lattice_size_t index, particle_t particle)
 {
+    wcm_sync_host_particles();
 	// Make sure the arguments are valid.
 	if (index >= numberSites)
 		throw InvalidSiteException(index);
@@ -277,6 +284,7 @@ void IntLattice::addParticle(lattice_size_t index, particle_t particle)
 
 void IntLattice::removeParticles(lattice_size_t x,lattice_size_t y,lattice_size_t z)
 {
+    wcm_sync_host_particles();
 	// Make sure the arguments are valid.
     if (x >= size.x || y >= size.y || z >= size.z)
         throw InvalidSiteException(x,y,z);
@@ -292,6 +300,7 @@ void IntLattice::removeParticles(lattice_size_t x,lattice_size_t y,lattice_size_
 
 void IntLattice::removeParticles(lattice_size_t index)
 {
+    wcm_sync_host_particles();
 	// Make sure the arguments are valid.
 	if (index >= numberSites)
 		throw InvalidSiteException(index);
@@ -306,6 +315,7 @@ void IntLattice::removeParticles(lattice_size_t index)
 
 void IntLattice::removeAllParticles()
 {
+    wcm_sync_host_particles();
     memset(particles, 0, numberSites*wordsPerSite*sizeof(uint32_t));
 }
 
@@ -403,11 +413,13 @@ void IntLattice::copySitesRowMajorByteToNative(void * destBuffer, void * sourceB
 // ONLY DEFINED BECAUSE IT IS PURE-VIRTUAL IN Lattice
 void IntLattice::setFromRowMajorByteData(void * buffer, size_t bufferSize)
 {
+    wcm_sync_host_particles();
 	throw("dont use this function");
     //copyRowMajorByteToNative(particles, buffer, size.x, size.y, size.z, wordsPerSite*PARTICLES_PER_WORD, bufferSize);
 }
 void IntLattice::setFromRowMajorData(void * buffer, size_t bufferSize)
 {
+    wcm_sync_host_particles();
     copyRowMajorToNative(particles, buffer, size.x, size.y, size.z, wordsPerSite*PARTICLES_PER_WORD, bufferSize);
 }
 
@@ -418,6 +430,7 @@ void IntLattice::setSitesFromRowMajorByteData(void * buffer, size_t bufferSize)
 
 std::map<particle_t,uint> IntLattice::getParticleCounts()
 {
+    wcm_sync_host_particles();
     std::map<particle_t,uint> particleCountMap;
     
     for (lattice_size_t index=0; index<numberSites*wordsPerSite; index++)
@@ -436,6 +449,7 @@ std::map<particle_t,uint> IntLattice::getParticleCounts()
 
 std::vector<particle_loc_t> IntLattice::findParticles(particle_t minParticleType, particle_t maxParticleType)
 {
+    wcm_sync_host_particles();
     std::vector<particle_loc_t> ret;
 
 
@@ -460,6 +474,7 @@ std::vector<particle_loc_t> IntLattice::findParticles(particle_t minParticleType
 
 uint32_t *IntLattice::getParticlesMemory()
 {
+    wcm_sync_host_particles();
 	return particles;
 }
 
@@ -476,6 +491,7 @@ void IntLattice::getSiteLatticeView(uint8_t **siteLattice, int *Nz, int *Ny, int
 }
 
 void IntLattice::getParticleLatticeView(uint32_t **particleLattice, int *Nw, int *Nz, int *Ny, int *Nx, int *Np) {
+    wcm_sync_host_particles();
     *Nx = size.x;
     *Ny = size.y;
     *Nz = size.z;

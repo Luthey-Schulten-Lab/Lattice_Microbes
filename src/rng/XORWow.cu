@@ -34,9 +34,12 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Elijah Roberts
+ * Author(s): Elijah Roberts, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  */
 
+#include <mutex>
+#include <cstdlib>
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <curand_kernel.h>
@@ -50,9 +53,49 @@
 namespace lm {
 namespace rng {
 
+// a CME call builds one XORWow and destroys it at the end of the call. Its six 8 MB pinned host buffers, three
+// 8 MB device buffers, the state array and the stream cost ~18 ms per call to allocate and free. The buffers of a
+// destroyed generator (its stream synchronised, so no copy is in flight) are kept for the next generator on the same
+// device. Every value a generator hands out is written by its own generate launches before it is read (the first read
+// always swaps in a freshly generated buffer and the kernel writes all numberValues entries), and the state array is
+// re-seeded by xorwow_init_kernel, so the random stream is unchanged. WCM_XORWOW_NOPOOL=1 restores per-call buffers.
+#ifdef RNG_CUDA_DOUBLE_PRECISION
+typedef double wcm_rng_value_t;
+#else
+typedef float wcm_rng_value_t;
+#endif
+namespace {
+struct WcmXorwowPool
+{
+    bool full = false;
+    int device = -1;
+    cudaStream_t stream = NULL;
+    curandState * state = NULL;
+    wcm_rng_value_t * buf[9] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
+};
+WcmXorwowPool wcmXorwowPool;
+std::mutex wcmXorwowPoolMutex;
+bool wcmXorwowPoolEnabled() { return getenv("WCM_XORWOW_NOPOOL") == NULL; }
+}
+
 XORWow::XORWow(int cudaDevice, uint32_t seedTop, uint32_t seedBottom, Distributions availableDists)
 :RandomGenerator(seedTop,seedBottom,availableDists),cudaDevice(cudaDevice),state(NULL),stream(NULL),randomValues(NULL),nextRandomValues(NULL),randomValuesDev(NULL),expRandomValues(NULL),nextExpRandomValues(NULL),expRandomValuesDev(NULL),normRandomValues(NULL),nextNormRandomValues(NULL),normRandomValuesDev(NULL),numberValues(RNG_TUNE_XORWOW_BLOCK_SIZE*RNG_TUNE_XORWOW_GRID_SIZE*RNG_TUNE_XORWOW_THREAD_ITERATIONS),nextValue(0)
 {
+    bool wcmReused = false;
+    if (wcmXorwowPoolEnabled())
+    {
+        std::lock_guard<std::mutex> lock(wcmXorwowPoolMutex);
+        if (wcmXorwowPool.full && wcmXorwowPool.device == cudaDevice)
+        {
+            stream = wcmXorwowPool.stream; state = wcmXorwowPool.state;
+            randomValues = wcmXorwowPool.buf[0]; nextRandomValues = wcmXorwowPool.buf[1]; randomValuesDev = wcmXorwowPool.buf[2];
+            expRandomValues = wcmXorwowPool.buf[3]; nextExpRandomValues = wcmXorwowPool.buf[4]; expRandomValuesDev = wcmXorwowPool.buf[5];
+            normRandomValues = wcmXorwowPool.buf[6]; nextNormRandomValues = wcmXorwowPool.buf[7]; normRandomValuesDev = wcmXorwowPool.buf[8];
+            wcmXorwowPool = WcmXorwowPool();
+            wcmReused = true;
+        }
+    }
+    if (!wcmReused) {
     // Create the cuda stream.
     CUDA_EXCEPTION_CHECK(cudaStreamCreate(&stream));
 
@@ -81,6 +124,7 @@ XORWow::XORWow(int cudaDevice, uint32_t seedTop, uint32_t seedBottom, Distributi
     CUDA_EXCEPTION_CHECK(cudaHostAlloc((void **)&nextNormRandomValues, numberValues*sizeof(float), cudaHostAllocDefault));
     CUDA_EXCEPTION_CHECK(cudaMalloc((void **)&normRandomValuesDev, numberValues*sizeof(float)));
     #endif
+    }
 
     PROF_CUDA_START(stream);
 
@@ -105,6 +149,25 @@ XORWow::~XORWow()
         // Wait for any kernels or mem copies to finish so they aren't using invalid memory.
         CUDA_EXCEPTION_CHECK_NOTHROW(cudaStreamSynchronize(stream));
         PROF_CUDA_FINISH(stream);
+
+        // keep the buffers for the next generator on this device.
+        wcm_rng_value_t * bufs[9] = {randomValues, nextRandomValues, randomValuesDev, expRandomValues, nextExpRandomValues, expRandomValuesDev, normRandomValues, nextNormRandomValues, normRandomValuesDev};
+        bool complete = (state != NULL);
+        for (int i=0; i<9; i++) complete = complete && (bufs[i] != NULL);
+        if (complete && wcmXorwowPoolEnabled() && cudaStreamQuery(stream) == cudaSuccess)
+        {
+            std::lock_guard<std::mutex> lock(wcmXorwowPoolMutex);
+            if (!wcmXorwowPool.full)
+            {
+                wcmXorwowPool.full = true; wcmXorwowPool.device = cudaDevice; wcmXorwowPool.stream = stream; wcmXorwowPool.state = state;
+                for (int i=0; i<9; i++) wcmXorwowPool.buf[i] = bufs[i];
+                stream = NULL; state = NULL;
+                randomValues = nextRandomValues = randomValuesDev = NULL;
+                expRandomValues = nextExpRandomValues = expRandomValuesDev = NULL;
+                normRandomValues = nextNormRandomValues = normRandomValuesDev = NULL;
+                return;
+            }
+        }
 
         CUDA_EXCEPTION_CHECK_NOTHROW(cudaStreamDestroy(stream));
         stream = NULL;

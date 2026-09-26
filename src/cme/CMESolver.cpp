@@ -34,9 +34,12 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Elijah Roberts
+ * Author(s): Elijah Roberts, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  */
 
+#include <algorithm>
+#include <vector>
 #include <string>
 #include <list>
 #include <map>
@@ -340,6 +343,32 @@ void CMESolver::buildModel(const uint numberSpeciesA,
         D[i] = DA[i];
     }
 
+    // the tables below used to scan whole columns of S and D (stride numberReactions) for every reaction.
+    // One row-major pass lists, per reaction, the species with D != 0 and with S != 0 in increasing species order,
+    // and per species the reactions with D > 0 in increasing reaction order; the loops then visit exactly the
+    // entries they used to act on, in the same order, with their tests unchanged.
+    std::vector<uint> wcmDStart(numberReactions+1, 0), wcmSStart(numberReactions+1, 0), wcmRowStart(numberSpecies+1, 0);
+    for (uint j=0, index=0; j<numberSpecies; j++)
+        for (uint i=0; i<numberReactions; i++, index++)
+        {
+            if (D[index] != 0) wcmDStart[i+1]++;
+            if (S[index] != 0) wcmSStart[i+1]++;
+            if (D[index] > 0) wcmRowStart[j+1]++;
+        }
+    for (uint i=0; i<numberReactions; i++) { wcmDStart[i+1] += wcmDStart[i]; wcmSStart[i+1] += wcmSStart[i]; }
+    for (uint j=0; j<numberSpecies; j++) wcmRowStart[j+1] += wcmRowStart[j];
+    std::vector<uint> wcmDSpecies(wcmDStart[numberReactions]), wcmSSpecies(wcmSStart[numberReactions]), wcmRowReaction(wcmRowStart[numberSpecies]);
+    {
+        std::vector<uint> dFill(wcmDStart.begin(), wcmDStart.end()-1), sFill(wcmSStart.begin(), wcmSStart.end()-1);
+        for (uint j=0, index=0, k=0; j<numberSpecies; j++)
+            for (uint i=0; i<numberReactions; i++, index++)
+            {
+                if (D[index] != 0) wcmDSpecies[dFill[i]++] = j;
+                if (S[index] != 0) wcmSSpecies[sFill[i]++] = j;
+                if (D[index] > 0) wcmRowReaction[k++] = i;
+            }
+    }
+
     // Create the propensity functions table.
     for (uint i=0; i<numberReactions; i++)
     {
@@ -349,9 +378,10 @@ void CMESolver::buildModel(const uint numberSpeciesA,
             {
                 // Find the dependencies.
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) 
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) 
                         numberDependencies++;
+                }
 
                 if (numberDependencies > 0) {
                     throw InvalidArgException("D", "zeroth order reaction cannot have any dependencies",numberDependencies);
@@ -368,7 +398,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
             {
                 // Find the dependencies.
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) {
                         numberDependencies++;
 
@@ -391,7 +421,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
                 // Find the dependencies.
                 uint firstDependency = 0;
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) {
                         numberDependencies++;
 
@@ -416,7 +446,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
             {
                 // Find the dependencies.
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) {
                         numberDependencies++;
 
@@ -438,7 +468,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
             {
                 // Find the dependencies.
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) {
                         numberDependencies++;
 
@@ -461,7 +491,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
                 // Find the dependencies.
                 uint firstDependency = 0, secondDependency = 0;
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) {
                         numberDependencies++;
 
@@ -500,7 +530,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
             {
                 // Find the dependency.
                 int xi=-1;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) {
                     	if (xi != -1) throw InvalidArgException("D", "zeroth order Heaviside reaction can only have one dependency");
                     	xi = j;
@@ -523,7 +553,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
                 // Find the dependency
                 uint firstDependency = 0, secondDependency = 0;
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1) {
                         numberDependencies++;
 
@@ -567,7 +597,7 @@ void CMESolver::buildModel(const uint numberSpeciesA,
                 // Find the dependency
                 uint firstDependency = 0, secondDependency = 0, thirdDependency = 0;
                 uint numberDependencies = 0;
-                for (uint j=0; j<numberSpecies; j++) {
+                for (uint wj=wcmDStart[i]; wj<wcmDStart[i+1]; wj++) { uint j = wcmDSpecies[wj];
                     if (D[j*numberReactions+i] == 1 or D[j*numberReactions+i] == 2) {
                         numberDependencies++;
 
@@ -645,51 +675,41 @@ void CMESolver::buildModel(const uint numberSpeciesA,
     // Create the species dependency tables from the S matrix.
     for (uint i=0; i<numberReactions; i++)
     {
-        numberDependentSpecies[i]=0;
-        for (uint j=0, index=i; j<numberSpecies; j++, index+=numberReactions)
-            if (S[index] != 0)
-                numberDependentSpecies[i]++;
+        numberDependentSpecies[i] = wcmSStart[i+1]-wcmSStart[i];
         dependentSpecies[i] = new uint[numberDependentSpecies[i]];
         dependentSpeciesChange[i] = new int[numberDependentSpecies[i]];
-        for (uint j=0, index=i, k=0; j<numberSpecies; j++, index+=numberReactions)
+        for (uint k=0; k<numberDependentSpecies[i]; k++)
         {
-            if (S[index] != 0 && k < numberDependentSpecies[i])
-            {
-                dependentSpecies[i][k] = j;
-                dependentSpeciesChange[i][k] = S[index];
-                k++;
-            }
+            uint j = wcmSSpecies[wcmSStart[i]+k];
+            dependentSpecies[i][k] = j;
+            dependentSpeciesChange[i][k] = S[j*numberReactions+i];
         }
     }
 
     // Create the reaction dependency tables from the other tables.
     for (uint r=0; r<numberReactions; r++)
     {
-        list<uint> dependentReactionList;
+        std::vector<uint> dependentReactionList;
 
         // Go through all of the species changed by this reaction.
         for (uint d=0; d<numberDependentSpecies[r]; d++)
         {
             uint s = dependentSpecies[r][d];
 
-            // Find all of the reactions that depend on this species.
-            for (uint i=0, index=s*numberReactions; i<numberReactions; i++, index++)
-            {
-                if (D[index] > 0) dependentReactionList.push_back(i);
-            }
+            // Find all of the reactions that depend on this species (D > 0, listed in increasing order above).
+            for (uint k=wcmRowStart[s]; k<wcmRowStart[s+1]; k++) dependentReactionList.push_back(wcmRowReaction[k]);
         }
 
         // Eliminate any duplicates from the list.
-        dependentReactionList.sort();
-        dependentReactionList.unique();
+        std::sort(dependentReactionList.begin(), dependentReactionList.end());
+        dependentReactionList.erase(std::unique(dependentReactionList.begin(), dependentReactionList.end()), dependentReactionList.end());
 
         // Create the table.
         numberDependentReactions[r] = dependentReactionList.size();
         dependentReactions[r] = new uint[numberDependentReactions[r]];
-        uint i=0;
-        for (list<uint>::iterator it=dependentReactionList.begin(); it != dependentReactionList.end() && i<numberDependentReactions[r]; it++, i++)
+        for (uint i=0; i<numberDependentReactions[r]; i++)
         {
-            dependentReactions[r][i] = *it;
+            dependentReactions[r][i] = dependentReactionList[i];
         }
     }
 }

@@ -34,7 +34,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Elijah Roberts
+ * Author(s): Elijah Roberts, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  */
 
 #include <string>
@@ -43,6 +44,10 @@
 #include <cmath>
 #include <iostream>
 #include <climits>
+#include <vector>
+#include <cstdint>
+#include <cstdlib>
+#include <typeinfo>
 #include "config.h"
 #if defined(MACOSX)
 #elif defined(LINUX)
@@ -122,6 +127,19 @@ void GillespieDSolver::generateTrajectory()
 
     // Initialize the propensities.
     updateAllPropensities(0.0);
+    // most gCME propensities are exactly zero (1087 of 1139 at the start of a captured second): the reactions with a
+    // nonzero propensity are kept in a bitmask, and the per-event selection scan and total-propensity sum walk only those, in
+    // reaction order. Adding or subtracting a zero term leaves the running value unchanged, so the sum is the full loop's; in
+    // the scan a zero term can only stop it when the running value has gone negative, and then the full loop stops at the next
+    // reaction, which is reproduced. Same reactions, same times, same counts. Only for this class (subclasses may update other
+    // propensities); WCM_CME_DENSE=1: the full loops.
+    const bool wcmSparse = (typeid(*this) == typeid(GillespieDSolver)) && getenv("WCM_CME_DENSE") == NULL;
+    std::vector<uint64_t> wcmNz((numberReactions + 63) / 64, 0);
+    auto wcmSetBit = [&](uint i) {
+        if (propensities[i] != 0.0) wcmNz[i >> 6] |= (1ULL << (i & 63)); else wcmNz[i >> 6] &= ~(1ULL << (i & 63));
+    };
+    auto wcmRebuild = [&]() { for (uint i=0; i<numberReactions; i++) wcmSetBit(i); };
+    if (wcmSparse) wcmRebuild();
     double totalPropensity = 0.0;
     for (uint i=0; i<numberReactions; i++) totalPropensity += propensities[i];
 
@@ -236,6 +254,26 @@ void GillespieDSolver::generateTrajectory()
         // Calculate which reaction it was.
         double rngValue = rngValues[rngNext]*totalPropensity;
         uint r=0;
+        if (wcmSparse)
+        {
+            const uint last = numberReactions-1;
+            r = last;
+            bool found = false;
+            for (size_t w=0; w<wcmNz.size() && !found; w++)
+            {
+                uint64_t m = wcmNz[w];
+                while (m)
+                {
+                    const uint k = (uint)(w << 6) + (uint)__builtin_ctzll(m);
+                    if (k >= last) { found = true; break; }
+                    if (rngValue < propensities[k]) { r = k; found = true; break; }
+                    rngValue -= propensities[k];
+                    if (rngValue < 0.0) { r = k + 1; found = true; break; }
+                    m &= m - 1;
+                }
+            }
+        }
+        else
         for (; r<(numberReactions-1); r++)
         {
             if (rngValue < propensities[r])
@@ -247,18 +285,27 @@ void GillespieDSolver::generateTrajectory()
         // Update species counts and propensities given the reaction that occurred.
         updateSpeciesCounts(r);
         updatePropensities(time, r);
+        if (wcmSparse) for (uint i=0; i<numberDependentReactions[r]; i++) wcmSetBit(dependentReactions[r][i]);
 
 		if(hookEnabled && nextHookTime <= (time+1e-9))
 		{
 				// Hook the simulation so that the user can handle this
 				if(hookSimulation(time)) {
         		  updateAllPropensities(time);
+        		  if (wcmSparse) wcmRebuild();
         		}
                 nextHookTime += hookInterval;
 		}
 
         // Recalculate the total propensity.
         totalPropensity = 0.0;
+        if (wcmSparse)
+        {
+            for (size_t w=0; w<wcmNz.size(); w++)
+                for (uint64_t m = wcmNz[w]; m; m &= m - 1)
+                    totalPropensity += propensities[(w << 6) + __builtin_ctzll(m)];
+        }
+        else
         for (uint i=0; i<numberReactions; i++) {
             totalPropensity += propensities[i];
         }

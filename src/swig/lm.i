@@ -34,7 +34,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Tyler M. Earnest, Mike Hallock, Elijah Roberts, 
+ * Author(s): Tyler M. Earnest, Mike Hallock, Elijah Roberts, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  *            Joseph R. Peterson
  */
 
@@ -930,6 +931,10 @@ public:
 
 
 };
+// numpy arrays for the device-side ribosome mask and slot gather
+%apply (unsigned char* INPLACE_ARRAY1, int DIM1) {(unsigned char *mask, int n)};
+%apply (int* IN_ARRAY1, int DIM1) {(int *sites, int nsites)};
+%apply (unsigned int* INPLACE_ARRAY1, int DIM1) {(unsigned int *slots, int nslots)};
 class CudaIntLattice: public IntLattice
 {
 public:
@@ -941,6 +946,10 @@ public:
     virtual void * getGPUMemoryDest();
     virtual void swapSrcDest();
     virtual void * getGPUMemorySiteTypes();
+
+    bool wcmHostParticlesStale() const;
+    void wcmRiboSiteMask(unsigned char *mask, int n, unsigned int ridx);
+    void wcmGatherSlots(int *sites, int nsites, unsigned int *slots, int nslots);
 
 
 };

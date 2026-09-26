@@ -34,7 +34,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Elijah Roberts
+ * Author(s): Elijah Roberts, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  */
 
 #ifndef LM_RDME_INTLATTICE_H_
@@ -83,6 +84,9 @@ public:
 	virtual void setSiteType(lattice_size_t subvolume, site_t site);
 	
 	// Particle methods.
+	// every method that reads or writes the host particle buffer calls this first; a lattice whose host particles
+	// may be behind the device (CudaIntLattice after copyFromGPULazy) downloads them here. No-op for a host-only lattice.
+	virtual void wcm_sync_host_particles() const {}
 	virtual site_size_t getOccupancy(lattice_size_t x, lattice_size_t y, lattice_size_t z) const;
 	virtual site_size_t getOccupancy(lattice_size_t subvolume) const;
 	virtual particle_t getParticle(lattice_size_t x, lattice_size_t y, lattice_size_t z, site_size_t particleIndex) const;

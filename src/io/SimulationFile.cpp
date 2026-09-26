@@ -34,7 +34,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Elijah Roberts
+ * Author(s): Elijah Roberts, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  */
 
 #include <cstdio>
@@ -455,10 +456,12 @@ void SimulationFile::getReactionModel(lm::io::ReactionModel * reactionModel)
                 }
 
                 // Read the matrices.
-                H5LTread_dataset_int(file, "/Model/Reaction/StoichiometricMatrix", intBuffer);
-                for (uint i=0; i<numberSpecies*numberReactions; i++) reactionModel->add_stoichiometric_matrix(intBuffer[i]);
-                H5LTread_dataset_int(file, "/Model/Reaction/DependencyMatrix", intBuffer);
-                for (uint i=0; i<numberSpecies*numberReactions; i++) reactionModel->add_dependency_matrix((uint)intBuffer[i]);
+                // the dense matrices are read straight into the protobuf fields (same values as the per-entry adds,
+                // the dependency entries being the int reads reinterpreted as uint exactly as the (uint) cast did).
+                reactionModel->mutable_stoichiometric_matrix()->Resize(numberSpecies*numberReactions, 0);
+                H5LTread_dataset_int(file, "/Model/Reaction/StoichiometricMatrix", reactionModel->mutable_stoichiometric_matrix()->mutable_data());
+                reactionModel->mutable_dependency_matrix()->Resize(numberSpecies*numberReactions, 0);
+                H5LTread_dataset_int(file, "/Model/Reaction/DependencyMatrix", reinterpret_cast<int *>(reactionModel->mutable_dependency_matrix()->mutable_data()));
 
                 // Free the buffers.
                 delete [] noiseBuffer;

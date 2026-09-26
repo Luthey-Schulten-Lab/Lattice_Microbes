@@ -88,7 +88,7 @@ define_tracked_option(TUNE_MPD_MAX_OVERFLOW_REPLACEMENT_DIST DEFAULT 4 STRING DE
 define_tracked_option(TUNE_MPD_MAX_PARTICLE_OVERFLOWS DEFAULT 2048 STRING DESCRIPTION "Parameters for the reaction kernel thread block size." ADVANCED)
 define_tracked_option(TUNE_MPD_REACTION_BLOCK_X_SIZE DEFAULT 32 STRING DESCRIPTION "Parameters for the reaction kernel thread block size." ADVANCED)
 define_tracked_option(TUNE_MPD_REACTION_BLOCK_Y_SIZE DEFAULT 8 STRING DESCRIPTION "Parameters for the reaction kernel thread block size." ADVANCED)
-define_tracked_option(TUNE_MPD_X_BLOCK_MAX_X_SIZE DEFAULT 256 STRING DESCRIPTION "Tuning parameters for the MpdRdmeSolver." ADVANCED)
+define_tracked_option(TUNE_MPD_X_BLOCK_MAX_X_SIZE DEFAULT 128 STRING DESCRIPTION "Tuning parameters for the MpdRdmeSolver." ADVANCED)
 define_tracked_option(TUNE_MPD_Y_BLOCK_X_SIZE DEFAULT 32 STRING DESCRIPTION "Tuning parameters for the MpdRdmeSolver." ADVANCED)
 define_tracked_option(TUNE_MPD_Y_BLOCK_Y_SIZE DEFAULT 8 STRING DESCRIPTION "Tuning parameters for the MpdRdmeSolver." ADVANCED)
 define_tracked_option(TUNE_MPD_Z_BLOCK_X_SIZE DEFAULT 32 STRING DESCRIPTION "Tuning parameters for the MpdRdmeSolver." ADVANCED)

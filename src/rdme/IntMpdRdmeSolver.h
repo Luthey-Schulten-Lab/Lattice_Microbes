@@ -39,7 +39,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
  * OTHER DEALINGS WITH THE SOFTWARE.
  *
- * Author(s): Elijah Roberts, Zane Thornburg
+ * Author(s): Elijah Roberts, Zane Thornburg, Ron Acda
+ *   (Ron Acda: using an iterative LLM-guided workflow, https://github.com/quarkron/iterative-hillclimber/tree/main)
  */
 
 #ifndef LM_RDME_INTMPDRDMESOLVER_H_
@@ -85,6 +86,8 @@ protected:
     virtual void writeSpeciesCounts(lm::io::SpeciesCounts * speciesCountsDataSet);
     virtual void hookCheckSimulation(double time, CudaIntLattice * lattice);
     virtual void runTimestep(CudaIntLattice * lattice, uint32_t timestep);
+    void wcm_launchTimestep(CudaIntLattice * lattice, uint32_t timestep);
+    void wcm_runTimesteps(CudaIntLattice * lattice, uint32_t first, uint32_t K);
     virtual uint64_t getTimestepSeed(uint32_t timestep, uint32_t substep);
     virtual void setLatticeData(const uint8_t* latticeData);
     virtual void computePropensities();
@@ -159,7 +162,7 @@ namespace intmpdrdme_dev {
                                             const float* reactionRatesG,
                                             const float* __restrict__ qp0,
                                             const float* __restrict__ qp1,
-                                            const float* __restrict__ qp2);
+                                            const float* __restrict__ qp2, uint8_t* __restrict__ occ);
 #else
     __global__ void precomp_reaction_kernel(const unsigned int* inLattice,
                                             const uint8_t * inSites,
@@ -170,7 +173,7 @@ namespace intmpdrdme_dev {
                                             const __restrict__ uint8_t *RLG,
                                             const float* __restrict__ qp0,
                                             const float* __restrict__ qp1,
-                                            const float* __restrict__ qp2);
+                                            const float* __restrict__ qp2, uint8_t* __restrict__ occ);
 #endif
 #endif
 
@@ -179,17 +182,17 @@ namespace intmpdrdme_dev {
                                  const uint8_t * inSites,
                                  unsigned int* outLattice,
                                  const unsigned long long timestepHash,
-                                 unsigned int* siteOverflowList);
+                                 unsigned int* siteOverflowList, const uint8_t* __restrict__ inOcc, uint8_t* __restrict__ outOcc);
     __global__ void mpd_y_kernel(const unsigned int* inLattice,
                                  const uint8_t * inSites,
                                  unsigned int* outLattice,
                                  const unsigned long long timestepHash,
-                                 unsigned int* siteOverflowList);
+                                 unsigned int* siteOverflowList, const uint8_t* __restrict__ inOcc, uint8_t* __restrict__ outOcc);
     __global__ void mpd_z_kernel(const unsigned int* inLattice,
                                  const uint8_t * inSites,
                                  unsigned int* outLattice,
                                  const unsigned long long timestepHash,
-                                 unsigned int* siteOverflowList);
+                                 unsigned int* siteOverflowList, const uint8_t* __restrict__ inOcc, uint8_t* __restrict__ outOcc);
 #ifdef MPD_GLOBAL_S_MATRIX
 #ifdef MPD_GLOBAL_R_MATRIX
     __global__ void reaction_kernel(const unsigned int* inLattice,
@@ -227,19 +230,19 @@ namespace intmpdrdme_dev {
                                  unsigned int* outLattice,
                                  const unsigned int gridXSize,
                                  const unsigned long long timestepHash,
-                                 unsigned int* siteOverflowList);
+                                 unsigned int* siteOverflowList, const uint8_t* __restrict__ inOcc, uint8_t* __restrict__ outOcc);
     __global__ void mpd_y_kernel(const unsigned int* inLattice,
                                  const uint8_t * inSites,
                                  unsigned int* outLattice,
                                  const unsigned int gridXSize,
                                  const unsigned long long timestepHash,
-                                 unsigned int* siteOverflowList);
+                                 unsigned int* siteOverflowList, const uint8_t* __restrict__ inOcc, uint8_t* __restrict__ outOcc);
     __global__ void mpd_z_kernel(const unsigned int* inLattice,
                                  const uint8_t * inSites,
                                  unsigned int* outLattice,
                                  const unsigned int gridXSize,
                                  const unsigned long long timestepHash,
-                                 unsigned int* siteOverflowList);
+                                 unsigned int* siteOverflowList, const uint8_t* __restrict__ inOcc, uint8_t* __restrict__ outOcc);
 #ifdef MPD_GLOBAL_S_MATRIX
 #ifdef MPD_GLOBAL_R_MATRIX
     __global__ void reaction_kernel(const unsigned int* inLattice,
